@@ -38,16 +38,13 @@ public class HashTagDAO extends AbstractDAO{
 
 			ResultSet results = stmt.executeQuery();
 			if (results.next()) {
-				user = new User(results.getString(2), results.getString(3),
-						username, results.getString(5), results.getString(6),
-						null, results.getString(7), results.getString(8));
-				user.setId(results.getInt(1));
+				//hashtagAux = new Hashtag(results.getString(2),UserDAO.getInstance().getUser(results.getString(5)),);
 			}
 			connection.close();
 		} catch (SQLException e) {
 			throw new DatabaseException(e.getMessage(), e);
 		}
-		return user;
+		return hashtagAux;
 	}
 
 	public void save(User user) {
