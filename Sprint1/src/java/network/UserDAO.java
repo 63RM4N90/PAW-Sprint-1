@@ -9,6 +9,7 @@ import java.util.List;
 
 import model.User;
 
+
 public class UserDAO extends AbstractDAO{
 
 	private final ConnectionManager manager;
