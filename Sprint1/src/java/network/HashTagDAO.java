@@ -7,28 +7,29 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import model.Hashtag;
 import model.User;
 
-public class UserDAO extends AbstractDAO{
+public class HashTagDAO extends AbstractDAO{
 
 	private final ConnectionManager manager;
 
-	private static UserDAO instance;
+	private static HashTagDAO instance;
 
-	public static UserDAO getInstance() {
+	public static HashTagDAO getInstance() {
 		if (instance == null) {
-			instance = new UserDAO();
+			instance = new HashTagDAO();
 		}
 		return instance;
 	}
 
-	private UserDAO() {
+	private HashTagDAO() {
 		manager = new ConnectionManager(driver, connectionString, username,
 				password);
 	}
 
-	public User getUser(String username) {
-		User user = null;
+	public Hashtag getHashTag (String hashtag) {
+		Hashtag hashtagAux = null;
 		try {
 			Connection connection = manager.getConnection();
 			PreparedStatement stmt = connection
@@ -121,4 +122,6 @@ public class UserDAO extends AbstractDAO{
 		}
 
 	}
+	
+	
 }
