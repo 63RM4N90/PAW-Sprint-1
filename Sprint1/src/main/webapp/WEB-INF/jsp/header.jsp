@@ -11,7 +11,7 @@
 	</head>
 	<body>
 		<div style="overflow: auto;">
-			<h1 style="float: left; margin-top: 0;">Sistema de administraci&oacute;n de hoteles</h1>
+			<h1 style="float: left; margin-top: 0;">Register user</h1>
 			<c:if test="${not empty user}">
 				<span style="float: right;"><c:out value="${user.username}" /> [<a href="logout">Cerrar sesi&oacute;n</a>]</span>
 			</c:if>
