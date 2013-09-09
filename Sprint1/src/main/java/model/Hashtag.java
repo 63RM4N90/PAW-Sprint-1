@@ -1,19 +1,23 @@
 package model;
 
-import java.util.Date;
+import java.sql.Date;
+import java.sql.Time;
 
-public class Hashtag {
+
+public class Hashtag{
 	private String hashtag;
 	private User author;
-	private Date dateAndTime;
+	private Date date;
+	private Time time;
 
 	public Hashtag() {
 	}
 
-	public Hashtag(String hashtag, User author, Date dateAndTime) {
+	public Hashtag(String hashtag, User author, Date date, Time time) {
 		this.hashtag = hashtag;
 		this.author = author;
-		this.dateAndTime = dateAndTime;
+		this.date = date;
+		this.time = time;
 	}
 
 	public String getHashtag() {
@@ -29,10 +33,15 @@ public class Hashtag {
 	}
 	
 	public Date getDate(){
-		return dateAndTime;
+		return date;
+	}
+	
+	public Time getTime(){
+		return time;
 	}
 
 	public void setAuthor(User author) {
 		this.author = author;
 	}
+	
 }
