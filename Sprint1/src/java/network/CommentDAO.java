@@ -49,16 +49,17 @@ public class CommentDAO {
 
 			ResultSet commentResults = stmt.executeQuery();
 			while (commentResults.next()) {
-				Date date = DateFormat.getInstance().parse(commentResults.getString(3));
+				Date commentDate = DateFormat.getInstance().parse(commentResults.getString(3));
 				stmt = connection.prepareStatement("SELECT * FROM Hashtag WHERE Hashtag.id = (SELECT id FROM HashtagsInComments WHERE commentId = ?)");
 				stmt.setString(1, String.valueOf(commentResults.getString(1)));
 				ResultSet hashtagResults = stmt.executeQuery();
 				List<Hashtag> hashtags = new ArrayList<Hashtag>();
 				while (hashtagResults.next()) {
 					User creator = userDao.getUser(hashtagResults.getString(3));
-					hashtags.add(new Hashtag(hashtagResults.getString(2), creator));
+					Date hashtagDate = DateFormat.getInstance().parse(commentResults.getString(3));
+					hashtags.add(new Hashtag(hashtagResults.getString(2), creator, hashtagDate));
 				}
-				Comment current = new Comment(user, date, commentResults.getString(5), hashtags); 
+				Comment current = new Comment(user, commentDate, commentResults.getString(5), hashtags); 
 				comments.add(current); 
 			}
 			connection.close();
@@ -74,28 +75,12 @@ public class CommentDAO {
 		try {
 			Connection connection = manager.getConnection();
 			PreparedStatement stmt;
-			if (comment.isNew()) {
-				stmt = connection
-						.prepareStatement("INSERT INTO Users(name, surname, password, username, description, secretquestion, secretanswer) values(?, ?, ?, ?, ?, ?, ?)");
-				stmt.setString(1, user.getName());
-				stmt.setString(2, user.getSurname());
-				stmt.setString(3, user.getPassword());
-				stmt.setString(4, user.getUsername());
-				stmt.setString(5, user.getDescription());
-				stmt.setString(6, user.getSecretQuestion());
-				stmt.setString(7, user.getSecretAnswer());
-			} else {
-				stmt = connection
-						.prepareStatement("UPDATE Users SET name = ?, surname = ?, password = ?, username = ?, description = ?, secretquestion = ?, secretanswer = ? WHERE username = ?");
-				stmt.setString(1, user.getName());
-				stmt.setString(2, user.getSurname());
-				stmt.setString(3, user.getPassword());
-				stmt.setString(4, user.getUsername());
-				stmt.setString(5, user.getDescription());
-				stmt.setString(6, user.getSecretQuestion());
-				stmt.setString(7, user.getSecretAnswer());
-				stmt.setString(8, user.getUsername());
-			}
+			stmt = connection.prepareStatement("INSERT INTO Comments(id, username, date, time, comment) values(?, ?, ?, ?, ?)");
+			stmt.setString(1, comment.getId());
+			stmt.setString(2, comment.getAuthor().getUsername());
+			stmt.setString(3, comment.getDate());
+			stmt.setString(4, user.getUsername());
+			stmt.setString(5, user.getDescription());
 			stmt.executeUpdate();
 			connection.commit();
 			connection.close();
