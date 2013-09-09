@@ -1,7 +1,7 @@
 <%@ include file="header.jsp" %>
 
 <h2>Registration</h2>
-<form method="POST" action="login">
+<form method="POST" action="register">
 	<div class="form-field">
 		<label for="name">Nombre:</label>
 		<input type="text" name="name"/>
