@@ -1,23 +1,26 @@
 package model;
 
+import java.sql.Time;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
+
 import java.util.List;
 
 public class Comment extends AbstractModel{
 	private User author;
-	private Date dateAndTime;
+	private Date date;
+	private	Time time;
 	private String comment;
 	private List<Hashtag> hashtags;
 
 	public Comment() {
 	}
 
-	public Comment(User author, Date dateAndTime, String comment,
-			List<Hashtag> hashtags) {
+	public Comment(User author, Date date, Time time, String comment, List<Hashtag> hashtags) {
 		this.author = author;
-		this.dateAndTime = dateAndTime;
+		this.date = date;
+		this.time = time;
 		this.comment = comment;
 		this.hashtags = hashtags;
 	}
@@ -39,12 +42,20 @@ public class Comment extends AbstractModel{
 		this.author = author;
 	}
 
-	public Date getDateAndTime() {
-		return dateAndTime;
+	public Date getDate() {
+		return date;
+	}
+	
+	public Time getTime() {
+		return time;
 	}
 
-	public void setDateAndTime(Date dateAndTime) {
-		this.dateAndTime = dateAndTime;
+	public void setDate(Date date) {
+		this.date = date;
+	}
+	
+	public void setTime(Time time) {
+		this.time = time;
 	}
 
 	public String getComment() {
