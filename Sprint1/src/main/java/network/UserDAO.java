@@ -9,12 +9,7 @@ import java.util.List;
 
 import model.User;
 
-public class UserDAO {
-
-	private static final String driver = "org.postgresql.Driver";
-	private static final String connectionString = "jdbc:postgresql://localhost/paw";
-	private static final String username = "paw";
-	private static final String password = "paw";
+public class UserDAO extends AbstractDAO {
 
 	private final ConnectionManager manager;
 
@@ -27,9 +22,35 @@ public class UserDAO {
 		return instance;
 	}
 
-	public UserDAO() {
+	private UserDAO() {
 		manager = new ConnectionManager(driver, connectionString, username,
 				password);
+	}
+
+	public User authenticate(String username, String password) {
+		try {
+			User user = null;
+			Connection connection = manager.getConnection();
+			PreparedStatement stmt = connection
+					.prepareStatement("SELECT * FROM Users WHERE username = ? AND password = ?");
+			stmt.setString(1, username);
+			stmt.setString(2, password);
+
+			ResultSet results = stmt.executeQuery();
+			if (results.next()) {
+				String name = results.getString(2);
+				String surname = results.getString(3);
+				String description = results.getString(6);
+				String secretQuestion = results.getString(7);
+				String secretAnswer = results.getString(8);
+				user = new User(name, surname, username, description, password,
+						null, secretQuestion, secretAnswer);
+			}
+			connection.close();
+			return user;
+		} catch (SQLException e) {
+			throw new DatabaseException(e.getMessage(), e);
+		}
 	}
 
 	public User getUser(String username) {
@@ -124,6 +145,5 @@ public class UserDAO {
 		} catch (SQLException e) {
 			throw new DatabaseException(e.getMessage(), e);
 		}
-
 	}
 }

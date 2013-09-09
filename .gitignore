@@ -8,7 +8,5 @@
 .classpath
 .project
 .settings/*
-.DS_Store
 target/*
 bin/*
-/target
