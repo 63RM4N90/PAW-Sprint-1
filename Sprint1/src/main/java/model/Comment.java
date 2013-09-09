@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-public class Comment {
+public class Comment extends AbstractModel{
 	private User author;
 	private Date dateAndTime;
 	private String comment;

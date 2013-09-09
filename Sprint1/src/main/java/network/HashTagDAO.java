@@ -5,10 +5,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
+import java.util.HashMap;
 
 import model.Hashtag;
-import model.User;
 
 public class HashTagDAO extends AbstractDAO{
 
@@ -38,7 +38,7 @@ public class HashTagDAO extends AbstractDAO{
 
 			ResultSet results = stmt.executeQuery();
 			if (results.next()) {
-				//hashtagAux = new Hashtag(results.getString(2),UserDAO.getInstance().getUser(results.getString(5)),);
+				hashtagAux = new Hashtag(results.getString(2),UserDAO.getInstance().getUser(results.getString(5)),results.getDate(4),results.getTime(5));
 			}
 			connection.close();
 		} catch (SQLException e) {
@@ -47,32 +47,19 @@ public class HashTagDAO extends AbstractDAO{
 		return hashtagAux;
 	}
 
-	public void save(User user) {
+	//	Este método guarda en la tabla "hashtags" los datos de su creación.
+	public void save(Hashtag hashtag) {
 		try {
 			Connection connection = manager.getConnection();
 			PreparedStatement stmt;
-			if (user.isNew()) {
+			
 				stmt = connection
-						.prepareStatement("INSERT INTO Users(name, surname, password, username, description, secretquestion, secretanswer) values(?, ?, ?, ?, ?, ?, ?)");
-				stmt.setString(1, user.getName());
-				stmt.setString(2, user.getSurname());
-				stmt.setString(3, user.getPassword());
-				stmt.setString(4, user.getUsername());
-				stmt.setString(5, user.getDescription());
-				stmt.setString(6, user.getSecretQuestion());
-				stmt.setString(7, user.getSecretAnswer());
-			} else {
-				stmt = connection
-						.prepareStatement("UPDATE Users SET name = ?, surname = ?, password = ?, username = ?, description = ?, secretquestion = ?, secretanswer = ? WHERE username = ?");
-				stmt.setString(1, user.getName());
-				stmt.setString(2, user.getSurname());
-				stmt.setString(3, user.getPassword());
-				stmt.setString(4, user.getUsername());
-				stmt.setString(5, user.getDescription());
-				stmt.setString(6, user.getSecretQuestion());
-				stmt.setString(7, user.getSecretAnswer());
-				stmt.setString(8, user.getUsername());
-			}
+						.prepareStatement("INSERT INTO hashtags(hashtag,creator,date,time) VALUES(?, ?, ?, ?)");
+				stmt.setString(1, hashtag.getHashtag());
+				stmt.setString(2,hashtag.getAuthor().getUsername());
+				stmt.setDate(3, hashtag.getDate());
+				stmt.setTime(4, hashtag.getTime());
+			
 			stmt.executeUpdate();
 			connection.commit();
 			connection.close();
@@ -80,45 +67,61 @@ public class HashTagDAO extends AbstractDAO{
 			throw new DatabaseException(e.getMessage(), e);
 		}
 	}
-
-	public List<User> getAllUsers() {
-		List<User> users = new ArrayList<User>();
-		User user;
+	
+	//Este método es para el CommentDAO para guardar en la tabla hashtagsincomments con el commentId.
+	void saveWithComment(Hashtag hashtag, int commentId){
 		try {
 			Connection connection = manager.getConnection();
-			PreparedStatement stmt = connection
-					.prepareStatement("SELECT * FROM Users WHERE username = ?");
-			stmt.setString(1, username);
-
-			ResultSet results = stmt.executeQuery();
-			if (results.next()) {
-				user = new User(results.getString(2), results.getString(3),
-						username, results.getString(5), results.getString(6),
-						null, results.getString(7), results.getString(8));
-				user.setId(results.getInt(1));
-				users.add(user);
-			}
-			connection.close();
-		} catch (SQLException e) {
-			throw new DatabaseException(e.getMessage(), e);
-		}
-		return users;
-	}
-
-	public void removeUser(User user) {
-		Connection connection = manager.getConnection();
-		PreparedStatement stmt;
-		try {
-			stmt = connection
-					.prepareStatement("DELETE FROM TABLE Users WHERE username = ?");
-			stmt.setString(1, user.getUsername());
+			PreparedStatement stmt;
+			
+				stmt = connection
+						.prepareStatement("INSERT INTO hashtagsincomments(commentid,hashtag)");
+				stmt.setInt(1, commentId);
+				stmt.setString(2, hashtag.getHashtag());
+			
+			stmt.executeUpdate();
 			connection.commit();
 			connection.close();
 		} catch (SQLException e) {
 			throw new DatabaseException(e.getMessage(), e);
-		}
-
+		}		
+		
 	}
+
 	
+	//FALTA TERMINAR
+	public HashMap<Integer,ArrayList<Hashtag>> rankedHashTags(Date from, Date to) throws SQLException{
+		HashMap<Integer,ArrayList<Hashtag>> rank = new HashMap<Integer,ArrayList<Hashtag>>();
+		
+		String query = "SELECT hashtags.hashtag,hashtags., count(hashtagsincomments.commentId) AS RANK, count(hashtags.hashtag) "
+				+ "FROM hashtags AS H1,hashtagsincomments AS H2,comments AS C "
+				+ "WHERE H1.hashtag = H2.hashtag AND H2.commentId = C.id "
+				+ "GROUP BY hashtags.hashtag "
+				+ "ORDER BY RANK DESC";
+		
+		Connection connection = manager.getConnection();
+		PreparedStatement stmt = connection.prepareStatement(query);
+		ResultSet results = stmt.executeQuery();
+		
+		int total;
+		
+		for(int i=0; i < total; i++){
+			
+			if(results.next()){
+				int ranking = results.getInt(2);
+				String hashtag = results.getString(1);
+				if(rank.containsKey(ranking)){
+					//(rank.put(ranking, rank.get(ranking).add(hashtag));
+				} else{
+					rank.put(ranking, new ArrayList<Hashtag>());
+				}
+					
+			}
+			
+		}
+		
+		return rank;
+		
+	}
 	
 }

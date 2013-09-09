@@ -2,7 +2,7 @@ package model;
 
 import java.awt.Image;
 
-public class User {
+public class User extends AbstractModel{
 	public int id;
 	public static final int MIN_USERNAME_LENGTH = 8;
 	public static final int MAX_USERNAME_LENGTH = 16;
@@ -53,17 +53,6 @@ public class User {
 		this.secretAnswer = secretAnswer;
 	}
 
-	public boolean isNew() {
-		return id == -1;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
 
 	public String getName() {
 		return name;
