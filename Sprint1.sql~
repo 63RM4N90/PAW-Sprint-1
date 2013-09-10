@@ -13,20 +13,21 @@
 CREATE TABLE Hashtags (
 	hashtag		varchar(139) NOT NULL UNIQUE,
 	creator		varchar(32) REFERENCES Users(username),
-	date		timestamp NOT NULL,
+	date		date NOT NULL,
+	time		time NOT NULL,
 	PRIMARY KEY(hashtag)
 );
 
 CREATE TABLE Comments (
 	id		SERIAL UNIQUE NOT NULL,
 	username	varchar(32) REFERENCES Users(username) ON DELETE CASCADE,
-	date		timestamp NOT NULL,
+	date		date NOT NULL,
+	time		time NOT NULL,
 	comment		varchar(140),
-	PRIMARY KEY(id, username, date)
+	PRIMARY KEY(id, username, date, time)
 );
 
 CREATE TABLE HashtagsInComments (
 	commentId	int REFERENCES Comments(id),
-	hashtag	VARCHAR NOT NULL REFERENCES Hashtags(hashtag),
-	PRIMARY KEY(commentId,hashtag)
+	hashtag	VARCHAR NOT NULL REFERENCES Hashtags(hashtag)
 );

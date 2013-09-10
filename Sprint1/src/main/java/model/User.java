@@ -3,7 +3,6 @@ package model;
 import java.awt.Image;
 
 public class User extends AbstractModel{
-	public int id;
 	public static final int MIN_USERNAME_LENGTH = 8;
 	public static final int MAX_USERNAME_LENGTH = 16;
 	public static final int MIN_PASSWORD_LENGTH = 8;
