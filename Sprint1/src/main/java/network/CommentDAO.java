@@ -41,7 +41,7 @@ public class CommentDAO extends AbstractDAO {
 
 			ResultSet commentResults = stmt.executeQuery();
 			while (commentResults.next()) {
-				stmt = connection.prepareStatement("SELECT * FROM Hashtags WHERE Hashtag.id = (SELECT id FROM HashtagsInComments WHERE commentId = ?)");
+				stmt = connection.prepareStatement("SELECT * FROM Hashtags WHERE Hashtags.id = (SELECT id FROM HashtagsInComments WHERE commentId = ?)");
 				stmt.setString(1, String.valueOf(commentResults.getString(1)));
 				ResultSet hashtagResults = stmt.executeQuery();
 				List<Hashtag> hashtags = new ArrayList<Hashtag>();
