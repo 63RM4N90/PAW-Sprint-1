@@ -15,5 +15,6 @@
 		<input type="submit" name="submit" value="Ingresar" />
 	</div>
 </form>
+<div class="notRegistered"><a href="register">Not a member yet? Register!</a></div>
 
 <%@ include file="footer.jsp" %>

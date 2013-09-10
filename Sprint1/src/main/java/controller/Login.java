@@ -28,10 +28,8 @@ public class Login extends HttpServlet {
 		String password = req.getParameter("password");
 		User user = userDao.authenticate(username, password);
 		if (user != null) {
-			req.getSession().setAttribute("user", user);
-			System.out.println("SUCCESS!");
+			
 		} else {
-			System.out.println("FAILURE!");
 			req.setAttribute("username", username);
 			req.setAttribute("error", "Invalid user or password.");
 			req.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(req,
