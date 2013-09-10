@@ -36,5 +36,6 @@
 		<input type="submit" name="submit" value="Submit" />
 	</div>
 </form>
+<div class="alreadyRegistered"><a href="login">Already registered? Login!</a></div>
 
 <%@ include file="footer.jsp" %>
