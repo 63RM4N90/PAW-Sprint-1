@@ -103,7 +103,7 @@ public class HashTagDAO extends AbstractDAO{
 		PreparedStatement stmt = connection.prepareStatement(query);
 		ResultSet results = stmt.executeQuery();
 		
-		int total;
+		int total =0;
 		
 		for(int i=0; i < total; i++){
 			

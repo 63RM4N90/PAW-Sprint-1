@@ -1,4 +1,4 @@
-package network;
+package Jetty;
 
 import org.mortbay.jetty.Connector;
 import org.mortbay.jetty.Server;
@@ -11,7 +11,7 @@ public class Start {
 		SocketConnector connector = new SocketConnector();
 		connector.setMaxIdleTime(1000 * 60 * 60);
 		connector.setSoLingerTime(-1);
-		connector.setPort(8080);
+		connector.setPort(8040);
 		server.setConnectors(new Connector[] { connector });
 		WebAppContext bb = new WebAppContext();
 		bb.setServer(server);
