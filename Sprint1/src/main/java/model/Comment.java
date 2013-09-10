@@ -25,15 +25,6 @@ public class Comment extends AbstractModel{
 		this.hashtags = hashtags;
 	}
 
-	public List<Hashtag> getHashtagList() {
-		List<String> hashtags = Arrays.asList(comment.split("#*[A-Za-z0-9]"));
-		List<Hashtag> ans = new ArrayList<Hashtag>();
-		for (String hashtag : hashtags) {
-			//ans.add(new Hashtag(hashtag, null));
-		}
-		return ans;
-	}
-
 	public User getAuthor() {
 		return author;
 	}

@@ -12,12 +12,7 @@ import model.Hashtag;
 import model.User;
 
 
-public class CommentDAO {
-
-	private static final String driver = "org.postgresql.Driver";
-	private static final String connectionString = "jdbc:postgresql://localhost/paw";
-	private static final String username = "paw";
-	private static final String password = "paw";
+public class CommentDAO extends AbstractDAO {
 
 	private final ConnectionManager manager;
 
