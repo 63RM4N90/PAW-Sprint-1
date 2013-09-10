@@ -26,13 +26,13 @@ public class UserDAO extends AbstractDAO {
 		manager = new ConnectionManager(driver, connectionString, username,
 				password);
 	}
-
+	
 	public User authenticate(String username, String password) {
 		try {
 			User user = null;
 			Connection connection = manager.getConnection();
 			PreparedStatement stmt = connection
-					.prepareStatement("SELECT * FROM Users WHERE username = ? AND password = ?");
+					.prepareStatement("SELECT username, password FROM Users WHERE username = ? AND password = ?");
 			stmt.setString(1, username);
 			stmt.setString(2, password);
 
@@ -82,26 +82,24 @@ public class UserDAO extends AbstractDAO {
 			if (user.isNew()) {
 				stmt = connection
 						.prepareStatement("INSERT INTO Users(name, surname, password, username, description, secretquestion, secretanswer) values(?, ?, ?, ?, ?, ?, ?)");
-				stmt.setString(1, user.getName());
-				stmt.setString(2, user.getSurname());
-				stmt.setString(3, user.getPassword());
-				stmt.setString(4, user.getUsername());
-				stmt.setString(5, user.getDescription());
-				stmt.setString(6, user.getSecretQuestion());
-				stmt.setString(7, user.getSecretAnswer());
 			} else {
 				stmt = connection
 						.prepareStatement("UPDATE Users SET name = ?, surname = ?, password = ?, username = ?, description = ?, secretquestion = ?, secretanswer = ? WHERE username = ?");
-				stmt.setString(1, user.getName());
-				stmt.setString(2, user.getSurname());
-				stmt.setString(3, user.getPassword());
-				stmt.setString(4, user.getUsername());
-				stmt.setString(5, user.getDescription());
-				stmt.setString(6, user.getSecretQuestion());
-				stmt.setString(7, user.getSecretAnswer());
-				stmt.setString(8, user.getUsername());
 			}
-			stmt.executeUpdate();
+			stmt.setString(1, user.getName());
+			stmt.setString(2, user.getSurname());
+			stmt.setString(3, user.getPassword());
+			stmt.setString(4, user.getUsername());
+			stmt.setString(5, user.getDescription());
+			stmt.setString(6, user.getSecretQuestion());
+			stmt.setString(7, user.getSecretAnswer());
+			if(user.isNew()) {
+				stmt.execute();
+			} else {
+				stmt.setString(8, user.getUsername());
+				stmt.executeUpdate();
+			}
+			
 			connection.commit();
 			connection.close();
 		} catch (SQLException e) {

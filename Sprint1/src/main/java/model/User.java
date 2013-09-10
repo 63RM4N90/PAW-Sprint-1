@@ -3,7 +3,6 @@ package model;
 import java.awt.Image;
 
 public class User extends AbstractModel{
-	public int id;
 	public static final int MIN_USERNAME_LENGTH = 8;
 	public static final int MAX_USERNAME_LENGTH = 16;
 	public static final int MIN_PASSWORD_LENGTH = 8;
@@ -42,7 +41,7 @@ public class User extends AbstractModel{
 					"The password must contain between " + MIN_USERNAME_LENGTH
 							+ " and " + MAX_USERNAME_LENGTH + " characters.");
 		}
-		this.id = -1;
+		setId(-1);
 		this.name = name;
 		this.surname = surname;
 		this.username = username;
