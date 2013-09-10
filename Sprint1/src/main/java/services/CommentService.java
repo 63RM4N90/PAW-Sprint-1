@@ -29,9 +29,9 @@ private HashTagDAO hashtagDao;
 		hashtagDao = HashTagDAO.getInstance();
 	}
 	
-	public List<Hashtag> getHashtags(Comment comment) {
+	public List<Hashtag> getHashtags(String comment) {
 		List<Hashtag> ans = new ArrayList<Hashtag>();
-		String[] aux = comment.getComment().split("#[A-Za-z0-9]");
+		String[] aux = comment.split("#[A-Za-z0-9]");
 		for (String string : aux) {
 			Hashtag hashtag = hashtagDao.getHashTag(string);
 			if (hashtag == null) {

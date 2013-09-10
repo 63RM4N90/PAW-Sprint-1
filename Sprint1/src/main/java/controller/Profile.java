@@ -1,12 +1,17 @@
 package controller;
 
 import java.io.IOException;
+import java.util.Date;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import model.Comment;
+import model.Hashtag;
 import model.User;
 import services.CommentService;
 import services.UserService;
@@ -30,6 +35,11 @@ public class Profile extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		String comment = req.getParameter("comment");
+		String aux = req.getParameter("comment");
+		HttpSession session = req.getSession();
+		User user = (User) session.getAttribute("user");
+		List<Hashtag> hashtags = commentService.getHashtags(aux);
+		//Comment comment = new Comment(user, new Date(), aux, hashtags);
+		resp.sendRedirect("profile?user=" + user.getUsername());
 	}
 }

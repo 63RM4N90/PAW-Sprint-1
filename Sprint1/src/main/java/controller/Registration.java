@@ -48,6 +48,8 @@ public class Registration extends HttpServlet {
 						req.getParameter("secretQuestion"),
 						req.getParameter("secretAnswer"));
 				userService.save(user);
+				req.getSession().setAttribute("user", user);
+				resp.sendRedirect("profile?user=" + user.getUsername());
 			}
 		}
 	}
