@@ -17,7 +17,8 @@
 			<span style="font-size: 15px;">
 				<c:out value="${comment.comment}" />
 			</span>
-			<a href="<c:url value="comment"><c:param name="id" value="${comment.author}" /></c:url>">
+			<a href="">
+				<c:out value="${comment.author.username}" />
 			</a>
 			<br />
 		</li>
