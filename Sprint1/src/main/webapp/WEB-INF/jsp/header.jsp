@@ -13,6 +13,6 @@
 	<body>
 		<div style="overflow: auto;">
 			<c:if test="${not empty user}">
-				<span style="float: right;"><c:out value="${user.username}" /> [<a href="logout">Cerrar sesi&oacute;n</a>]</span>
+				<span style="float: right;"><c:out value="${user.username}" /> [<a href="logout">Close session</a>]</span>
 			</c:if>
 		</div>

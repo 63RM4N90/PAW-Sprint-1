@@ -32,7 +32,7 @@ public class UserDAO extends AbstractDAO {
 			User user = null;
 			Connection connection = manager.getConnection();
 			PreparedStatement stmt = connection
-					.prepareStatement("SELECT username, password FROM Users WHERE username = ? AND password = ?");
+					.prepareStatement("SELECT * FROM Users WHERE username = ? AND password = ?");
 			stmt.setString(1, username);
 			stmt.setString(2, password);
 
@@ -117,7 +117,7 @@ public class UserDAO extends AbstractDAO {
 			stmt.setString(1, username);
 
 			ResultSet results = stmt.executeQuery();
-			if (results.next()) {
+			while (results.next()) {
 				user = new User(results.getString(2), results.getString(3),
 						username, results.getString(5), results.getString(6),
 						null, results.getString(7), results.getString(8));

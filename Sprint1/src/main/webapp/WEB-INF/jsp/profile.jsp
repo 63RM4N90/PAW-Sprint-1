@@ -10,6 +10,20 @@
 		<input type="submit" name="submit" value="Post" />
 	</div>
 </form>
-<div class="notRegistered"><a href="register">Not a member yet? Register!</a></div>
+<ul style="padding:0;">
+	<c:set var="row" value="0" />
+	<c:forEach items="${comments}" var="comment">
+		<li class="<c:if test="${row % 2 == 0}">odd</c:if><c:if test="${row % 2 != 0}">even</c:if><c:set var="row" value="${row + 1}" />" style="list-style-type: none; padding: 10px;">
+			<span style="font-size: 15px;">
+				<c:out value="${comment.comment}" />
+			</span>
+			<a href="<c:url value="comment"><c:param name="id" value="${comment.author}" /></c:url>">
+			</a>
+			<br />
+		</li>
+	</c:forEach>
+</ul>
+
+
 
 <%@ include file="footer.jsp" %>
