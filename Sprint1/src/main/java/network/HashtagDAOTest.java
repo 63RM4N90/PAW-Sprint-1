@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -28,6 +29,15 @@ public class HashtagDAOTest {
 		
 		Date date = new Date();
 		
+		Calendar aux = Calendar.getInstance();
+		aux.set(2013, aux.AUGUST, 1);
+		
+		Date from = aux.getTime();
+		aux.set(2013, aux.SEPTEMBER,5);
+		Date to = aux.getTime();
+		
+		
+		
 		HashtagDAO htdao = HashtagDAO.getInstance();
 		
 		Hashtag hashtag = new Hashtag("hashtag",user,date);
@@ -39,6 +49,8 @@ public class HashtagDAOTest {
 		//htdao.save(hashtag2);
 		
 		System.out.println(date);
+		System.out.println(from);
+		System.out.println(to);
 		
 				
 		
@@ -48,9 +60,14 @@ public class HashtagDAOTest {
 
 		//htdao.saveWithComment(hashtag2,4);
 		
-		HashMap<Integer,ArrayList<Hashtag>> map = htdao.rankedHashTags(null, null);
+		HashMap<Integer,ArrayList<Hashtag>> map = htdao.rankedHashTags(from,to);
 		
-		System.out.println(map);
+		for(Integer each: map.keySet()){
+			System.out.println("Con " + each + " estan los hashtags:");
+			for(Hashtag auxi: map.get(each)){
+				System.out.println(auxi.getHashtag());
+			}
+		}
 	
 		
 

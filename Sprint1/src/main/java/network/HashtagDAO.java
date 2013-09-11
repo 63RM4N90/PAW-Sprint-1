@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.sql.Date;
+import java.util.Date;
 import java.util.HashMap;
 
 import model.Hashtag;
@@ -101,7 +101,7 @@ public class HashtagDAO extends AbstractDAO {
 
 		String query = "SELECT H1.hashtag, H1.date, count(H2.commentId) AS RANK, U.id, U.name, U.surname,U.username, U.password, U.description,U.secretquestion,U.secretanswer "
 				+ "FROM hashtags AS H1,hashtagsincomments AS H2,comments AS C,users AS U "
-				+ "WHERE H1.hashtag = H2.hashtag AND H2.commentId = C.id AND H1.creator = U.username "
+				+ "WHERE H1.hashtag = H2.hashtag AND H2.commentId = C.id AND H1.creator = U.username AND C.date >= ? AND C.date <= ? "
 				+ "GROUP BY H1.hashtag, H1.date, U.id, U.name, U.surname, U.password, U.username, U.description,U.secretquestion,U.secretanswer "
 				+ "ORDER BY RANK DESC";
 
@@ -109,6 +109,8 @@ public class HashtagDAO extends AbstractDAO {
 		PreparedStatement stmt;
 		try {
 			stmt = connection.prepareStatement(query);
+			stmt.setTimestamp(1, new Timestamp(from.getTime()));
+			stmt.setTimestamp(2, new Timestamp(to.getTime()));
 			ResultSet results = stmt.executeQuery();
 
 			Hashtag hashtag;
