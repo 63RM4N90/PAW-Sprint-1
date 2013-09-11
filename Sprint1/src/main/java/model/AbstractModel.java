@@ -14,7 +14,7 @@ public abstract class AbstractModel {
 	}
 	
 	public boolean isNew(){
-		return id == -1?true:false;
+		return id == -1;
 	}
 
 }

@@ -8,12 +8,12 @@ import model.Comment;
 import model.Hashtag;
 import model.User;
 import network.CommentDAO;
-import network.HashTagDAO;
+import network.HashtagDAO;
 
 public class CommentService {
 
 private CommentDAO commentDao;
-private HashTagDAO hashtagDao;
+private HashtagDAO hashtagDao;
 	
 	private static CommentService instance;
 
@@ -26,7 +26,7 @@ private HashTagDAO hashtagDao;
 
 	private CommentService() {
 		commentDao = CommentDAO.getInstance();
-		hashtagDao = HashTagDAO.getInstance();
+		hashtagDao = HashtagDAO.getInstance();
 	}
 	
 	public List<Hashtag> getHashtags(String comment) {
