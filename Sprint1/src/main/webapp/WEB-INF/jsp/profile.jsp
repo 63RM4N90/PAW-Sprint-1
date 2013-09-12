@@ -1,6 +1,10 @@
 <%@ include file="header.jsp" %>
+<img src="/images/<c:out value="${user.username}" />.jpg" alt="user_image">
+<h2><c:out value="${user.username}" /></h2>
+<h5><c:out value="${user.name}" /></h5>
+<h5><c:out value="${user.surname}" /></h5>
+<p><c:out value="${user.description}" /></p>
 
-<h2>Welcome <c:out value="${username}" />!</h2>
 <form method="POST" action="profile">
 	<div class="form-field">
 		<label for="comment">Comment:</label>
