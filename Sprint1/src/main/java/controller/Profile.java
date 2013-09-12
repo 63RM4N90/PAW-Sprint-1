@@ -2,7 +2,6 @@ package controller;
 
 import java.io.IOException;
 import java.util.Date;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -11,14 +10,13 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import model.Comment;
-import model.Hashtag;
 import model.User;
 import services.CommentService;
 import services.UserService;
 
 @SuppressWarnings("serial")
 public class Profile extends HttpServlet {
-	
+
 	private CommentService commentService = CommentService.getInstance();
 	private UserService userService = UserService.getInstance();
 
@@ -38,8 +36,10 @@ public class Profile extends HttpServlet {
 		String aux = req.getParameter("comment");
 		HttpSession session = req.getSession();
 		User user = (User) session.getAttribute("user");
-		List<Hashtag> hashtags = commentService.getHashtags(aux);
-		//Comment comment = new Comment(user, new Date(), aux, hashtags);
+		String commentString = commentService.getProcessedComment(aux);
+		Comment comment = new Comment(user, new Date(), commentString,
+				commentService.getHashtagList(commentString, user));
+		commentService.save(comment);
 		resp.sendRedirect("profile?user=" + user.getUsername());
 	}
 }

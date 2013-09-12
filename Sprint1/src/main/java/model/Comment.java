@@ -1,20 +1,18 @@
 package model;
 
-import java.sql.Date;
-import java.sql.Time;
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 public class Comment extends AbstractModel{
 	private User author;
-	private Timestamp date;
+	private Date date;
 	private String comment;
 	private List<Hashtag> hashtags;
 
 	public Comment() {
 	}
 
-	public Comment(User author, Timestamp date, String comment, List<Hashtag> hashtags) {
+	public Comment(User author, Date date, String comment, List<Hashtag> hashtags) {
 		this.author = author;
 		this.date = date;
 		this.comment = comment;
@@ -29,11 +27,11 @@ public class Comment extends AbstractModel{
 		this.author = author;
 	}
 
-	public Timestamp getDate() {
+	public Date getDate() {
 		return date;
 	}
 
-	public void setDate(Timestamp date) {
+	public void setDate(Date date) {
 		this.date = date;
 	}
 

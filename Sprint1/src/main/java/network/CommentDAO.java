@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,11 +64,10 @@ public class CommentDAO extends AbstractDAO {
 		try {
 			Connection connection = manager.getConnection();
 			PreparedStatement stmt;
-			stmt = connection.prepareStatement("INSERT INTO Comments(id, username, date, comment) values(?, ?, ?, ?)");
-			stmt.setInt(1, comment.getId());
-			stmt.setString(2, comment.getAuthor().getUsername());
-			stmt.setTimestamp(3, comment.getDate());
-			stmt.setString(4, comment.getComment());
+			stmt = connection.prepareStatement("INSERT INTO Comments(username, date, comment) values(?, ?, ?)");
+			stmt.setString(1, comment.getAuthor().getUsername());
+			stmt.setTimestamp(2, new Timestamp(comment.getDate().getTime()));
+			stmt.setString(3, comment.getComment());
 			stmt.executeUpdate();
 			connection.commit();
 			connection.close();
@@ -88,6 +88,5 @@ public class CommentDAO extends AbstractDAO {
 		} catch (SQLException e) {
 			throw new DatabaseException(e.getMessage(), e);
 		}
-
 	}
 }

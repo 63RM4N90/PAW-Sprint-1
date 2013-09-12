@@ -16,9 +16,9 @@ public class CommentDAOTest {
 		//umanager.save(u);
 		Comment c = new Comment(u, new Timestamp(10), "ger topu", new ArrayList<Hashtag>());
 		c.setId(1);
-		//manager.save(c);
-		manager.removeComment(c);
+		manager.save(c);
+		//manager.removeComment(c);
 //		System.out.println(umanager.getUser(u.getUsername()).getUsername());
-//		System.out.println(manager.getComments(u));
+		System.out.println(manager.getComments(u));
 	}
 }
