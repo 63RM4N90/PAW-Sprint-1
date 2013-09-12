@@ -50,16 +50,6 @@ public class CommentService {
 	}
 
 	public String getProcessedComment(String comment) {
-		/*
-		 * int i = 0; String ans = ""; String auxTag = ""; boolean tagFound =
-		 * false; while (i < comment.length()) { if (comment.charAt(i) == ' ') {
-		 * if (tagFound) { ans += "\">#" + auxTag + "</a>"; auxTag = "";
-		 * tagFound = false; } } else if (comment.charAt(i) == '#') { ans +=
-		 * "<a href=\"/hashtag?tag="; tagFound = true; } else { if (tagFound) {
-		 * auxTag += comment.charAt(i); } } ans += comment.charAt(i); i++; } if
-		 * (tagFound) { ans += "\">#" + auxTag + "</a>"; } return ans;
-		 */
-
 		// Search for URLs
 		if (comment != null && comment.contains("http:")) {
 			int indexOfHttp = comment.indexOf("http:");
@@ -77,7 +67,6 @@ public class CommentService {
 		String result = "";
 
 		// Search for Hashtags
-
 		while (matcher.find()) {
 			result = matcher.group();
 			result = result.replace(" ", "");
