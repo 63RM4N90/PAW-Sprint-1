@@ -41,7 +41,7 @@ public class CommentService {
 		}
 		return ans;
 	}
-	
+
 	public void save(Comment comment) {
 		commentDao.save(comment);
 	}
@@ -54,23 +54,23 @@ public class CommentService {
 		while (i < comment.length()) {
 			if (comment.charAt(i) == ' ') {
 				if (tagFound) {
-					ans += ">" + auxTag + "</a>";
+					ans += "\">#" + auxTag + "</a>";
 					auxTag = "";
 					tagFound = false;
-				} else {
-					ans += comment.charAt(i);
-					auxTag += comment.charAt(i);
 				}
 			} else if (comment.charAt(i) == '#') {
 				ans += "<a href=\"/hashtag?tag=";
 				tagFound = true;
 			} else {
-				ans += comment.charAt(i);
 				if (tagFound) {
 					auxTag += comment.charAt(i);
 				}
 			}
+			ans += comment.charAt(i);
 			i++;
+		}
+		if (tagFound) {
+			ans += "\">#" + auxTag + "</a>";
 		}
 		return ans;
 	}

@@ -46,7 +46,6 @@ public class User extends AbstractModel{
 		this.surname = surname;
 		this.username = username;
 		this.description = description;
-		System.out.println("lala = " + this.description);
 		this.password = password;
 		this.photo = photo;
 		this.secretQuestion = secretQuestion;
@@ -79,7 +78,6 @@ public class User extends AbstractModel{
 	}
 
 	public String getDescription() {
-		System.out.println("jaja = " + description);
 		return description;
 	}
 
