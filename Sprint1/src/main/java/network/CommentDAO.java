@@ -49,7 +49,7 @@ public class CommentDAO extends AbstractDAO {
 					User creator = userDao.getUser(hashtagResults.getString(3));
 					hashtags.add(new Hashtag(hashtagResults.getString(2), creator, commentResults.getDate(3)));
 				}
-				Comment current = new Comment(user, commentResults.getDate(3), commentResults.getTime(4), commentResults.getString(5), hashtags); 
+				Comment current = new Comment(user, commentResults.getTimestamp(3), commentResults.getString(4), hashtags); 
 				comments.add(current); 
 			}
 			connection.close();
@@ -63,12 +63,11 @@ public class CommentDAO extends AbstractDAO {
 		try {
 			Connection connection = manager.getConnection();
 			PreparedStatement stmt;
-			stmt = connection.prepareStatement("INSERT INTO Comments(id, username, date, time, comment) values(?, ?, ?, ?, ?)");
+			stmt = connection.prepareStatement("INSERT INTO Comments(id, username, date, comment) values(?, ?, ?, ?)");
 			stmt.setInt(1, comment.getId());
 			stmt.setString(2, comment.getAuthor().getUsername());
-			stmt.setDate(3, comment.getDate());
-			stmt.setTime(4, comment.getTime());
-			stmt.setString(5, comment.getComment());
+			stmt.setTimestamp(3, comment.getDate());
+			stmt.setString(4, comment.getComment());
 			stmt.executeUpdate();
 			connection.commit();
 			connection.close();
@@ -81,8 +80,9 @@ public class CommentDAO extends AbstractDAO {
 		Connection connection = manager.getConnection();
 		PreparedStatement stmt;
 		try {
-			stmt = connection.prepareStatement("DELETE FROM TABLE Comments WHERE id = ?");
+			stmt = connection.prepareStatement("DELETE FROM Comments WHERE id = ?");
 			stmt.setInt(1, comment.getId());
+			stmt.execute();
 			connection.commit();
 			connection.close();
 		} catch (SQLException e) {

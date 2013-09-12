@@ -1,4 +1,4 @@
-﻿CREATE TABLE Users (
+CREATE TABLE Users (
 	id		SERIAL NOT NULL,
 	name		varchar(32),
 	surname		varchar(32),
@@ -23,7 +23,7 @@ CREATE TABLE Comments (
 	username	varchar(32) REFERENCES Users(username) ON DELETE CASCADE,
 	date		TIMESTAMP NOT NULL,
 	comment		varchar(140),
-	PRIMARY KEY(id, username, date, time)
+	PRIMARY KEY(id, username, date)
 );
 
 CREATE TABLE HashtagsInComments (

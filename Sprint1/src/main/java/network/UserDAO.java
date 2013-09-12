@@ -136,8 +136,9 @@ public class UserDAO extends AbstractDAO {
 		PreparedStatement stmt;
 		try {
 			stmt = connection
-					.prepareStatement("DELETE FROM TABLE Users WHERE username = ?");
+					.prepareStatement("DELETE FROM Users WHERE username = ?");
 			stmt.setString(1, user.getUsername());
+			stmt.execute();
 			connection.commit();
 			connection.close();
 		} catch (SQLException e) {
