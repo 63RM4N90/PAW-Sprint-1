@@ -3,6 +3,8 @@ package services;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import model.Comment;
 import model.Hashtag;
@@ -36,6 +38,7 @@ public class CommentService {
 			Hashtag tag = hashtagDao.getHashTag(string);
 			if (tag == null) {
 				tag = new Hashtag(string, author, new Date());
+				hashtagDao.save(tag);
 			}
 			ans.add(tag);
 		}
@@ -47,32 +50,44 @@ public class CommentService {
 	}
 
 	public String getProcessedComment(String comment) {
-		int i = 0;
-		String ans = "";
-		String auxTag = "";
-		boolean tagFound = false;
-		while (i < comment.length()) {
-			if (comment.charAt(i) == ' ') {
-				if (tagFound) {
-					ans += "\">#" + auxTag + "</a>";
-					auxTag = "";
-					tagFound = false;
-				}
-			} else if (comment.charAt(i) == '#') {
-				ans += "<a href=\"/hashtag?tag=";
-				tagFound = true;
-			} else {
-				if (tagFound) {
-					auxTag += comment.charAt(i);
-				}
-			}
-			ans += comment.charAt(i);
-			i++;
+		/*
+		 * int i = 0; String ans = ""; String auxTag = ""; boolean tagFound =
+		 * false; while (i < comment.length()) { if (comment.charAt(i) == ' ') {
+		 * if (tagFound) { ans += "\">#" + auxTag + "</a>"; auxTag = "";
+		 * tagFound = false; } } else if (comment.charAt(i) == '#') { ans +=
+		 * "<a href=\"/hashtag?tag="; tagFound = true; } else { if (tagFound) {
+		 * auxTag += comment.charAt(i); } } ans += comment.charAt(i); i++; } if
+		 * (tagFound) { ans += "\">#" + auxTag + "</a>"; } return ans;
+		 */
+
+		// Search for URLs
+		if (comment != null && comment.contains("http:")) {
+			int indexOfHttp = comment.indexOf("http:");
+			int endPoint = (comment.indexOf(' ', indexOfHttp) != -1) ? comment
+					.indexOf(' ', indexOfHttp) : comment.length();
+			String url = comment.substring(indexOfHttp, endPoint);
+			String targetUrlHtml = "<a href='" + url + "' target='_blank'>"
+					+ url + "</a>";
+			comment = comment.replace(url, targetUrlHtml);
 		}
-		if (tagFound) {
-			ans += "\">#" + auxTag + "</a>";
+
+		String patternStr = "#([A-Za-z0-9_]+)";
+		Pattern pattern = Pattern.compile(patternStr);
+		Matcher matcher = pattern.matcher(comment);
+		String result = "";
+
+		// Search for Hashtags
+
+		while (matcher.find()) {
+			result = matcher.group();
+			result = result.replace(" ", "");
+			String search = result.replace("#", "");
+			String searchHTML = "<a href='/hashtag?tag=" + search + "'>"
+					+ result + "</a>";
+			comment = comment.replace(result, searchHTML);
 		}
-		return ans;
+		System.out.println(comment);
+		return comment;
 	}
 
 	public List<Comment> getComments(User user) {
