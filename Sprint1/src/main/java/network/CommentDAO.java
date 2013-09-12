@@ -47,7 +47,7 @@ public class CommentDAO extends AbstractDAO {
 				List<Hashtag> hashtags = new ArrayList<Hashtag>();
 				while (hashtagResults.next()) {
 					User creator = userDao.getUser(hashtagResults.getString(3));
-					hashtags.add(new Hashtag(hashtagResults.getString(2), creator, commentResults.getDate(3), commentResults.getTime(4)));
+					hashtags.add(new Hashtag(hashtagResults.getString(2), creator, commentResults.getDate(3)));
 				}
 				Comment current = new Comment(user, commentResults.getDate(3), commentResults.getTime(4), commentResults.getString(5), hashtags); 
 				comments.add(current); 
