@@ -15,6 +15,16 @@
 		<input type="submit" name="submit" value="Ingresar" />
 	</div>
 </form>
-<div class="notRegistered"><a href="register">Not a member yet? Register!</a></div>
+
+<div>
+	<h2>Welcome to Social Cthulhu!</h2>
+	<p>
+		A place were you can become a Cthulhu follower <br>
+		and show your love to our beloved god by posting <br>
+		comments in your own personal space. Wanna join us? <br>
+	</p>
+	<div class="notRegistered"><a href="register"><button>Register</button></a></div>
+</div>
+
 
 <%@ include file="footer.jsp" %>

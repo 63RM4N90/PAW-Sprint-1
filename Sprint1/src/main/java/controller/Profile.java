@@ -27,7 +27,7 @@ public class Profile extends HttpServlet {
 			throws ServletException, IOException {
 		String username = req.getParameter("user");
 		User user = userService.getUsuer(username);
-		req.setAttribute("username", username);
+		req.setAttribute("user", user);
 		req.setAttribute("comments", commentService.getComments(user));
 		req.getRequestDispatcher("/WEB-INF/jsp/profile.jsp").forward(req, resp);
 	}
