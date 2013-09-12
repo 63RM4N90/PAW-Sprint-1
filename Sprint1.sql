@@ -14,16 +14,14 @@ CREATE TABLE Hashtags (
 	id		SERIAL NOT NULL UNIQUE,
 	hashtag		varchar(139) NOT NULL UNIQUE,
 	creator		varchar(32) REFERENCES Users(username),
-	date		date NOT NULL,
-	time		time NOT NULL,
+	date		TIMESTAMP NOT NULL,
 	PRIMARY KEY(id, hashtag)
 );
 
 CREATE TABLE Comments (
 	id		SERIAL UNIQUE NOT NULL,
 	username	varchar(32) REFERENCES Users(username) ON DELETE CASCADE,
-	date		date NOT NULL,
-	time		time NOT NULL,
+	date		TIMESTAMP NOT NULL,
 	comment		varchar(140),
 	PRIMARY KEY(id, username, date, time)
 );
