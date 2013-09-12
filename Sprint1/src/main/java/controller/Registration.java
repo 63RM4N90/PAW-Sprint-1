@@ -39,7 +39,17 @@ public class Registration extends HttpServlet {
 				fillInputs(req);
 				req.getRequestDispatcher("/WEB-INF/jsp/registration.jsp")
 						.forward(req, resp);
+			}
+			if (!req.getParameter("password")
+					.equals(req.getParameter("confirm"))) {
+				req.setAttribute("passwordError",
+						"Password confirmation doesn't match the password field!");
+				fillInputs(req);
+				req.getRequestDispatcher("/WEB-INF/jsp/registration.jsp")
+						.forward(req, resp);
 			} else {
+				System.out.println("description = "
+						+ req.getParameter("description"));
 				User user = new User(req.getParameter("name"),
 						req.getParameter("surname"),
 						req.getParameter("username"),

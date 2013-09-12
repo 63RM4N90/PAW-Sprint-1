@@ -21,6 +21,10 @@
 		<input type="password" name="password" value="<c:out value="${password}" />"/>
 	</div>
 	<div class="form-field">
+		<label for="confirm">Confirm password:</label>
+		<input type="password" name="confirm" value="<c:out value="${confirm}" />"/>
+	</div>
+	<div class="form-field">
 		<label for="description">Description:</label>
 		<input type="text" name="description" value="<c:out value="${description}" />"/>
 	</div>

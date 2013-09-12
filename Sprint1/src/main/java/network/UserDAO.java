@@ -64,7 +64,7 @@ public class UserDAO extends AbstractDAO {
 			ResultSet results = stmt.executeQuery();
 			if (results.next()) {
 				user = new User(results.getString(2), results.getString(3),
-						username, results.getString(5), results.getString(6),
+						username, results.getString(6), results.getString(4),
 						null, results.getString(7), results.getString(8));
 				user.setId(results.getInt(1));
 			}
@@ -76,6 +76,7 @@ public class UserDAO extends AbstractDAO {
 	}
 
 	public void save(User user) {
+		System.out.println("DAO");
 		try {
 			Connection connection = manager.getConnection();
 			PreparedStatement stmt;

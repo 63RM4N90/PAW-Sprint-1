@@ -36,10 +36,12 @@ public class Profile extends HttpServlet {
 		String aux = req.getParameter("comment");
 		HttpSession session = req.getSession();
 		User user = (User) session.getAttribute("user");
-		String commentString = commentService.getProcessedComment(aux);
-		Comment comment = new Comment(user, new Date(), commentString,
-				commentService.getHashtagList(commentString, user));
-		commentService.save(comment);
+		if (aux.length() > 0) {
+			String commentString = commentService.getProcessedComment(aux);
+			Comment comment = new Comment(user, new Date(), commentString,
+					commentService.getHashtagList(commentString, user));
+			commentService.save(comment);
+		}
 		resp.sendRedirect("profile?user=" + user.getUsername());
 	}
 }
