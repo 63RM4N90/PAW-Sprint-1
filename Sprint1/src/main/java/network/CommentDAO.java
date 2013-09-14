@@ -34,7 +34,6 @@ public class CommentDAO extends AbstractDAO {
 	public List<Comment> getComments(User user) {
 		List<Comment> comments = new ArrayList<Comment>();
 		UserDAO userDao = UserDAO.getInstance();
-		
 		try {
 			Connection connection = manager.getConnection();
 			PreparedStatement stmt = connection.prepareStatement("SELECT * FROM Comments WHERE username = ?");

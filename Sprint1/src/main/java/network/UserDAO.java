@@ -18,8 +18,9 @@ import model.User;
 public class UserDAO extends AbstractDAO {
 
 	private final ConnectionManager manager;
-
 	private static UserDAO instance;
+	private static final File defaultPicture = new File(
+			"../pictures/defaultPicture.jpg");
 
 	public static UserDAO getInstance() {
 		if (instance == null) {
@@ -44,13 +45,7 @@ public class UserDAO extends AbstractDAO {
 
 			ResultSet results = stmt.executeQuery();
 			if (results.next()) {
-				String name = results.getString(2);
-				String surname = results.getString(3);
-				String description = results.getString(6);
-				String secretQuestion = results.getString(7);
-				String secretAnswer = results.getString(8);
-				user = new User(name, surname, username, description, password,
-						null, secretQuestion, secretAnswer);
+				user = constructUser(results);
 			}
 			connection.close();
 			return user;
@@ -69,12 +64,7 @@ public class UserDAO extends AbstractDAO {
 
 			ResultSet results = stmt.executeQuery();
 			if (results.next()) {
-				ByteToFile(results.getBytes(9), username + ".jpg");
-				File picture = new File(username);
-				user = new User(results.getString(2), results.getString(3),
-						username, results.getString(6), results.getString(4),
-						picture, results.getString(7), results.getString(8));
-				user.setId(results.getInt(1));
+				user = constructUser(results);
 			}
 			connection.close();
 		} catch (SQLException e) {
@@ -88,11 +78,21 @@ public class UserDAO extends AbstractDAO {
 			Connection connection = manager.getConnection();
 			PreparedStatement stmt;
 			if (user.isNew()) {
-				stmt = connection
-						.prepareStatement("INSERT INTO Users(name, surname, password, username, description, secretquestion, secretanswer, picture) values(?, ?, ?, ?, ?, ?, ?, ?)");
+				if (user.getPicture() != null) {
+					stmt = connection
+							.prepareStatement("INSERT INTO Users(name, surname, password, username, description, secretquestion, secretanswer, picture) values(?, ?, ?, ?, ?, ?, ?, ?)");
+				} else {
+					stmt = connection
+							.prepareStatement("INSERT INTO Users(name, surname, password, username, description, secretquestion, secretanswer) values(?, ?, ?, ?, ?, ?, ?)");
+				}
 			} else {
-				stmt = connection
-						.prepareStatement("UPDATE Users SET name = ?, surname = ?, password = ?, username = ?, description = ?, secretquestion = ?, secretanswer = ?, picture = ? WHERE username = ?");
+				if (user.getPicture() != null) {
+					stmt = connection
+							.prepareStatement("UPDATE Users SET name = ?, surname = ?, password = ?, username = ?, description = ?, secretquestion = ?, secretanswer = ?, picture = ? WHERE username = ?");
+				} else {
+					stmt = connection
+							.prepareStatement("UPDATE Users SET name = ?, surname = ?, password = ?, username = ?, description = ?, secretquestion = ?, secretanswer = ? WHERE username = ?");
+				}
 			}
 			stmt.setString(1, user.getName());
 			stmt.setString(2, user.getSurname());
@@ -101,11 +101,18 @@ public class UserDAO extends AbstractDAO {
 			stmt.setString(5, user.getDescription());
 			stmt.setString(6, user.getSecretQuestion());
 			stmt.setString(7, user.getSecretAnswer());
-			stmt.setBytes(8, FileToByte(user.getPicture()));
 			if (user.isNew()) {
+				if (user.getPicture() != null) {
+					stmt.setBytes(8, fileToByte(user.getPicture()));
+				}
 				stmt.execute();
 			} else {
-				stmt.setString(9, user.getUsername());
+				if (user.getPicture() != null) {
+					stmt.setBytes(8, fileToByte(user.getPicture()));
+					stmt.setString(9, user.getUsername());
+				} else {
+					stmt.setString(8, user.getUsername());
+				}
 				stmt.executeUpdate();
 			}
 
@@ -129,10 +136,7 @@ public class UserDAO extends AbstractDAO {
 
 			ResultSet results = stmt.executeQuery();
 			while (results.next()) {
-				user = new User(results.getString(2), results.getString(3),
-						username, results.getString(5), results.getString(6),
-						null, results.getString(7), results.getString(8));
-				user.setId(results.getInt(1));
+				user = constructUser(results);
 				users.add(user);
 			}
 			connection.close();
@@ -157,7 +161,7 @@ public class UserDAO extends AbstractDAO {
 		}
 	}
 
-	public static byte[] FileToByte(File file) throws FileNotFoundException {
+	private static byte[] fileToByte(File file) throws FileNotFoundException {
 		FileInputStream fis = new FileInputStream(file);
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		byte[] buf = new byte[1024];
@@ -169,11 +173,11 @@ public class UserDAO extends AbstractDAO {
 		} catch (IOException ex) {
 		}
 		byte[] bytes = bos.toByteArray();
-		
+
 		return bytes;
 	}
 
-	public static void ByteToFile(byte[] image, String fileName) {
+	private static void byteToFile(byte[] image, String fileName) {
 		File someFile = new File(fileName);
 		FileOutputStream fos;
 		try {
@@ -185,5 +189,27 @@ public class UserDAO extends AbstractDAO {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	private User constructUser(ResultSet results) throws SQLException {
+		int id = results.getInt(1);
+		String name = results.getString(2);
+		String surname = results.getString(3);
+		String password = results.getString(4);
+		String username = results.getString(5);
+		String description = results.getString(6);
+		String secretQuestion = results.getString(7);
+		String secretAnswer = results.getString(8);
+		String pictureName = username + ".jpg";
+		File file = null;
+		if (results.getBytes(9) != null) {
+			byteToFile(results.getBytes(9), pictureName);
+			file = new File(pictureName);
+		}
+		User user = new User(name, surname, username, description, password,
+				file, secretQuestion, secretAnswer);
+		user.setId(id);
+
+		return user;
 	}
 }
