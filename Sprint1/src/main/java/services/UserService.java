@@ -1,5 +1,7 @@
 package services;
 
+import java.util.List;
+
 import model.User;
 import network.UserDAO;
 
@@ -34,5 +36,9 @@ public class UserService {
 
 	public User getUsuer(String username) {
 		return userDao.getUser(username);
+	}
+	
+	public List<User> getUsersWithName(String name) {
+		return userDao.getUsersWithName(name);
 	}
 }

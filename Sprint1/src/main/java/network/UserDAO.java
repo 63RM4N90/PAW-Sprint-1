@@ -125,12 +125,36 @@ public class UserDAO extends AbstractDAO {
 
 	public List<User> getAllUsers() {
 		List<User> users = new ArrayList<User>();
-		User user;
+		User user = null;
 		try {
 			Connection connection = manager.getConnection();
 			PreparedStatement stmt = connection
 					.prepareStatement("SELECT * FROM Users WHERE username = ?");
 			stmt.setString(1, username);
+
+			ResultSet results = stmt.executeQuery();
+			while (results.next()) {
+				user = constructUser(results);
+				users.add(user);
+			}
+			connection.close();
+		} catch (SQLException e) {
+			throw new DatabaseException(e.getMessage(), e);
+		}
+		return users;
+	}
+
+	public List<User> getUsersWithName(String name) {
+		List<User> users = new ArrayList<User>();
+		User user = null;
+		try {
+			Connection connection = manager.getConnection();
+			PreparedStatement stmt = connection
+					.prepareStatement("SELECT * FROM Users WHERE username LIKE '%"
+							+ name
+							+ "%' OR (name LIKE '%"
+							+ name
+							+ "%') OR (surname LIKE '%" + name + "%')");
 
 			ResultSet results = stmt.executeQuery();
 			while (results.next()) {
