@@ -30,6 +30,43 @@ public class CommentDAO extends AbstractDAO {
 		manager = new ConnectionManager(driver, connectionString, username,
 				password);
 	}
+	
+	public List<Comment> getComments(String hashtag){
+		List<Comment> comments = new ArrayList<Comment>();
+		HashtagDAO hDAO = HashtagDAO.getInstance();
+		UserDAO uDAO = UserDAO.getInstance();
+		
+		try {
+			Connection connection = manager.getConnection();
+			PreparedStatement stmt = connection.prepareStatement("SELECT * FROM hashtagsincomments,comments"
+					+ " WHERE commentid = id AND hashtag = ?");
+			stmt.setString(1, hashtag);			
+			ResultSet results = stmt.executeQuery();
+			
+			while(results.next()){
+				List<Hashtag> hashtags = new ArrayList<Hashtag>();
+				stmt = connection.prepareStatement("SELECT commentid,hashtag FROM hashtagsincomments "
+						+ "WHERE commentid = ?");
+				stmt.setInt(1, results.getInt(1));
+				ResultSet resultsH = stmt.executeQuery();
+					while(resultsH.next()){
+						hashtags.add(hDAO.getHashTag(resultsH.getString(2)));
+					}
+				User author = uDAO.getUser(results.getString(4));
+				Comment comment = new Comment(author,results.getTimestamp(5),results.getString(6),hashtags);
+				comments.add(comment);
+			}
+			
+			
+			
+			
+		} catch (SQLException e) {
+			throw new DatabaseException(e.getMessage(), e);
+		}
+		
+		
+		return comments;
+	}
 
 	public List<Comment> getComments(User user) {
 		List<Comment> comments = new ArrayList<Comment>();
