@@ -9,6 +9,11 @@
 		<servlet-name>Registration</servlet-name>
 		<servlet-class>controller.Registration</servlet-class>
 	</servlet>
+	
+	<servlet>
+		<servlet-name>Hashtag</servlet-name>
+		<servlet-class>controller.HashtagPage</servlet-class>
+	</servlet>
 
 	<servlet>
 		<servlet-name>Login</servlet-name>
@@ -34,6 +39,11 @@
 	<servlet-mapping>
 		<servlet-name>Registration</servlet-name>
 		<url-pattern>/register</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>Hashtag</servlet-name>
+		<url-pattern>/hashtag</url-pattern>
 	</servlet-mapping>
 
 	<servlet-mapping>

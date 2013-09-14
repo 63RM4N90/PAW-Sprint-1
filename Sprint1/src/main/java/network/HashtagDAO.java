@@ -7,8 +7,10 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.List;
+import java.util.TreeMap;
 
+import model.Comment;
 import model.Hashtag;
 import model.User;
 
@@ -35,8 +37,8 @@ public class HashtagDAO extends AbstractDAO {
 		try {
 			Connection connection = manager.getConnection();
 			PreparedStatement stmt = connection
-					.prepareStatement("SELECT * FROM Users WHERE username = ?");
-			stmt.setString(1, username);
+					.prepareStatement("SELECT * FROM hashtags WHERE hashtag = ?");
+			stmt.setString(1, hashtag);
 
 			ResultSet results = stmt.executeQuery();
 			if (results.next()) {
@@ -94,10 +96,15 @@ public class HashtagDAO extends AbstractDAO {
 		}
 
 	}
+	
+	public List<Comment> getComments(String hashtag){
+		CommentDAO commentDAO = CommentDAO.getInstance();
+		return commentDAO.getComments(hashtag);
+	}
 
-	public HashMap<Integer, ArrayList<Hashtag>> rankedHashTags(Date from,
+	public TreeMap<Integer, ArrayList<Hashtag>> rankedHashTags(Date from,
 			Date to) {
-		HashMap<Integer, ArrayList<Hashtag>> rank = new HashMap<Integer, ArrayList<Hashtag>>();
+		TreeMap<Integer, ArrayList<Hashtag>> rank = new TreeMap<Integer, ArrayList<Hashtag>>();
 
 		String query = "SELECT H1.hashtag, H1.date, count(H2.commentId) AS RANK, U.id, U.name, U.surname,U.username, U.password, U.description,U.secretquestion,U.secretanswer "
 				+ "FROM hashtags AS H1,hashtagsincomments AS H2,comments AS C,users AS U "
