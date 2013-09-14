@@ -1,6 +1,11 @@
 <%@ include file="header.jsp"%>
-<img src="/images/<c:out value="${user.username}" />.jpg"
-	alt="user_image">
+<c:if test="${empty user.picture}">
+	<img src="img/a.jpg" alt="user_picture"/>
+</c:if>
+<c:if test="${not empty user.picture}">
+	<img src="img/<c:out value="${user.picture.path}" />"
+		alt="user_picture"/>
+</c:if>
 <h2>
 	<c:out value="${user.username}" />
 </h2>
@@ -26,15 +31,12 @@
 <ul style="padding: 0;">
 	<c:set var="row" value="0" />
 	<c:forEach items="${comments}" var="comment">
-		<li
-			<c:set var="row" value="${row + 1}" />>
+		<li <c:set var="row" value="${row + 1}" />>
 			<p>${comment.comment}</p> <a
 			href="<c:url value="profile"><c:param name="user" value="${comment.author.username}" /></c:url>">${comment.author.username}</a>
 			<br />
 		</li>
 	</c:forEach>
 </ul>
-
-
 
 <%@ include file="footer.jsp"%>
