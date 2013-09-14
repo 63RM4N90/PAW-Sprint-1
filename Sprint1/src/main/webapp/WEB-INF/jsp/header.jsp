@@ -17,7 +17,12 @@
 				<span style="float: right;"><c:out value="${user.username}" /> [<a href="logout">Close session</a>]</span>
 			</c:if>
 		</div>
-		<div class="search-bar">
-			<label for="search">Search:</label>
-			<input type="text" name="search" />
-	</div>
+		<form method="POST" action="search">
+			<div class="search-bar">
+				<label for="search">Search:</label>
+				<input type="text" name="search" />
+			</div>
+			<div class="search-button">
+				<input type="submit" name="submit" value="Search" />
+			</div>
+		</form>

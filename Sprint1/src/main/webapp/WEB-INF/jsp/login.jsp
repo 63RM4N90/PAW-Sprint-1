@@ -4,15 +4,15 @@
 <div class="error"><c:out value="${error}" /></div>
 <form method="POST" action="login">
 	<div class="form-field">
-		<label for="username">Usuario:</label>
+		<label for="username">User:</label>
 		<input type="text" name="username" value="<c:out value="${username}" />" />
 	</div>
 	<div class="form-field">
-		<label for="password">Contrase&ntilde;a:</label>
+		<label for="password">Password:</label>
 		<input type="password" name="password"/>
 	</div>
 	<div class="form-buttons">
-		<input type="submit" name="submit" value="Ingresar" />
+		<input type="submit" name="submit" value="Login" />
 	</div>
 </form>
 

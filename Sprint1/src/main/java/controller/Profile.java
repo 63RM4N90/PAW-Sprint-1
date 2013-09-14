@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.Date;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -15,7 +14,7 @@ import services.CommentService;
 import services.UserService;
 
 @SuppressWarnings("serial")
-public class Profile extends HttpServlet {
+public class Profile extends AbstractController{
 
 	private CommentService commentService = CommentService.getInstance();
 	private UserService userService = UserService.getInstance();
@@ -37,7 +36,7 @@ public class Profile extends HttpServlet {
 		HttpSession session = req.getSession();
 		User user = (User) session.getAttribute("user");
 		if (aux.length() > 0) {
-			String commentString = commentService.getProcessedComment(aux);
+			String commentString = getProcessedComment(aux);
 			Comment comment = new Comment(user, new Date(), commentString,
 					commentService.getHashtagList(commentString, user));
 			commentService.save(comment);
