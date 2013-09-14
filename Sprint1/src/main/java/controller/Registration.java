@@ -34,19 +34,14 @@ public class Registration extends HttpServlet {
 		} else {
 			int pwdlength = req.getParameter("password").length();
 			if (pwdlength < 8 || pwdlength > 16) {
-				req.setAttribute("passwordError",
-						"Password must contain between 8 and 16 characters!");
+				req.setAttribute("passwordError","Password must contain between 8 and 16 characters!");
 				fillInputs(req);
-				req.getRequestDispatcher("/WEB-INF/jsp/registration.jsp")
-						.forward(req, resp);
+				req.getRequestDispatcher("/WEB-INF/jsp/registration.jsp").forward(req, resp);
 			}
-			if (!req.getParameter("password")
-					.equals(req.getParameter("confirm"))) {
-				req.setAttribute("passwordError",
-						"Password confirmation doesn't match the password field!");
+			if (!req.getParameter("password").equals(req.getParameter("confirm"))) {
+				req.setAttribute("passwordError","Password confirmation doesn't match the password field!");
 				fillInputs(req);
-				req.getRequestDispatcher("/WEB-INF/jsp/registration.jsp")
-						.forward(req, resp);
+				req.getRequestDispatcher("/WEB-INF/jsp/registration.jsp").forward(req, resp);
 			} else {
 				System.out.println("description = "
 						+ req.getParameter("description"));

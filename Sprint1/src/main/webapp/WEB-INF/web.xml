@@ -25,6 +25,10 @@
 		<servlet-class>controller.Logout</servlet-class>
 	</servlet>
 	
+	<servlet>
+		<servlet-name>EditProfile</servlet-name>
+		<servlet-class>controller.EditProfile</servlet-class>
+	</servlet>
 
 	<servlet-mapping>
 		<servlet-name>Registration</servlet-name>
@@ -45,4 +49,18 @@
 		<servlet-name>Logout</servlet-name>
 		<url-pattern>/logout</url-pattern>
 	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>EditProfile</servlet-name>
+		<url-pattern>/editProfile</url-pattern>
+	</servlet-mapping>
+	
+	<filter>
+		<filter-name>authenticationFilter</filter-name>
+		<filter-class>network.AuthenticationFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>authenticationFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
 </web-app>

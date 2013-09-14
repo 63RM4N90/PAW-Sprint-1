@@ -1,6 +1,7 @@
 package model;
 
-import java.awt.Image;
+import controller.Image;
+
 
 public class User extends AbstractModel{
 	public static final int MIN_USERNAME_LENGTH = 8;
@@ -15,9 +16,6 @@ public class User extends AbstractModel{
 	private Image photo;
 	private String secretQuestion;
 	private String secretAnswer;
-
-	public User() {
-	}
 
 	public User(String name, String surname, String username,
 			String description, String password, Image photo,
@@ -115,5 +113,10 @@ public class User extends AbstractModel{
 
 	public void setSecretAnswer(String secretAnswer) {
 		this.secretAnswer = secretAnswer;
+	}
+	
+	@Override
+	public boolean isNew() {
+		return id >= 0;
 	}
 }
