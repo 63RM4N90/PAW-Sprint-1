@@ -19,8 +19,6 @@ public class UserDAO extends AbstractDAO {
 
 	private final ConnectionManager manager;
 	private static UserDAO instance;
-	private static final File defaultPicture = new File(
-			"../pictures/defaultPicture.jpg");
 
 	public static UserDAO getInstance() {
 		if (instance == null) {

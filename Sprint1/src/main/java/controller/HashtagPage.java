@@ -8,9 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import model.Hashtag;
-import network.HashtagDAO;
-//import services.CommentService;
 import services.HashtagService;
+//import services.CommentService;
 //import services.UserService;
 
 @SuppressWarnings("serial")
