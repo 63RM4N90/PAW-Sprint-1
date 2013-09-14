@@ -6,7 +6,7 @@ import network.UserDAO;
 public class UserService {
 
 	private UserDAO userDao;
-	
+
 	private static UserService instance;
 
 	public static UserService getInstance() {
@@ -19,19 +19,19 @@ public class UserService {
 	private UserService() {
 		userDao = UserDAO.getInstance();
 	}
-	
+
 	public boolean userExists(String username) {
 		return userDao.getUser(username) != null;
 	}
-	
+
 	public void save(User user) {
 		userDao.save(user);
 	}
-	
+
 	public User authenticate(String username, String password) {
 		return userDao.authenticate(username, password);
 	}
-	
+
 	public User getUsuer(String username) {
 		return userDao.getUser(username);
 	}

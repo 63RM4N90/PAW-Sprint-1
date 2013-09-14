@@ -7,6 +7,7 @@ CREATE TABLE Users (
 	description	varchar(140),
 	secretQuestion	varchar(64),
 	secretAnswer	varchar(64),
+	picture		bytea,
 	PRIMARY KEY(id)
 );
 

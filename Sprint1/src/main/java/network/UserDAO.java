@@ -1,5 +1,11 @@
 package network;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -26,7 +32,7 @@ public class UserDAO extends AbstractDAO {
 		manager = new ConnectionManager(driver, connectionString, username,
 				password);
 	}
-	
+
 	public User authenticate(String username, String password) {
 		try {
 			User user = null;
@@ -63,9 +69,11 @@ public class UserDAO extends AbstractDAO {
 
 			ResultSet results = stmt.executeQuery();
 			if (results.next()) {
+				ByteToFile(results.getBytes(9), username + ".jpg");
+				File picture = new File(username);
 				user = new User(results.getString(2), results.getString(3),
 						username, results.getString(6), results.getString(4),
-						null, results.getString(7), results.getString(8));
+						picture, results.getString(7), results.getString(8));
 				user.setId(results.getInt(1));
 			}
 			connection.close();
@@ -76,16 +84,15 @@ public class UserDAO extends AbstractDAO {
 	}
 
 	public void save(User user) {
-		System.out.println("DAO");
 		try {
 			Connection connection = manager.getConnection();
 			PreparedStatement stmt;
 			if (user.isNew()) {
 				stmt = connection
-						.prepareStatement("INSERT INTO Users(name, surname, password, username, description, secretquestion, secretanswer) values(?, ?, ?, ?, ?, ?, ?)");
+						.prepareStatement("INSERT INTO Users(name, surname, password, username, description, secretquestion, secretanswer, picture) values(?, ?, ?, ?, ?, ?, ?, ?)");
 			} else {
 				stmt = connection
-						.prepareStatement("UPDATE Users SET name = ?, surname = ?, password = ?, username = ?, description = ?, secretquestion = ?, secretanswer = ? WHERE username = ?");
+						.prepareStatement("UPDATE Users SET name = ?, surname = ?, password = ?, username = ?, description = ?, secretquestion = ?, secretanswer = ?, picture = ? WHERE username = ?");
 			}
 			stmt.setString(1, user.getName());
 			stmt.setString(2, user.getSurname());
@@ -94,16 +101,19 @@ public class UserDAO extends AbstractDAO {
 			stmt.setString(5, user.getDescription());
 			stmt.setString(6, user.getSecretQuestion());
 			stmt.setString(7, user.getSecretAnswer());
-			if(user.isNew()) {
+			stmt.setBytes(8, FileToByte(user.getPicture()));
+			if (user.isNew()) {
 				stmt.execute();
 			} else {
-				stmt.setString(8, user.getUsername());
+				stmt.setString(9, user.getUsername());
 				stmt.executeUpdate();
 			}
-			
+
 			connection.commit();
 			connection.close();
 		} catch (SQLException e) {
+			throw new DatabaseException(e.getMessage(), e);
+		} catch (FileNotFoundException e) {
 			throw new DatabaseException(e.getMessage(), e);
 		}
 	}
@@ -144,6 +154,36 @@ public class UserDAO extends AbstractDAO {
 			connection.close();
 		} catch (SQLException e) {
 			throw new DatabaseException(e.getMessage(), e);
+		}
+	}
+
+	public static byte[] FileToByte(File file) throws FileNotFoundException {
+		FileInputStream fis = new FileInputStream(file);
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		byte[] buf = new byte[1024];
+		try {
+			for (int readNum; (readNum = fis.read(buf)) != -1;) {
+				bos.write(buf, 0, readNum);
+			}
+			fis.close();
+		} catch (IOException ex) {
+		}
+		byte[] bytes = bos.toByteArray();
+		
+		return bytes;
+	}
+
+	public static void ByteToFile(byte[] image, String fileName) {
+		File someFile = new File(fileName);
+		FileOutputStream fos;
+		try {
+			fos = new FileOutputStream(someFile);
+			fos.write(image);
+			fos.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 }
