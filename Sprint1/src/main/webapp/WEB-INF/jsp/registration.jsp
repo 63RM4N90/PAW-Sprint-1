@@ -5,15 +5,15 @@
 <div class="error"><c:out value="${passwordError}" /></div>
 <form method="POST" action="register">
 	<div class="form-field">
-		<label for="name">Nombre:</label>
+		<label for="name">Name:</label>
 		<input type="text" name="name" value="<c:out value="${name}" />" />
 	</div>
 	<div class="form-field">
-		<label for="surname">Apellido:</label>
+		<label for="surname">Surname:</label>
 		<input type="text" name="surname" value="<c:out value="${surname}" />"/>
 	</div>
 	<div class="form-field">
-		<label for="username">Usuario:</label>
+		<label for="username">User:</label>
 		<input type="text" name="username" value="<c:out value="${username}" />"/>
 	</div>
 	<div class="form-field">
