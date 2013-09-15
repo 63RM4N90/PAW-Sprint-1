@@ -3,7 +3,7 @@ package model;
 import java.util.Date;
 import java.util.List;
 
-public class Comment extends AbstractModel{
+public class Comment extends AbstractModel implements Comparable<Comment>{
 	private User author;
 	private Date date;
 	private String comment;
@@ -49,5 +49,9 @@ public class Comment extends AbstractModel{
 
 	public void setHashtags(List<Hashtag> hashtags) {
 		this.hashtags = hashtags;
+	}
+
+	public int compareTo(Comment o) {
+		return date.compareTo(o.getDate());
 	}
 }

@@ -56,15 +56,9 @@ public class CommentDAO extends AbstractDAO {
 				Comment comment = new Comment(author,results.getTimestamp(5),results.getString(6),hashtags);
 				comments.add(comment);
 			}
-			
-			
-			
-			
 		} catch (SQLException e) {
 			throw new DatabaseException(e.getMessage(), e);
 		}
-		
-		
 		return comments;
 	}
 
