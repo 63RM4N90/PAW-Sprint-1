@@ -34,7 +34,6 @@ public abstract class AbstractController extends HttpServlet {
 					+ result + "</a>";
 			comment = comment.replace(result, searchHTML);
 		}
-		System.out.println(comment);
 		return comment;
 	}
 }

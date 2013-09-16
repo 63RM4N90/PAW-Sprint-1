@@ -44,7 +44,6 @@ public class CommentService {
 		while (matcher.find()) {
 			result = matcher.group();
 			String hashtag = result.substring(1);
-			System.out.println("RESULT = " + hashtag);
 			Hashtag tag = hashtagDao.getHashTag(hashtag);
 			if (tag == null) {
 				tag = new Hashtag(hashtag, author, new Date());

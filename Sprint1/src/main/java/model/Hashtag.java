@@ -35,5 +35,4 @@ public class Hashtag {
 	public void setAuthor(User author) {
 		this.author = author;
 	}
-
 }

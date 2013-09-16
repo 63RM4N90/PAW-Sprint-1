@@ -79,8 +79,6 @@ public class HashtagDAO extends AbstractDAO {
 		try {
 			Connection connection = manager.getConnection();
 			PreparedStatement stmt;
-			System.out.println("TAG NAME = " + hashtag.getHashtag());
-			System.out.println("AUTHOR = " + hashtag.getAuthor());
 			stmt = connection
 					.prepareStatement("INSERT INTO hashtagsincomments(commentid,hashtag) VALUES(?,?)");
 			stmt.setInt(1, commentId);
