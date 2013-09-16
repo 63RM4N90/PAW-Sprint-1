@@ -23,7 +23,7 @@
 	</div>
 	<div class="form-field">
 		<label for="confirm">Confirm password:</label>
-		<input type="password" name="confirm" value="<c:out value="${sessionUser.confirm}" />"/>
+		<input type="password" name="confirm" value="<c:out value="${sessionUser.password}" />"/>
 	</div>
 	<div class="form-field">
 		<label for="description">Description:</label>
