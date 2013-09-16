@@ -25,7 +25,9 @@ public class Registration extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-				
+	
+		DiskFileUpload du = new DiskFileUpload();
+		
 		String username = req.getParameter("username");
 		if (userService.userExists(username)) {
 			req.setAttribute("usernameError", "User already exists!");
