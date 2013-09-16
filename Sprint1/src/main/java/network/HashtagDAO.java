@@ -43,10 +43,10 @@ public class HashtagDAO extends AbstractDAO {
 			ResultSet results = stmt.executeQuery();
 			if (results.next()) {
 				
-				Date date = new Date(results.getTimestamp(4).getTime());
+				Date date = new Date(results.getTimestamp(3).getTime());
 				
-				hashtagAux = new Hashtag(results.getString(2), UserDAO
-						.getInstance().getUser(results.getString(3)),date);
+				hashtagAux = new Hashtag(results.getString(1), UserDAO
+						.getInstance().getUser(results.getString(2)),date);
 			}
 			connection.close();
 		} catch (SQLException e) {
@@ -79,7 +79,8 @@ public class HashtagDAO extends AbstractDAO {
 		try {
 			Connection connection = manager.getConnection();
 			PreparedStatement stmt;
-
+			System.out.println("TAG NAME = " + hashtag.getHashtag());
+			System.out.println("AUTHOR = " + hashtag.getAuthor());
 			stmt = connection
 					.prepareStatement("INSERT INTO hashtagsincomments(commentid,hashtag) VALUES(?,?)");
 			stmt.setInt(1, commentId);
