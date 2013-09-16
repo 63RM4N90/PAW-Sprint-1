@@ -30,6 +30,11 @@
 		<servlet-class>controller.EditProfile</servlet-class>
 	</servlet>
 
+	<servlet>
+		<servlet-name>LostPassword</servlet-name>
+		<servlet-class>controller.LostPassword</servlet-class>
+	</servlet>
+	
 	<servlet-mapping>
 		<servlet-name>Registration</servlet-name>
 		<url-pattern>/register</url-pattern>
@@ -53,6 +58,11 @@
 	<servlet-mapping>
 		<servlet-name>EditProfile</servlet-name>
 		<url-pattern>/editProfile</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>LostPassword</servlet-name>
+		<url-pattern>/lostPassword</url-pattern>
 	</servlet-mapping>
 	
 	<filter>

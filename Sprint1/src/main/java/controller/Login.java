@@ -16,8 +16,7 @@ public class Login extends HttpServlet {
 	private UserService userService = UserService.getInstance();
 
 	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		req.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(req, resp);
 	}
 
@@ -33,8 +32,7 @@ public class Login extends HttpServlet {
 		} else {
 			req.setAttribute("username", username);
 			req.setAttribute("error", "Invalid user or password.");
-			req.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(req,
-					resp);
+			req.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(req,resp);
 		}
 	}
 }
