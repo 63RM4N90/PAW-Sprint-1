@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import model.Comment;
 import model.Hashtag;
@@ -32,12 +34,20 @@ public class CommentService {
 	}
 
 	public List<Hashtag> getHashtagList(String comment, User author) {
-		String[] aux = comment.split("#[A-Za-z0-9]");
+
 		List<Hashtag> ans = new ArrayList<Hashtag>();
-		for (String string : aux) {
-			Hashtag tag = hashtagDao.getHashTag(string);
+		String patternStr = "#([A-Za-z0-9_]+)";
+		Pattern pattern = Pattern.compile(patternStr);
+		Matcher matcher = pattern.matcher(comment);
+		String result = "";
+
+		while (matcher.find()) {
+			result = matcher.group();
+			String hashtag = result.substring(1);
+			System.out.println("RESULT = " + hashtag);
+			Hashtag tag = hashtagDao.getHashTag(hashtag);
 			if (tag == null) {
-				tag = new Hashtag(string, author, new Date());
+				tag = new Hashtag(hashtag, author, new Date());
 				hashtagDao.save(tag);
 			}
 			ans.add(tag);
@@ -58,7 +68,7 @@ public class CommentService {
 	private void sortComments(List<Comment> comments) {
 		Collections.sort(comments, new Comparator<Comment>() {
 			public int compare(Comment o1, Comment o2) {
-				return -1*o1.getDate().compareTo(o2.getDate());
+				return -1 * o1.getDate().compareTo(o2.getDate());
 			}
 		});
 	}

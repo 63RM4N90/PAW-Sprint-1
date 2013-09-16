@@ -43,10 +43,10 @@ public class HashtagDAO extends AbstractDAO {
 			ResultSet results = stmt.executeQuery();
 			if (results.next()) {
 				
-				Date date = new Date(results.getTimestamp(3).getTime());
+				Date date = new Date(results.getTimestamp(4).getTime());
 				
-				hashtagAux = new Hashtag(results.getString(1), UserDAO
-						.getInstance().getUser(results.getString(2)),date);
+				hashtagAux = new Hashtag(results.getString(2), UserDAO
+						.getInstance().getUser(results.getString(3)),date);
 			}
 			connection.close();
 		} catch (SQLException e) {
@@ -55,7 +55,6 @@ public class HashtagDAO extends AbstractDAO {
 		return hashtagAux;
 	}
 
-	// Este m��todo guarda en la tabla "hashtags" los datos de su creaci��n.
 	public void save(Hashtag hashtag) {
 		try {
 			Connection connection = manager.getConnection();
@@ -76,8 +75,6 @@ public class HashtagDAO extends AbstractDAO {
 		}
 	}
 
-	// Este m��todo es para el CommentDAO para guardar en la tabla
-	// hashtagsincomments con el commentId.
 	void saveWithComment(Hashtag hashtag, int commentId) {
 		try {
 			Connection connection = manager.getConnection();

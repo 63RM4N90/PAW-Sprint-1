@@ -28,16 +28,13 @@ public class HashtagService {
 		hashtagDAO = HashtagDAO.getInstance();
 	}
 	
-	
 	public void save(Hashtag hashtag) {
 		hashtagDAO.save(hashtag);
 	}
-
 	
 	public Hashtag getHashtag(String hashtag) {
 		return hashtagDAO.getHashTag(hashtag);
 	}
-
 	
 	public LinkedList<Hashtag> TopHashtags(int days){
 		LinkedList<Hashtag> ranking = new LinkedList<Hashtag>();
