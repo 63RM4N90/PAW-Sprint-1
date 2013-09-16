@@ -1,4 +1,4 @@
-CREATE TABLE Users (
+﻿CREATE TABLE Users (
 	id		SERIAL NOT NULL,
 	name		varchar(32),
 	surname		varchar(32),
@@ -12,11 +12,10 @@ CREATE TABLE Users (
 );
 
 CREATE TABLE Hashtags (
-	id		SERIAL NOT NULL UNIQUE,
 	hashtag		varchar(139) NOT NULL UNIQUE,
 	creator		varchar(32) REFERENCES Users(username),
 	date		TIMESTAMP NOT NULL,
-	PRIMARY KEY(id, hashtag)
+	PRIMARY KEY (hashtag)
 );
 
 CREATE TABLE Comments (
@@ -29,5 +28,5 @@ CREATE TABLE Comments (
 
 CREATE TABLE HashtagsInComments (
 	commentId	int REFERENCES Comments(id),
-	hashtagId	int NOT NULL REFERENCES Hashtags(id)
+	hashtag		varchar(139) REFERENCES Hashtags(hashtag)
 );
