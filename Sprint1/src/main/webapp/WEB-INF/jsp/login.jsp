@@ -15,6 +15,7 @@
 		<input type="submit" name="submit" value="Login" />
 	</div>
 </form>
+<a href="lostPassword">forgotten password?</a>
 
 <div>
 	<h2>Welcome to Social Cthulhu!</h2>

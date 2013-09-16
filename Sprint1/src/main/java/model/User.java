@@ -2,6 +2,7 @@ package model;
 
 import java.io.File;
 
+
 public class User extends AbstractModel {
 	public static final int MIN_USERNAME_LENGTH = 8;
 	public static final int MAX_USERNAME_LENGTH = 16;
@@ -15,9 +16,6 @@ public class User extends AbstractModel {
 	private File picture;
 	private String secretQuestion;
 	private String secretAnswer;
-
-	public User() {
-	}
 
 	public User(String name, String surname, String username,
 			String description, String password, File picture,
@@ -114,5 +112,10 @@ public class User extends AbstractModel {
 
 	public void setSecretAnswer(String secretAnswer) {
 		this.secretAnswer = secretAnswer;
+	}
+	
+	@Override
+	public boolean isNew() {
+		return id >= 0;
 	}
 }

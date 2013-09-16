@@ -21,12 +21,19 @@ public class Profile extends AbstractController{
 	private UserService userService = UserService.getInstance();
 
 	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String username = req.getParameter("user");
-		User user = userService.getUsuer(username);
-		req.setAttribute("user", user);
-		List<Comment> comments = commentService.getComments(user);
+		HttpSession session = req.getSession(false);
+		User profile = userService.getUsuer(username);
+		User userSession = (User) session.getAttribute("user");			
+		if(userSession!=null) {
+			if(profile.getUsername().equals(userSession.getUsername())){
+				req.setAttribute("isOwner",true);
+			}
+		}
+		req.setAttribute("user", profile);
+		req.setAttribute("userSession", userSession);
+		List<Comment> comments = commentService.getComments(profile);
 		for (Comment comment : comments) {
 			comment.setComment(getProcessedComment(comment.getComment()));
 		}
@@ -35,8 +42,7 @@ public class Profile extends AbstractController{
 	}
 
 	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp)	throws ServletException, IOException {
 		String aux = req.getParameter("comment");
 		HttpSession session = req.getSession();
 		User user = (User) session.getAttribute("user");
