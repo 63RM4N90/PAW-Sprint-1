@@ -42,17 +42,19 @@ public class HashtagService {
 		Date to = new Date();
 		Calendar calendar = Calendar.getInstance();
 		calendar.roll(Calendar.DATE,-days);
-		Date from = calendar.getTime();		
+		Date from = calendar.getTime();	
+		
 		
 		TreeMap<Integer,ArrayList<Hashtag>> top = hashtagDAO.rankedHashTags(from,to);
+		
 
 		ArrayList<Hashtag> aux;
-		int index = 0;
 		int count = 0;
 		
 		while(count < 10){
 			int key = top.lastKey();
 			aux = top.get(key);
+			int index = 0;
 				while(count < 10 && index < aux.size()){
 					ranking.add(aux.get(index));
 					count++;

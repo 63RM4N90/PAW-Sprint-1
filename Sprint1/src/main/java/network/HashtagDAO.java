@@ -122,20 +122,21 @@ public class HashtagDAO extends AbstractDAO {
 			int ranking;
 
 			while (results.next()) {
-
 				ranking = results.getInt(3);
 				creator = new User(results.getString(5), results.getString(6),
 						results.getString(7), results.getString(9),
-						results.getString(9), null, results.getString(10),
+						results.getString(8), null, results.getString(10),
 						results.getString(11));
 				creator.setId(results.getInt(4));
 				hashtag = new Hashtag(results.getString(1), creator,
 						results.getDate(2));
 
+				ArrayList<Hashtag> aux;
 				if (rank.containsKey(ranking)) {
 					rank.get(ranking).add(hashtag);
+					
 				} else {
-					ArrayList<Hashtag> aux = new ArrayList<Hashtag>();
+					aux = new ArrayList<Hashtag>();
 					aux.add(hashtag);
 					rank.put(ranking, aux);
 				}

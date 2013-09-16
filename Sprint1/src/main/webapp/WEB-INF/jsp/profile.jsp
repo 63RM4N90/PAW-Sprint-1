@@ -6,9 +6,10 @@
 	<img src="img/<c:out value="${user.picture.path}" />"
 		alt="user_picture"/>
 </c:if>
-<h2>
-	<c:out value="${user.username}" />
-</h2>
+
+<span><h2><c:out value="${user.username}" /></h2></span>
+<span><%@ include file="top10.jsp"%></span>
+
 <h5>
 	<c:out value="${user.name}" />
 </h5>
