@@ -30,7 +30,7 @@ public abstract class AbstractController extends HttpServlet {
 			result = matcher.group();
 			result = result.replace(" ", "");
 			String search = result.replace("#", "");
-			String searchHTML = "<a href='/hashtag?tag=" + search + "'>"
+			String searchHTML = "<a href='./hashtag?tag=" + search + "'>"
 					+ result + "</a>";
 			comment = comment.replace(result, searchHTML);
 		}

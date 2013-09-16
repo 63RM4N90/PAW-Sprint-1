@@ -2,6 +2,7 @@ package controller;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -25,7 +26,11 @@ public class Profile extends AbstractController{
 		String username = req.getParameter("user");
 		User user = userService.getUsuer(username);
 		req.setAttribute("user", user);
-		req.setAttribute("comments", commentService.getComments(user));
+		List<Comment> comments = commentService.getComments(user);
+		for (Comment comment : comments) {
+			comment.setComment(getProcessedComment(comment.getComment()));
+		}
+		req.setAttribute("comments", comments);
 		req.getRequestDispatcher("/WEB-INF/jsp/profile.jsp").forward(req, resp);
 	}
 
@@ -36,9 +41,8 @@ public class Profile extends AbstractController{
 		HttpSession session = req.getSession();
 		User user = (User) session.getAttribute("user");
 		if (aux.length() > 0) {
-			String commentString = getProcessedComment(aux);
-			Comment comment = new Comment(user, new Date(), commentString,
-					commentService.getHashtagList(commentString, user));
+			Comment comment = new Comment(user, new Date(), aux,
+					commentService.getHashtagList(aux, user));
 			commentService.save(comment);
 		}
 		resp.sendRedirect("profile?user=" + user.getUsername());

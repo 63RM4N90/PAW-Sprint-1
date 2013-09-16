@@ -39,15 +39,15 @@ public class CommentDAO extends AbstractDAO {
 		try {
 			Connection connection = manager.getConnection();
 			PreparedStatement stmt = connection.prepareStatement("SELECT * FROM hashtagsincomments,comments"
-					+ " WHERE commentid = id AND hashtag = ?");
+					+ " WHERE commentid = comments.id AND hashtag = ?");
 			stmt.setString(1, hashtag);			
 			ResultSet results = stmt.executeQuery();
 			
 			while(results.next()){
 				List<Hashtag> hashtags = new ArrayList<Hashtag>();
-				stmt = connection.prepareStatement("SELECT commentid,hashtag FROM hashtagsincomments "
+				stmt = connection.prepareStatement("SELECT * FROM hashtagsincomments "
 						+ "WHERE commentid = ?");
-				stmt.setInt(1, results.getInt(1));
+				stmt.setRowId(1, results.getRowId(1));
 				ResultSet resultsH = stmt.executeQuery();
 					while(resultsH.next()){
 						hashtags.add(hDAO.getHashTag(resultsH.getString(2)));
