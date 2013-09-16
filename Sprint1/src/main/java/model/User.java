@@ -113,9 +113,4 @@ public class User extends AbstractModel {
 	public void setSecretAnswer(String secretAnswer) {
 		this.secretAnswer = secretAnswer;
 	}
-	
-	@Override
-	public boolean isNew() {
-		return id >= 0;
-	}
 }

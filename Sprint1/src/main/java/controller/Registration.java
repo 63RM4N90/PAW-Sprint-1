@@ -30,6 +30,7 @@ public class Registration extends HttpServlet {
 		
 		String username = req.getParameter("username");
 		if (userService.userExists(username)) {
+			System.out.println("1");
 			req.setAttribute("usernameError", "User already exists!");
 			fillInputs(req);
 			req.getRequestDispatcher("/WEB-INF/jsp/registration.jsp").forward(

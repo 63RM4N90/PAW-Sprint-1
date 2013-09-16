@@ -4,7 +4,6 @@ public abstract class AbstractModel {
 	
 	protected int id;
 	
-
 	public int getId() {
 		return id;
 	}
@@ -16,5 +15,4 @@ public abstract class AbstractModel {
 	public boolean isNew(){
 		return id == -1;
 	}
-
 }

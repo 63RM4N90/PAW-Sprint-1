@@ -11,6 +11,7 @@ import javax.servlet.http.HttpSession;
 import model.User;
 import services.UserService;
 
+@SuppressWarnings("serial")
 public class EditProfile extends HttpServlet {
 
 	@Override
