@@ -27,8 +27,6 @@ public class HashtagPage extends HttpServlet{
 		req.setAttribute("tag",hashtag);
 		req.setAttribute("comments", hashtagService.getComments(hashtagStr));
 		req.getRequestDispatcher("/WEB-INF/jsp/tag.jsp").forward(req, resp);
-		
-		System.out.println(hashtag.getHashtag());
 	}
 	
 }

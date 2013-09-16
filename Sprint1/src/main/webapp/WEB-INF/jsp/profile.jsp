@@ -36,6 +36,9 @@
 			<p>${comment.comment}</p> <a
 			href="<c:url value="profile"><c:param name="user" value="${comment.author.username}" /></c:url>">${comment.author.username}</a>
 			<br />
+			<span>
+				<c:out value="${comment.date}" />
+			</span>
 		</li>
 	</c:forEach>
 </ul>

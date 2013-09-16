@@ -36,6 +36,10 @@
 		<label for="secretAnswer">Secret answer:</label>
 		<input type="text" name="secretAnswer" value="<c:out value="${secretAnswer}" />"/>
 	</div>
+	<div class="form-field">
+		<label for="picture">Picture:</label>
+		<input type="file" name="picture" accept="image/jpg"/>
+	</div>
 	<div class="form-buttons">
 		<input type="submit" name="submit" value="Submit" />
 	</div>

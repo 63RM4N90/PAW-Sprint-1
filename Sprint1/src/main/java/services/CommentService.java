@@ -1,6 +1,8 @@
 package services;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -48,6 +50,16 @@ public class CommentService {
 	}
 
 	public List<Comment> getComments(User user) {
-		return commentDao.getComments(user);
+		List<Comment> comments = commentDao.getComments(user);
+		sortComments(comments);
+		return comments;
+	}
+
+	private void sortComments(List<Comment> comments) {
+		Collections.sort(comments, new Comparator<Comment>() {
+			public int compare(Comment o1, Comment o2) {
+				return -1*o1.getDate().compareTo(o2.getDate());
+			}
+		});
 	}
 }

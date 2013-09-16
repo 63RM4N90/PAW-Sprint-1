@@ -25,6 +25,7 @@ public class Registration extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+				
 		String username = req.getParameter("username");
 		if (userService.userExists(username)) {
 			req.setAttribute("usernameError", "User already exists!");
@@ -48,8 +49,6 @@ public class Registration extends HttpServlet {
 				req.getRequestDispatcher("/WEB-INF/jsp/registration.jsp")
 						.forward(req, resp);
 			} else {
-				System.out.println("description = "
-						+ req.getParameter("description"));
 				User user = new User(req.getParameter("name"),
 						req.getParameter("surname"),
 						req.getParameter("username"),

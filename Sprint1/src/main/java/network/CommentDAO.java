@@ -58,6 +58,7 @@ public class CommentDAO extends AbstractDAO {
 						results.getString(6), hashtags);
 				comments.add(comment);
 			}
+
 			connection.close();
 
 		} catch (SQLException e) {
