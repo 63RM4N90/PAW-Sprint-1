@@ -13,10 +13,13 @@
 			href="<c:url value="profile"><c:param name="user" value="${user.username}" /></c:url>">${user.username}</a>
 			<br />
 			<span>
+				<c:out value="${user.surname}" />
+			</span>
+			<span>
 				<c:out value="${user.name}" />
 			</span>
 			<span>
-				<c:out value="${user.surname}" />
+				Registered on <c:out value="${user.registrationDate}" />
 			</span>
 		</li>
 	</c:forEach>

@@ -1,5 +1,7 @@
 package services;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import database.UserDAO;
@@ -40,6 +42,16 @@ public class UserService {
 	}
 	
 	public List<User> getUsersWithName(String name) {
-		return userDao.getUsersWithName(name);
+		List<User> result = userDao.getUsersWithName(name);
+		sortUsers(result);
+		return result;
+	}
+	
+	private void sortUsers(List<User> users) {
+		Collections.sort(users, new Comparator<User>() {
+			public int compare(User o1, User o2) {
+				return o1.getSurname().compareTo(o2.getSurname());
+			}
+		});
 	}
 }
