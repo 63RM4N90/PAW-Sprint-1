@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -34,6 +35,7 @@ public class Registration extends FormController {
 
 		DiskFileUpload fu = new DiskFileUpload();
 		try {
+			@SuppressWarnings("unchecked")
 			List<FileItem> fileItems = fu.parseRequest(req);
 			String name = fileItems.get(0).getString();
 			String surname = fileItems.get(1).getString();
@@ -52,15 +54,16 @@ public class Registration extends FormController {
 			}
 			if (userService.userExists(username)) {
 				req.setAttribute("usernameError", "User already exists!");
-				fillInputs(name, surname, username, description, secretQuestion,
-						secretAnswer, req);
+				fillInputs(name, surname, username, description,
+						secretQuestion, secretAnswer, req);
 				req.getRequestDispatcher("/WEB-INF/jsp/registration.jsp")
 						.forward(req, resp);
 			} else {
 				if (super.validate(req, resp, name, surname, password, confirm,
 						description, secretQuestion, secretAnswer)) {
 					User user = new User(name, surname, username, description,
-							password, picture, secretQuestion, secretAnswer);
+							password, picture, secretQuestion, secretAnswer,
+							new Date());
 					userService.save(user);
 					user = userService.getUsuer(username);
 					req.getSession().setAttribute("user", user);

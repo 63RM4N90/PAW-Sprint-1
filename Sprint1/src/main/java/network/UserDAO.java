@@ -4,7 +4,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import model.User;
@@ -72,18 +74,18 @@ public class UserDAO extends AbstractDAO {
 			if (user.isNew()) {
 				if (user.getPicture() != null) {
 					stmt = connection
-							.prepareStatement("INSERT INTO Users(name, surname, password, username, description, secretquestion, secretanswer, picture) values(?, ?, ?, ?, ?, ?, ?, ?)");
+							.prepareStatement("INSERT INTO Users(name, surname, password, username, description, secretquestion, secretanswer, picture, registrationDate) values(?, ?, ?, ?, ?, ?, ?, ?, ?)");
 				} else {
 					stmt = connection
-							.prepareStatement("INSERT INTO Users(name, surname, password, username, description, secretquestion, secretanswer) values(?, ?, ?, ?, ?, ?, ?)");
+							.prepareStatement("INSERT INTO Users(name, surname, password, username, description, secretquestion, secretanswer, registrationDate) values(?, ?, ?, ?, ?, ?, ?, ?)");
 				}
 			} else {
 				if (user.getPicture() != null) {
 					stmt = connection
-							.prepareStatement("UPDATE Users SET name = ?, surname = ?, password = ?, username = ?, description = ?, secretquestion = ?, secretanswer = ?, picture = ? WHERE username = ?");
+							.prepareStatement("UPDATE Users SET name = ?, surname = ?, password = ?, username = ?, description = ?, secretquestion = ?, secretanswer = ?, picture = ?, registrationDate = ? WHERE username = ?");
 				} else {
 					stmt = connection
-							.prepareStatement("UPDATE Users SET name = ?, surname = ?, password = ?, username = ?, description = ?, secretquestion = ?, secretanswer = ? WHERE username = ?");
+							.prepareStatement("UPDATE Users SET name = ?, surname = ?, password = ?, username = ?, description = ?, secretquestion = ?, secretanswer = ?, registrationDate = ? WHERE username = ?");
 				}
 			}
 			stmt.setString(1, user.getName());
@@ -96,14 +98,19 @@ public class UserDAO extends AbstractDAO {
 			if (user.isNew()) {
 				if (user.getPicture() != null) {
 					stmt.setBytes(8, user.getPicture());
+					stmt.setTimestamp(9, new Timestamp(user.getRegistrationDate().getTime()));
+				} else {
+					stmt.setTimestamp(8, new Timestamp(user.getRegistrationDate().getTime()));
 				}
 				stmt.execute();
 			} else {
 				if (user.getPicture() != null) {
 					stmt.setBytes(8, user.getPicture());
-					stmt.setString(9, user.getUsername());
+					stmt.setTimestamp(9, new Timestamp(user.getRegistrationDate().getTime()));
+					stmt.setString(10, user.getUsername());
 				} else {
-					stmt.setString(8, user.getUsername());
+					stmt.setTimestamp(8, new Timestamp(user.getRegistrationDate().getTime()));
+					stmt.setString(9, user.getUsername());
 				}
 				stmt.executeUpdate();
 			}
@@ -185,8 +192,9 @@ public class UserDAO extends AbstractDAO {
 		String secretQuestion = results.getString(7);
 		String secretAnswer = results.getString(8);
 		byte[] file = results.getBytes(9);
+		Date registrationDate = results.getDate(10);
 		User user = new User(name, surname, username, description, password,
-				file, secretQuestion, secretAnswer);
+				file, secretQuestion, secretAnswer, registrationDate);
 		user.setId(id);
 
 		return user;

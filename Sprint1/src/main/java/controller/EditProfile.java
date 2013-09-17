@@ -37,6 +37,7 @@ public class EditProfile extends FormController {
 			throws ServletException, IOException {
 		DiskFileUpload fu = new DiskFileUpload();
 		try {
+			@SuppressWarnings("unchecked")
 			List<FileItem> fileItems = fu.parseRequest(req);
 			String name = fileItems.get(0).getString();
 			String surname = fileItems.get(1).getString();
@@ -46,7 +47,7 @@ public class EditProfile extends FormController {
 			String secretQuestion = fileItems.get(5).getString();
 			String secretAnswer = fileItems.get(6).getString();
 			FileItem pictureFile = fileItems.get(7);
-			System.out.println( name + " " + surname + " " + password + " " );
+			System.out.println(name + " " + surname + " " + password + " ");
 			byte[] picture;
 			User userSession = (User) req.getSession().getAttribute("user");
 			if (super.validate(req, resp, name, surname, password, confirm,
@@ -58,7 +59,7 @@ public class EditProfile extends FormController {
 				}
 				User user = new User(name, surname, userSession.getUsername(),
 						description, password, picture, secretQuestion,
-						secretAnswer);
+						secretAnswer, userSession.getRegistrationDate());
 				int id = userSession.getId();
 				user.setId(id);
 				userService.save(user);
