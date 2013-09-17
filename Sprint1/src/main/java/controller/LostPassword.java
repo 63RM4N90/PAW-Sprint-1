@@ -33,21 +33,32 @@ public class LostPassword extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String secretAnswerSubmited = req.getParameter("secretAnswer");
+		String newPassword = req.getParameter("password");
+		String newPasswordConfirm = req.getParameter("confirm");
 		String userToRecover = req.getParameter("userToRecover");
 		User u = userDao.getUser(userToRecover);
 		
 		req.setAttribute("userSelected", true);
 		if(secretAnswerSubmited != null){
 			boolean matches = u.getSecretAnswer().equals(secretAnswerSubmited);
+			boolean passwordMatches = newPassword.equals(newPasswordConfirm);
 			if(!matches) {
 				req.setAttribute("error", "Wrong secret Answer");
 				req.setAttribute("success", "Recovering password for " + u.getUsername());
 				req.setAttribute("user", u);
 			} else {
-				req.setAttribute("passwordRecovered", true);
-				req.setAttribute("success", "Your password is: " + u.getPassword());
-			}			
-		}
+				if(passwordMatches) {
+					req.setAttribute("passwordRecovered", true);
+					req.setAttribute("success", "Your password was changed successfully!");
+					u.setPassword(newPassword);
+					userDao.save(u);
+				} else {
+					req.setAttribute("error", "Passwords dont match");
+					req.setAttribute("success", "Recovering password for " + u.getUsername());
+					req.setAttribute("user", u);
+				}
+			}
+		}	
 		req.getRequestDispatcher("/WEB-INF/jsp/lostPassword.jsp").forward(req,resp);
 	}
 
