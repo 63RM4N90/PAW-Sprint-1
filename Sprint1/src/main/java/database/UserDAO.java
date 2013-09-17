@@ -145,6 +145,9 @@ public class UserDAO extends AbstractDAO {
 
 	public List<User> getUsersWithName(String name) {
 		List<User> users = new ArrayList<User>();
+		if (name.length() == 0) {
+			return users;
+		}
 		User user = null;
 		try {
 			Connection connection = manager.getConnection();

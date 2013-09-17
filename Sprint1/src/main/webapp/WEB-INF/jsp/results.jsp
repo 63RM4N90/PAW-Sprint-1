@@ -1,7 +1,7 @@
 <%@ include file="header.jsp"%>
 
 <h2>
-	Results for <c:out value="${search}" />
+	Results for "<c:out value="${search}" />"
 </h2>
 
 <ul>

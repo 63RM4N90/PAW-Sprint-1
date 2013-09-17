@@ -107,7 +107,7 @@
 	
 	<filter>
 		<filter-name>authenticationFilter</filter-name>
-		<filter-class>network.AuthenticationFilter</filter-class>
+		<filter-class>database.AuthenticationFilter</filter-class>
 	</filter>
 
 	<filter-mapping>
@@ -117,7 +117,7 @@
 
 	<filter>
 		<filter-name>errorFilter</filter-name>
-		<filter-class>network.ErrorFilter</filter-class>
+		<filter-class>database.ErrorFilter</filter-class>
 	</filter>
 	
 	<filter-mapping>
