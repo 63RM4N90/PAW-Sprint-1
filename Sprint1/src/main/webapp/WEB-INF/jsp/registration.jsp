@@ -3,6 +3,7 @@
 <h2>Registration</h2>
 <div class="error"><c:out value="${usernameError}" /></div>
 <div class="error"><c:out value="${passwordError}" /></div>
+<div class="error"><c:out value="${generalError}" /></div>
 <form method="POST" action="register" enctype="multipart/form-data">
 	<div class="form-field">
 		<label for="name">Name:</label>

@@ -4,9 +4,9 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import model.User;
 
@@ -17,7 +17,7 @@ import org.apache.commons.fileupload.FileUploadException;
 import services.UserService;
 
 @SuppressWarnings("serial")
-public class Registration extends HttpServlet {
+public class Registration extends FormController {
 
 	private UserService userService = UserService.getInstance();
 
@@ -43,47 +43,46 @@ public class Registration extends HttpServlet {
 			String description = fileItems.get(5).getString();
 			String secretQuestion = fileItems.get(6).getString();
 			String secretAnswer = fileItems.get(7).getString();
-			byte[] picture = fileItems.get(8).get();
+			FileItem pictureFile = fileItems.get(8);
+			byte[] picture;
+			if (pictureFile.getName().length() == 0) {
+				picture = null;
+			} else {
+				picture = pictureFile.get();
+			}
 			if (userService.userExists(username)) {
 				req.setAttribute("usernameError", "User already exists!");
-				fillInputs(req);
+				fillInputs(name, surname, description, secretQuestion,
+						secretAnswer, req);
+				req.setAttribute("username", req.getParameter("username"));
 				req.getRequestDispatcher("/WEB-INF/jsp/registration.jsp")
 						.forward(req, resp);
 			} else {
-				int pwdlength = password.length();
-				if (pwdlength < 8 || pwdlength > 16) {
-					req.setAttribute("passwordError",
-							"Password must contain between 8 and 16 characters!");
-					fillInputs(req);
-					req.getRequestDispatcher("/WEB-INF/jsp/registration.jsp")
-							.forward(req, resp);
-				}
-				if (!password.equals(confirm)) {
-					req.setAttribute("passwordError",
-							"Password confirmation doesn't match the password field!");
-					fillInputs(req);
-					req.getRequestDispatcher("/WEB-INF/jsp/registration.jsp")
-							.forward(req, resp);
-				} else {
-					
+				if(super.validate(req, resp, name, surname, password, confirm,
+						description, secretQuestion, secretAnswer)) {
 					User user = new User(name, surname, username, description,
 							password, picture, secretQuestion, secretAnswer);
 					userService.save(user);
 					user = userService.getUsuer(username);
 					req.getSession().setAttribute("user", user);
-					resp.sendRedirect("profile?user=" + user.getUsername());
+					resp.sendRedirect("profile?user=" + user.getUsername());					
+				} else {
+					fillInputs(name, surname, description, secretQuestion,
+							secretAnswer, req);
+					req.getRequestDispatcher("/WEB-INF/jsp/registration.jsp")
+							.forward(req, resp);
 				}
 			}
 		} catch (FileUploadException e) {
 		}
 	}
-
-	private void fillInputs(HttpServletRequest req) {
-		req.setAttribute("name", req.getParameter("name"));
-		req.setAttribute("surname", req.getParameter("surname"));
-		req.setAttribute("description", req.getParameter("description"));
-		req.setAttribute("username", req.getParameter("username"));
-		req.setAttribute("secretQuestion", req.getParameter("secretQuestion"));
-		req.setAttribute("secretAnswer", req.getParameter("secretAnswer"));
+	
+	private void fillInputs(String name, String surname, String description,
+			String secretQuestion, String secretAnswer, HttpServletRequest req) {
+		req.setAttribute("name", name);
+		req.setAttribute("surname", surname);
+		req.setAttribute("description", description);
+		req.setAttribute("secretQuestion", secretQuestion);
+		req.setAttribute("secretAnswer", secretAnswer);
 	}
 }
