@@ -32,7 +32,7 @@ public class HashtagService {
 	}
 	
 	public Hashtag getHashtag(String hashtag) {
-		return hashtagDAO.getHashTag(hashtag);
+		return hashtagDAO.getHashtag(hashtag);
 	}
 	
 	public LinkedList<Hashtag> TopHashtags(int days){
@@ -44,7 +44,7 @@ public class HashtagService {
 		Date from = calendar.getTime();	
 		
 		
-		TreeMap<Integer,ArrayList<Hashtag>> top = hashtagDAO.rankedHashTags(from,to);
+		TreeMap<Integer,ArrayList<Hashtag>> top = hashtagDAO.rankedHashtags(from,to);
 		
 
 		ArrayList<Hashtag> aux;

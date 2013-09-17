@@ -32,8 +32,8 @@ public class HashtagDAOTest {
 		//hashtagDAO.save(prueba);
 		//hashtagDAO.save(prueba2);
 		
-		Hashtag prueba = hashtagDAO.getHashTag("florchen");
-		Hashtag prueba2 = hashtagDAO.getHashTag("puppi");
+		Hashtag prueba = hashtagDAO.getHashtag("florchen");
+		Hashtag prueba2 = hashtagDAO.getHashtag("puppi");
 		
 		Hashtag h1 = new Hashtag("h1",user,date);
 		Hashtag h2 = new Hashtag("h2",user,date);

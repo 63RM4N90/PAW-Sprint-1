@@ -32,7 +32,7 @@ public class HashtagDAO extends AbstractDAO {
 				password);
 	}
 
-	public Hashtag getHashTag(String hashtag) {
+	public Hashtag getHashtag(String hashtag) {
 		Hashtag hashtagAux = null;
 		try {
 			Connection connection = manager.getConnection();
@@ -97,7 +97,7 @@ public class HashtagDAO extends AbstractDAO {
 		return commentDAO.getComments(hashtag);
 	}
 
-	public TreeMap<Integer, ArrayList<Hashtag>> rankedHashTags(Date from,
+	public TreeMap<Integer, ArrayList<Hashtag>> rankedHashtags(Date from,
 			Date to) {
 		TreeMap<Integer, ArrayList<Hashtag>> rank = new TreeMap<Integer, ArrayList<Hashtag>>();
 
