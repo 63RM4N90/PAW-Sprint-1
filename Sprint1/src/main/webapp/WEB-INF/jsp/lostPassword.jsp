@@ -17,8 +17,17 @@
 <c:if test="${userSelected && !passwordRecovered}">
 	<form method="POST" action="lostPassword">
 			<div class="form-field">
-				<label for="secretQuestion"><c:out value="${user.secretQuestion}"/></label>
+				<label><c:out value="${user.secretQuestion}"/></label>
+				<br>
 				<input type="text" name="secretAnswer" />
+				<br>
+				<label>New Password:</label>
+				<br>
+				<input type="password" name="password" />
+				<br>
+				<label>Confirm New Password:</label>
+				<br>
+				<input type="password" name="confirm" />
 				<input type="hidden" name="userToRecover" value="<c:out value="${user.username}"/>" />
 			</div/>
 			<c:if test="${!passwordRecovered}">
