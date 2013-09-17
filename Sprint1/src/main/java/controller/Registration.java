@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -8,6 +9,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import model.User;
+
+import org.apache.commons.fileupload.DiskFileUpload;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadException;
+
 import services.UserService;
 
 @SuppressWarnings("serial")
@@ -25,40 +31,50 @@ public class Registration extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-	
-		//DiskFileUpload du = new DiskFileUpload();
-		
-		String username = req.getParameter("username");
-		if (userService.userExists(username)) {
-			System.out.println("1");
-			req.setAttribute("usernameError", "User already exists!");
-			fillInputs(req);
-			req.getRequestDispatcher("/WEB-INF/jsp/registration.jsp").forward(
-					req, resp);
-		} else {
-			int pwdlength = req.getParameter("password").length();
-			if (pwdlength < 8 || pwdlength > 16) {
-				req.setAttribute("passwordError","Password must contain between 8 and 16 characters!");
+
+		DiskFileUpload fu = new DiskFileUpload();
+		try {
+			List<FileItem> fileItems = fu.parseRequest(req);
+			String name = fileItems.get(0).getString();
+			String surname = fileItems.get(1).getString();
+			String username = fileItems.get(2).getString();
+			String password = fileItems.get(3).getString();
+			String confirm = fileItems.get(4).getString();
+			String description = fileItems.get(5).getString();
+			String secretQuestion = fileItems.get(6).getString();
+			String secretAnswer = fileItems.get(7).getString();
+			byte[] picture = fileItems.get(8).get();
+			if (userService.userExists(username)) {
+				req.setAttribute("usernameError", "User already exists!");
 				fillInputs(req);
-				req.getRequestDispatcher("/WEB-INF/jsp/registration.jsp").forward(req, resp);
-			}
-			if (!req.getParameter("password").equals(req.getParameter("confirm"))) {
-				req.setAttribute("passwordError","Password confirmation doesn't match the password field!");
-				fillInputs(req);
-				req.getRequestDispatcher("/WEB-INF/jsp/registration.jsp").forward(req, resp);
+				req.getRequestDispatcher("/WEB-INF/jsp/registration.jsp")
+						.forward(req, resp);
 			} else {
-				User user = new User(req.getParameter("name"),
-						req.getParameter("surname"),
-						req.getParameter("username"),
-						req.getParameter("description"),
-						req.getParameter("password"), null,
-						req.getParameter("secretQuestion"),
-						req.getParameter("secretAnswer"));
-				userService.save(user);
-				user = userService.getUsuer(username);
-				req.getSession().setAttribute("user", user);
-				resp.sendRedirect("profile?user=" + user.getUsername());
+				int pwdlength = password.length();
+				if (pwdlength < 8 || pwdlength > 16) {
+					req.setAttribute("passwordError",
+							"Password must contain between 8 and 16 characters!");
+					fillInputs(req);
+					req.getRequestDispatcher("/WEB-INF/jsp/registration.jsp")
+							.forward(req, resp);
+				}
+				if (!password.equals(confirm)) {
+					req.setAttribute("passwordError",
+							"Password confirmation doesn't match the password field!");
+					fillInputs(req);
+					req.getRequestDispatcher("/WEB-INF/jsp/registration.jsp")
+							.forward(req, resp);
+				} else {
+					
+					User user = new User(name, surname, username, description,
+							password, picture, secretQuestion, secretAnswer);
+					userService.save(user);
+					user = userService.getUsuer(username);
+					req.getSession().setAttribute("user", user);
+					resp.sendRedirect("profile?user=" + user.getUsername());
+				}
 			}
+		} catch (FileUploadException e) {
 		}
 	}
 

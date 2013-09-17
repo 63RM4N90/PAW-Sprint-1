@@ -1,8 +1,5 @@
 package model;
 
-import java.io.File;
-
-
 public class User extends AbstractModel {
 	public static final int MIN_USERNAME_LENGTH = 8;
 	public static final int MAX_USERNAME_LENGTH = 16;
@@ -13,12 +10,12 @@ public class User extends AbstractModel {
 	private String username;
 	private String description;
 	private String password;
-	private File picture;
+	private byte[] picture;
 	private String secretQuestion;
 	private String secretAnswer;
 
 	public User(String name, String surname, String username,
-			String description, String password, File picture,
+			String description, String password, byte[] picture,
 			String secretQuestion, String secretAnswer)
 			throws IllegalArgumentException {
 		if (name == null || surname == null || username == null
@@ -90,11 +87,11 @@ public class User extends AbstractModel {
 		this.password = password;
 	}
 
-	public File getPicture() {
+	public byte[] getPicture() {
 		return picture;
 	}
 
-	public void setFile(File picture) {
+	public void setFile(byte[] picture) {
 		this.picture = picture;
 	}
 
