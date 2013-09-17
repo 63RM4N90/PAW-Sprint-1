@@ -9,7 +9,7 @@
 		<servlet-name>Registration</servlet-name>
 		<servlet-class>controller.Registration</servlet-class>
 	</servlet>
-	
+
 	<servlet>
 		<servlet-name>Hashtag</servlet-name>
 		<servlet-class>controller.HashtagPage</servlet-class>
@@ -19,17 +19,17 @@
 		<servlet-name>Login</servlet-name>
 		<servlet-class>controller.Login</servlet-class>
 	</servlet>
-	
+
 	<servlet>
 		<servlet-name>Profile</servlet-name>
 		<servlet-class>controller.Profile</servlet-class>
 	</servlet>
-	
+
 	<servlet>
 		<servlet-name>Logout</servlet-name>
 		<servlet-class>controller.Logout</servlet-class>
 	</servlet>
-	
+
 	<servlet>
 		<servlet-name>Search</servlet-name>
 		<servlet-class>controller.Search</servlet-class>
@@ -45,11 +45,16 @@
 		<servlet-class>controller.LostPassword</servlet-class>
 	</servlet>
 	
+	<servlet>
+		<servlet-name>Error</servlet-name>
+		<servlet-class>controller.Error</servlet-class>
+	</servlet>
+
 	<servlet-mapping>
 		<servlet-name>Registration</servlet-name>
 		<url-pattern>/register</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet-mapping>
 		<servlet-name>Hashtag</servlet-name>
 		<url-pattern>/hashtag</url-pattern>
@@ -59,39 +64,54 @@
 		<servlet-name>Login</servlet-name>
 		<url-pattern>/login</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet-mapping>
 		<servlet-name>Profile</servlet-name>
 		<url-pattern>/profile</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet-mapping>
 		<servlet-name>Search</servlet-name>
 		<url-pattern>/search</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet-mapping>
 		<servlet-name>Logout</servlet-name>
 		<url-pattern>/logout</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet-mapping>
 		<servlet-name>EditProfile</servlet-name>
 		<url-pattern>/editProfile</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet-mapping>
 		<servlet-name>LostPassword</servlet-name>
 		<url-pattern>/lostPassword</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>Error</servlet-name>
+		<url-pattern>/error</url-pattern>
 	</servlet-mapping>
 	
 	<filter>
 		<filter-name>authenticationFilter</filter-name>
 		<filter-class>network.AuthenticationFilter</filter-class>
 	</filter>
-	
+
 	<filter-mapping>
 		<filter-name>authenticationFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<filter>
+		<filter-name>errorFilter</filter-name>
+		<filter-class>network.ErrorFilter</filter-class>
+	</filter>
+	
+	<filter-mapping>
+		<filter-name>errorFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 </web-app>

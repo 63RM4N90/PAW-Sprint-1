@@ -9,8 +9,12 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-public class AuthenticationFilter implements Filter {
+/**
+ * Filtro que captura excepciones y muestra una página de error.
+ */
+public class ErrorFilter implements Filter {
 
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
@@ -21,16 +25,15 @@ public class AuthenticationFilter implements Filter {
 	public void destroy() {
 		// Do nothing
 	}
-
+	
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-		HttpServletRequest req = (HttpServletRequest) request;
-		
-		if (req.getSession().getAttribute("user") == null) {
-			req.setAttribute("isLogged", false);
-		} else {
-			req.setAttribute("isLogged", true);
+		try {
+			chain.doFilter(request, response);
+		} catch (RuntimeException e) {
+			((HttpServletResponse) response).sendRedirect(((HttpServletRequest) request).getContextPath() + "/error");
 		}
-		chain.doFilter(request, response);
 	}
+	
+	
 }
