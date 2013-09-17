@@ -32,12 +32,12 @@ public class EditProfile extends HttpServlet {
 		if (pwdlength < 8 || pwdlength > 16) {
 			req.setAttribute("passwordError","Password must contain between 8 and 16 characters!");
 			fillInputs(req);
-			req.getRequestDispatcher("/WEB-INF/jsp/registration.jsp").forward(req, resp);
+			req.getRequestDispatcher("/WEB-INF/jsp/editProfile.jsp").forward(req, resp);
 		}
 		if (!req.getParameter("password").equals(req.getParameter("confirm"))) {
 			req.setAttribute("passwordError","Password confirmation doesn't match the password field!");
 			fillInputs(req);
-			req.getRequestDispatcher("/WEB-INF/jsp/registration.jsp").forward(req, resp);
+			req.getRequestDispatcher("/WEB-INF/jsp/editProfile.jsp").forward(req, resp);
 		} else {
 			User user = new User(req.getParameter("name"),
 					req.getParameter("surname"),
@@ -45,8 +45,8 @@ public class EditProfile extends HttpServlet {
 					req.getParameter("description"),
 					req.getParameter("password"),
 					null,
-					req.getParameter("secretQuestion"),
-					req.getParameter("secretAnswer"));
+					userSession.getSecretQuestion(),
+					userSession.getSecretAnswer());
 			user.setId(userSession.getId());
 			userService.save(user);
 			req.getSession().setAttribute("user", user);
@@ -60,8 +60,6 @@ public class EditProfile extends HttpServlet {
 		req.setAttribute("password", req.getParameter("password"));
 		req.setAttribute("confirm", req.getParameter("confirm"));
 		req.setAttribute("description", req.getParameter("description"));
-		req.setAttribute("secretQuestion", req.getParameter("secretQuestion"));
-		req.setAttribute("secretAnswer", req.getParameter("secretAnswer"));
 	}
 	
 	private void setDefaults(HttpServletRequest req, User original) {
@@ -70,7 +68,5 @@ public class EditProfile extends HttpServlet {
 		req.setAttribute("password", original.getPassword());
 		req.setAttribute("confirm", original.getPassword());
 		req.setAttribute("description", original.getDescription());
-		req.setAttribute("secretQuestion", original.getSecretQuestion());
-		req.setAttribute("secretAnswer", original.getSecretAnswer());
 	}
 }
