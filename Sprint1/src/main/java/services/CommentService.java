@@ -8,11 +8,12 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import database.CommentDAO;
+import database.HashtagDAO;
+
 import model.Comment;
 import model.Hashtag;
 import model.User;
-import network.CommentDAO;
-import network.HashtagDAO;
 
 public class CommentService {
 

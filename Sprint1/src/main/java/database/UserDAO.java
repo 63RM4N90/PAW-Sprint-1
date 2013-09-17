@@ -1,4 +1,4 @@
-package network;
+package database;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

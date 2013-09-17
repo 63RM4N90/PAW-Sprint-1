@@ -1,4 +1,4 @@
-package network;
+package database;
 
 /**
  * Excepcion no chequeada que se lanza cuando ocurre un error fatal en la base de datos.

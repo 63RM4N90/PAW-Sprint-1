@@ -2,8 +2,9 @@ package services;
 
 import java.util.List;
 
+import database.UserDAO;
+
 import model.User;
-import network.UserDAO;
 
 public class UserService {
 

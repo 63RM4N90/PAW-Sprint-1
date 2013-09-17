@@ -6,8 +6,9 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.TreeMap;
 
+import database.HashtagDAO;
+
 import model.Hashtag;
-import network.HashtagDAO;
 
 public class HashtagService {
 	

@@ -1,4 +1,4 @@
-package network;
+package database;
 
 public abstract class AbstractDAO {
 	
