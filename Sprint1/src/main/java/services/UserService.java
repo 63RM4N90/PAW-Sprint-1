@@ -34,7 +34,7 @@ public class UserService {
 		return userDao.authenticate(username, password);
 	}
 
-	public User getUsuer(String username) {
+	public User getUser(String username) {
 		return userDao.getUser(username);
 	}
 	

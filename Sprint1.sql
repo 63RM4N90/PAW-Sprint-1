@@ -1,13 +1,14 @@
 ﻿CREATE TABLE Users (
-	id		SERIAL NOT NULL,
-	name		varchar(32),
-	surname		varchar(32),
-	password	varchar(16) CHECK (char_length(password) >= 8 AND char_length(password) <= 16) NOT NULL,
-	username	varchar(32) NOT NULL UNIQUE,
-	description	varchar(140),
-	secretQuestion	varchar(64),
-	secretAnswer	varchar(64),
-	picture		bytea,
+	id			SERIAL NOT NULL,
+	name			varchar(32),
+	surname			varchar(32),
+	password		varchar(16) CHECK (char_length(password) >= 8 AND char_length(password) <= 16) NOT NULL,
+	username		varchar(32) NOT NULL UNIQUE,
+	description		varchar(140),
+	secretQuestion		varchar(64),
+	secretAnswer		varchar(64),
+	picture			bytea,
+	registrationDate	TIMESTAMP NOT NULL,
 	PRIMARY KEY(id)
 );
 

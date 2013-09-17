@@ -23,7 +23,7 @@ public class Picture extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		String username = req.getParameter("username");
-		User user = userService.getUsuer(username);
+		User user = userService.getUser(username);
 		if (user != null) {
 			if (user.getPicture() != null) {
 				resp.getOutputStream().write(user.getPicture());

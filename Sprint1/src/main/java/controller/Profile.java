@@ -25,7 +25,7 @@ public class Profile extends AbstractController {
 			throws ServletException, IOException {
 		String username = req.getParameter("user");
 		HttpSession session = req.getSession(false);
-		User profile = userService.getUsuer(username);
+		User profile = userService.getUser(username);
 		if (profile != null) {
 			User userSession = (User) session.getAttribute("user");
 			if (userSession != null) {

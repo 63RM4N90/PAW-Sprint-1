@@ -65,7 +65,7 @@ public class Registration extends FormController {
 							password, picture, secretQuestion, secretAnswer,
 							new Date());
 					userService.save(user);
-					user = userService.getUsuer(username);
+					user = userService.getUser(username);
 					req.getSession().setAttribute("user", user);
 					resp.sendRedirect("profile?user=" + user.getUsername());
 				} else {
