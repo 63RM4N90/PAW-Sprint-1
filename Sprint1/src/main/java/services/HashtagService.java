@@ -41,7 +41,7 @@ public class HashtagService {
 		
 		Date to = new Date();
 		Calendar calendar = Calendar.getInstance();
-		calendar.roll(Calendar.DATE,-days);
+		calendar.roll(Calendar.DAY_OF_YEAR,-days);
 		Date from = calendar.getTime();	
 		
 		

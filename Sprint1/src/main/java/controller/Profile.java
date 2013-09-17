@@ -10,8 +10,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import model.Comment;
+import model.Hashtag;
 import model.User;
 import services.CommentService;
+import services.HashtagService;
 import services.UserService;
 
 @SuppressWarnings("serial")
@@ -19,11 +21,13 @@ public class Profile extends AbstractController {
 
 	private CommentService commentService = CommentService.getInstance();
 	private UserService userService = UserService.getInstance();
+	private HashtagService hashtagService = HashtagService.getInstance();
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		String username = req.getParameter("user");
+		List<Hashtag> top10 = hashtagService.TopHashtags(7);
 		HttpSession session = req.getSession(false);
 		User profile = userService.getUsuer(username);
 		if (profile != null) {
@@ -35,6 +39,7 @@ public class Profile extends AbstractController {
 			}
 			req.setAttribute("user", profile);
 			req.setAttribute("userSession", userSession);
+			req.setAttribute("ranking", top10);
 			List<Comment> comments = commentService.getComments(profile);
 			for (Comment comment : comments) {
 				comment.setComment(getProcessedComment(comment.getComment()));
