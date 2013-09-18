@@ -43,10 +43,8 @@ public class HashtagDAO extends AbstractDAO {
 			ResultSet results = stmt.executeQuery();
 			if (results.next()) {
 
-				Date date = new Date(results.getTimestamp(3).getTime());
-
 				hashtagAux = new Hashtag(results.getString(1), UserDAO
-						.getInstance().getUser(results.getString(2)), date);
+						.getInstance().getUser(results.getString(2)), results.getTimestamp(3));
 			}
 			connection.close();
 		} catch (SQLException e) {
@@ -96,12 +94,13 @@ public class HashtagDAO extends AbstractDAO {
 		CommentDAO commentDAO = CommentDAO.getInstance();
 		return commentDAO.getComments(hashtag);
 	}
+	
 
 	public TreeMap<Integer, ArrayList<Hashtag>> rankedHashtags(Date from,
 			Date to) {
 		TreeMap<Integer, ArrayList<Hashtag>> rank = new TreeMap<Integer, ArrayList<Hashtag>>();
 
-		String query = "SELECT H1.hashtag, H1.date, count(H2.commentId) AS RANK, U.id, U.name, U.surname,U.username, U.password, U.description,U.secretquestion,U.secretanswer "
+		String query = "SELECT H1.hashtag, H1.date, count(H2.commentId) AS RANK, U.id, U.name, U.surname,U.username, U.password, U.description,U.secretquestion,U.secretanswer,U.picture,U.registrationDate "
 				+ "FROM hashtags AS H1,hashtagsincomments AS H2,comments AS C,users AS U "
 				+ "WHERE H1.hashtag = H2.hashtag AND H2.commentId = C.id AND H1.creator = U.username AND C.date >= ? AND C.date <= ? "
 				+ "GROUP BY H1.hashtag, H1.date, U.id, U.name, U.surname, U.password, U.username, U.description,U.secretquestion,U.secretanswer, U.picture, U.registrationDate "
@@ -124,10 +123,10 @@ public class HashtagDAO extends AbstractDAO {
 				creator = new User(results.getString(5), results.getString(6),
 						results.getString(7), results.getString(9),
 						results.getString(8), results.getBytes(12), results.getString(10),
-						results.getString(11), results.getDate(13));
+						results.getString(11), results.getTimestamp(13));
 				creator.setId(results.getInt(4));
 				hashtag = new Hashtag(results.getString(1), creator,
-						results.getDate(2));
+						results.getTimestamp(2));
 
 				ArrayList<Hashtag> aux;
 				if (rank.containsKey(ranking)) {

@@ -1,4 +1,3 @@
-
 <%@ include file="header.jsp"%>
 <div class="vertical-container">
 	<div class="info-column profile-column">
@@ -59,4 +58,4 @@
 		<span><%@ include file="top10.jsp"%></span>
 	</div>
 
-<%@ include file="footer.jsp"%>
+

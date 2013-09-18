@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import model.Comment;
@@ -37,9 +38,10 @@ public class CommentDAO extends AbstractDAO {
 
 		try {
 			Connection connection = manager.getConnection();
-			PreparedStatement stmt = connection.prepareStatement("SELECT * FROM hashtagsincomments,comments"
-					+ " WHERE commentid = comments.id AND hashtag = ?");
-			stmt.setString(1, hashtag);			
+			PreparedStatement stmt = connection
+					.prepareStatement("SELECT * FROM hashtagsincomments,comments"
+							+ " WHERE commentid = comments.id AND hashtag = ?");
+			stmt.setString(1, hashtag);
 			ResultSet results = stmt.executeQuery();
 
 			while (results.next()) {
@@ -146,15 +148,21 @@ public class CommentDAO extends AbstractDAO {
 
 	}
 
-	public void removeComment(Comment comment) {
+	public void removeComment(int commentId) {
 		Connection connection = manager.getConnection();
 		PreparedStatement stmt;
 		try {
+			stmt = connection.prepareStatement("DELETE FROM hashtagsincomments WHERE commentid = ?");
+			stmt.setInt(1, commentId);
+			stmt.execute();
+			
 			stmt = connection
 					.prepareStatement("DELETE FROM Comments WHERE id = ?");
-			stmt.setInt(1, comment.getId());
+			stmt.setInt(1, commentId);
 			stmt.execute();
+			
 			connection.commit();
+			
 			connection.close();
 		} catch (SQLException e) {
 			throw new DatabaseException(e.getMessage(), e);

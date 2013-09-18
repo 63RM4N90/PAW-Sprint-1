@@ -36,15 +36,13 @@
 		</div>
 	</div>
 	<div class="login-column column-3">
-		<!-- TOP TEN COMMENTS -->
+		<%@ include file="top10.jsp"%> 
 	</div>
-</div>
 	<div class="about-us">
 		<p>
 			Special Project Done By<br>
 			Florencia Besteiro - German Romarion - Gabriel Zanzotti
 		</p>
 	</div>
-
-
+</div>
 <%@ include file="footer.jsp" %>
