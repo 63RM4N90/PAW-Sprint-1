@@ -32,14 +32,6 @@
 		<input type="text" name="description" value="<c:out value="${description}" />"/>
 	</div>
 	<div class="form-field">
-		<label for="secretQuestion">Secret question:</label>
-		<input type="text" name="secretQuestion" value="<c:out value="${secretQuestion}" />"/>
-	</div>
-	<div class="form-field">
-		<label for="secretAnswer">Secret answer:</label>
-		<input type="text" name="secretAnswer" value="<c:out value="${secretAnswer}" />"/>
-	</div>
-	<div class="form-field">
 		<label for="picture">Picture:</label>
 		<input type="file" name="picture" accept="image/jpg"/>
 	</div>

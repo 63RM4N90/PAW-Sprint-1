@@ -80,7 +80,5 @@ public class EditProfile extends FormController {
 		req.setAttribute("password", original.getPassword());
 		req.setAttribute("confirm", original.getPassword());
 		req.setAttribute("description", original.getDescription());
-		req.setAttribute("secretQuestion", original.getSecretQuestion());
-		req.setAttribute("secretAnswer", original.getSecretAnswer());
 	}
 }
