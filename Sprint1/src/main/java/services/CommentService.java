@@ -8,11 +8,12 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import database.CommentDAO;
+import database.HashtagDAO;
+
 import model.Comment;
 import model.Hashtag;
 import model.User;
-import network.CommentDAO;
-import network.HashtagDAO;
 
 public class CommentService {
 
@@ -44,7 +45,7 @@ public class CommentService {
 		while (matcher.find()) {
 			result = matcher.group();
 			String hashtag = result.substring(1);
-			Hashtag tag = hashtagDao.getHashTag(hashtag);
+			Hashtag tag = hashtagDao.getHashtag(hashtag);
 			if (tag == null) {
 				tag = new Hashtag(hashtag, author, new Date());
 				hashtagDao.save(tag);

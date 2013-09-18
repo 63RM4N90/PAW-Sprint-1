@@ -1,4 +1,4 @@
-package network;
+package database;
 
 import java.io.IOException;
 
@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Filtro que captura excepciones y muestra una página de error.
+ * Filtro que captura excepciones y muestra una p??gina de error.
  */
 public class ErrorFilter implements Filter {
 

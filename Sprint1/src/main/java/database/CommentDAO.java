@@ -1,4 +1,4 @@
-package network;
+package database;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -74,6 +74,7 @@ public class CommentDAO extends AbstractDAO {
 				stmt.setInt(1, results.getInt(1));
 				ResultSet resultsH = stmt.executeQuery();
 				while (resultsH.next()) {
+<<<<<<< HEAD:Sprint1/src/main/java/network/CommentDAO.java
 					hashtags.add(hDAO.getHashTag(resultsH.getString(2)));
 				}*/
 				List<Hashtag> hashtags = hDAO.getHashtags(results.getInt(1));
@@ -110,6 +111,7 @@ public class CommentDAO extends AbstractDAO {
 				ResultSet hashtags = stmt.executeQuery();
 				List<Hashtag> list = new ArrayList<Hashtag>();
 				while (hashtags.next()) {
+<<<<<<< HEAD:Sprint1/src/main/java/network/CommentDAO.java
 					list.add(hashtagDAO.getHashTag(hashtags.getString(1)));
 				}*/
 				List<Hashtag> list = hashtagDAO.getHashtags(results.getInt(1));
