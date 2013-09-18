@@ -44,12 +44,12 @@
 		<servlet-name>LostPassword</servlet-name>
 		<servlet-class>controller.LostPassword</servlet-class>
 	</servlet>
-	
+
 	<servlet>
 		<servlet-name>Picture</servlet-name>
 		<servlet-class>controller.Picture</servlet-class>
 	</servlet>
-	
+
 	<servlet>
 		<servlet-name>Error</servlet-name>
 		<servlet-class>controller.Error</servlet-class>
@@ -99,13 +99,13 @@
 		<servlet-name>Error</servlet-name>
 		<url-pattern>/error</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet-mapping>
 		<servlet-name>Picture</servlet-name>
 		<url-pattern>/image</url-pattern>
 	</servlet-mapping>
-	
-	<!-- <filter>
+
+	<filter>
 		<filter-name>authenticationFilter</filter-name>
 		<filter-class>database.AuthenticationFilter</filter-class>
 	</filter>
@@ -119,10 +119,9 @@
 		<filter-name>errorFilter</filter-name>
 		<filter-class>database.ErrorFilter</filter-class>
 	</filter>
-	
+
 	<filter-mapping>
 		<filter-name>errorFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
-	 -->
 </web-app>

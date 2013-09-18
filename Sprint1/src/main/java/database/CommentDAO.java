@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import model.Comment;
@@ -29,6 +30,29 @@ public class CommentDAO extends AbstractDAO {
 		manager = new ConnectionManager(driver, connectionString, username,
 				password);
 	}
+	
+	public Comment getComment(int commentId){
+		UserDAO userDAO = UserDAO.getInstance();
+		HashtagDAO hashtagDAO = HashtagDAO.getInstance();
+		Comment comment = null;
+		
+		try {
+			Connection connection = manager.getConnection();
+			PreparedStatement stmt = connection.prepareStatement("SELECT * FROM comments WHERE id = ? ");
+			stmt.setInt(1, commentId);
+			
+			ResultSet results = stmt.executeQuery();
+			if(results.next()){
+				comment = new Comment(userDAO.getUser(results.getString(2)),new Date(results.getTimestamp(3).getTime()),results.getString(4),hashtagDAO.getHashtags(commentId));
+			}
+			connection.close();
+			
+		} catch (SQLException e) {
+			throw new DatabaseException(e.getMessage(), e);
+		}
+		
+		return comment;
+	}
 
 	public List<Comment> getComments(String hashtag) {
 		List<Comment> comments = new ArrayList<Comment>();
@@ -43,15 +67,17 @@ public class CommentDAO extends AbstractDAO {
 			ResultSet results = stmt.executeQuery();
 
 			while (results.next()) {
-				List<Hashtag> hashtags = new ArrayList<Hashtag>();
+				/*List<Hashtag> hashtags = new ArrayList<Hashtag>();
 				stmt = connection
 						.prepareStatement("SELECT commentid,hashtag FROM hashtagsincomments "
 								+ "WHERE commentid = ?");
 				stmt.setInt(1, results.getInt(1));
 				ResultSet resultsH = stmt.executeQuery();
 				while (resultsH.next()) {
-					hashtags.add(hDAO.getHashtag(resultsH.getString(2)));
-				}
+<<<<<<< HEAD:Sprint1/src/main/java/network/CommentDAO.java
+					hashtags.add(hDAO.getHashTag(resultsH.getString(2)));
+				}*/
+				List<Hashtag> hashtags = hDAO.getHashtags(results.getInt(1));
 				User author = uDAO.getUser(results.getString(4));
 				Comment comment = new Comment(author, results.getTimestamp(5),
 						results.getString(6), hashtags);
@@ -79,14 +105,16 @@ public class CommentDAO extends AbstractDAO {
 			ResultSet results = stmt.executeQuery();
 
 			while (results.next()) {
-				stmt = connection
+				/*stmt = connection
 						.prepareStatement("SELECT hashtag FROM hashtagsincomments WHERE commentid = ?");
 				stmt.setInt(1, results.getInt(1));
 				ResultSet hashtags = stmt.executeQuery();
 				List<Hashtag> list = new ArrayList<Hashtag>();
 				while (hashtags.next()) {
-					list.add(hashtagDAO.getHashtag(hashtags.getString(1)));
-				}
+<<<<<<< HEAD:Sprint1/src/main/java/network/CommentDAO.java
+					list.add(hashtagDAO.getHashTag(hashtags.getString(1)));
+				}*/
+				List<Hashtag> list = hashtagDAO.getHashtags(results.getInt(1));
 				Comment comment = new Comment(user, results.getTimestamp(3),
 						results.getString(4), list);
 				comments.add(comment);

@@ -1,4 +1,3 @@
-
 <%@ include file="header.jsp"%>
 <img src="image?username=<c:out value="${user.username}" />"
 	alt="user_picture" />
@@ -50,4 +49,6 @@
 	</c:forEach>
 </ul>
 
-<%@ include file="footer.jsp"%>
+<span>
+		<%@ include file="top10.jsp"%> 
+</span>

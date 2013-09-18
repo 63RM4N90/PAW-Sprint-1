@@ -96,6 +96,31 @@ public class HashtagDAO extends AbstractDAO {
 		CommentDAO commentDAO = CommentDAO.getInstance();
 		return commentDAO.getComments(hashtag);
 	}
+	
+	public List<Hashtag> getHashtags(int commentId){
+		List<Hashtag> hashtags = new ArrayList<Hashtag>();
+		UserDAO userDAO = UserDAO.getInstance();
+		
+		try {
+			Connection connection = manager.getConnection();
+			PreparedStatement stmt = connection.prepareStatement("SELECT hashtag.hashtag,creator,date "
+					+ "FROM hastag,hashtagsincomment "
+					+ "WHERE commentid = ? AND hashtag.hashtag = hashtagsincomments.hashtag");
+			stmt.setInt(1, commentId);
+			ResultSet results = stmt.executeQuery();
+			
+			while(results.next()){
+				hashtags.add(new Hashtag(results.getString(1),userDAO.getUser(results.getString(2)),new Date(results.getTimestamp(3).getTime())));			
+			}
+			connection.close();
+		} catch (SQLException e) {
+			throw new DatabaseException(e.getMessage(), e);
+		}
+		
+		return hashtags;
+		
+		
+	}
 
 	public TreeMap<Integer, ArrayList<Hashtag>> rankedHashtags(Date from,
 			Date to) {

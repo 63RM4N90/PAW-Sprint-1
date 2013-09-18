@@ -1,7 +1,7 @@
 <%@ include file="header.jsp" %>
 
 <h2>Login</h2>
-<div class="error"><c:out value="${error}" /></div>
+<div style="float:left;" class="error"><c:out value="${error}" /></div>
 <form method="POST" action="login">
 	<div class="form-field">
 		<label for="username">User:</label>
@@ -17,7 +17,7 @@
 </form>
 <a href="lostPassword">forgotten password?</a>
 
-<div>
+<div style="float:left;">
 	<h2>Welcome to Social Cthulhu!</h2>
 	<p>
 		A place were you can become a Cthulhu follower <br>
@@ -26,6 +26,10 @@
 	</p>
 	<div class="notRegistered"><a href="register"><button>Register</button></a></div>
 </div>
+
+<span>
+		<%@ include file="top10.jsp"%> 
+</span>
 
 
 <%@ include file="footer.jsp" %>
