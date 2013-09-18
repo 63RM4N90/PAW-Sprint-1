@@ -21,8 +21,8 @@ public class Login extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
 		List<Hashtag> top10 = hashtagService.topHashtags(30);
-				
 		req.setAttribute("ranking", top10);
 		req.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(req, resp);
 	}
@@ -41,7 +41,8 @@ public class Login extends HttpServlet {
 		} else {
 			req.setAttribute("username", username);
 			req.setAttribute("error", "Invalid user or password.");
-			req.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(req,resp);
+			req.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(req,
+					resp);
 		}
 	}
 }

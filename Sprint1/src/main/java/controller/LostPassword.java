@@ -20,22 +20,28 @@ public class LostPassword extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		String userName = req.getParameter("userToRecover");
-		String search = req.getParameter("search");
 		User user = null;
 		if (userName != null) {
-			user = userService.getUser(userName);
+			if (userName != "") {
+				user = userService.getUser(userName);				
+			} else {
+				user = new User("", "", "", "", "", null, "", "", null);
+			}
+		} else {
+			userName = "";
+			req.setAttribute("userToRecover", userName);
+			user = new User("", "", "", "", "", null, "", "", null);
 		}
-		if (search == null) {
-			req.setAttribute("search", "");
-		}
-		if (userName != null && user == null) {
+		if (userName != "" && user.getUsername() == "") {
 			req.setAttribute("error", "User does not exist");
 			req.setAttribute("userSelected", false);
-		} else if (user != null) {
+		} else if (user.getUsername() != "") {
 			req.setAttribute("success",
 					"Recovering password for " + user.getUsername());
 			req.setAttribute("user", user);
 			req.setAttribute("userSelected", true);
+		} else {
+			req.setAttribute("userSelected", false);
 		}
 		req.getRequestDispatcher("/WEB-INF/jsp/lostPassword.jsp").forward(req,
 				resp);
@@ -50,7 +56,6 @@ public class LostPassword extends HttpServlet {
 		String userToRecover = req.getParameter("userToRecover");
 		User u = userService.getUser(userToRecover);
 		req.setAttribute("userSelected", true);
-
 		if (secretAnswerSubmited != null) {
 			boolean matches = u.getSecretAnswer().equals(secretAnswerSubmited);
 			boolean passwordMatches = false;
