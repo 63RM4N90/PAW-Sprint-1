@@ -122,6 +122,6 @@
 	
 	<filter-mapping>
 		<filter-name>errorFilter</filter-name>
-		<url-pattern>/*</url-pattern>
+		<url-pattern>/blabla</url-pattern>
 	</filter-mapping>
 </web-app>

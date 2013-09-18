@@ -9,18 +9,32 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 "http://www.w3.org/TR/html4/loose.dtd">
 <html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="css/style.css" />
+	</head>
 	<body>
-		<div>
-			<c:if test="${isLogged}">
-				<span><c:out value="${userSession.username}" /> [<a href="logout">Close session</a>]</span>
-			</c:if>
+		<div class="top-bar">
+			<div class="top-bar-element title">
+				<img src="/Sprint1/img/title.png" alt="Social Cthulhu"/>
+			</div>
+			<div class="top-bar-element search-bar">
+				<form method="POST" action="search">
+						<input type="text"  placeholder="Find Soul..." name="search" />
+						<input type="submit" class="button" name="submit" value="Search" />
+				</form>
+			</div>
+			<div class="top-bar-element session">
+				<div class="home-link">
+					<img class="separator" src="/Sprint1/img/topbar_separator.png" alt=""/>
+					<a href="/Sprint1"><img class="home" src="/Sprint1/img/home.png" alt="home"/></a>
+				</div>
+				<c:if test="${isLogged}">
+					<img class="separator" src="/Sprint1/img/topbar_separator.png" alt=""/>
+					<div class="user-session">
+						<p><c:out value="${userSession.username}" /></p>
+						<br>
+						<a href="logout">Log out</a>
+					</div>
+				</c:if>
+			</div>
 		</div>
-		<form method="POST" action="search">
-			<div class="search-bar">
-				<label for="search">Search:</label>
-				<input type="text" name="search" />
-			</div>
-			<div class="search-button">
-				<input type="submit" name="submit" value="Search" />
-			</div>
-		</form>
