@@ -26,7 +26,7 @@ public class Profile extends AbstractController {
 		String username = req.getParameter("user");
 		HttpSession session = req.getSession(false);
 		User userSession = (User) session.getAttribute("user");
-		List<Hashtag> ranking = hashtagService.TopHashtags(30);
+		List<Hashtag> ranking = hashtagService.topHashtags(30);
 		if (username == null) {
 			if (userSession != null) {
 				resp.sendRedirect("profile?user=" + userSession.getUsername());
