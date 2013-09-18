@@ -1,4 +1,4 @@
-package network;
+package database;
 
 import java.io.IOException;
 

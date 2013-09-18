@@ -1,4 +1,4 @@
-package network;
+package database;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -50,7 +50,7 @@ public class CommentDAO extends AbstractDAO {
 				stmt.setInt(1, results.getInt(1));
 				ResultSet resultsH = stmt.executeQuery();
 				while (resultsH.next()) {
-					hashtags.add(hDAO.getHashTag(resultsH.getString(2)));
+					hashtags.add(hDAO.getHashtag(resultsH.getString(2)));
 				}
 				User author = uDAO.getUser(results.getString(4));
 				Comment comment = new Comment(author, results.getTimestamp(5),
@@ -85,7 +85,7 @@ public class CommentDAO extends AbstractDAO {
 				ResultSet hashtags = stmt.executeQuery();
 				List<Hashtag> list = new ArrayList<Hashtag>();
 				while (hashtags.next()) {
-					list.add(hashtagDAO.getHashTag(hashtags.getString(1)));
+					list.add(hashtagDAO.getHashtag(hashtags.getString(1)));
 				}
 				Comment comment = new Comment(user, results.getTimestamp(3),
 						results.getString(4), list);

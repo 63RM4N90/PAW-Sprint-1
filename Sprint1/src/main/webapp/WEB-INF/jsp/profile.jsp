@@ -23,10 +23,13 @@
 	</form>
 </c:if>
 <c:if test="${isOwner}">
+	<div class="commentError">
+		<c:out value="${commentError}" />
+	</div>
 	<form method="POST" action="profile">
 		<div class="form-field">
 			<label for="comment">Comment:</label> <input type="text"
-				name="comment" />
+				name="comment" maxlength="140" />
 		</div>
 		<div class="form-buttons">
 			<input type="submit" name="submit" value="Post" />

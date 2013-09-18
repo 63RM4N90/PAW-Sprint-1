@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Date;
+
 public class User extends AbstractModel {
 	public static final int MIN_USERNAME_LENGTH = 8;
 	public static final int MAX_USERNAME_LENGTH = 16;
@@ -13,10 +15,11 @@ public class User extends AbstractModel {
 	private byte[] picture;
 	private String secretQuestion;
 	private String secretAnswer;
+	private Date registrationDate;
 
 	public User(String name, String surname, String username,
 			String description, String password, byte[] picture,
-			String secretQuestion, String secretAnswer)
+			String secretQuestion, String secretAnswer, Date registrationDate)
 			throws IllegalArgumentException {
 		if (name == null || surname == null || username == null
 				|| password == null || secretQuestion == null
@@ -45,6 +48,7 @@ public class User extends AbstractModel {
 		this.picture = picture;
 		this.secretQuestion = secretQuestion;
 		this.secretAnswer = secretAnswer;
+		this.registrationDate = registrationDate;
 	}
 
 	public String getName() {
@@ -109,5 +113,13 @@ public class User extends AbstractModel {
 
 	public void setSecretAnswer(String secretAnswer) {
 		this.secretAnswer = secretAnswer;
+	}
+
+	public Date getRegistrationDate() {
+		return registrationDate;
+	}
+
+	public void setRegistrationDate(Date registrationDate) {
+		this.registrationDate = registrationDate;
 	}
 }

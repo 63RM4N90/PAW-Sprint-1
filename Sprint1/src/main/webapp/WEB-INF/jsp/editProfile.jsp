@@ -3,31 +3,37 @@
 <h2>EditProfile</h2>
 <div class="error"><c:out value="${usernameError}" /></div>
 <div class="error"><c:out value="${passwordError}" /></div>
-<form method="POST" action="editProfile">
+<div class="error"><c:out value="${generalError}" /></div>
+<form method="POST" action="editProfile" enctype="multipart/form-data">
 	
 	<div class="form-field">
-		<label for="surname">ChangeProfilePicture:</label>
-		<button><img src="sessionUser.image" alt="user image"></buton>
+		<label for="pictureShow">ChangeProfilePicture:</label>
+		<img src="image?username=<c:out value="${user.username}" />"
+		alt="user_picture" />
 	</div>
 	<div class="form-field">
 		<label for="name">Name:</label>
-		<input type="text" name="name" value="<c:out value="${sessionUser.name}" />" />
+		<input type="text" name="name" value="<c:out value="${name}" />" />
 	</div>
 	<div class="form-field">
 		<label for="surname">Surname:</label>
-		<input type="text" name="surname" value="<c:out value="${sessionUser.surname}" />"/>
+		<input type="text" name="surname" value="<c:out value="${surname}" />"/>
 	</div>
 	<div class="form-field">
 		<label for="password">Password:</label>
-		<input type="password" name="password" value="<c:out value="${sessionUser.password}" />"/>
+		<input type="password" name="password" value="<c:out value="${password}" />"/>
 	</div>
 	<div class="form-field">
 		<label for="confirm">Confirm password:</label>
-		<input type="password" name="confirm" value="<c:out value="${sessionUser.password}" />"/>
+		<input type="password" name="confirm" value="<c:out value="${confirm}" />"/>
 	</div>
 	<div class="form-field">
 		<label for="description">Description:</label>
-		<input type="text" name="description" value="<c:out value="${sessionUser.description}" />"/>
+		<input type="text" name="description" value="<c:out value="${description}" />"/>
+	</div>
+	<div class="form-field">
+		<label for="picture">Picture:</label>
+		<input type="file" name="picture" accept="image/jpg"/>
 	</div>
 	<div class="form-buttons">
 		<input type="submit" name="submit" value="Save" />

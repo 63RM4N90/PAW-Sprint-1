@@ -1,10 +1,10 @@
 package controller;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -17,13 +17,14 @@ import org.apache.commons.fileupload.FileUploadException;
 import services.UserService;
 
 @SuppressWarnings("serial")
-public class Registration extends HttpServlet {
+public class Registration extends FormController {
 
 	private UserService userService = UserService.getInstance();
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+		fillInputs("", "", "", "", "", "", req);
 		req.getRequestDispatcher("/WEB-INF/jsp/registration.jsp").forward(req,
 				resp);
 	}
@@ -34,6 +35,7 @@ public class Registration extends HttpServlet {
 
 		DiskFileUpload fu = new DiskFileUpload();
 		try {
+			@SuppressWarnings("unchecked")
 			List<FileItem> fileItems = fu.parseRequest(req);
 			String name = fileItems.get(0).getString();
 			String surname = fileItems.get(1).getString();
@@ -43,47 +45,50 @@ public class Registration extends HttpServlet {
 			String description = fileItems.get(5).getString();
 			String secretQuestion = fileItems.get(6).getString();
 			String secretAnswer = fileItems.get(7).getString();
-			byte[] picture = fileItems.get(8).get();
+			FileItem pictureFile = fileItems.get(8);
+			byte[] picture;
+			if (pictureFile.getName().length() == 0) {
+				picture = null;
+			} else {
+				picture = pictureFile.get();
+			}
 			if (userService.userExists(username)) {
 				req.setAttribute("usernameError", "User already exists!");
-				fillInputs(req);
+				fillInputs(name, surname, username, description,
+						secretQuestion, secretAnswer, req);
 				req.getRequestDispatcher("/WEB-INF/jsp/registration.jsp")
 						.forward(req, resp);
 			} else {
-				int pwdlength = password.length();
-				if (pwdlength < 8 || pwdlength > 16) {
-					req.setAttribute("passwordError",
-							"Password must contain between 8 and 16 characters!");
-					fillInputs(req);
-					req.getRequestDispatcher("/WEB-INF/jsp/registration.jsp")
-							.forward(req, resp);
-				}
-				if (!password.equals(confirm)) {
-					req.setAttribute("passwordError",
-							"Password confirmation doesn't match the password field!");
-					fillInputs(req);
-					req.getRequestDispatcher("/WEB-INF/jsp/registration.jsp")
-							.forward(req, resp);
-				} else {
-					
+				if (super.validate(req, resp, name, surname, password, confirm,
+						description, secretQuestion, secretAnswer)) {
 					User user = new User(name, surname, username, description,
-							password, picture, secretQuestion, secretAnswer);
+							password, picture, secretQuestion, secretAnswer,
+							new Date());
 					userService.save(user);
-					user = userService.getUsuer(username);
+					user = userService.getUser(username);
 					req.getSession().setAttribute("user", user);
 					resp.sendRedirect("profile?user=" + user.getUsername());
+				} else {
+					fillInputs(name, surname, username, description,
+							secretQuestion, secretAnswer, req);
+					req.getRequestDispatcher("/WEB-INF/jsp/registration.jsp")
+							.forward(req, resp);
 				}
 			}
 		} catch (FileUploadException e) {
 		}
 	}
 
-	private void fillInputs(HttpServletRequest req) {
-		req.setAttribute("name", req.getParameter("name"));
-		req.setAttribute("surname", req.getParameter("surname"));
-		req.setAttribute("description", req.getParameter("description"));
-		req.setAttribute("username", req.getParameter("username"));
-		req.setAttribute("secretQuestion", req.getParameter("secretQuestion"));
-		req.setAttribute("secretAnswer", req.getParameter("secretAnswer"));
+	private void fillInputs(String name, String surname, String username,
+			String description, String secretQuestion, String secretAnswer,
+			HttpServletRequest req) {
+		req.setAttribute("name", name);
+		req.setAttribute("surname", surname);
+		req.setAttribute("username", username);
+		req.setAttribute("password", "");
+		req.setAttribute("confirm", "");
+		req.setAttribute("description", description);
+		req.setAttribute("secretQuestion", secretQuestion);
+		req.setAttribute("secretAnswer", secretAnswer);
 	}
 }

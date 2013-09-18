@@ -1,4 +1,4 @@
-package network;
+package database;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -32,8 +32,8 @@ public class HashtagDAOTest {
 		//hashtagDAO.save(prueba);
 		//hashtagDAO.save(prueba2);
 		
-		Hashtag prueba = hashtagDAO.getHashTag("florchen");
-		Hashtag prueba2 = hashtagDAO.getHashTag("puppi");
+		Hashtag prueba = hashtagDAO.getHashtag("florchen");
+		Hashtag prueba2 = hashtagDAO.getHashtag("puppi");
 		
 		Hashtag h1 = new Hashtag("h1",user,date);
 		Hashtag h2 = new Hashtag("h2",user,date);
@@ -78,7 +78,7 @@ public class HashtagDAOTest {
 		list3.add(h7);
 		list3.add(prueba2);
 		list3.add(h5);
-		Comment c5 = new Comment(user2,new Date(),"aslc,ñllsk",list3);
+		Comment c5 = new Comment(user2,new Date(),"aslc,??llsk",list3);
 		
 		list3.add(h1);
 		Comment c6 = new Comment(user,new Date(),"fpsdoifosk",list3);

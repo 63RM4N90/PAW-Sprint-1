@@ -1,4 +1,4 @@
-package network;
+package database;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -32,7 +32,7 @@ public class HashtagDAO extends AbstractDAO {
 				password);
 	}
 
-	public Hashtag getHashTag(String hashtag) {
+	public Hashtag getHashtag(String hashtag) {
 		Hashtag hashtagAux = null;
 		try {
 			Connection connection = manager.getConnection();
@@ -42,11 +42,11 @@ public class HashtagDAO extends AbstractDAO {
 
 			ResultSet results = stmt.executeQuery();
 			if (results.next()) {
-				
+
 				Date date = new Date(results.getTimestamp(3).getTime());
-				
+
 				hashtagAux = new Hashtag(results.getString(1), UserDAO
-						.getInstance().getUser(results.getString(2)),date);
+						.getInstance().getUser(results.getString(2)), date);
 			}
 			connection.close();
 		} catch (SQLException e) {
@@ -65,7 +65,6 @@ public class HashtagDAO extends AbstractDAO {
 			stmt.setString(1, hashtag.getHashtag());
 			stmt.setString(2, hashtag.getAuthor().getUsername());
 			stmt.setTimestamp(3, new Timestamp(hashtag.getDate().getTime()));
-
 
 			stmt.executeUpdate();
 			connection.commit();
@@ -92,20 +91,20 @@ public class HashtagDAO extends AbstractDAO {
 		}
 
 	}
-	
-	public List<Comment> getComments(String hashtag){
+
+	public List<Comment> getComments(String hashtag) {
 		CommentDAO commentDAO = CommentDAO.getInstance();
 		return commentDAO.getComments(hashtag);
 	}
 
-	public TreeMap<Integer, ArrayList<Hashtag>> rankedHashTags(Date from,
+	public TreeMap<Integer, ArrayList<Hashtag>> rankedHashtags(Date from,
 			Date to) {
 		TreeMap<Integer, ArrayList<Hashtag>> rank = new TreeMap<Integer, ArrayList<Hashtag>>();
 
 		String query = "SELECT H1.hashtag, H1.date, count(H2.commentId) AS RANK, U.id, U.name, U.surname,U.username, U.password, U.description,U.secretquestion,U.secretanswer "
 				+ "FROM hashtags AS H1,hashtagsincomments AS H2,comments AS C,users AS U "
 				+ "WHERE H1.hashtag = H2.hashtag AND H2.commentId = C.id AND H1.creator = U.username AND C.date >= ? AND C.date <= ? "
-				+ "GROUP BY H1.hashtag, H1.date, U.id, U.name, U.surname, U.password, U.username, U.description,U.secretquestion,U.secretanswer "
+				+ "GROUP BY H1.hashtag, H1.date, U.id, U.name, U.surname, U.password, U.username, U.description,U.secretquestion,U.secretanswer, U.picture, U.registrationDate "
 				+ "ORDER BY RANK DESC";
 
 		Connection connection = manager.getConnection();
@@ -124,8 +123,8 @@ public class HashtagDAO extends AbstractDAO {
 				ranking = results.getInt(3);
 				creator = new User(results.getString(5), results.getString(6),
 						results.getString(7), results.getString(9),
-						results.getString(8), null, results.getString(10),
-						results.getString(11));
+						results.getString(8), results.getBytes(12), results.getString(10),
+						results.getString(11), results.getDate(13));
 				creator.setId(results.getInt(4));
 				hashtag = new Hashtag(results.getString(1), creator,
 						results.getDate(2));
@@ -133,7 +132,7 @@ public class HashtagDAO extends AbstractDAO {
 				ArrayList<Hashtag> aux;
 				if (rank.containsKey(ranking)) {
 					rank.get(ranking).add(hashtag);
-					
+
 				} else {
 					aux = new ArrayList<Hashtag>();
 					aux.add(hashtag);
