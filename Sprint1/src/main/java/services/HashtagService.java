@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
+import java.util.NoSuchElementException;
 import java.util.TreeMap;
 
 import database.HashtagDAO;
-
 import model.Hashtag;
 
 public class HashtagService {
@@ -51,16 +51,20 @@ public class HashtagService {
 			ArrayList<Hashtag> aux;
 			int count = 0;
 
-			while (count < 10) {
-				int key = top.lastKey();
-				aux = top.get(key);
-				int index = 0;
-				while (count < 10 && index < aux.size()) {
-					ranking.add(aux.get(index));
-					count++;
-					index++;
+			try {
+				while (count < 10) {
+					int key = top.lastKey();
+					aux = top.get(key);
+					int index = 0;
+					while (count < 10 && index < aux.size()) {
+						ranking.add(aux.get(index));
+						count++;
+						index++;
+					}
+					top.remove(key);
 				}
-				top.remove(key);
+			} catch (NoSuchElementException e) {
+				return ranking;
 			}
 		}
 		return ranking;
