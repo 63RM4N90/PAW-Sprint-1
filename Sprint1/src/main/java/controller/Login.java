@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -21,9 +22,19 @@ public class Login extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-		List<Hashtag> top10 = hashtagService.topHashtags(30);
+		List<Hashtag> top10;
+		
+		if(req.getParameter("period") == null){
+			top10 = hashtagService.topHashtags(30);
+		}else{
+			top10 = hashtagService.topHashtags(Integer.valueOf(req.getParameter("period")));
+		}
+			
+		
+		boolean isempty = top10.size() == 0;
+		req.setAttribute("previous", "login");
 		req.setAttribute("ranking", top10);
+		req.setAttribute("isempty", isempty);
 		req.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(req, resp);
 	}
 

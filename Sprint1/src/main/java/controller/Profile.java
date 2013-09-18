@@ -26,7 +26,16 @@ public class Profile extends AbstractController {
 		String username = req.getParameter("user");
 		HttpSession session = req.getSession(false);
 		User userSession = (User) session.getAttribute("user");
-		List<Hashtag> ranking = hashtagService.topHashtags(30);
+		
+		List<Hashtag> top10;
+		
+		if(req.getParameter("period") == null){
+			top10 = hashtagService.topHashtags(30);
+		}else{
+			top10 = hashtagService.topHashtags(Integer.valueOf(req.getParameter("period")));
+		}
+		
+		
 		if (username == null) {
 			if (userSession != null) {
 				resp.sendRedirect("profile?user=" + userSession.getUsername());
@@ -41,7 +50,8 @@ public class Profile extends AbstractController {
 						req.setAttribute("isOwner", true);
 					}
 				}
-				req.setAttribute("ranking", ranking);
+				req.setAttribute("previous", "profile");
+				req.setAttribute("ranking", top10);
 				req.setAttribute("user", profile);
 				req.setAttribute("userSession", userSession);
 				List<Comment> comments = commentService.getComments(profile);
@@ -58,6 +68,16 @@ public class Profile extends AbstractController {
 			throws ServletException, IOException {
 		String aux = req.getParameter("comment");
 		HttpSession session = req.getSession();
+		List<Hashtag> top10;
+		
+		if(req.getParameter("period") == null){
+			top10 = hashtagService.topHashtags(30);
+		}else{
+			top10 = hashtagService.topHashtags(Integer.valueOf(req.getParameter("period")));
+		}
+		
+		req.setAttribute("previous", "profile");
+		req.setAttribute("ranking", top10);
 		User user = (User) session.getAttribute("user");
 		if (aux.length() > 0) {
 			Comment comment = new Comment(user, new Date(), aux,
