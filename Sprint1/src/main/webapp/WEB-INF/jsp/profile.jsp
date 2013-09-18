@@ -2,7 +2,6 @@
 <%@include file="header.jsp"%>
 
 <span>
-
 	<div class="container-fluid" style="float:left;" >
 		<span class="container-fluid" >
 			<div class="container-fluid user">	

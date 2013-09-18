@@ -8,9 +8,9 @@
 		Of the last
 		
 		<form action="">
-			<input type="radio" name="days" value="1">day
-			<input type="radio" name="days" value="7">week
-			<input type="radio" name="days" value="30">month
+			<input name="days" type="radio" value="1" />day
+			<input name="days" type="radio" value="7" />week
+			<input name="days" type="radio" value="30" />month
 		</form>
 	</span>
 

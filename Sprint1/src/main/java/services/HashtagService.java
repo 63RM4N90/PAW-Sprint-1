@@ -64,8 +64,4 @@ public class HashtagService {
 		}			
 		return ranking;
 	}
-	
-	public List<Comment> getComments(String hashtag){
-		return hashtagDAO.getComments(hashtag);
-	}
 }

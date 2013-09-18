@@ -64,6 +64,12 @@ public class CommentService {
 		return comments;
 	}
 
+	public List<Comment> getComments(String hashtag){
+		List<Comment> comments = hashtagDao.getComments(hashtag);
+		sortComments(comments);
+		return comments;
+	}
+	
 	private void sortComments(List<Comment> comments) {
 		Collections.sort(comments, new Comparator<Comment>() {
 			public int compare(Comment o1, Comment o2) {
