@@ -27,6 +27,7 @@ public class AuthenticationFilter implements Filter {
 		HttpServletRequest req = (HttpServletRequest) request;
 		
 		if (req.getSession().getAttribute("user") == null) {
+			System.out.println("NULL USER");
 			req.setAttribute("isLogged", false);
 		} else {
 			req.setAttribute("isLogged", true);
