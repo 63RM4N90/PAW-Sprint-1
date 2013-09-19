@@ -20,9 +20,12 @@ public class Profile extends AbstractController {
 	private UserService userService = UserService.getInstance();
 	private HashtagService hashtagService = HashtagService.getInstance();
 	private static final int MAX_COMMENT_LENGTH = 140;
+	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+		req.setAttribute("search", "a");
+		req.setAttribute("comment", "a");
 		String username = req.getParameter("user");
 		HttpSession session = req.getSession(false);
 		User userSession = (User) session.getAttribute("user");
@@ -38,7 +41,7 @@ public class Profile extends AbstractController {
 		
 		if (username == null) {
 			if (userSession != null) {
-				resp.sendRedirect("profile?user=" + userSession.getUsername());
+				resp.sendRedirect("profile?user=" + userSession.getUsername() + "&period=" + req.getParameter("period"));
 			} else {
 				req.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(req, resp);
 			}
@@ -53,7 +56,6 @@ public class Profile extends AbstractController {
 				req.setAttribute("previous", "profile");
 				req.setAttribute("ranking", top10);
 				req.setAttribute("user", profile);
-				req.setAttribute("userSession", userSession);
 				List<Comment> comments = commentService.getComments(profile);
 				for (Comment comment : comments) {
 					comment.setComment(getProcessedComment(comment.getComment()));

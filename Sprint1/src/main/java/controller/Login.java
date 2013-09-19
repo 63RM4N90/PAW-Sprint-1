@@ -1,7 +1,6 @@
 package controller;
 
 import java.io.IOException;
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -33,15 +32,15 @@ public class Login extends HttpServlet {
 		
 		boolean isempty = top10.size() == 0;
 		req.setAttribute("previous", "login");
+
 		req.setAttribute("ranking", top10);
 		req.setAttribute("isempty", isempty);
-		req.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(req, resp);
+		getServletContext().getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(req, resp);
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		
 		
 		String username = req.getParameter("username");
 		String password = req.getParameter("password");

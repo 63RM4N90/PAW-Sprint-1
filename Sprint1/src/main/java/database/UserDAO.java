@@ -148,7 +148,6 @@ public class UserDAO extends AbstractDAO {
 		if (name.length() == 0) {
 			return users;
 		}
-		User user = null;
 		try {
 			Connection connection = manager.getConnection();
 			PreparedStatement stmt = connection
@@ -160,7 +159,7 @@ public class UserDAO extends AbstractDAO {
 
 			ResultSet results = stmt.executeQuery();
 			while (results.next()) {
-				user = constructUser(results);
+				User user = constructUser(results);
 				users.add(user);
 			}
 			connection.close();

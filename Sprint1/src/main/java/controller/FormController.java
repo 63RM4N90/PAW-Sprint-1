@@ -12,13 +12,11 @@ public class FormController extends HttpServlet {
 
 	protected boolean validate(HttpServletRequest req,
 			HttpServletResponse resp, String name, String surname,
-			String password, String confirm, String description,
-			String secretQuestion, String secretAnswer)
+			String password, String confirm, String description)
 			throws ServletException, IOException {
 		if (name.length() == 0 || surname.length() == 0
 				|| password.length() == 0 || confirm.length() == 0
-				|| description.length() == 0 || secretQuestion.length() == 0
-				|| secretAnswer.length() == 0) {
+				|| description.length() == 0) {
 			req.setAttribute("generalError",
 					"One or more mandatory fields are empty!");
 			return false;
