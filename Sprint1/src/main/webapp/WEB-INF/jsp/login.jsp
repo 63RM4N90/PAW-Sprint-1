@@ -38,11 +38,11 @@
 	<div class="login-column column-3">
 		<%@ include file="top10.jsp"%> 
 	</div>
-	<div class="about-us">
-		<p>
-			Special Project Done By<br>
-			Florencia Besteiro - German Romarion - Gabriel Zanzotti
-		</p>
-	</div>
+</div>
+<div class="about-us">
+	<p>
+		Special Project Done By<br>
+		Florencia Besteiro - German Romarion - Gabriel Zanzotti
+	</p>
 </div>
 <%@ include file="footer.jsp" %>

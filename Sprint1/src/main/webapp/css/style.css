@@ -42,7 +42,7 @@ body {
 }
 
 .search-bar input[type="text"] {
-	height: 25px;
+	height: 35px;
 	width: 400px;
 	vertical-align: middle;
 	font-size: 16px;
@@ -54,7 +54,7 @@ body {
 }
 
 .form-field input[type="text"], .registration-form-field input[type="text"],  .form-field input[type="password"], .registration-form-field input[type="password"], .recover-form-field input[type="text"], .recover-form-field input[type="password"] {
-	height: 25px;
+	height: 35px;
 	vertical-align: middle;
 	font-size: 16px;
 	float: right;
@@ -108,11 +108,11 @@ a, a :visited {
 }
 
 .column-2 {
-	width: 38%;
+	position: absolute;
 }
 
 .column-3 {
-	width: 28%;
+	float: right;
 }
 
 
@@ -332,4 +332,17 @@ a button.back-button {
 .home-link {
 	display: inline-block;
 	float: left;
+}
+
+li p {
+	margin: 0;
+}
+
+.top ul {
+	padding: 0;
+}
+
+.tag-info{
+	display: inline-block;
+	float: right;
 }
