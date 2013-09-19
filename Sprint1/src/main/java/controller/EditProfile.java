@@ -45,7 +45,6 @@ public class EditProfile extends FormController {
 			String confirm = fileItems.get(3).getString();
 			String description = fileItems.get(4).getString();
 			FileItem pictureFile = fileItems.get(5);
-			System.out.println(name + " " + surname + " " + password + " ");
 			byte[] picture;
 			User userSession = (User) req.getSession().getAttribute("user");
 			if (super.validate(req, resp, name, surname, password, confirm,

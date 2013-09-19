@@ -33,27 +33,13 @@ public class AuthenticationFilter implements Filter {
 		HttpServletRequest req = (HttpServletRequest) request;
 
 		if (req.getSession().getAttribute("user") == null) {
-			System.out.println("NULL USER");
 			req.setAttribute("userSession", new User("", "", "", "", "", null,
 					"", "", null));
 			req.setAttribute("isLogged", false);
 		} else {
-			System.out.println("ELSE");
 			req.setAttribute("userSession",
 					req.getSession().getAttribute("user"));
 			req.setAttribute("isLogged", true);
-		}
-		if (chain == null) {
-			System.out.println("CHAIN ES NULL!!!");
-			log.info("chain is null");
-		}
-		if (request == null) {
-			System.out.println("request ES NULL!!!");
-			log.info("request is null");
-		}
-		if (response == null) {
-			System.out.println("response ES NULL!!!");
-			log.info("response is null");
 		}
 		chain.doFilter(request, response);
 	}
