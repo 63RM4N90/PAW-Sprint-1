@@ -22,9 +22,14 @@ public class Login extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		showTopTenHashtags(req);
-		getServletContext().getRequestDispatcher("/WEB-INF/jsp/login.jsp")
-				.forward(req, resp);
+		User user = (User) req.getSession().getAttribute("user");
+		if (user == null) {
+			showTopTenHashtags(req);
+			getServletContext().getRequestDispatcher("/WEB-INF/jsp/login.jsp")
+			.forward(req, resp);
+		} else {
+			resp.sendRedirect("profile?user=" + user.getUsername());
+		}
 	}
 
 	@Override
