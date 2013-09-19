@@ -47,15 +47,17 @@
 						<p>${comment.comment}</p>
 						<div class="comment-reference">
 							<i>Created by: </i><a href="<c:url value="profile"><c:param name="user" value="${comment.author.username}" /></c:url>">${comment.author.username}</a> | 
-							<i><fmt:formatDate value="${comment.date}" pattern="dd-MM-yyyy HH:mm" /></i>
+							<i><fmt:formatDate value="${comment.date}" pattern="dd-MM-yyyy HH:mm" /></i> | 
+							<c:if test="${isOwner}">
+								<a href="<c:url value="commentary"><c:param name="commentid" value="${comment.id}" /><c:param name="user" value="${comment.author.username}" /></c:url>">Delete</a>
+							</c:if>
 						</div>
 					</div>
 				</li>
 			</c:forEach>
 		</ul>
 	</div>
-	<div class="hashtags-column profile-column">
-		<span><%@ include file="top10.jsp"%></span>
+	<div class="tag-column profile-column">
+		<%@ include file="top10.jsp"%>
 	</div>
-
-
+<%@ include file="footer.jsp"%>

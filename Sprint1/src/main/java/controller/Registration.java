@@ -25,6 +25,7 @@ public class Registration extends FormController {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		fillInputs("", "", "", "", "", "", req);
+
 		req.getRequestDispatcher("/WEB-INF/jsp/registration.jsp").forward(req,
 				resp);
 	}
@@ -60,7 +61,9 @@ public class Registration extends FormController {
 						.forward(req, resp);
 			} else {
 				if (super.validate(req, resp, name, surname, password, confirm,
-						description, secretQuestion, secretAnswer)) {
+						description)
+						&& secretQuestion.length() != 0
+						&& secretAnswer.length() != 0) {
 					User user = new User(name, surname, username, description,
 							password, picture, secretQuestion, secretAnswer,
 							new Date());

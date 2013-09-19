@@ -3,7 +3,6 @@
 	<h2>
 		Results for "<c:out value="${search}" />"
 	</h2>
-	
 	<ul>
 		<c:set var="row" value="0" />
 		<c:forEach items="${users}" var="user">

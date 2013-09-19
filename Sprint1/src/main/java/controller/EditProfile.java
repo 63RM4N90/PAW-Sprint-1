@@ -44,22 +44,21 @@ public class EditProfile extends FormController {
 			String password = fileItems.get(2).getString();
 			String confirm = fileItems.get(3).getString();
 			String description = fileItems.get(4).getString();
-			String secretQuestion = fileItems.get(5).getString();
-			String secretAnswer = fileItems.get(6).getString();
-			FileItem pictureFile = fileItems.get(7);
-			System.out.println(name + " " + surname + " " + password + " ");
+			FileItem pictureFile = fileItems.get(5);
 			byte[] picture;
 			User userSession = (User) req.getSession().getAttribute("user");
 			if (super.validate(req, resp, name, surname, password, confirm,
-					description, secretQuestion, secretAnswer)) {
+					description)) {
 				if (pictureFile.getName().length() == 0) {
 					picture = null;
 				} else {
 					picture = pictureFile.get();
 				}
 				User user = new User(name, surname, userSession.getUsername(),
-						description, password, picture, secretQuestion,
-						secretAnswer, userSession.getRegistrationDate());
+						description, password, picture,
+						userSession.getSecretQuestion(),
+						userSession.getSecretAnswer(),
+						userSession.getRegistrationDate());
 				int id = userSession.getId();
 				user.setId(id);
 				userService.save(user);

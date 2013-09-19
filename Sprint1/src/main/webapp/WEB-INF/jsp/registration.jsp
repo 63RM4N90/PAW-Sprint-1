@@ -1,4 +1,5 @@
 <%@ include file="header.jsp" %>
+<<<<<<< HEAD
 <div class="vertical-container">
 	<h2>Registration</h2>
 	<div class="error"><c:out value="${usernameError}" /></div>
@@ -46,5 +47,4 @@
 		</div>
 	</form>
 	<div class="alreadyRegistered"><a href="login">Already registered? Login!</a></div>
-
 <%@ include file="footer.jsp" %>

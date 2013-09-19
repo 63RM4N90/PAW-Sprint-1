@@ -346,3 +346,7 @@ li p {
 	display: inline-block;
 	float: right;
 }
+
+.tag-column {
+	float: right;
+}
