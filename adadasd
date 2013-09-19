@@ -1,3 +1,0 @@
-﻿SELECT * 
-FROM hashtags AS H,hashtagsincomments AS H2,users AS U
-WHERE 

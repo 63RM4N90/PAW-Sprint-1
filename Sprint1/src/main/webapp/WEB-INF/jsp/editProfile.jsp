@@ -1,5 +1,4 @@
 <%@ include file="header.jsp" %>
-<<<<<<< HEAD
 <div class="vertical-container">
 	<h2>EditProfile</h2>
 	<div class="error"><c:out value="${usernameError}" /></div>
