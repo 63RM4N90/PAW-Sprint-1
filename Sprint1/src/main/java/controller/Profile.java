@@ -69,6 +69,9 @@ public class Profile extends AbstractController {
 					comment.setComment(getProcessedComment(comment.getComment()));
 				}
 				req.setAttribute("comments", comments);
+			} else {
+				resp.sendRedirect("profile");
+				return;
 			}
 			req.getRequestDispatcher("/WEB-INF/jsp/profile.jsp").forward(req,
 					resp);

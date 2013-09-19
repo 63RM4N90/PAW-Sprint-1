@@ -84,6 +84,14 @@
 		<servlet-name>Error</servlet-name>
 		<url-pattern>/error</url-pattern>
 	</servlet-mapping>
+	<servlet>
+		<servlet-name>Commentary</servlet-name>
+		<servlet-class>controller.Commentary</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Commentary</servlet-name>
+		<url-pattern>/commentary</url-pattern>
+	</servlet-mapping>
 	<filter>
 		<filter-name>authenticationFilter</filter-name>
 		<filter-class>database.AuthenticationFilter</filter-class>

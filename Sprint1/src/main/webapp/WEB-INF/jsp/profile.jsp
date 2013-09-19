@@ -6,8 +6,7 @@
 		<c:out value="${user.username}" />
 	</h2></span>
 
-<span>
-		<%@ include file="top10.jsp"%> 
+<span> <%@ include file="top10.jsp"%>
 </span>
 <h5>
 	<c:out value="${user.name}" />
@@ -46,7 +45,10 @@
 			<br>
 			<p>
 				<fmt:formatDate value="${comment.date}" pattern="dd-MM-yyyy HH:mm" />
-			</p>
+			</p> <c:if test="${isOwner}">
+				<a
+					href="<c:url value="commentary"><c:param name="commentid" value="${comment.id}" /><c:param name="user" value="${comment.author.username}" /></c:url>">Delete</a>
+			</c:if>
 		</li>
 	</c:forEach>
 </ul>

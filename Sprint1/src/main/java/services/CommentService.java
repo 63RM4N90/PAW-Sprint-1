@@ -64,6 +64,10 @@ public class CommentService {
 		sortComments(comments);
 		return comments;
 	}
+	
+	public void removeComment(int commentId) {
+		commentDao.removeComment(commentId);
+	}
 
 	public List<Comment> getComments(String hashtag){
 		List<Comment> comments = hashtagDao.getComments(hashtag);

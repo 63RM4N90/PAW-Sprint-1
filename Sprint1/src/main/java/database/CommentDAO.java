@@ -91,6 +91,7 @@ public class CommentDAO extends AbstractDAO {
 				}
 				Comment comment = new Comment(user, results.getTimestamp(3),
 						results.getString(4), list);
+				comment.setId(results.getInt(1));
 				comments.add(comment);
 			}
 
@@ -152,17 +153,18 @@ public class CommentDAO extends AbstractDAO {
 		Connection connection = manager.getConnection();
 		PreparedStatement stmt;
 		try {
-			stmt = connection.prepareStatement("DELETE FROM hashtagsincomments WHERE commentid = ?");
+			stmt = connection
+					.prepareStatement("DELETE FROM hashtagsincomments WHERE commentid = ?");
 			stmt.setInt(1, commentId);
 			stmt.execute();
-			
+
 			stmt = connection
 					.prepareStatement("DELETE FROM Comments WHERE id = ?");
 			stmt.setInt(1, commentId);
 			stmt.execute();
-			
+
 			connection.commit();
-			
+
 			connection.close();
 		} catch (SQLException e) {
 			throw new DatabaseException(e.getMessage(), e);
