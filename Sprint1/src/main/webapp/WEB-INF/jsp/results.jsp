@@ -4,7 +4,6 @@
 	Results for "<c:out value="${search}" />"
 </h2>
 
-<c:if test="${!isempty}">
 <ul>
 	<c:set var="row" value="0" />
 	<c:forEach items="${users}" var="user">
@@ -25,7 +24,6 @@
 		</li>
 	</c:forEach>
 </ul>
-</c:if>
 <a href="profile">My profile</a>
 
 <%@ include file="footer.jsp"%>
