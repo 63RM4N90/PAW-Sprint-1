@@ -27,9 +27,6 @@ public class Picture extends HttpServlet {
 		if (user != null) {
 			if (user.getPicture() != null) {
 				resp.getOutputStream().write(user.getPicture());
-			} else {
-				File defaultPicture = new File("src/main/webapp/img/a.jpg");
-				resp.getOutputStream().write(fileToByte(defaultPicture));				
 			}
 		}
 	}

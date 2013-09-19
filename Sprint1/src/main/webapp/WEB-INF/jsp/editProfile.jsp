@@ -28,7 +28,7 @@
 		</div>
 		<div class="registration-form-field">
 			<label for="picture">Picture:</label>
-			<input type="file" name="picture" accept="image/jpg"/>
+			<input type="file" name="picture" accept="image/"/>
 		</div>
 		<div class="form-buttons">
 			<input type="submit" class="button" name="submit" value="Save" />

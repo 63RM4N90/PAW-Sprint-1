@@ -1,8 +1,13 @@
 <%@ include file="header.jsp"%>
 <div class="vertical-container">
 	<div class="info-column profile-column">
-		<div class="user-info">	
-			<img src="image?username=<c:out value="${user.username}" />" alt="user_picture" />
+		<div class="user-info">
+			<c:if test="${isEmptyPicture}">	
+				<img src="img/a.jpg" alt="user_picture" />
+			</c:if>
+			<c:if test="${!isEmptyPicture}">
+				<img src="image?username=<c:out value="${user.username}" />" alt="user_picture" />
+			</c:if>
 			<h3><c:out value="${user.username}" /></h3>
 			<h6>Name:</h6>
 			<h5>

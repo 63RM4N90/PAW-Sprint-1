@@ -26,8 +26,6 @@ public class Profile extends AbstractController {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		req.setAttribute("search", "a");
-		req.setAttribute("comment", "a");
 		String username = req.getParameter("user");
 		HttpSession session = req.getSession(false);
 		User userSession = (User) session.getAttribute("user");
@@ -64,6 +62,7 @@ public class Profile extends AbstractController {
 				req.setAttribute("previous", "profile");
 				req.setAttribute("ranking", top10);
 				req.setAttribute("user", profile);
+				req.setAttribute("isEmptyPicture", profile.getPicture() == null);
 				List<Comment> comments = commentService.getComments(profile);
 				for (Comment comment : comments) {
 					comment.setComment(getProcessedComment(comment.getComment()));
