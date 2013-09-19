@@ -7,7 +7,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import model.Hashtag;
 import model.User;
@@ -21,28 +20,17 @@ public class Login extends HttpServlet {
 	private HashtagService hashtagService = HashtagService.getInstance();
 
 	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		List<Hashtag> top10;
-		
-		if(req.getParameter("period") == null){
-			top10 = hashtagService.topHashtags(30);
-		}else{
-			top10 = hashtagService.topHashtags(Integer.valueOf(req.getParameter("period")));
-		}
-			
-		
-		boolean isempty = top10.size() == 0;
-		req.setAttribute("previous", "login");
-
-		req.setAttribute("ranking", top10);
-		req.setAttribute("isempty", isempty);
-		getServletContext().getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(req, resp);
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+		showTopTenHashtags(req);
+		getServletContext().getRequestDispatcher("/WEB-INF/jsp/login.jsp")
+				.forward(req, resp);
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		
+		showTopTenHashtags(req);
 		String username = req.getParameter("username");
 		String password = req.getParameter("password");
 		User user = userService.authenticate(username, password);
@@ -55,5 +43,22 @@ public class Login extends HttpServlet {
 			req.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(req,
 					resp);
 		}
+	}
+
+	private void showTopTenHashtags(HttpServletRequest req) {
+		List<Hashtag> top10;
+
+		if (req.getParameter("period") == null) {
+			top10 = hashtagService.topHashtags(30);
+		} else {
+			top10 = hashtagService.topHashtags(Integer.valueOf(req
+					.getParameter("period")));
+		}
+
+		boolean isempty = top10.size() == 0;
+		req.setAttribute("previous", "login");
+
+		req.setAttribute("ranking", top10);
+		req.setAttribute("isempty", isempty);
 	}
 }
