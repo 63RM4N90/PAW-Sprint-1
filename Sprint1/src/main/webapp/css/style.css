@@ -345,6 +345,7 @@ li p {
 .tag-info{
 	display: inline-block;
 	float: right;
+	font-size: 12px;
 }
 
 .tag-column {

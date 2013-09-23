@@ -9,6 +9,9 @@ import javax.servlet.http.HttpServletResponse;
 
 @SuppressWarnings("serial")
 public class FormController extends HttpServlet {
+	
+	private static final int MAX_STRING_LENGTH = 32;
+	private static final int MAX_DESCRIPTION_LENGTH = 140;
 
 	protected boolean validate(HttpServletRequest req,
 			HttpServletResponse resp, String name, String surname,
@@ -30,6 +33,21 @@ public class FormController extends HttpServlet {
 		if (!password.equals(confirm)) {
 			req.setAttribute("passwordError",
 					"Password confirmation doesn't match the password field!");
+			return false;
+		}
+		if (name.length() > MAX_STRING_LENGTH ) {
+			req.setAttribute("generalError",
+					"name input must be less or equal than 32 characters!");
+			return false;
+		}
+		if (surname.length() > MAX_STRING_LENGTH ) {
+			req.setAttribute("generalError",
+					"surname input must be less or equal than 32 characters!");
+			return false;
+		}
+		if (description.length() > MAX_DESCRIPTION_LENGTH ) {
+			req.setAttribute("generalError",
+					"description input must be less or equal than 140 characters!");
 			return false;
 		}
 		return true;

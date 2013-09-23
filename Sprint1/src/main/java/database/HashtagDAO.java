@@ -14,7 +14,7 @@ import model.Comment;
 import model.Hashtag;
 import model.User;
 
-public class HashtagDAO extends AbstractDAO {
+public class HashtagDAO {
 
 	private final ConnectionManager manager;
 
@@ -28,8 +28,9 @@ public class HashtagDAO extends AbstractDAO {
 	}
 
 	private HashtagDAO() {
-		manager = new ConnectionManager(driver, connectionString, username,
-				password);
+		manager = new ConnectionManager(DatabaseInfo.driver,
+				DatabaseInfo.connectionString, DatabaseInfo.username,
+				DatabaseInfo.password);
 	}
 
 	public Hashtag getHashtag(String hashtag) {
@@ -44,7 +45,8 @@ public class HashtagDAO extends AbstractDAO {
 			if (results.next()) {
 
 				hashtagAux = new Hashtag(results.getString(1), UserDAO
-						.getInstance().getUser(results.getString(2)), results.getTimestamp(3));
+						.getInstance().getUser(results.getString(2)),
+						results.getTimestamp(3));
 			}
 			connection.close();
 		} catch (SQLException e) {
@@ -94,7 +96,6 @@ public class HashtagDAO extends AbstractDAO {
 		CommentDAO commentDAO = CommentDAO.getInstance();
 		return commentDAO.getComments(hashtag);
 	}
-	
 
 	public TreeMap<Integer, ArrayList<Hashtag>> rankedHashtags(Date from,
 			Date to) {
@@ -122,8 +123,9 @@ public class HashtagDAO extends AbstractDAO {
 				ranking = results.getInt(3);
 				creator = new User(results.getString(5), results.getString(6),
 						results.getString(7), results.getString(9),
-						results.getString(8), results.getBytes(12), results.getString(10),
-						results.getString(11), results.getTimestamp(13));
+						results.getString(8), results.getBytes(12),
+						results.getString(10), results.getString(11),
+						results.getTimestamp(13));
 				creator.setId(results.getInt(4));
 				hashtag = new Hashtag(results.getString(1), creator,
 						results.getTimestamp(2));

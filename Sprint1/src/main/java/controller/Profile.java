@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import model.Comment;
-import model.Hashtag;
+import model.RankedHashtag;
 import model.User;
 import services.CommentService;
 import services.HashtagService;
@@ -30,7 +30,7 @@ public class Profile extends AbstractController {
 		HttpSession session = req.getSession(false);
 		User userSession = (User) session.getAttribute("user");
 
-		List<Hashtag> top10;
+		List<RankedHashtag> top10;
 
 		if (req.getParameter("period") == null) {
 			top10 = hashtagService.topHashtags(30);
@@ -38,6 +38,8 @@ public class Profile extends AbstractController {
 			top10 = hashtagService.topHashtags(Integer.valueOf(req
 					.getParameter("period")));
 		}
+		req.setAttribute("previous", "profile");
+		req.setAttribute("ranking", top10);
 
 		if (username == null) {
 			if (userSession != null) {
@@ -59,8 +61,6 @@ public class Profile extends AbstractController {
 						req.setAttribute("isOwner", true);
 					}
 				}
-				req.setAttribute("previous", "profile");
-				req.setAttribute("ranking", top10);
 				req.setAttribute("user", profile);
 				req.setAttribute("isEmptyPicture", profile.getPicture() == null);
 				List<Comment> comments = commentService.getComments(profile);
@@ -82,7 +82,7 @@ public class Profile extends AbstractController {
 			throws ServletException, IOException {
 		String aux = req.getParameter("comment");
 		HttpSession session = req.getSession();
-		List<Hashtag> top10;
+		List<RankedHashtag> top10;
 
 		if (req.getParameter("period") == null) {
 			top10 = hashtagService.topHashtags(30);

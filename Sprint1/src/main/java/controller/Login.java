@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import model.Hashtag;
+import model.RankedHashtag;
 import model.User;
 import services.HashtagService;
 import services.UserService;
@@ -51,7 +52,7 @@ public class Login extends HttpServlet {
 	}
 
 	private void showTopTenHashtags(HttpServletRequest req) {
-		List<Hashtag> top10;
+		List<RankedHashtag> top10;
 
 		if (req.getParameter("period") == null) {
 			top10 = hashtagService.topHashtags(30);

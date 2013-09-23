@@ -1,4 +1,4 @@
-﻿CREATE TABLE Users (
+CREATE TABLE Users (
 	id			SERIAL NOT NULL,
 	name			varchar(32),
 	surname			varchar(32),
@@ -31,3 +31,5 @@ CREATE TABLE HashtagsInComments (
 	commentId	int REFERENCES Comments(id),
 	hashtag		varchar(139) REFERENCES Hashtags(hashtag)
 );
+
+ALTER DATABASE paw4 SET bytea_output = 'escape';

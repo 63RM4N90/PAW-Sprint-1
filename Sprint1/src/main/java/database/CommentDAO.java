@@ -13,7 +13,7 @@ import model.Comment;
 import model.Hashtag;
 import model.User;
 
-public class CommentDAO extends AbstractDAO {
+public class CommentDAO {
 
 	private final ConnectionManager manager;
 
@@ -27,8 +27,9 @@ public class CommentDAO extends AbstractDAO {
 	}
 
 	private CommentDAO() {
-		manager = new ConnectionManager(driver, connectionString, username,
-				password);
+		manager = new ConnectionManager(DatabaseInfo.driver,
+				DatabaseInfo.connectionString, DatabaseInfo.username,
+				DatabaseInfo.password);
 	}
 
 	public List<Comment> getComments(String hashtag) {

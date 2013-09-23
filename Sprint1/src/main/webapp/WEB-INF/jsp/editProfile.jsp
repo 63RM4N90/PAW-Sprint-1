@@ -7,23 +7,23 @@
 	<form method="POST" action="editProfile" enctype="multipart/form-data">
 		<div class="registration-form-field">
 			<label for="name">Name:</label>
-			<input type="text" name="name" value="<c:out value="${name}" />" />
+			<input type="text" name="name" value="<c:out value="${name}" maxlength=32/>" />
 		</div>
 		<div class="registration-form-field">
 			<label for="surname">Surname:</label>
-			<input type="text" name="surname" value="<c:out value="${surname}" />"/>
+			<input type="text" name="surname" value="<c:out value="${surname}" maxlength=32 />"/>
 		</div>
 		<div class="registration-form-field">
 			<label for="password">Password:</label>
-			<input type="password" name="password" value="<c:out value="${password}" />"/>
+			<input type="password" name="password" value="<c:out value="${password}" maxlength=16 />"/>
 		</div>
 		<div class="registration-form-field">
 			<label for="confirm">Confirm password:</label>
-			<input type="password" name="confirm" value="<c:out value="${confirm}" />"/>
+			<input type="password" name="confirm" value="<c:out value="${confirm}" maxlength=16 />"/>
 		</div>
 		<div class="registration-form-field">
 			<label for="description">Description:</label>
-			<input type="text" name="description" value="<c:out value="${description}" />"/>
+			<input type="text" name="description" value="<c:out value="${description}" maxlength=140 />"/>
 		</div>
 		<div class="registration-form-field">
 			<label for="picture">Picture:</label>

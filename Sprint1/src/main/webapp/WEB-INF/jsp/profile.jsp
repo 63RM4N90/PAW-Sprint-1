@@ -3,7 +3,7 @@
 	<div class="info-column profile-column">
 		<div class="user-info">
 			<c:if test="${isEmptyPicture}">	
-				<img src="img/a.jpg" alt="user_picture" />
+				<img src="img/default_picture.png" alt="user_picture" />
 			</c:if>
 			<c:if test="${!isEmptyPicture}">
 				<img src="image?username=<c:out value="${user.username}" />" alt="user_picture" />

@@ -1,9 +1,28 @@
 <!-- <!DOCTYPE web-app PUBLIC -->
-<!--  "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN" -->
-<!--  "http://java.sun.com/dtd/web-app_2_3.dtd" > -->
+<!-- "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN" -->
+<!-- "http://java.sun.com/dtd/web-app_2_3.dtd" > -->
 
 <web-app xmlns="http://java.sun.com/xml/ns/javaee" version="2.5">
 	<display-name>Archetype Created Web Application</display-name>
+	<listener>
+		<listener-class>controller.DatabaseListener</listener-class>
+	</listener>
+	<context-param>
+		<param-name>url</param-name>
+		<param-value>jdbc:postgresql://localhost/</param-value>
+	</context-param>
+	<context-param>
+		<param-name>database</param-name>
+		<param-value>paw4</param-value>
+	</context-param>
+	<context-param>
+		<param-name>user_name</param-name>
+		<param-value>paw</param-value>
+	</context-param>
+	<context-param>
+		<param-name>password</param-name>
+		<param-value>paw</param-value>
+	</context-param>
 	<servlet>
 		<servlet-name>Registration</servlet-name>
 		<servlet-class>controller.Registration</servlet-class>
@@ -100,12 +119,12 @@
 		<filter-name>authenticationFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
-	<filter>
-		<filter-name>errorFilter</filter-name>
-		<filter-class>database.ErrorFilter</filter-class>
-	</filter>
-	<filter-mapping>
-		<filter-name>errorFilter</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
+	<filter> 
+        <filter-name>errorFilter</filter-name>
+        <filter-class>database.ErrorFilter</filter-class> 
+    </filter>
+    <filter-mapping>
+        <filter-name>errorFilter</filter-name>
+        <url-pattern>/*</url-pattern> 
+    </filter-mapping>
 </web-app>

@@ -9,6 +9,7 @@ import java.util.TreeMap;
 
 import database.HashtagDAO;
 import model.Hashtag;
+import model.RankedHashtag;
 
 public class HashtagService {
 
@@ -35,8 +36,8 @@ public class HashtagService {
 		return hashtagDAO.getHashtag(hashtag);
 	}
 
-	public LinkedList<Hashtag> topHashtags(int days) {
-		LinkedList<Hashtag> ranking = new LinkedList<Hashtag>();
+	public LinkedList<RankedHashtag> topHashtags(int days) {
+		LinkedList<RankedHashtag> ranking = new LinkedList<RankedHashtag>();
 
 		Date to = new Date();
 		Calendar calendar = Calendar.getInstance();
@@ -57,7 +58,7 @@ public class HashtagService {
 					aux = top.get(key);
 					int index = 0;
 					while (count < 10 && index < aux.size()) {
-						ranking.add(aux.get(index));
+						ranking.add(new RankedHashtag(aux.get(index),key));
 						count++;
 						index++;
 					}

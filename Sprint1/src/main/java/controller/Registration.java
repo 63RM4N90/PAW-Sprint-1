@@ -49,7 +49,6 @@ public class Registration extends FormController {
 			FileItem pictureFile = fileItems.get(8);
 			byte[] picture;
 			if (pictureFile.getName().length() == 0) {
-				System.out.println("FOTO ES NULL");
 				picture = null;
 			} else {
 				picture = pictureFile.get();

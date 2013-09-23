@@ -14,10 +14,11 @@
 		<c:set var="row" value="0" />
 		<c:forEach items="${ranking}" var="hashtag">
 			<li <c:set var="row" value="${row + 1}" />>
-				<a href="<c:url value="hashtag"><c:param name="tag" value="${hashtag.hashtag}" /></c:url>">#${hashtag.hashtag}</a>
+				<a href="<c:url value="hashtag"><c:param name="tag" value="${hashtag.hashtag.hashtag}" /></c:url>">#${hashtag.hashtag.hashtag}</a>
 				<div class="tag-info">
-					<a href="<c:url value="profile"><c:param name="user" value="${hashtag.author.username}" /></c:url>">${hashtag.author.username}</a>
-					<fmt:formatDate value="${hashtag.date}" pattern="dd-MM-yyyy HH:mm" /></p>
+					<a href="<c:url value="profile"><c:param name="user" value="${hashtag.hashtag.author.username}" /></c:url>">${hashtag.hashtag.author.username}</a>
+					<fmt:formatDate value="${hashtag.hashtag.date}" pattern="dd-MM-yyyy" />
+					AMOUNT:<c:out value="${hashtag.rank}" />
 				</div>
 			</li>
 		</c:forEach>

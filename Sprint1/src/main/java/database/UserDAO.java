@@ -11,7 +11,7 @@ import java.util.List;
 
 import model.User;
 
-public class UserDAO extends AbstractDAO {
+public class UserDAO {
 
 	private final ConnectionManager manager;
 	private static UserDAO instance;
@@ -24,8 +24,8 @@ public class UserDAO extends AbstractDAO {
 	}
 
 	private UserDAO() {
-		manager = new ConnectionManager(driver, connectionString, username,
-				password);
+		manager = new ConnectionManager(DatabaseInfo.driver, DatabaseInfo.connectionString, DatabaseInfo.username,
+				DatabaseInfo.password);
 	}
 
 	public User authenticate(String username, String password) {
@@ -120,27 +120,6 @@ public class UserDAO extends AbstractDAO {
 		} catch (SQLException e) {
 			throw new DatabaseException(e.getMessage(), e);
 		}
-	}
-
-	public List<User> getAllUsers() {
-		List<User> users = new ArrayList<User>();
-		User user = null;
-		try {
-			Connection connection = manager.getConnection();
-			PreparedStatement stmt = connection
-					.prepareStatement("SELECT * FROM Users WHERE username = ?");
-			stmt.setString(1, username);
-
-			ResultSet results = stmt.executeQuery();
-			while (results.next()) {
-				user = constructUser(results);
-				users.add(user);
-			}
-			connection.close();
-		} catch (SQLException e) {
-			throw new DatabaseException(e.getMessage(), e);
-		}
-		return users;
 	}
 
 	public List<User> getUsersWithName(String name) {
