@@ -4,13 +4,12 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import database.UserDAO;
-
+import dao.impl.DbUserDAOImpl;
 import model.User;
 
 public class UserService {
 
-	private UserDAO userDao;
+	private DbUserDAOImpl userDao;
 
 	private static UserService instance;
 
@@ -22,7 +21,7 @@ public class UserService {
 	}
 
 	private UserService() {
-		userDao = UserDAO.getInstance();
+		userDao = DbUserDAOImpl.getInstance();
 	}
 
 	public boolean userExists(String username) {

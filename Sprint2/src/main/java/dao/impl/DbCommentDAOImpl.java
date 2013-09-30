@@ -1,4 +1,4 @@
-package database;
+package dao.impl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -6,36 +6,39 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import model.Comment;
 import model.Hashtag;
 import model.User;
+import dao.CommentDAO;
+import database.ConnectionManager;
+import database.DatabaseException;
+import database.DatabaseInfo;
 
-public class CommentDAO {
+public class DbCommentDAOImpl implements CommentDAO {
 
 	private final ConnectionManager manager;
 
-	private static CommentDAO instance;
+	private static DbCommentDAOImpl instance;
 
-	public static CommentDAO getInstance() {
+	public static DbCommentDAOImpl getInstance() {
 		if (instance == null) {
-			instance = new CommentDAO();
+			instance = new DbCommentDAOImpl();
 		}
 		return instance;
 	}
 
-	private CommentDAO() {
-		manager = new ConnectionManager(DatabaseInfo.driver,
-				DatabaseInfo.connectionString, DatabaseInfo.username,
-				DatabaseInfo.password);
+	private DbCommentDAOImpl() {
+		manager = new ConnectionManager(DatabaseInfo.getDriver(),
+				DatabaseInfo.getConnectionString(), DatabaseInfo.getUsername(),
+				DatabaseInfo.getPassword());
 	}
 
 	public List<Comment> getComments(String hashtag) {
 		List<Comment> comments = new ArrayList<Comment>();
-		HashtagDAO hDAO = HashtagDAO.getInstance();
-		UserDAO uDAO = UserDAO.getInstance();
+		DbHashtagDAOImpl hDAO = DbHashtagDAOImpl.getInstance();
+		DbUserDAOImpl uDAO = DbUserDAOImpl.getInstance();
 
 		try {
 			Connection connection = manager.getConnection();
@@ -72,7 +75,7 @@ public class CommentDAO {
 
 	public List<Comment> getComments(User user) {
 		List<Comment> comments = new ArrayList<Comment>();
-		HashtagDAO hashtagDAO = HashtagDAO.getInstance();
+		DbHashtagDAOImpl hashtagDAO = DbHashtagDAOImpl.getInstance();
 
 		try {
 			Connection connection = manager.getConnection();
@@ -119,7 +122,7 @@ public class CommentDAO {
 			int id = getCommentId(comment, connection);
 			connection.close();
 
-			HashtagDAO hashtagDAO = HashtagDAO.getInstance();
+			DbHashtagDAOImpl hashtagDAO = DbHashtagDAOImpl.getInstance();
 			for (Hashtag each : comment.getHashtags()) {
 				hashtagDAO.saveWithComment(each, id);
 			}

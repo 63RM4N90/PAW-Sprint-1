@@ -71,10 +71,6 @@ public class User extends AbstractModel {
 		return username;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
 	public String getDescription() {
 		return description;
 	}
@@ -117,9 +113,5 @@ public class User extends AbstractModel {
 
 	public Date getRegistrationDate() {
 		return registrationDate;
-	}
-
-	public void setRegistrationDate(Date registrationDate) {
-		this.registrationDate = registrationDate;
 	}
 }

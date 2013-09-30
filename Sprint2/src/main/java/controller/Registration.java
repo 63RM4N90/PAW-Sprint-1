@@ -36,7 +36,6 @@ public class Registration extends FormController {
 
 		DiskFileUpload fu = new DiskFileUpload();
 		try {
-			@SuppressWarnings("unchecked")
 			List<FileItem> fileItems = fu.parseRequest(req);
 			String name = fileItems.get(0).getString();
 			String surname = fileItems.get(1).getString();

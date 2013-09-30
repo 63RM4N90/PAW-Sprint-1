@@ -23,7 +23,5 @@ public class DatabaseListener implements ServletContextListener {
 	@Override
 	public void contextDestroyed(ServletContextEvent sce) {
 		// TODO Auto-generated method stub
-
 	}
-
 }

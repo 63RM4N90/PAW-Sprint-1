@@ -1,9 +1,5 @@
 package controller;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -29,21 +25,5 @@ public class Picture extends HttpServlet {
 				resp.getOutputStream().write(user.getPicture());
 			}
 		}
-	}
-	
-	private static byte[] fileToByte(File file) throws FileNotFoundException {
-		FileInputStream fis = new FileInputStream(file);
-		ByteArrayOutputStream bos = new ByteArrayOutputStream();
-		byte[] buf = new byte[1024];
-		try {
-			for (int readNum; (readNum = fis.read(buf)) != -1;) {
-				bos.write(buf, 0, readNum);
-			}
-			fis.close();
-		} catch (IOException ex) {
-		}
-		byte[] bytes = bos.toByteArray();
-
-		return bytes;
 	}
 }

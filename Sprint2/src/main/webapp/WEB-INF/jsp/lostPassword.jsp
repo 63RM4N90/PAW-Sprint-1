@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <%@ include file="header.jsp" %>
 <div class="vertical-container">
 	<div class="recover-container">

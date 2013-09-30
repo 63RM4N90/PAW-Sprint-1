@@ -1,4 +1,4 @@
-package database;
+package dao.impl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,23 +9,28 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import dao.UserDAO;
+import database.ConnectionManager;
+import database.DatabaseException;
+import database.DatabaseInfo;
 import model.User;
 
-public class UserDAO {
+public class DbUserDAOImpl implements UserDAO {
 
 	private final ConnectionManager manager;
-	private static UserDAO instance;
+	private static DbUserDAOImpl instance;
 
-	public static UserDAO getInstance() {
+	public static DbUserDAOImpl getInstance() {
 		if (instance == null) {
-			instance = new UserDAO();
+			instance = new DbUserDAOImpl();
 		}
 		return instance;
 	}
 
-	private UserDAO() {
-		manager = new ConnectionManager(DatabaseInfo.driver, DatabaseInfo.connectionString, DatabaseInfo.username,
-				DatabaseInfo.password);
+	private DbUserDAOImpl() {
+		manager = new ConnectionManager(DatabaseInfo.getDriver(),
+				DatabaseInfo.getConnectionString(), DatabaseInfo.getUsername(),
+				DatabaseInfo.getPassword());
 	}
 
 	public User authenticate(String username, String password) {
@@ -98,18 +103,22 @@ public class UserDAO {
 			if (user.isNew()) {
 				if (user.getPicture() != null) {
 					stmt.setBytes(8, user.getPicture());
-					stmt.setTimestamp(9, new Timestamp(user.getRegistrationDate().getTime()));
+					stmt.setTimestamp(9, new Timestamp(user
+							.getRegistrationDate().getTime()));
 				} else {
-					stmt.setTimestamp(8, new Timestamp(user.getRegistrationDate().getTime()));
+					stmt.setTimestamp(8, new Timestamp(user
+							.getRegistrationDate().getTime()));
 				}
 				stmt.execute();
 			} else {
 				if (user.getPicture() != null) {
 					stmt.setBytes(8, user.getPicture());
-					stmt.setTimestamp(9, new Timestamp(user.getRegistrationDate().getTime()));
+					stmt.setTimestamp(9, new Timestamp(user
+							.getRegistrationDate().getTime()));
 					stmt.setString(10, user.getUsername());
 				} else {
-					stmt.setTimestamp(8, new Timestamp(user.getRegistrationDate().getTime()));
+					stmt.setTimestamp(8, new Timestamp(user
+							.getRegistrationDate().getTime()));
 					stmt.setString(9, user.getUsername());
 				}
 				stmt.executeUpdate();

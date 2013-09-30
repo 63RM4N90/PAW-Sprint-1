@@ -1,5 +1,4 @@
 <%@ include file="header.jsp" %>
-<<<<<<< HEAD
 <div class="vertical-container">
 	<h2>Registration</h2>
 	<div class="error"><c:out value="${usernameError}" /></div>
@@ -12,31 +11,31 @@
 		</div>
 		<div class="registration-form-field">
 			<label for="surname">Surname:</label>
-			<input type="text" name="surname" value="<c:out value="${surname}" maxlength=32 />"/>
+			<input type="text" name="surname" value="<c:out value="${surname}" />" maxlength=32 />
 		</div>
 		<div class="registration-form-field">
 			<label for="username">User:</label>
-			<input type="text" name="username" value="<c:out value="${username}" maxlength=32 />"/>
+			<input type="text" name="username" value="<c:out value="${username}" />" maxlength=32 />
 		</div>
 		<div class="registration-form-field">
 			<label for="password">Password:</label>
-			<input type="password" name="password" value="<c:out value="${password}" maxlength=16 />"/>
+			<input type="password" name="password" value="<c:out value="${password}" />" maxlength=16 />
 		</div>
 		<div class="registration-form-field">
 			<label for="confirm">Confirm password:</label>
-			<input type="password" name="confirm" value="<c:out value="${confirm}" maxlength=16 />"/>
+			<input type="password" name="confirm" value="<c:out value="${confirm}" />" maxlength=16 />
 		</div>
 		<div class="registration-form-field">
 			<label for="description">Description:</label>
-			<input type="text" name="description" value="<c:out value="${description}" maxlength=140/>"/>
+			<input type="text" name="description" value="<c:out value="${description}" />" maxlength=140 />
 		</div>
 		<div class="registration-form-field">
 			<label for="secretQuestion">Secret question:</label>
-			<input type="text" name="secretQuestion" value="<c:out value="${secretQuestion}" maxlength=64 />"/>
+			<input type="text" name="secretQuestion" value="<c:out value="${secretQuestion}" />" maxlength=64 />
 		</div>
 		<div class="registration-form-field">
 			<label for="secretAnswer">Secret answer:</label>
-			<input type="text" name="secretAnswer" value="<c:out value="${secretAnswer}" maxlength=64 />"/>
+			<input type="text" name="secretAnswer" value="<c:out value="${secretAnswer}" />" maxlength=64 />
 		</div>
 		<div class="registration-form-field">
 			<label for="picture">Picture:</label>

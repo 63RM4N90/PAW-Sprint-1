@@ -37,7 +37,6 @@ public class EditProfile extends FormController {
 			throws ServletException, IOException {
 		DiskFileUpload fu = new DiskFileUpload();
 		try {
-			@SuppressWarnings("unchecked")
 			List<FileItem> fileItems = fu.parseRequest(req);
 			String name = fileItems.get(0).getString();
 			String surname = fileItems.get(1).getString();

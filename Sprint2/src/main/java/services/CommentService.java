@@ -8,17 +8,16 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import database.CommentDAO;
-import database.HashtagDAO;
-
+import dao.impl.DbCommentDAOImpl;
+import dao.impl.DbHashtagDAOImpl;
 import model.Comment;
 import model.Hashtag;
 import model.User;
 
 public class CommentService {
 
-	private CommentDAO commentDao;
-	private HashtagDAO hashtagDao;
+	private DbCommentDAOImpl commentDao;
+	private DbHashtagDAOImpl hashtagDao;
 
 	private static CommentService instance;
 
@@ -30,8 +29,8 @@ public class CommentService {
 	}
 
 	private CommentService() {
-		commentDao = CommentDAO.getInstance();
-		hashtagDao = HashtagDAO.getInstance();
+		commentDao = DbCommentDAOImpl.getInstance();
+		hashtagDao = DbHashtagDAOImpl.getInstance();
 	}
 
 	public List<Hashtag> getHashtagList(String comment, User author) {

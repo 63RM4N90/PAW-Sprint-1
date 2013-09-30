@@ -7,13 +7,13 @@ import java.util.LinkedList;
 import java.util.NoSuchElementException;
 import java.util.TreeMap;
 
-import database.HashtagDAO;
+import dao.impl.DbHashtagDAOImpl;
 import model.Hashtag;
 import model.RankedHashtag;
 
 public class HashtagService {
 
-	HashtagDAO hashtagDAO;
+	DbHashtagDAOImpl hashtagDAO;
 
 	private static HashtagService instance;
 
@@ -25,7 +25,7 @@ public class HashtagService {
 	}
 
 	private HashtagService() {
-		hashtagDAO = HashtagDAO.getInstance();
+		hashtagDAO = DbHashtagDAOImpl.getInstance();
 	}
 
 	public void save(Hashtag hashtag) {

@@ -14,15 +14,7 @@ public class RankedHashtag {
 		return hashtag;
 	}
 
-	public void setHashtag(Hashtag hashtag) {
-		this.hashtag = hashtag;
-	}
-
 	public int getRank() {
 		return rank;
-	}
-
-	public void setRank(int rank) {
-		this.rank = rank;
 	}
 }

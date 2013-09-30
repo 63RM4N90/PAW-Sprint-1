@@ -1,4 +1,4 @@
-package database;
+package dao.impl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,27 +10,31 @@ import java.util.Date;
 import java.util.List;
 import java.util.TreeMap;
 
+import dao.HashtagDAO;
+import database.ConnectionManager;
+import database.DatabaseException;
+import database.DatabaseInfo;
 import model.Comment;
 import model.Hashtag;
 import model.User;
 
-public class HashtagDAO {
+public class DbHashtagDAOImpl implements HashtagDAO {
 
 	private final ConnectionManager manager;
 
-	private static HashtagDAO instance;
+	private static DbHashtagDAOImpl instance;
 
-	public static HashtagDAO getInstance() {
+	public static DbHashtagDAOImpl getInstance() {
 		if (instance == null) {
-			instance = new HashtagDAO();
+			instance = new DbHashtagDAOImpl();
 		}
 		return instance;
 	}
 
-	private HashtagDAO() {
-		manager = new ConnectionManager(DatabaseInfo.driver,
-				DatabaseInfo.connectionString, DatabaseInfo.username,
-				DatabaseInfo.password);
+	private DbHashtagDAOImpl() {
+		manager = new ConnectionManager(DatabaseInfo.getDriver(),
+				DatabaseInfo.getConnectionString(), DatabaseInfo.getUsername(),
+				DatabaseInfo.getPassword());
 	}
 
 	public Hashtag getHashtag(String hashtag) {
@@ -44,7 +48,7 @@ public class HashtagDAO {
 			ResultSet results = stmt.executeQuery();
 			if (results.next()) {
 
-				hashtagAux = new Hashtag(results.getString(1), UserDAO
+				hashtagAux = new Hashtag(results.getString(1), DbUserDAOImpl
 						.getInstance().getUser(results.getString(2)),
 						results.getTimestamp(3));
 			}
@@ -74,7 +78,7 @@ public class HashtagDAO {
 		}
 	}
 
-	void saveWithComment(Hashtag hashtag, int commentId) {
+	public void saveWithComment(Hashtag hashtag, int commentId) {
 		try {
 			Connection connection = manager.getConnection();
 			PreparedStatement stmt;
@@ -93,7 +97,7 @@ public class HashtagDAO {
 	}
 
 	public List<Comment> getComments(String hashtag) {
-		CommentDAO commentDAO = CommentDAO.getInstance();
+		DbCommentDAOImpl commentDAO = DbCommentDAOImpl.getInstance();
 		return commentDAO.getComments(hashtag);
 	}
 

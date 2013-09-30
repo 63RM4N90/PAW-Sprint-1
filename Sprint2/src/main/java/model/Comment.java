@@ -9,9 +9,6 @@ public class Comment extends AbstractModel implements Comparable<Comment>{
 	private String comment;
 	private List<Hashtag> hashtags;
 
-	public Comment() {
-	}
-
 	public Comment(User author, Date date, String comment, List<Hashtag> hashtags) {
 		this.author = author;
 		this.date = date;
@@ -23,16 +20,8 @@ public class Comment extends AbstractModel implements Comparable<Comment>{
 		return author;
 	}
 
-	public void setAuthor(User author) {
-		this.author = author;
-	}
-
 	public Date getDate() {
 		return date;
-	}
-
-	public void setDate(Date date) {
-		this.date = date;
 	}
 
 	public String getComment() {
@@ -45,10 +34,6 @@ public class Comment extends AbstractModel implements Comparable<Comment>{
 
 	public List<Hashtag> getHashtags() {
 		return hashtags;
-	}
-
-	public void setHashtags(List<Hashtag> hashtags) {
-		this.hashtags = hashtags;
 	}
 
 	public int compareTo(Comment o) {
