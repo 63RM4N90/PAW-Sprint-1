@@ -150,7 +150,6 @@ public class DbCommentDAOImpl implements CommentDAO {
 		}
 
 		return cID;
-
 	}
 
 	public void removeComment(int commentId) {
@@ -174,5 +173,4 @@ public class DbCommentDAOImpl implements CommentDAO {
 			throw new DatabaseException(e.getMessage(), e);
 		}
 	}
-
 }
