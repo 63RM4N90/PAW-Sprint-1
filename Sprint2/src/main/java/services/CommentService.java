@@ -8,12 +8,15 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import dao.impl.DbCommentDAOImpl;
-import dao.impl.DbHashtagDAOImpl;
 import model.Comment;
 import model.Hashtag;
 import model.User;
 
+import org.springframework.stereotype.Service;
+
+import dao.impl.DbCommentDAOImpl;
+import dao.impl.DbHashtagDAOImpl;
+@Service
 public class CommentService {
 
 	private DbCommentDAOImpl commentDao;

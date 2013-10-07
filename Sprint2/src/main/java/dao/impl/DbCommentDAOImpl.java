@@ -11,11 +11,14 @@ import java.util.List;
 import model.Comment;
 import model.Hashtag;
 import model.User;
+
+import org.springframework.stereotype.Repository;
+
 import dao.CommentDAO;
 import database.ConnectionManager;
 import database.DatabaseException;
 import database.DatabaseInfo;
-
+@Repository
 public class DbCommentDAOImpl implements CommentDAO {
 
 	private final ConnectionManager manager;

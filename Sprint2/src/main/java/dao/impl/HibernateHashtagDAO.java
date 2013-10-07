@@ -7,8 +7,11 @@ import java.util.TreeMap;
 
 import model.Comment;
 import model.Hashtag;
-import dao.HashtagDAO;
 
+import org.springframework.stereotype.Repository;
+
+import dao.HashtagDAO;
+@Repository
 public class HibernateHashtagDAO extends HibernateGenericDAO<Hashtag> implements HashtagDAO {
 
 	@Override

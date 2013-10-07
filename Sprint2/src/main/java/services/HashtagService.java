@@ -7,25 +7,21 @@ import java.util.LinkedList;
 import java.util.NoSuchElementException;
 import java.util.TreeMap;
 
-import dao.impl.DbHashtagDAOImpl;
 import model.Hashtag;
 import model.RankedHashtag;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import dao.impl.HibernateHashtagDAO;
+@Service
 public class HashtagService {
 
-	DbHashtagDAOImpl hashtagDAO;
+	private HibernateHashtagDAO hashtagDAO;
 
-	private static HashtagService instance;
-
-	public static HashtagService getInstance() {
-		if (instance == null) {
-			instance = new HashtagService();
-		}
-		return instance;
-	}
-
-	private HashtagService() {
-		hashtagDAO = DbHashtagDAOImpl.getInstance();
+	@Autowired
+	public HashtagService(HibernateHashtagDAO hashtagDAO) {
+		this.hashtagDAO = hashtagDAO;
 	}
 
 	public void save(Hashtag hashtag) {

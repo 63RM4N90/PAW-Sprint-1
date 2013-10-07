@@ -4,24 +4,20 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import dao.impl.DbUserDAOImpl;
 import model.User;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import dao.impl.HibernateUserDAO;
+@Service
 public class UserService {
 
-	private DbUserDAOImpl userDao;
+	private HibernateUserDAO userDao;
 
-	private static UserService instance;
-
-	public static UserService getInstance() {
-		if (instance == null) {
-			instance = new UserService();
-		}
-		return instance;
-	}
-
-	private UserService() {
-		userDao = DbUserDAOImpl.getInstance();
+	@Autowired
+	public UserService(HibernateUserDAO userDao) {
+		this.userDao = userDao;
 	}
 
 	public boolean userExists(String username) {
@@ -29,7 +25,7 @@ public class UserService {
 	}
 
 	public void save(User user) {
-		userDao.save(user);
+		userDao.store(user);
 	}
 
 	public User authenticate(String username, String password) {

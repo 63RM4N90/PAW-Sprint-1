@@ -8,14 +8,15 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import dao.UserDAO;
-
-public class HIbernateUserDAO extends HibernateGenericDAO<User> implements
+@Repository
+public class HibernateUserDAO extends HibernateGenericDAO<User> implements
 		UserDAO {
 
 	@Autowired
-	public HIbernateUserDAO(SessionFactory sessionFactory) {
+	public HibernateUserDAO(SessionFactory sessionFactory) {
 		super.setSessionFactory(sessionFactory);
 	}
 
