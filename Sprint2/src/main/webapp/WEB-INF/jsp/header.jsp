@@ -3,13 +3,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ page isELIgnored="false"%>
-<link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
-<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
+<link rel="stylesheet" type="text/css" href="../../css/bootstrap.css" />
+<link rel="stylesheet" type="text/css" href="../../css/bootstrap.min.css" />
 <link rel="stylesheet" type="text/css"
-	href="css/bootstrap-responsive.css" />
+	href="../../css/bootstrap-responsive.css" />
 <link rel="stylesheet" type="text/css"
-	href="css/bootstrap-responsive.min.css" />
-<link rel="stylesheet" type="text/css" href="css/custom.css" />
+	href="../../css/bootstrap-responsive.min.css" />
+<link rel="stylesheet" type="text/css" href="../../css/custom.css" />
 
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"

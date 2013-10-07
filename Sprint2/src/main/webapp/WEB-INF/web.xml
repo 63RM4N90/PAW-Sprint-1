@@ -5,14 +5,14 @@
 <web-app xmlns="http://java.sun.com/xml/ns/javaee" version="2.5">
 	<display-name>Archetype Created Web Application</display-name>
 	<servlet>
-		<servlet-name>spring</servlet-name>
+		<servlet-name>Sprint2</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 
 	<servlet-mapping>
-		<servlet-name>spring</servlet-name>
-		<url-pattern>/bin/*</url-pattern>
+		<servlet-name>Sprint2</servlet-name>
+		<url-pattern>/</url-pattern>
 	</servlet-mapping>
 	<!-- <servlet>
 		<servlet-name>Registration</servlet-name>
