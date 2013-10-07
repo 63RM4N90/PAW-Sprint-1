@@ -8,31 +8,24 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ar.edu.itba.it.paw.dao.impl.DbCommentDAOImpl;
-import ar.edu.itba.it.paw.dao.impl.DbHashtagDAOImpl;
+import ar.edu.itba.it.paw.dao.impl.HibernateCommentDAO;
+import ar.edu.itba.it.paw.dao.impl.HibernateHashtagDAO;
 import ar.edu.itba.it.paw.model.Comment;
 import ar.edu.itba.it.paw.model.Hashtag;
 import ar.edu.itba.it.paw.model.User;
 @Service
 public class CommentService {
 
-	private DbCommentDAOImpl commentDao;
-	private DbHashtagDAOImpl hashtagDao;
+	private HibernateCommentDAO commentDao;
+	private HibernateHashtagDAO hashtagDao;
 
-	private static CommentService instance;
-
-	public static CommentService getInstance() {
-		if (instance == null) {
-			instance = new CommentService();
-		}
-		return instance;
-	}
-
-	private CommentService() {
-		commentDao = DbCommentDAOImpl.getInstance();
-		hashtagDao = DbHashtagDAOImpl.getInstance();
+	@Autowired
+	public CommentService(HibernateCommentDAO commentDao, HibernateHashtagDAO hashtagDao) {
+		this.commentDao = commentDao;
+		this.hashtagDao = hashtagDao;
 	}
 
 	public List<Hashtag> getHashtagList(String comment, User author) {
