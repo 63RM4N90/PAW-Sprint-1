@@ -1,4 +1,4 @@
-<%@ include file="header.jsp" %>
+<%@ include file="../header.jsp" %>
 <div class="container">
 	<div class="login-column column-1">	
 		<h2>Login</h2>
@@ -28,7 +28,7 @@
 			Wanna join us? <br>
 		</p>
 		<div class="notRegistered">
-			<a href="register">
+			<a href="registration">
 				<button class="button">
 					Register
 				</button>
@@ -36,7 +36,7 @@
 		</div>
 	</div>
 	<div class="login-column column-3">
-		<%@ include file="top10.jsp"%> 
+		<%@ include file="../top10.jsp"%> 
 	</div>
 </div>
 <div class="about-us">
@@ -45,4 +45,4 @@
 		Florencia Besteiro - German Romarion - Gabriel Zanzotti
 	</p>
 </div>
-<%@ include file="footer.jsp" %>
+<%@ include file="../footer.jsp" %>

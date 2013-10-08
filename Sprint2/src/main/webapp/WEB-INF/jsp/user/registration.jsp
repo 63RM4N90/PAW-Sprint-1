@@ -1,4 +1,4 @@
-<%@ include file="header.jsp" %>
+<%@ include file="../header.jsp" %>
 <div class="vertical-container">
 	<h2>Registration</h2>
 	<div class="error"><c:out value="${usernameError}" /></div>
@@ -7,7 +7,7 @@
 	<form method="POST" action="register" enctype="multipart/form-data">
 		<div class="registration-form-field">
 			<label for="name">Name:</label>
-			<input type="text" name="name" value="<c:out value="${name}" />" />
+			<input type="text" name="name" value="<c:out value="${name}" />" maxlength=32 />
 		</div>
 		<div class="registration-form-field">
 			<label for="surname">Surname:</label>
@@ -46,4 +46,4 @@
 		</div>
 	</form>
 	<div class="alreadyRegistered"><a href="login">Already registered? Login!</a></div>
-<%@ include file="footer.jsp" %>
+<%@ include file="../footer.jsp" %>
