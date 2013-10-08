@@ -33,7 +33,7 @@ public class UserController {
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView login(HttpSession s) {
 		ModelAndView mav = new ModelAndView();
-		if (s != null) {
+		if (s.getAttribute("userId") != null) {
 			mav.setViewName("redirect:profile");
 		}
 		showTopTenHashtags(mav);
@@ -59,6 +59,12 @@ public class UserController {
 			mav.addObject("error", "Invalid user or password.");
 			mav.setViewName("login");
 		}
+		return mav;
+	}
+	
+	@RequestMapping(method = RequestMethod.GET)
+	public ModelAndView registration() {
+		ModelAndView mav = new ModelAndView();
 		return mav;
 	}
 
