@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -120,13 +119,84 @@ public class UserController {
 		}
 		return mav;
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView editProfile(HttpSession session) {
 		ModelAndView mav = new ModelAndView();
 		User userSession = (User) session.getAttribute("user");
 		mav.addObject("sessionUser", userSession);
 		setDefaults(mav, userSession);
+		return mav;
+	}
+
+	@RequestMapping(method = RequestMethod.GET)
+	public ModelAndView recoverPassword(
+			@RequestParam(value = "userToRecover", required = true) String username) {
+		ModelAndView mav = new ModelAndView();
+		User user = null;
+		if (username != null) {
+			if (username != "") {
+				user = userService.getUser(username);
+			} else {
+				user = new User("", "", "", "", "", null, "", "", null);
+			}
+		} else {
+			username = "";
+			mav.addObject("userToRecover", username);
+			user = new User("", "", "", "", "", null, "", "", null);
+		}
+		if (username != "" && user.getUsername() == "") {
+			mav.addObject("error", "User does not exist");
+			mav.addObject("userSelected", false);
+		} else if (user.getUsername() != "") {
+			mav.addObject("success",
+					"Recovering password for " + user.getUsername());
+			mav.addObject("user", user);
+			mav.addObject("userSelected", true);
+		} else {
+			mav.addObject("userSelected", false);
+		}
+		return mav;
+	}
+
+	@RequestMapping(method = RequestMethod.POST)
+	public ModelAndView recoverPassword(
+			@RequestParam(value = "secretAnswer", required = true) String secretAnswerSubmited,
+			@RequestParam(value = "password", required = true) String newPassword,
+			@RequestParam(value = "confirm", required = true) String newPasswordConfirm,
+			@RequestParam(value = "userToRecover", required = true) String userToRecover) {
+		ModelAndView mav = new ModelAndView();
+		User u = userService.getUser(userToRecover);
+		mav.addObject("userSelected", true);
+		if (secretAnswerSubmited != null) {
+			boolean matches = u.getSecretAnswer().equals(secretAnswerSubmited);
+			boolean passwordMatches = false;
+			if (newPassword != null && newPasswordConfirm != null) {
+				passwordMatches = newPassword.equals(newPasswordConfirm);
+			}
+			if (!matches) {
+				mav.addObject("error", "Wrong secret Answer");
+				mav.addObject("success",
+						"Recovering password for " + u.getUsername());
+				mav.addObject("user", u);
+			} else {
+				if (passwordMatches
+						&& newPassword.length() <= MAX_PASSWORD_LENGTH
+						&& newPassword.length() >= MIN_PASSWORD_LENGTH) {
+					mav.addObject("passwordRecovered", true);
+					mav.addObject("success",
+							"Your password was changed successfully!");
+					u.setPassword(newPassword);
+					userService.save(u);
+				} else {
+					mav.addObject("error",
+							"Passwords dont match or have less than 8 characters or more than 16.");
+					mav.addObject("success",
+							"Recovering password for " + u.getUsername());
+					mav.addObject("user", u);
+				}
+			}
+		}
 		return mav;
 	}
 
@@ -197,7 +267,7 @@ public class UserController {
 		}
 		return comment;
 	}
-	
+
 	private void setDefaults(ModelAndView mav, User original) {
 		mav.addObject("name", original.getName());
 		mav.addObject("surname", original.getSurname());
