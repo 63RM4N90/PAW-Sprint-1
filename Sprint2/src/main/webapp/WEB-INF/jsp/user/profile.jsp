@@ -1,4 +1,4 @@
-<%@ include file="header.jsp"%>
+<%@ include file="../header.jsp"%>
 <div class="vertical-container">
 	<div class="info-column profile-column">
 		<div class="user-info">
@@ -63,6 +63,6 @@
 		</ul>
 	</div>
 	<div class="tag-column profile-column">
-		<%@ include file="top10.jsp"%>
+		<%@ include file="../top10.jsp"%>
 	</div>
-<%@ include file="footer.jsp"%>
+<%@ include file="../footer.jsp"%>

@@ -1,4 +1,4 @@
-<%@ include file="header.jsp" %>
+<%@ include file="../header.jsp" %>
 <div class="vertical-container">
 	<h2>EditProfile</h2>
 	<div class="error"><c:out value="${usernameError}" /></div>
@@ -33,4 +33,4 @@
 			<input type="submit" class="button" name="submit" value="Save" />
 		</div>
 	</form>
-<%@ include file="footer.jsp" %>
+<%@ include file="../footer.jsp" %>
