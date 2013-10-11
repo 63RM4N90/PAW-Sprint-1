@@ -115,7 +115,7 @@ public class UserController {
 				mav.setViewName("redirect:profile?user="
 						+ userSession.getUsername() + "&period=" + period);
 			} else {
-				mav.setViewName("login");
+				mav.setViewName("user/login");
 			}
 		} else {
 			User profile = userService.getUser(username);
@@ -133,7 +133,7 @@ public class UserController {
 				}
 				mav.addObject("comments", comments);
 			} else {
-				mav.setViewName("redirect:profile");
+				mav.setViewName("redirect:user/profile");
 				return mav;
 			}
 		}
