@@ -26,7 +26,7 @@
 </c:if>
 
 <c:if test="${isempty}">
-	<p>No hay hashtags</p>
+	<p>There are no hashtags</p>
 </c:if>
 
 </div>
