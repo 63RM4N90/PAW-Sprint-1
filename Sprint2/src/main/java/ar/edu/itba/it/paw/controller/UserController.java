@@ -1,5 +1,6 @@
 package ar.edu.itba.it.paw.controller;
 
+import java.net.BindException;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -9,12 +10,17 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import ar.edu.itba.it.paw.form.UserForm;
 import ar.edu.itba.it.paw.formValidators.PasswordRecoveryFormValidator;
+import ar.edu.itba.it.paw.formValidators.UserFormValidator;
 import ar.edu.itba.it.paw.model.Comment;
 import ar.edu.itba.it.paw.model.RankedHashtag;
 import ar.edu.itba.it.paw.model.User;
@@ -48,9 +54,28 @@ public class UserController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
-	public String register(Model model) {
+	public ModelAndView registration() {
+		ModelAndView mav = new ModelAndView();
 		// showTopTenHashtags(model);
-		return "redirect:profile";
+		return mav;
+	}
+
+	@RequestMapping(method = RequestMethod.POST)
+	public ModelAndView registration(
+			@RequestParam(value = "name", required = true) String name,
+			@RequestParam(value = "surname", required = true) String surname,
+			@RequestParam(value = "username", required = true) String username,
+			@RequestParam(value = "password", required = true) String password,
+			@RequestParam(value = "confirm", required = true) String confirm,
+			@RequestParam(value = "description", required = true) String description,
+			@RequestParam(value = "secretQuestion", required = true) String secretQuestion) {
+		ModelAndView mav = new ModelAndView();
+		//UserForm userForm = new UserForm(name, surname, username, password,
+		//		confirm, description, secretQuestion, secretAnswer);
+		//UserFormValidator userFormValidator = new UserFormValidator();
+		//userFormValidator.validate(userForm, (Errors)new BindException());
+		// showTopTenHashtags(model);
+		return mav;
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
@@ -68,12 +93,6 @@ public class UserController {
 			mav.addObject("error", "Invalid user or password.");
 			mav.setViewName("login");
 		}
-		return mav;
-	}
-
-	@RequestMapping(method = RequestMethod.GET)
-	public ModelAndView registration() {
-		ModelAndView mav = new ModelAndView();
 		return mav;
 	}
 
