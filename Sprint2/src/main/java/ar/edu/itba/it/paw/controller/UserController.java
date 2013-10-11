@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.View;
 
 import ar.edu.itba.it.paw.formValidators.PasswordRecoveryFormValidator;
 import ar.edu.itba.it.paw.model.Comment;
@@ -47,10 +46,10 @@ public class UserController {
 		showTopTenHashtags(mav);
 		return mav;
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET)
 	public String register(Model model) {
-		showTopTenHashtags(model);
+		// showTopTenHashtags(model);
 		return "redirect:profile";
 	}
 
@@ -180,7 +179,7 @@ public class UserController {
 		PasswordRecoveryFormValidator validator = new PasswordRecoveryFormValidator(
 				secretAnswerSubmited, newPassword, newPasswordConfirm,
 				userToRecover);
-		validator.validate(target, errors);
+		// validator.validate(target, errors);
 		return mav;
 	}
 
@@ -208,19 +207,19 @@ public class UserController {
 
 	private void showTopTenHashtags(ModelAndView mav) {
 		List<RankedHashtag> top10;
-		View view = new View();
-		
-		if (model.get("period") == null) {
+
+		if (mav.getModel().get("period") == null) {
 			top10 = hashtagService.topHashtags(30);
 		} else {
-			top10 = hashtagService.topHashtags(Integer.valueOf((String) model.get("period")));
+			top10 = hashtagService.topHashtags(Integer.valueOf((String) mav
+					.getModel().get("period")));
 		}
 
 		boolean isempty = top10.size() == 0;
-		model.addObject("previous", "login");
+		mav.addObject("previous", "login");
 
-		model.addObject("ranking", top10);
-		model.addObject("isempty", isempty);
+		mav.addObject("ranking", top10);
+		mav.addObject("isempty", isempty);
 	}
 
 	public String getProcessedComment(String comment) {
