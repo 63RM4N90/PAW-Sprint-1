@@ -8,10 +8,12 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.View;
 
 import ar.edu.itba.it.paw.formValidators.PasswordRecoveryFormValidator;
 import ar.edu.itba.it.paw.model.Comment;
@@ -44,6 +46,12 @@ public class UserController {
 		}
 		showTopTenHashtags(mav);
 		return mav;
+	}
+	
+	@RequestMapping(method = RequestMethod.GET)
+	public String register(Model model) {
+		showTopTenHashtags(model);
+		return "redirect:profile";
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
@@ -200,19 +208,19 @@ public class UserController {
 
 	private void showTopTenHashtags(ModelAndView mav) {
 		List<RankedHashtag> top10;
-
-		if (mav.getModel().get("period") == null) {
+		View view = new View();
+		
+		if (model.get("period") == null) {
 			top10 = hashtagService.topHashtags(30);
 		} else {
-			top10 = hashtagService.topHashtags(Integer.valueOf((String) mav
-					.getModel().get("period")));
+			top10 = hashtagService.topHashtags(Integer.valueOf((String) model.get("period")));
 		}
 
 		boolean isempty = top10.size() == 0;
-		mav.addObject("previous", "login");
+		model.addObject("previous", "login");
 
-		mav.addObject("ranking", top10);
-		mav.addObject("isempty", isempty);
+		model.addObject("ranking", top10);
+		model.addObject("isempty", isempty);
 	}
 
 	public String getProcessedComment(String comment) {
