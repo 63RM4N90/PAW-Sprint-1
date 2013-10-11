@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import ar.edu.itba.it.paw.formValidators.PasswordRecoveryFormValidator;
 import ar.edu.itba.it.paw.model.Comment;
 import ar.edu.itba.it.paw.model.RankedHashtag;
 import ar.edu.itba.it.paw.model.User;
@@ -168,35 +169,10 @@ public class UserController {
 		ModelAndView mav = new ModelAndView();
 		User u = userService.getUser(userToRecover);
 		mav.addObject("userSelected", true);
-		if (secretAnswerSubmited != null) {
-			boolean matches = u.getSecretAnswer().equals(secretAnswerSubmited);
-			boolean passwordMatches = false;
-			if (newPassword != null && newPasswordConfirm != null) {
-				passwordMatches = newPassword.equals(newPasswordConfirm);
-			}
-			if (!matches) {
-				mav.addObject("error", "Wrong secret Answer");
-				mav.addObject("success",
-						"Recovering password for " + u.getUsername());
-				mav.addObject("user", u);
-			} else {
-				if (passwordMatches
-						&& newPassword.length() <= MAX_PASSWORD_LENGTH
-						&& newPassword.length() >= MIN_PASSWORD_LENGTH) {
-					mav.addObject("passwordRecovered", true);
-					mav.addObject("success",
-							"Your password was changed successfully!");
-					u.setPassword(newPassword);
-					userService.save(u);
-				} else {
-					mav.addObject("error",
-							"Passwords dont match or have less than 8 characters or more than 16.");
-					mav.addObject("success",
-							"Recovering password for " + u.getUsername());
-					mav.addObject("user", u);
-				}
-			}
-		}
+		PasswordRecoveryFormValidator validator = new PasswordRecoveryFormValidator(
+				secretAnswerSubmited, newPassword, newPasswordConfirm,
+				userToRecover);
+		validator.validate(target, errors);
 		return mav;
 	}
 

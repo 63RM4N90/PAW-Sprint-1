@@ -12,7 +12,7 @@
 
 	<servlet-mapping>
 		<servlet-name>Sprint2</servlet-name>
-		<url-pattern>/</url-pattern>
+		<url-pattern>/bin/*</url-pattern>
 	</servlet-mapping>
 	<!-- <servlet>
 		<servlet-name>Registration</servlet-name>

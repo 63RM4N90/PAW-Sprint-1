@@ -34,6 +34,35 @@ public class PasswordRecoveryFormValidator implements Validator {
 	public void validate(Object target, Errors errors) {
 		checkLength(errors);
 		checkEmpt(errors);
+		if (secretAnswer != null) {
+			boolean matches = u.getSecretAnswer().equals(secretAnswer);
+			boolean passwordMatches = false;
+			if (password != null && confirmPassword != null) {
+				passwordMatches = password.equals(confirmPassword);
+			}
+			if (!matches) {
+				mav.addObject("error", "Wrong secret Answer");
+				mav.addObject("success",
+						"Recovering password for " + u.getUsername());
+				mav.addObject("user", u);
+			} else {
+				if (passwordMatches
+						&& password.length() <= MAX_PASSWORD_LENGTH
+						&& password.length() >= MIN_PASSWORD_LENGTH) {
+					mav.addObject("passwordRecovered", true);
+					mav.addObject("success",
+							"Your password was changed successfully!");
+					u.setPassword(password);
+					userService.save(u);
+				} else {
+					mav.addObject("error",
+							"Passwords dont match or have less than 8 characters or more than 16.");
+					mav.addObject("success",
+							"Recovering password for " + u.getUsername());
+					mav.addObject("user", u);
+				}
+			}
+		}
 	}
 	
 	private void checkEmpt(Errors errors) {
