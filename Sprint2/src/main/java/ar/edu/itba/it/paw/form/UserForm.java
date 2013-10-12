@@ -1,8 +1,12 @@
 package ar.edu.itba.it.paw.form;
 
+import java.util.Date;
+
+import ar.edu.itba.it.paw.model.User;
 
 public class UserForm {
 
+	private User user;
 	private String name;
 	private String surname;
 	private String username;
@@ -12,17 +16,26 @@ public class UserForm {
 	private String secretQuestion;
 	private String secretAnswer;
 	
-	public UserForm(String name, String surname, String username,
-			String password, String confirmPassword, String description,
-			String secretQuestion, String secretAnswer) {
-		this.name = name;
-		this.surname = surname;
-		this.username = username;
-		this.password = password;
-		this.confirmPassword = confirmPassword;
-		this.description = description;
-		this.secretQuestion = secretQuestion;
-		this.secretAnswer = secretAnswer;
+	public UserForm() {
+	}
+
+	public UserForm(User user) {
+		this.user = user;
+		this.name = user.getName();
+		this.surname = user.getSurname();
+		this.username = user.getUsername();
+		this.password = user.getPassword();
+		this.description = user.getDescription();
+		this.secretQuestion = user.getSecretQuestion();
+		this.secretAnswer = user.getSecretAnswer();
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	public String getName() {
@@ -87,5 +100,22 @@ public class UserForm {
 
 	public void setSecretAnswer(String secretAnswer) {
 		this.secretAnswer = secretAnswer;
+	}
+
+	public User build() {
+		if (user == null) {
+			return new User(name, surname, username, description,
+					confirmPassword, null, secretQuestion, secretAnswer,
+					new Date());
+		} else {
+			user.setName(name);
+			user.setSurname(surname);
+			user.setUsername(username);
+			user.setPassword(password);
+			user.setDescription(description);
+			user.setSecretQuestion(secretQuestion);
+			user.setSecretAnswer(secretAnswer);
+			return user;
+		}
 	}
 }

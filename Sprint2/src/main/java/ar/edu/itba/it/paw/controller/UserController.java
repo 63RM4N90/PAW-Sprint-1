@@ -8,11 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.DiskFileUpload;
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileUploadException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,13 +32,16 @@ public class UserController {
 	private UserService userService;
 	private HashtagService hashtagService;
 	private CommentService commentService;
+	private UserFormValidator userFormValidator;
 
 	@Autowired
 	public UserController(UserService userService,
-			HashtagService hashtagService, CommentService commentService) {
+			HashtagService hashtagService, CommentService commentService,
+			UserFormValidator userFormValidator) {
 		this.userService = userService;
 		this.hashtagService = hashtagService;
 		this.commentService = commentService;
+		this.userFormValidator = userFormValidator;
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
@@ -56,52 +57,28 @@ public class UserController {
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView registration() {
 		ModelAndView mav = new ModelAndView();
+		mav.addObject("userForm", new UserForm());
 		// showTopTenHashtags(model);
 		return mav;
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public ModelAndView registration(HttpServletRequest req) {
-		DiskFileUpload fu = new DiskFileUpload();
+	public ModelAndView registration(HttpServletRequest req,
+			UserForm userForm, Errors errors) {
+		//DiskFileUpload fu = new DiskFileUpload();
 		ModelAndView mav = new ModelAndView();
+		userFormValidator.validate(userForm, errors);
+		
+		if (errors.hasErrors()) {
+			System.out.println("ERRORES EN EL FORM");
+			return null;
+		}		
+		
 		try {
-			List<FileItem> fileItems = fu.parseRequest(req);
-			String name = fileItems.get(0).getString();
-			String surname = fileItems.get(1).getString();
-			String username = fileItems.get(2).getString();
-			String password = fileItems.get(3).getString();
-			String confirm = fileItems.get(4).getString();
-			String description = fileItems.get(5).getString();
-			String secretQuestion = fileItems.get(6).getString();
-			String secretAnswer = fileItems.get(7).getString();
-			FileItem pictureFile = fileItems.get(8);
-			System.out.println("NAME = " + name);
-			System.out.println("SURNAME = " + surname);
-			byte[] picture;
-			if (pictureFile.getName().length() == 0) {
-				picture = null;
-			} else {
-				picture = pictureFile.get();
-			}
-			if (userService.userExists(username)) {
-				mav.addObject("usernameError", "User already exists!");
-				fillInputs(name, surname, username, description,
-						secretQuestion, secretAnswer, mav);
-				mav.setViewName("user/registration");
-			} else {
-				UserFormValidator userFormValidator = new UserFormValidator();
-				UserForm userForm = new UserForm(name, surname, username,
-						password, confirm, description, secretQuestion,
-						secretAnswer);
-				BeanPropertyBindingResult bpbr = new BeanPropertyBindingResult(userForm, "user");
-				try {
-					userFormValidator.validate(userForm, bpbr);
-					
-				} catch (IllegalStateException e) {
-					System.out.println("illegal...");
-				}
-			}
-		} catch (FileUploadException e) {
+			userService.save(userForm.build());
+		} catch (Exception e){
+			errors.rejectValue("username", "duplicated");
+			return null;
 		}
 		mav.setViewName("user/profile");
 		return mav;

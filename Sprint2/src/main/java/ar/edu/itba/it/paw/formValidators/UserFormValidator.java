@@ -1,11 +1,12 @@
 package ar.edu.itba.it.paw.formValidators;
 
+import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
-import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 import ar.edu.itba.it.paw.form.UserForm;
 
+@Component
 public class UserFormValidator implements Validator {
 
 	private static final int MAX_STRING_LENGTH = 32;
@@ -13,9 +14,6 @@ public class UserFormValidator implements Validator {
 	private static final int MAX_PASSWORD_LENGTH = 16;
 	private static final int MAX_DESCRIPTION_LENGTH = 140;
 	private static final int MAX_QUE_AND_ANS_LENGTH = 64;
-
-	public UserFormValidator() {
-	}
 
 	@Override
 	public boolean supports(Class<?> clazz) {
@@ -25,14 +23,6 @@ public class UserFormValidator implements Validator {
 	@Override
 	public void validate(Object target, Errors errors) throws IllegalStateException {
 		UserForm userForm = (UserForm) target;
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password",
-				"required.password", "Field name is required.");
-
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "confirmPassword",
-				"required.confirmPassword", "Field name is required.");
-
-		System.out.println("pass = " + userForm.getPassword() + " - "
-				+ userForm.getConfirmPassword() + ".");
 
 		if (!(userForm.getPassword().equals(userForm.getConfirmPassword()))) {
 			errors.rejectValue("password", "notmatch.password");
@@ -44,69 +34,69 @@ public class UserFormValidator implements Validator {
 
 	private void checkPasswordConfirm(UserForm userForm, Errors errors) {
 		if (!userForm.getPassword().equals(userForm.getConfirmPassword())) {
-			errors.rejectValue("password", "distinct.password");
+			errors.rejectValue("password", "distinct");
 		}
 	}
 
 	private void checkInputLength(UserForm userForm, Errors errors) {
 		if (userForm.getName().length() > MAX_STRING_LENGTH
 				|| userForm.getName().length() == 0) {
-			errors.rejectValue("name", "length.name");
+			errors.rejectValue("name", "length");
 		}
 		if (userForm.getSurname().length() > MAX_STRING_LENGTH
 				|| userForm.getSurname().length() == 0) {
-			errors.rejectValue("surname", "length.surname");
+			errors.rejectValue("surname", "length");
 		}
 		if (userForm.getUsername().length() > MAX_STRING_LENGTH
 				|| userForm.getUsername().length() == 0) {
-			errors.rejectValue("username", "length.username");
+			errors.rejectValue("username", "length");
 		}
 		if (userForm.getPassword().length() < MIN_PASSWORD_LENGTH
 				|| userForm.getPassword().length() > MAX_PASSWORD_LENGTH) {
-			errors.rejectValue("password", "length.password");
+			errors.rejectValue("password", "length");
 		}
 		if (userForm.getConfirmPassword().length() < MIN_PASSWORD_LENGTH
 				|| userForm.getConfirmPassword().length() > MAX_PASSWORD_LENGTH) {
-			errors.rejectValue("confirmPassword", "length.confirmPassword");
+			errors.rejectValue("confirmPassword", "length");
 		}
 		if (userForm.getDescription().length() > MAX_DESCRIPTION_LENGTH
 				|| userForm.getDescription().length() == 0) {
-			errors.rejectValue("description", "length.description");
+			errors.rejectValue("description", "length");
 		}
 		if (userForm.getSecretQuestion().length() > MAX_QUE_AND_ANS_LENGTH
 				|| userForm.getSecretQuestion().length() == 0) {
-			errors.rejectValue("secretQuestion", "length.secretQuestion");
+			errors.rejectValue("secretQuestion", "length");
 		}
 		if (userForm.getSecretAnswer().length() > MAX_QUE_AND_ANS_LENGTH
 				|| userForm.getSecretAnswer().length() == 0) {
-			errors.rejectValue("secretAnswer", "length.secretAnswer");
+			errors.rejectValue("secretAnswer", "length");
 		}
 	}
 
 	private void checkEmptyInputs(UserForm userForm, Errors errors) {
 		if (userForm.getName() == null) {
-			errors.rejectValue("name", "empty.name");
+			errors.rejectValue("name", "empty");
 		}
 		if (userForm.getSurname() == null) {
-			errors.rejectValue("surname", "empty.surname");
+			errors.rejectValue("surname", "empty");
 		}
 		if (userForm.getUsername() == null) {
-			errors.rejectValue("username", "empty.username");
+			errors.rejectValue("username", "empty");
 		}
 		if (userForm.getPassword() == null) {
-			errors.rejectValue("password", "empty.password");
+			errors.rejectValue("password", "empty");
 		}
 		if (userForm.getConfirmPassword() == null) {
-			errors.rejectValue("confirmPassword", "empty.confirmPassword");
+			errors.rejectValue("confirmPassword", "empty");
 		}
 		if (userForm.getDescription() == null) {
-			errors.rejectValue("description", "empty.description");
+			errors.rejectValue("description", "empty");
 		}
 		if (userForm.getSecretQuestion() == null) {
-			errors.rejectValue("secretQuestion", "empty.secretQuestion");
+			errors.rejectValue("secretQuestion", "empty");
 		}
 		if (userForm.getSecretAnswer() == null) {
-			errors.rejectValue("secretAnswer", "empty.secretAnswer");
+			errors.rejectValue("secretAnswer", "empty");
 		}
 	}
 }
