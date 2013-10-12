@@ -70,7 +70,6 @@ public class UserController {
 		userFormValidator.validate(userForm, errors);
 		
 		if (errors.hasErrors()) {
-			System.out.println("ERRORES EN EL FORM");
 			return null;
 		}		
 		

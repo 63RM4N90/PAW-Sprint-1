@@ -25,7 +25,7 @@ public class UserFormValidator implements Validator {
 		UserForm userForm = (UserForm) target;
 
 		if (!(userForm.getPassword().equals(userForm.getConfirmPassword()))) {
-			errors.rejectValue("password", "notmatch.password");
+			errors.rejectValue("password", "nonmatch.password");
 		}
 		checkEmptyInputs(userForm, errors);
 		checkInputLength(userForm, errors);
@@ -34,7 +34,7 @@ public class UserFormValidator implements Validator {
 
 	private void checkPasswordConfirm(UserForm userForm, Errors errors) {
 		if (!userForm.getPassword().equals(userForm.getConfirmPassword())) {
-			errors.rejectValue("password", "distinct");
+			errors.rejectValue("password", "nonmatch");
 		}
 	}
 
