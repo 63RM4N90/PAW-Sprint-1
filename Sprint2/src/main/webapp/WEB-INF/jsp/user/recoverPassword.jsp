@@ -5,7 +5,7 @@
 		<div class="error"><c:out value="${error}" /></div>
 		<div class="success"><c:out value="${success}" /></div>
 		<c:if test="${!userSelected}">
-			<form method="GET" action="lostPassword">
+			<form method="GET" action="recoverPassword">
 					<div class="recover-form-field">
 						<label for="userToRecover"> Insert your Username: </label>
 						<input type="text" name="userToRecover"/>
@@ -16,7 +16,7 @@
 			</form>
 		</c:if>	
 		<c:if test="${userSelected && !passwordRecovered}">
-			<form method="POST" action="lostPassword">
+			<form method="POST" action="recoverPassword">
 					<div class="recover-form-field">
 						<label><c:out value="${user.secretQuestion}"/></label>
 						<input type="text" name="secretAnswer" />

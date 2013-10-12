@@ -18,7 +18,7 @@
 				<input class="button" type="submit" name="submit" value="Login" />
 			</div>
 		</form>
-		<a href="lostPassword">forgotten password?</a>
+		<a href="recoverPassword">forgotten password?</a>
 	</div>
 	<div class="login-column column-2">
 		<h2>Welcome to Social Cthulhu!</h2>
