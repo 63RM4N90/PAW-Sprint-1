@@ -145,8 +145,8 @@ h2 {
 
 .registration-form-field {
 	width: 400px;
-	margin-bottom: 20px;
 	height: 30px;
+	display: inline-block;
 }
 
 .form-field label, .registration-form-field label, recover-form-field label { 
@@ -350,4 +350,21 @@ li p {
 
 .tag-column {
 	float: right;
+}
+
+.error {
+font-size: 14px;
+display: inline-block;
+}
+
+.error span {
+color: red;
+background-color: rgba(255,0,0,0.2);
+padding: 10px;
+border-radius: 5px;
+vertical-align: bottom:
+}
+
+.field-wrapper {
+	margin-bottom: 20px;
 }
