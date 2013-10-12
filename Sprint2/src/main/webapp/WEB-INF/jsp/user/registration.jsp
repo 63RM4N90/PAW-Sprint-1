@@ -4,8 +4,6 @@
 
 	<form:form method="POST" action="registration" commandName="userForm">
 
-	
-		<form:hidden path="user" />
 		<div class="field-wrapper">
 			<div class="registration-form-field">
 				<label for="name">Name:</label>

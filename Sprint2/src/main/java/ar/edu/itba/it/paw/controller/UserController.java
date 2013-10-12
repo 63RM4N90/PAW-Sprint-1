@@ -7,10 +7,10 @@ import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.fileupload.DiskFileUpload;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -67,19 +67,25 @@ public class UserController {
 			UserForm userForm, Errors errors) {
 		//DiskFileUpload fu = new DiskFileUpload();
 		ModelAndView mav = new ModelAndView();
-		userFormValidator.validate(userForm, errors);
+		List<ObjectError> errorList = errors.getAllErrors();
+		for (ObjectError each : errorList) {
+			System.out.println(each.toString());
+		}
+		userFormValidator.validate(userForm, errors);			
 		
 		if (errors.hasErrors()) {
 			return null;
-		}		
+		}
 		
 		try {
 			userService.save(userForm.build());
+			System.out.println("SAVED");
 		} catch (Exception e){
+			System.out.println("CATCH");
 			errors.rejectValue("username", "duplicated");
 			return null;
 		}
-		mav.setViewName("user/profile");
+		mav.setViewName("redirect:profile?user="+userForm.getUsername());
 		return mav;
 	}
 
@@ -92,7 +98,7 @@ public class UserController {
 		User user = userService.authenticate(username, password);
 		if (user != null) {
 			session.setAttribute("userId", user.getId());
-			mav.setViewName("redirect:profile");
+			mav.setViewName("redirect:profile?user="+username);
 		} else {
 			mav.addObject("username", username);
 			mav.addObject("error", "Invalid user or password.");

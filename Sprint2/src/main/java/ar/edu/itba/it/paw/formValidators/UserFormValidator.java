@@ -23,9 +23,8 @@ public class UserFormValidator implements Validator {
 	@Override
 	public void validate(Object target, Errors errors) throws IllegalStateException {
 		UserForm userForm = (UserForm) target;
-
 		if (!(userForm.getPassword().equals(userForm.getConfirmPassword()))) {
-			errors.rejectValue("password", "nonmatch.password");
+			errors.rejectValue("password", "nonmatch");
 		}
 		checkEmptyInputs(userForm, errors);
 		checkInputLength(userForm, errors);
