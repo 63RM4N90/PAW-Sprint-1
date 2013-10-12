@@ -3,8 +3,6 @@
 	<h2>Registration</h2>
 
 	<form:form method="POST" action="registration" commandName="userForm">
-
-	
 		<form:hidden path="user" />
 		<div class="field-wrapper">
 			<div class="registration-form-field">

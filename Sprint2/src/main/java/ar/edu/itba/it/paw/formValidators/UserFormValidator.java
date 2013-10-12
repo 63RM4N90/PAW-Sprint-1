@@ -23,13 +23,12 @@ public class UserFormValidator implements Validator {
 	@Override
 	public void validate(Object target, Errors errors) throws IllegalStateException {
 		UserForm userForm = (UserForm) target;
-
-		if (!(userForm.getPassword().equals(userForm.getConfirmPassword()))) {
-			errors.rejectValue("password", "nonmatch.password");
-		}
 		checkEmptyInputs(userForm, errors);
 		checkInputLength(userForm, errors);
-		checkPasswordConfirm(userForm, errors);
+		if(userForm.getPassword().length() > MIN_PASSWORD_LENGTH 
+				&& userForm.getPassword().length() < MAX_PASSWORD_LENGTH) { 
+			checkPasswordConfirm(userForm, errors);
+		}
 	}
 
 	private void checkPasswordConfirm(UserForm userForm, Errors errors) {
