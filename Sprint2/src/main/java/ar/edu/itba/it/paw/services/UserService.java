@@ -7,14 +7,16 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ar.edu.itba.it.paw.dao.impl.HibernateUserDAO;
+import ar.edu.itba.it.paw.dao.impl.DbUserDAOImpl;
 import ar.edu.itba.it.paw.model.User;
+
 @Service
 public class UserService {
 
-	private HibernateUserDAO userDao;
+	private DbUserDAOImpl userDao;
+
 	@Autowired
-	public UserService(HibernateUserDAO userDao) {
+	public UserService(DbUserDAOImpl userDao) {
 		this.userDao = userDao;
 	}
 
@@ -23,7 +25,7 @@ public class UserService {
 	}
 
 	public void save(User user) {
-		userDao.store(user);
+		userDao.save(user);
 	}
 
 	public User authenticate(String username, String password) {
@@ -33,13 +35,13 @@ public class UserService {
 	public User getUser(String username) {
 		return userDao.getUser(username);
 	}
-	
+
 	public List<User> getUsersWithName(String name) {
 		List<User> result = userDao.getUsersWithName(name);
 		sortUsers(result);
 		return result;
 	}
-	
+
 	private void sortUsers(List<User> users) {
 		Collections.sort(users, new Comparator<User>() {
 			public int compare(User o1, User o2) {

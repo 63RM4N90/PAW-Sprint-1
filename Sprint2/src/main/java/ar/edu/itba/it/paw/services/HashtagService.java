@@ -10,15 +10,15 @@ import java.util.TreeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ar.edu.itba.it.paw.dao.impl.HibernateHashtagDAO;
+import ar.edu.itba.it.paw.dao.impl.DbHashtagDAOImpl;
 import ar.edu.itba.it.paw.model.Hashtag;
 import ar.edu.itba.it.paw.model.RankedHashtag;
 @Service
 public class HashtagService {
 
-	private HibernateHashtagDAO hashtagDAO;
+	private DbHashtagDAOImpl hashtagDAO;
 	@Autowired
-	public HashtagService(HibernateHashtagDAO hashtagDAO) {
+	public HashtagService(DbHashtagDAOImpl hashtagDAO) {
 		this.hashtagDAO = hashtagDAO;
 	}
 

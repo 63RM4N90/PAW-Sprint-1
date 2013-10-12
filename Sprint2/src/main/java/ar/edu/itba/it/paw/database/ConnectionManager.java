@@ -12,9 +12,9 @@ public class ConnectionManager {
 
 	public ConnectionManager(String driver, String connectionString,
 			String username, String password) {
-		this.connectionString = connectionString;
-		this.username = username;
-		this.password = password;
+		this.connectionString = "jdbc:postgresql://localhost/paw4";
+		this.username = "paw";
+		this.password = "paw";
 		try {
 			Class.forName(driver);
 		} catch (ClassNotFoundException e) {

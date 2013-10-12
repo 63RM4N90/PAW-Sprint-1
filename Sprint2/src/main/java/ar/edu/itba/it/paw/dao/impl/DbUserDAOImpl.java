@@ -9,12 +9,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 import ar.edu.itba.it.paw.dao.UserDAO;
 import ar.edu.itba.it.paw.database.ConnectionManager;
 import ar.edu.itba.it.paw.database.DatabaseException;
 import ar.edu.itba.it.paw.database.DatabaseInfo;
 import ar.edu.itba.it.paw.model.User;
-
+@Repository
 public class DbUserDAOImpl implements UserDAO {
 
 	private final ConnectionManager manager;

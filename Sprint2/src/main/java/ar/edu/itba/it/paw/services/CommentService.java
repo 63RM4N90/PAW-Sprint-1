@@ -11,19 +11,19 @@ import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ar.edu.itba.it.paw.dao.impl.HibernateCommentDAO;
-import ar.edu.itba.it.paw.dao.impl.HibernateHashtagDAO;
+import ar.edu.itba.it.paw.dao.impl.DbCommentDAOImpl;
+import ar.edu.itba.it.paw.dao.impl.DbHashtagDAOImpl;
 import ar.edu.itba.it.paw.model.Comment;
 import ar.edu.itba.it.paw.model.Hashtag;
 import ar.edu.itba.it.paw.model.User;
 @Service
 public class CommentService {
 
-	private HibernateCommentDAO commentDao;
-	private HibernateHashtagDAO hashtagDao;
+	private DbCommentDAOImpl commentDao;
+	private DbHashtagDAOImpl hashtagDao;
 
 	@Autowired
-	public CommentService(HibernateCommentDAO commentDao, HibernateHashtagDAO hashtagDao) {
+	public CommentService(DbCommentDAOImpl commentDao, DbHashtagDAOImpl hashtagDao) {
 		this.commentDao = commentDao;
 		this.hashtagDao = hashtagDao;
 	}

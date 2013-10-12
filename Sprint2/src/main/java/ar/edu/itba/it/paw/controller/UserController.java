@@ -4,16 +4,23 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.fileupload.DiskFileUpload;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import ar.edu.itba.it.paw.form.UserForm;
 import ar.edu.itba.it.paw.formValidators.PasswordRecoveryFormValidator;
+import ar.edu.itba.it.paw.formValidators.UserFormValidator;
 import ar.edu.itba.it.paw.model.Comment;
 import ar.edu.itba.it.paw.model.RankedHashtag;
 import ar.edu.itba.it.paw.model.User;
@@ -54,27 +61,56 @@ public class UserController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public ModelAndView registration(
-			@RequestParam(value = "name", required = true) String name,
-			@RequestParam(value = "surname", required = true) String surname,
-			@RequestParam(value = "username", required = true) String username,
-			@RequestParam(value = "password", required = true) String password,
-			@RequestParam(value = "confirm", required = true) String confirm,
-			@RequestParam(value = "description", required = true) String description,
-			@RequestParam(value = "secretQuestion", required = true) String secretQuestion) {
+	public ModelAndView registration(HttpServletRequest req) {
+		DiskFileUpload fu = new DiskFileUpload();
 		ModelAndView mav = new ModelAndView();
-		//UserForm userForm = new UserForm(name, surname, username, password,
-		//		confirm, description, secretQuestion, secretAnswer);
-		//UserFormValidator userFormValidator = new UserFormValidator();
-		//userFormValidator.validate(userForm, (Errors)new BindException());
-		// showTopTenHashtags(model);
+		try {
+			List<FileItem> fileItems = fu.parseRequest(req);
+			String name = fileItems.get(0).getString();
+			String surname = fileItems.get(1).getString();
+			String username = fileItems.get(2).getString();
+			String password = fileItems.get(3).getString();
+			String confirm = fileItems.get(4).getString();
+			String description = fileItems.get(5).getString();
+			String secretQuestion = fileItems.get(6).getString();
+			String secretAnswer = fileItems.get(7).getString();
+			FileItem pictureFile = fileItems.get(8);
+			System.out.println("NAME = " + name);
+			System.out.println("SURNAME = " + surname);
+			byte[] picture;
+			if (pictureFile.getName().length() == 0) {
+				picture = null;
+			} else {
+				picture = pictureFile.get();
+			}
+			if (userService.userExists(username)) {
+				mav.addObject("usernameError", "User already exists!");
+				fillInputs(name, surname, username, description,
+						secretQuestion, secretAnswer, mav);
+				mav.setViewName("user/registration");
+			} else {
+				UserFormValidator userFormValidator = new UserFormValidator();
+				UserForm userForm = new UserForm(name, surname, username,
+						password, confirm, description, secretQuestion,
+						secretAnswer);
+				BeanPropertyBindingResult bpbr = new BeanPropertyBindingResult(userForm, "user");
+				try {
+					userFormValidator.validate(userForm, bpbr);
+					
+				} catch (IllegalStateException e) {
+					System.out.println("illegal...");
+				}
+			}
+		} catch (FileUploadException e) {
+		}
+		mav.setViewName("user/profile");
 		return mav;
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
 	public ModelAndView login(
-			@RequestParam(value = "username", required = true) String username,
-			@RequestParam(value = "password", required = true) String password,
+			@RequestParam(value = "username", required = false) String username,
+			@RequestParam(value = "password", required = false) String password,
 			HttpSession session) {
 		ModelAndView mav = new ModelAndView();
 		User user = userService.authenticate(username, password);
@@ -151,7 +187,7 @@ public class UserController {
 
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView recoverPassword(
-			@RequestParam(value = "userToRecover", required = true) String username) {
+			@RequestParam(value = "userToRecover", required = false) String username) {
 		ModelAndView mav = new ModelAndView();
 		User user = null;
 		if (username != null) {
@@ -181,10 +217,10 @@ public class UserController {
 
 	@RequestMapping(method = RequestMethod.POST)
 	public ModelAndView recoverPassword(
-			@RequestParam(value = "secretAnswer", required = true) String secretAnswerSubmited,
-			@RequestParam(value = "password", required = true) String newPassword,
-			@RequestParam(value = "confirm", required = true) String newPasswordConfirm,
-			@RequestParam(value = "userToRecover", required = true) String userToRecover) {
+			@RequestParam(value = "secretAnswer", required = false) String secretAnswerSubmited,
+			@RequestParam(value = "password", required = false) String newPassword,
+			@RequestParam(value = "confirm", required = false) String newPasswordConfirm,
+			@RequestParam(value = "userToRecover", required = false) String userToRecover) {
 		ModelAndView mav = new ModelAndView();
 		User u = userService.getUser(userToRecover);
 		mav.addObject("userSelected", true);
@@ -269,5 +305,18 @@ public class UserController {
 		mav.addObject("password", original.getPassword());
 		mav.addObject("confirm", original.getPassword());
 		mav.addObject("description", original.getDescription());
+	}
+
+	private void fillInputs(String name, String surname, String username,
+			String description, String secretQuestion, String secretAnswer,
+			ModelAndView mav) {
+		mav.addObject("name", name);
+		mav.addObject("surname", surname);
+		mav.addObject("username", username);
+		mav.addObject("password", "");
+		mav.addObject("confirm", "");
+		mav.addObject("description", description);
+		mav.addObject("secretQuestion", secretQuestion);
+		mav.addObject("secretAnswer", secretAnswer);
 	}
 }

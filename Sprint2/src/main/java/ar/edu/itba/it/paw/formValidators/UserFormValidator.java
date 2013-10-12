@@ -23,7 +23,7 @@ public class UserFormValidator implements Validator {
 	}
 
 	@Override
-	public void validate(Object target, Errors errors) {
+	public void validate(Object target, Errors errors) throws IllegalStateException {
 		UserForm userForm = (UserForm) target;
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password",
 				"required.password", "Field name is required.");
@@ -31,7 +31,8 @@ public class UserFormValidator implements Validator {
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "confirmPassword",
 				"required.confirmPassword", "Field name is required.");
 
-		// User user = (User) target;
+		System.out.println("pass = " + userForm.getPassword() + " - "
+				+ userForm.getConfirmPassword() + ".");
 
 		if (!(userForm.getPassword().equals(userForm.getConfirmPassword()))) {
 			errors.rejectValue("password", "notmatch.password");

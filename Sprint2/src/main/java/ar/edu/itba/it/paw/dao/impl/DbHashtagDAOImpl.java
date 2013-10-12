@@ -10,6 +10,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.TreeMap;
 
+import org.springframework.stereotype.Repository;
+
 import ar.edu.itba.it.paw.dao.HashtagDAO;
 import ar.edu.itba.it.paw.database.ConnectionManager;
 import ar.edu.itba.it.paw.database.DatabaseException;
@@ -17,7 +19,7 @@ import ar.edu.itba.it.paw.database.DatabaseInfo;
 import ar.edu.itba.it.paw.model.Comment;
 import ar.edu.itba.it.paw.model.Hashtag;
 import ar.edu.itba.it.paw.model.User;
-
+@Repository
 public class DbHashtagDAOImpl implements HashtagDAO {
 
 	private final ConnectionManager manager;
