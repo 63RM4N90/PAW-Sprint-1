@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import ar.edu.itba.it.paw.dao.HashtagDAO;
 import ar.edu.itba.it.paw.model.Comment;
 import ar.edu.itba.it.paw.model.Hashtag;
-@Repository
+//@Repository
 public class HibernateHashtagDAO extends HibernateGenericDAO<Hashtag> implements HashtagDAO {
 
 	public HibernateHashtagDAO() {

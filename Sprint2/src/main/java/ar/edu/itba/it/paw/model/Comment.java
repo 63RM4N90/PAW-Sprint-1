@@ -3,23 +3,17 @@ package ar.edu.itba.it.paw.model;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-
-@Entity
+//@Entity
 public class Comment extends AbstractModel implements Comparable<Comment>{
-	@OneToOne
-	@Column(nullable=false)
+	//@OneToOne
+	//@Column(nullable=false)
 	private User author;
-	@Column(nullable=false)
+	//@Column(nullable=false)
 	private Date date;
-	@Column(nullable=false)
+	//@Column(nullable=false)
 	private String comment;
-	@OneToMany
-	@JoinColumn(name="com_id")
+	//@OneToMany
+	//@JoinColumn(name="com_id")
 	private List<Hashtag> hashtags;
 
 	public Comment() {

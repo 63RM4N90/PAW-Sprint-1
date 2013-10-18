@@ -2,6 +2,9 @@ package ar.edu.itba.it.paw.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.itba.it.paw.services.CommentService;
 
@@ -14,7 +17,11 @@ public class CommentaryController {
 	public CommentaryController(CommentService commentService) {
 		this.commentService = commentService;
 	}
-	
+
+	@RequestMapping(method = RequestMethod.GET)
+	public ModelAndView asdf() {
+		return new ModelAndView();
+	}
 	
 //	@Override
 //	protected void doGet(HttpServletRequest req, HttpServletResponse resp)

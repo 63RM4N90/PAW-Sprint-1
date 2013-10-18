@@ -1,14 +1,28 @@
 package ar.edu.itba.it.paw.converters;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.format.support.FormattingConversionServiceFactoryBean;
 
-public class EnhancedFormattingConversionServiceFactoryBean extends FormattingConversionServiceFactoryBean {
+public class EnhancedFormattingConversionServiceFactoryBean extends
+		FormattingConversionServiceFactoryBean {
+
+	private Converter<?, ?>[] converters;
+
+	@Autowired
+	public EnhancedFormattingConversionServiceFactoryBean(
+			Converter<?, ?>[] converters) {
+		this.converters = converters;
+
+	}
 
 	@Override
 	@SuppressWarnings("deprecation")
-	protected void installFormatters(FormatterRegistry registry){
+	protected void installFormatters(FormatterRegistry registry) {
 		super.installFormatters(registry);
-		registry.addConverter(new StringToIntegerConverter());
+		for (Converter<?, ?> c : converters) {
+			registry.addConverter(c);
+		}
 	}
 }

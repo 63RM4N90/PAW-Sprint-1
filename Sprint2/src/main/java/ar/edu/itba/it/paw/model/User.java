@@ -2,9 +2,7 @@ package ar.edu.itba.it.paw.model;
 
 import java.util.Date;
 
-import javax.persistence.Entity;
-
-@Entity
+//@Entity
 public class User extends AbstractModel {
 	public static final int MIN_USERNAME_LENGTH = 8;
 	public static final int MAX_USERNAME_LENGTH = 16;

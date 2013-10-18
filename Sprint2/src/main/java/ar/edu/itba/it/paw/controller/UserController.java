@@ -58,49 +58,47 @@ public class UserController {
 	public ModelAndView registration() {
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("userForm", new UserForm());
-		// showTopTenHashtags(model);
+		showTopTenHashtags(mav);
 		return mav;
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public ModelAndView registration(HttpServletRequest req,
-			UserForm userForm, Errors errors) {
-		//DiskFileUpload fu = new DiskFileUpload();
+	public ModelAndView registration(HttpServletRequest req, UserForm userForm,
+			Errors errors, HttpSession session) {
+		// DiskFileUpload fu = new DiskFileUpload();
 		ModelAndView mav = new ModelAndView();
 		List<ObjectError> errorList = errors.getAllErrors();
 		for (ObjectError each : errorList) {
 			System.out.println(each.toString());
 		}
-		userFormValidator.validate(userForm, errors);			
-		
+		userFormValidator.validate(userForm, errors);
+
 		if (errors.hasErrors()) {
 			return null;
 		}
-		
+
 		try {
 			userService.save(userForm.build());
-			System.out.println("SAVED");
-		} catch (Exception e){
-			System.out.println("CATCH");
+		} catch (Exception e) {
 			errors.rejectValue("username", "duplicated");
 			return null;
 		}
-		mav.setViewName("redirect:profile?user="+userForm.getUsername());
+		session.setAttribute("username", userForm.getUsername());
+		mav.setViewName("redirect:profile?user=" + userForm.getUsername());
 		return mav;
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
 	public ModelAndView login(
-			@RequestParam(value = "username", required = false) String username,
+			@RequestParam(value = "username", required = false) User user,
 			@RequestParam(value = "password", required = false) String password,
 			HttpSession session) {
 		ModelAndView mav = new ModelAndView();
-		User user = userService.authenticate(username, password);
 		if (user != null) {
-			session.setAttribute("userId", user.getId());
-			mav.setViewName("redirect:profile?user="+username);
+			session.setAttribute("username", user.getUsername());
+			mav.setViewName("redirect:profile?user=" + user.getUsername());
 		} else {
-			mav.addObject("username", username);
+			// mav.addObject("username", username);
 			mav.addObject("error", "Invalid user or password.");
 			mav.setViewName("login");
 		}
@@ -109,26 +107,19 @@ public class UserController {
 
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView profile(
-			@RequestParam(value = "user", required = false) String username,
+			@RequestParam(value = "user", required = false) User profile,
 			@RequestParam(value = "period", required = false) Integer period,
 			HttpSession session) {
 		ModelAndView mav = new ModelAndView();
-		User userSession = (User) session.getAttribute("user");
+		User userSession = userService.getUser((String) session
+				.getAttribute("username"));
 
-		List<RankedHashtag> top10;
+		showTopTenHashtags(mav);
 
-		if (period == null) {
-			top10 = hashtagService.topHashtags(30);
-		} else {
-			top10 = hashtagService.topHashtags(period);
-		}
-		// req.setAttribute("previous", "profile");
-		// req.setAttribute("ranking", top10);
-
-		if (username == null) {
+		if (profile == null) {
 			if (userSession != null) {
 				if (period == null) {
-					period = 30;
+					period = 30;					
 				}
 				mav.setViewName("redirect:profile?user="
 						+ userSession.getUsername() + "&period=" + period);
@@ -136,32 +127,28 @@ public class UserController {
 				mav.setViewName("user/login");
 			}
 		} else {
-			User profile = userService.getUser(username);
-			if (profile != null) {
-				if (userSession != null) {
-					if (profile.getUsername().equals(userSession.getUsername())) {
-						mav.addObject("isOwner", true);
-					}
+			if (userSession != null) {
+				if (profile.getUsername().equals(userSession.getUsername())) {
+					mav.addObject("isOwner", true);
 				}
-				session.setAttribute("user", profile);
-				mav.addObject("isEmptyPicture", profile.getPicture() == null);
-				List<Comment> comments = commentService.getComments(profile);
-				for (Comment comment : comments) {
-					comment.setComment(getProcessedComment(comment.getComment()));
-				}
-				mav.addObject("comments", comments);
-			} else {
-				mav.setViewName("redirect:user/profile");
-				return mav;
 			}
+			session.setAttribute("user", profile);
+			mav.addObject("isEmptyPicture", profile.getPicture() == null);
+			List<Comment> comments = commentService.getComments(profile);
+			for (Comment comment : comments) {
+				comment.setComment(getProcessedComment(comment.getComment()));
+			}
+			mav.addObject("comments", comments);
 		}
+		
 		return mav;
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView editProfile(HttpSession session) {
 		ModelAndView mav = new ModelAndView();
-		User userSession = (User) session.getAttribute("user");
+		String username = (String) session.getAttribute("username");
+		User userSession = userService.getUser(username);
 		mav.addObject("sessionUser", userSession);
 		setDefaults(mav, userSession);
 		return mav;
