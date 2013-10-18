@@ -18,7 +18,7 @@
 			<img src="${pageContext.request.contextPath}/img/title.png" alt="Social Cthulhu" />
 		</div>
 		<div class="top-bar-element search-bar">
-			<form method="POST" action="search">
+			<form method="POST" action="/Sprint2/bin/search/results">
 				<input type="text" placeholder="Find Soul..." name="search" /> <input
 					type="submit" class="button" name="submit" value="Search" />
 			</form>

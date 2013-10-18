@@ -53,6 +53,23 @@ public class UserController {
 		showTopTenHashtags(mav);
 		return mav;
 	}
+	
+	@RequestMapping(method = RequestMethod.POST)
+	public ModelAndView login(
+			@RequestParam(value = "username", required = false) User user,
+			@RequestParam(value = "password", required = false) String password,
+			HttpSession session) {
+		ModelAndView mav = new ModelAndView();
+		if (user != null) {
+			session.setAttribute("username", user.getUsername());
+			mav.setViewName("redirect:profile?user=" + user.getUsername());
+		} else {
+			// mav.addObject("username", username);
+			mav.addObject("error", "Invalid user or password.");
+			mav.setViewName("login");
+		}
+		return mav;
+	}
 
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView registration() {
@@ -85,23 +102,6 @@ public class UserController {
 		}
 		session.setAttribute("username", userForm.getUsername());
 		mav.setViewName("redirect:profile?user=" + userForm.getUsername());
-		return mav;
-	}
-
-	@RequestMapping(method = RequestMethod.POST)
-	public ModelAndView login(
-			@RequestParam(value = "username", required = false) User user,
-			@RequestParam(value = "password", required = false) String password,
-			HttpSession session) {
-		ModelAndView mav = new ModelAndView();
-		if (user != null) {
-			session.setAttribute("username", user.getUsername());
-			mav.setViewName("redirect:profile?user=" + user.getUsername());
-		} else {
-			// mav.addObject("username", username);
-			mav.addObject("error", "Invalid user or password.");
-			mav.setViewName("login");
-		}
 		return mav;
 	}
 
@@ -239,7 +239,7 @@ public class UserController {
 		mav.addObject("isempty", isempty);
 	}
 
-	public String getProcessedComment(String comment) {
+	private String getProcessedComment(String comment) {
 		// Search for URLs
 		if (comment != null && comment.contains("http:")) {
 			int indexOfHttp = comment.indexOf("http:");

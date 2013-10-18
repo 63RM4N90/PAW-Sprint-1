@@ -1,4 +1,4 @@
-<%@ include file="header.jsp"%>
+<%@ include file="../header.jsp"%>
 <div class="vertical-container">
 	<h2>
 		Results for "<c:out value="${search}" />"
@@ -9,7 +9,7 @@
 			<li
 				<c:set var="row" value="${row + 1}" />>
 				<a
-				href="<c:url value="profile"><c:param name="user" value="${user.username}" /></c:url>">${user.username}</a>
+				href="<c:url value="/bin/user/profile"><c:param name="user" value="${user.username}" /></c:url>">${user.username}</a>
 				<br />
 				<span>
 					<c:out value="${user.surname}" />
@@ -23,4 +23,4 @@
 			</li>
 		</c:forEach>
 	</ul>
-<%@ include file="footer.jsp"%>
+<%@ include file="../footer.jsp"%>
