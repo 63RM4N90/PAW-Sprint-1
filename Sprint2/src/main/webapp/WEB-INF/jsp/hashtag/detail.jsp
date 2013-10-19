@@ -1,4 +1,4 @@
-<%@ include file="header.jsp"%>
+<%@ include file="../header.jsp"%>
 <div class="vertical-container">
 	<h2>
 		#<c:out value="${tag.hashtag}" />
@@ -18,11 +18,11 @@
 				<div class="comment">
 					<p>${comment.comment}</p>
 					<div class="comment-reference">
-						<i>Created by: </i><a href="<c:url value="profile"><c:param name="user" value="${comment.author.username}" /></c:url>">${comment.author.username}</a> | 
+						<i>Created by: </i><a href="<c:url value="/bin/user/profile"><c:param name="user" value="${comment.author.username}" /></c:url>">${comment.author.username}</a> | 
 						<i><fmt:formatDate value="${comment.date}" pattern="dd-MM-yyyy HH:mm" /></i>
 					</div>
 				</div>
 			</li>
 		</c:forEach>
 	</ul>
-<%@ include file="footer.jsp"%>
+<%@ include file="../footer.jsp"%>
