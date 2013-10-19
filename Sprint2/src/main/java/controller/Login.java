@@ -11,12 +11,12 @@ import javax.servlet.http.HttpServletResponse;
 import model.RankedHashtag;
 import model.User;
 import services.HashtagService;
-import services.UserService;
+import services.UserServiceAUX;
 
 @SuppressWarnings("serial")
 public class Login extends HttpServlet {
 
-	private UserService userService = UserService.getInstance();
+	private UserServiceAUX userService = UserServiceAUX.getInstance();
 	private HashtagService hashtagService = HashtagService.getInstance();
 
 	@Override

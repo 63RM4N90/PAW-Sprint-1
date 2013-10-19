@@ -7,12 +7,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import services.CommentService;
+import services.CommentServiceAUX;
 
 @SuppressWarnings("serial")
 public class Commentary extends HttpServlet {
 
-	private CommentService commentService = CommentService.getInstance();
+	private CommentServiceAUX commentService = CommentServiceAUX.getInstance();
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)

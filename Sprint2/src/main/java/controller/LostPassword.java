@@ -8,11 +8,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import model.User;
-import services.UserService;
+import services.UserServiceAUX;
 
 @SuppressWarnings("serial")
 public class LostPassword extends HttpServlet {
-	private UserService userService = UserService.getInstance();;
+	private UserServiceAUX userService = UserServiceAUX.getInstance();;
 	private static final int MAX_PASSWORD_LENGTH = 16;
 	private static final int MIN_PASSWORD_LENGTH = 8;
 

@@ -8,12 +8,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import model.User;
-import services.UserService;
+import services.UserServiceAUX;
 
 @SuppressWarnings("serial")
 public class Picture extends HttpServlet {
 	
-	private UserService userService = UserService.getInstance();
+	private UserServiceAUX userService = UserServiceAUX.getInstance();
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)

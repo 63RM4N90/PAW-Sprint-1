@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import model.Comment;
 import model.Hashtag;
-import services.CommentService;
+import services.CommentServiceAUX;
 import services.HashtagService;
 //import services.CommentService;
 //import services.UserService;
@@ -20,7 +20,7 @@ public class HashtagPage extends AbstractController {
 	// private CommentService commentService = CommentService.getInstance();
 	// private UserService userService = UserService.getInstance();
 	private HashtagService hashtagService = HashtagService.getInstance();
-	private CommentService commentService = CommentService.getInstance();
+	private CommentServiceAUX commentService = CommentServiceAUX.getInstance();
 
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {

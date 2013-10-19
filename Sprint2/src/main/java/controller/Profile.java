@@ -12,14 +12,14 @@ import javax.servlet.http.HttpSession;
 import model.Comment;
 import model.RankedHashtag;
 import model.User;
-import services.CommentService;
+import services.CommentServiceAUX;
 import services.HashtagService;
-import services.UserService;
+import services.UserServiceAUX;
 
 @SuppressWarnings("serial")
 public class Profile extends AbstractController {
-	private CommentService commentService = CommentService.getInstance();
-	private UserService userService = UserService.getInstance();
+	private CommentServiceAUX commentService = CommentServiceAUX.getInstance();
+	private UserServiceAUX userService = UserServiceAUX.getInstance();
 	private HashtagService hashtagService = HashtagService.getInstance();
 	private static final int MAX_COMMENT_LENGTH = 140;
 

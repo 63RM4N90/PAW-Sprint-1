@@ -9,12 +9,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import model.User;
-import services.UserService;
+import services.UserServiceAUX;
 
 @SuppressWarnings("serial")
 public class Search extends HttpServlet {
 
-	UserService userService = UserService.getInstance();
+	UserServiceAUX userService = UserServiceAUX.getInstance();
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)

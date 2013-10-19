@@ -14,12 +14,12 @@ import org.apache.commons.fileupload.DiskFileUpload;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 
-import services.UserService;
+import services.UserServiceAUX;
 
 @SuppressWarnings("serial")
 public class EditProfile extends FormController {
 
-	private UserService userService = UserService.getInstance();
+	private UserServiceAUX userService = UserServiceAUX.getInstance();
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)

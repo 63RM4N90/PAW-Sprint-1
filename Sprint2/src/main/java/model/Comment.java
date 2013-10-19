@@ -6,11 +6,13 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 @Entity
 public class Comment extends AbstractModel implements Comparable<Comment>{
+	
 	@OneToOne
 	@Column(nullable=false)
 	private User author;
@@ -18,7 +20,7 @@ public class Comment extends AbstractModel implements Comparable<Comment>{
 	private Date date;
 	@Column(nullable=false)
 	private String comment;
-	@OneToMany
+	@ManyToMany
 	@JoinColumn(name="com_id")
 	private List<Hashtag> hashtags;
 
