@@ -49,7 +49,7 @@ public class UserController {
 		if (s.getAttribute("userId") != null) {
 			mav.setViewName("redirect:profile");
 		}
-		showTopTenHashtags(mav);
+		//showTopTenHashtags(mav);
 		return mav;
 	}
 	
@@ -74,7 +74,7 @@ public class UserController {
 	public ModelAndView registration() {
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("userForm", new UserForm());
-		showTopTenHashtags(mav);
+		//showTopTenHashtags(mav);
 		return mav;
 	}
 
@@ -113,7 +113,7 @@ public class UserController {
 		User userSession = userService.getUser((String) session
 				.getAttribute("username"));
 
-		showTopTenHashtags(mav);
+		//showTopTenHashtags(mav);
 
 		if (profile == null) {
 			if (userSession != null) {

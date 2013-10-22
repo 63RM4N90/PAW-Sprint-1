@@ -4,30 +4,34 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 
-import org.hibernate.annotations.Entity;
-
 @Entity
-public class Comment extends AbstractModel implements Comparable<Comment>{
-	
+public class Comment implements Comparable<Comment> {
+
+	@Id
+	@GeneratedValue(strategy = javax.persistence.GenerationType.AUTO)
+	private Integer id;
 	@OneToOne
-	@Column(nullable=false)
 	private User author;
-	@Column(nullable=false)
+	@Column(nullable = false)
 	private Date date;
-	@Column(nullable=false)
+	@Column(nullable = false)
 	private String comment;
 	@ManyToMany
-	@JoinColumn(name="com_id")
+	@JoinColumn(name = "com_id")
 	private List<Hashtag> hashtags;
 
 	public Comment() {
 	}
-	
-	public Comment(User author, Date date, String comment, List<Hashtag> hashtags) {
+
+	public Comment(User author, Date date, String comment,
+			List<Hashtag> hashtags) {
 		this.author = author;
 		this.date = date;
 		this.comment = comment;
@@ -56,5 +60,13 @@ public class Comment extends AbstractModel implements Comparable<Comment>{
 
 	public int compareTo(Comment o) {
 		return date.compareTo(o.getDate());
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 }

@@ -3,16 +3,19 @@ package ar.edu.itba.it.paw.model;
 import java.util.Date;
 
 import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.persistence.OneToOne;
-
-import org.hibernate.annotations.Entity;
+import javax.persistence.Entity;
 
 @Entity
-public class Hashtag extends AbstractModel {
+public class Hashtag {
 	private String hashtag;
 	
+	@Id
+	@GeneratedValue(strategy = javax.persistence.GenerationType.AUTO)
+	private Integer id;
 	@OneToOne
-	@Column(nullable=false)
 	private User author;
 	@Column(nullable=false)
 	private Date date;
@@ -36,5 +39,13 @@ public class Hashtag extends AbstractModel {
 
 	public Date getDate() {
 		return date;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 }

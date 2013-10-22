@@ -3,16 +3,22 @@ package ar.edu.itba.it.paw.model;
 import java.util.Date;
 
 import javax.persistence.Column;
-
-import org.hibernate.annotations.Entity;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
-public class User extends AbstractModel {
+@Table(name="userss")
+public class User {
 	
 	public static final int MIN_USERNAME_LENGTH = 8;
 	public static final int MAX_USERNAME_LENGTH = 16;
 	public static final int MIN_PASSWORD_LENGTH = 8;
 	public static final int MAX_PASSWORD_LENGTH = 16;
+	@Id
+	@GeneratedValue(strategy = javax.persistence.GenerationType.AUTO)
+	private Integer id;
 	@Column(nullable=false)
 	private String name;
 	@Column(nullable=false)
@@ -55,7 +61,6 @@ public class User extends AbstractModel {
 					"The password must contain between " + MIN_USERNAME_LENGTH
 							+ " and " + MAX_USERNAME_LENGTH + " characters.");
 		}
-		setId(-1);
 		this.name = name;
 		this.surname = surname;
 		this.username = username;
@@ -141,5 +146,13 @@ public class User extends AbstractModel {
 
 	public Date getRegistrationDate() {
 		return registrationDate;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 }

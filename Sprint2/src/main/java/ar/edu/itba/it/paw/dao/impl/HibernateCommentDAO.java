@@ -12,7 +12,6 @@ import ar.edu.itba.it.paw.dao.CommentDAO;
 import ar.edu.itba.it.paw.model.Comment;
 import ar.edu.itba.it.paw.model.User;
 
-
 @Repository
 public class HibernateCommentDAO extends HibernateGenericDAO<Comment> implements CommentDAO {
 
@@ -39,11 +38,8 @@ public class HibernateCommentDAO extends HibernateGenericDAO<Comment> implements
 		return result;
 	}
 
-
 	@Override
 	public void removeComment(int commentId) {
 		// TODO Auto-generate method stub		
 	}
-
-
 }
