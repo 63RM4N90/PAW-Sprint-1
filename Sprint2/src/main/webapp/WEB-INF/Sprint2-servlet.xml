@@ -18,5 +18,8 @@
 
 	<!-- Beans relacionados con Spring MVC -->
 	<import resource="classpath:mvc.xml" />
+
+	<!-- Beans relacionados con Spring MVC -->
+	<import resource="classpath:data.xml" />
 	
 </beans>

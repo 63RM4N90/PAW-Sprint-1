@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.itba.it.paw.form.UserForm;
-import ar.edu.itba.it.paw.formValidators.PasswordRecoveryFormValidator;
 import ar.edu.itba.it.paw.formValidators.UserFormValidator;
 import ar.edu.itba.it.paw.model.Comment;
 import ar.edu.itba.it.paw.model.RankedHashtag;
@@ -193,9 +192,9 @@ public class UserController {
 		ModelAndView mav = new ModelAndView();
 		User u = userService.getUser(userToRecover);
 		mav.addObject("userSelected", true);
-		PasswordRecoveryFormValidator validator = new PasswordRecoveryFormValidator(
-				secretAnswerSubmited, newPassword, newPasswordConfirm,
-				userToRecover);
+//		PasswordRecoveryFormValidator validator = new PasswordRecoveryFormValidator(
+//				secretAnswerSubmited, newPassword, newPasswordConfirm,
+//				userToRecover);
 		// validator.validate(target, errors);
 		return mav;
 	}

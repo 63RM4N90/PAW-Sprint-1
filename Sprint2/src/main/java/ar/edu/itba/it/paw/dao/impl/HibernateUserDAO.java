@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import ar.edu.itba.it.paw.dao.UserDAO;
 import ar.edu.itba.it.paw.model.User;
-//@Repository
+@Repository
 public class HibernateUserDAO extends HibernateGenericDAO<User> implements
 		UserDAO {
 
