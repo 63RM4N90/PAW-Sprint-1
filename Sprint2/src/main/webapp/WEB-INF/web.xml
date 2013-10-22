@@ -5,6 +5,16 @@
 <web-app xmlns="http://java.sun.com/xml/ns/javaee" version="2.5">
 	<display-name>Archetype Created Web Application</display-name>
 	<servlet>
+		<servlet-name>Sprint2</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Sprint2</servlet-name>
+		<url-pattern>/bin/*</url-pattern>
+	</servlet-mapping>
+	<!-- <servlet>
 		<servlet-name>Registration</servlet-name>
 		<servlet-class>controller.Registration</servlet-class>
 	</servlet>
@@ -94,7 +104,7 @@
 	</servlet-mapping>
 	<filter>
 		<filter-name>authenticationFilter</filter-name>
-		<filter-class>database.AuthenticationFilter</filter-class>
+		<filter-class>filter.AuthenticationFilter</filter-class>
 	</filter>
 	<filter-mapping>
 		<filter-name>authenticationFilter</filter-name>
@@ -102,10 +112,10 @@
 	</filter-mapping>
 	<filter> 
         <filter-name>errorFilter</filter-name>
-        <filter-class>database.ErrorFilter</filter-class> 
+        <filter-class>filter.ErrorFilter</filter-class> 
     </filter>
     <filter-mapping>
         <filter-name>errorFilter</filter-name>
         <url-pattern>/*</url-pattern> 
-    </filter-mapping>
+    </filter-mapping>-->
 </web-app>

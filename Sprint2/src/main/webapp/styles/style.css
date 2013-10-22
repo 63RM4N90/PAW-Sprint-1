@@ -1,0 +1,370 @@
+html {
+	height: 100%;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	font-family: sans-serif;
+	background: url(../img/body_background.jpg);
+	height: 100%;
+}
+
+.top-bar {
+	width: 100%;
+	background: url(../img/topbar_background.png);
+	height: 45px;
+	box-shadow: 0px 10px 30px #000;
+}
+
+.top-bar-element {
+	display: inline-block;
+}
+
+.title img {
+	margin-top: 3px;
+}
+
+.title {
+	width: 30%;
+	float: left;
+}
+
+.session {
+	margin-right: 10px;
+	top: 0;
+	float: right;
+}
+
+.search-bar {
+	width: 40%;
+	margin-top: 3px;
+}
+
+.search-bar input[type="text"] {
+	height: 30px;
+	width: 400px;
+	vertical-align: middle;
+	font-size: 16px;
+	border: 2px solid #006600;
+	padding: 2px 10px;
+	background-color: #000;
+	color: #006600;
+	outline: none;
+}
+
+.form-field input[type="text"], .registration-form-field input[type="text"],  .form-field input[type="password"], .registration-form-field input[type="password"], .recover-form-field input[type="text"], .recover-form-field input[type="password"] {
+	height: 35px;
+	vertical-align: middle;
+	font-size: 16px;
+	float: right;
+	border: 2px solid #006600;
+	padding: 2px 10px;
+	background-color: #000;
+	color: #006600;
+	outline: none;
+}
+
+.button {
+	height: 33px;
+	border: 2px solid #006600;
+	background: black;
+	color: #006600;
+	min-width: 80px;
+}
+
+img.home {
+	margin-top: 5px;
+}
+
+.session img {
+	float: left;
+}
+
+.user-session {
+	display: inline-block;
+	margin-top: 5px;
+	position: relative;
+	float: right;
+}
+
+.user-session p{
+	margin: 0;
+	position: absolute;
+}
+
+a, a :visited {
+	color: #006600;
+}
+
+.login-column {
+	display: inline-block;
+	padding: 20px;
+}
+
+.column-1 {
+	width: 25%;
+	float: left;
+}
+
+.column-2 {
+	position: absolute;
+}
+
+.column-3 {
+	float: right;
+}
+
+
+.container {
+	height: 300px;
+	background: url(../img/container_background.png);
+	margin-top: 130px;
+	box-shadow: 0px 0px 50px #000;
+}
+
+h2 {
+    font-size: 35px;
+    color: #060;
+    font-weight: bold;
+    margin: 0;
+    margin-bottom: 20px;
+}
+
+.form-field {
+	width: 320px;
+	margin-bottom: 20px;
+	height: 30px;
+}
+
+.recover-form-field {
+	width: 450px;
+	margin-bottom: 20px;
+	height: 30px;
+}
+
+.registration-form-field {
+	width: 400px;
+	height: 30px;
+	display: inline-block;
+}
+
+.form-field label, .registration-form-field label, recover-form-field label { 
+	float: left;
+	font-size: 18px;
+	margin-top: 5px;
+}
+
+.form-field input, .registration-form-field input, recover-form-field input { 
+	float: right;
+}
+
+.notRegistered button { 
+	float: right;
+}
+
+.column-2 p {
+	font-size: 18px;
+}
+
+.login-elements {
+	margin-bottom: 30px;
+}
+
+.about-us {
+	text-align: center;
+	bottom: 0;
+	color: #ddd;
+	margin: 0 auto;
+}
+
+.vertical-container { 
+	width: 80%;
+	margin: 0 auto;
+	background: url(../img/container_background.png);
+	box-shadow: 0px 0px 100px #000;
+	height: 100%;
+	padding: 40px;
+}
+
+.profile-column {
+	display: inline-block;
+}
+
+.info-column {
+	float: left;
+	width: 20%;
+}
+
+.comments-column { 
+	width: 563px;
+}
+
+.hashtags-column {
+	float: right;
+	width: 30%;
+}
+
+.info-column img {
+	width: 200px;
+	border: 4px solid #000;
+}
+
+.comment-area {
+	width: 520px;
+	height: 100px;
+	font-family: sans-serif;
+	font-size: 16px;
+	background: #000;
+	color: #060;
+	border: 2px solid #060;
+	outline: none;
+	float: right;
+	margin-bottom: 10px;
+}
+
+.comment-creator-area { 
+	margin-bottom: 30px;
+}
+
+.form-area {
+	height: 120px;
+}
+
+.form-buttons .button {
+	float: left;
+}
+
+.form-buttons {
+	height: 50px;
+}
+
+ul {
+	margin: 0;
+}
+
+li {
+	list-style: none;
+}
+
+.comment {
+	padding: 10px;
+	background: rgba(0,102,0,0.6);
+	margin-bottom: 15px;
+	width: 500px;
+	border-radius: 15px;
+	border: 1px solid black;
+	position: relative;
+	min-height: 50px;
+}
+
+.comment-reference {
+	text-align: right;
+	font-size: 12px;
+	position: absolute;
+	bottom: 5px;
+	right: 10px;
+}
+
+h3 {
+	font-size: 35px;
+	color: #060;
+	font-weight: bold;
+	margin: 0;
+}
+
+h6 {
+	margin:5px 0;
+	font-size: 12px;
+	font-weight: normal;
+}
+
+h5 {
+	margin:0 10px;
+	color: #060;
+	font-size: 18px;
+	font-weight: normal;
+}
+
+.info-column p {
+	font-size: 14px;
+	margin: 0 10px;
+	font-weight: normal;
+	color: #060;
+}
+
+.user-info {
+	margin-bottom: 15px;
+}
+
+.comment p {
+ 	margin: 0;
+ }
+ 
+ form .recover {
+ 	float: left;
+ }
+ 
+ .recover-container {
+ 	position: relative;
+ 	width: 450px;
+ }
+ 
+ .recover-button {
+ 	position: absolute;
+	right: 120px;
+}
+
+a button.back-button {
+	position: absolute;
+	right: 0;
+}
+
+.user-register-button {
+	position: absolute;
+	right: 100px;
+}
+
+.comment-creator-area form input.profile-button {
+	float: right;
+}
+
+.home-link {
+	display: inline-block;
+	float: left;
+}
+
+li p {
+	margin: 0;
+}
+
+.top ul {
+	padding: 0;
+}
+
+.tag-info{
+	display: inline-block;
+	float: right;
+	font-size: 12px;
+}
+
+.tag-column {
+	float: right;
+}
+
+.error {
+font-size: 14px;
+display: inline-block;
+}
+
+.error span {
+color: red;
+background-color: rgba(255,0,0,0.2);
+padding: 10px;
+border-radius: 5px;
+vertical-align: bottom:
+}
+
+.field-wrapper {
+	margin-bottom: 20px;
+}
