@@ -6,10 +6,10 @@ import java.util.List;
 import java.util.TreeMap;
 
 import org.hibernate.Query;
+import org.hibernate.ScrollableResults;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.stereotype.Repository;
 
 import ar.edu.itba.it.paw.dao.HashtagDAO;
@@ -46,12 +46,30 @@ public class HibernateHashtagDAO extends HibernateGenericDAO<Hashtag> implements
 		TreeMap<Integer, ArrayList<Hashtag>> rank = new TreeMap<Integer, ArrayList<Hashtag>>();
 		
 		Session session = getSession();
-		Query query = session.createQuery("select hashtag,count(id) as rankfrom Comment c inner join c.hastags group by hashtag.hashtag order by"
+		Query query = session.createQuery("select hashtag,count(distinct c.id) as rankfrom Comment c inner join c.hastags group by hashtag.hashtag order by"
 				+ "rank");
 		
+		ScrollableResults results = query.scroll();
 		
+		ArrayList<Hashtag> aux;
 		
-		return null;
+		while(results.next()){
+			
+			Object[] row = results.get();
+			Hashtag hashtag = (Hashtag) row[0];
+			Integer ranking = results.getInteger(1);
+			
+			if (rank.containsKey(ranking)) {
+	                rank.get(ranking).add(hashtag);
+
+	        } else {
+	                aux = new ArrayList<Hashtag>();
+	                aux.add(hashtag);
+	                rank.put(ranking, aux);
+	        }
+		}		
+		
+		return rank;
 	}
 
 }

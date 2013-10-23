@@ -33,7 +33,7 @@ public class HibernateCommentDAO extends HibernateGenericDAO<Comment> implements
 	public List<Comment> getComments(User user) {
 		Session session = getSession();
 		Query query = session.createQuery("from Comment where author = ?");
-		query.setParameter(0, user.getUsername());
+		query.setParameter(0, user);
 		List<Comment> result = (List<Comment>)query.list();
 		return result;
 	}
