@@ -27,7 +27,7 @@ public class HibernateUserDAO extends HibernateGenericDAO<User> implements
 		Session session = getSession();
 		Transaction tx = session.beginTransaction();
 		Query query = session
-				.createQuery(" from Users where username = ? and password = ?");
+				.createQuery(" from User where username = ? and password = ?");
 		query.setParameter(0, username);
 		query.setParameter(1, password);
 		List<User> result = (List<User>) query.list();
@@ -39,8 +39,9 @@ public class HibernateUserDAO extends HibernateGenericDAO<User> implements
 	@Override
 	public User getUser(String username) {
 		Session session = getSession();
+		System.out.println("USERNAME = " + username + ".");
 		Transaction tx = session.beginTransaction(); 
-		Query query = session.createQuery(" from Users where username = ?");
+		Query query = session.createQuery(" from User where username = ?");
 		query.setParameter(0, username);
 		List<User> result = (List<User>) query.list();
 		tx.commit();
@@ -52,7 +53,7 @@ public class HibernateUserDAO extends HibernateGenericDAO<User> implements
 	public List<User> getUsersWithName(String name) {
 		Session session = getSession();
 		Transaction tx = session.beginTransaction();
-		Query query = session.createQuery(" from Users where username like '%"
+		Query query = session.createQuery(" from User where username like '%"
 				+ name + "%' or (name like '%" + name
 				+ "%') or (surname like '%" + name + "%')");
 		tx.commit();

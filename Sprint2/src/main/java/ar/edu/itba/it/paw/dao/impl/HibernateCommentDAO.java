@@ -5,6 +5,7 @@ import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -21,6 +22,7 @@ public class HibernateCommentDAO extends HibernateGenericDAO<Comment> implements
 	}
 	
 	@Override
+	@SuppressWarnings("unchecked")
 	public List<Comment> getComments(String hashtag) {
 		Session session = getSession();
 		Query query = session.createQuery("from Comment c inner join c.hashtags where c.hashtags = ?");
@@ -30,11 +32,14 @@ public class HibernateCommentDAO extends HibernateGenericDAO<Comment> implements
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public List<Comment> getComments(User user) {
 		Session session = getSession();
+		Transaction tx = session.beginTransaction();
 		Query query = session.createQuery("from Comment where author = ?");
-		query.setParameter(0, user.getUsername());
+		query.setParameter(0, user);
 		List<Comment> result = (List<Comment>)query.list();
+		tx.commit();
 		return result;
 	}
 

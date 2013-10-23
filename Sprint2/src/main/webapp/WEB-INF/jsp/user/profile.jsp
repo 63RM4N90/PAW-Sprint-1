@@ -54,7 +54,7 @@
 							<i>Created by: </i><a href="<c:url value="profile"><c:param name="user" value="${comment.author.username}" /></c:url>">${comment.author.username}</a> | 
 							<i><fmt:formatDate value="${comment.date}" pattern="dd-MM-yyyy HH:mm" /></i> | 
 							<c:if test="${isOwner}">
-								<a href="<c:url value="commentary"><c:param name="commentid" value="${comment.id}" /><c:param name="user" value="${comment.author.username}" /></c:url>">Delete</a>
+<%-- 								<a href="<c:url value="commentary"><c:param name="commentid" value="${comment.id}" /><c:param name="user" value="${comment.author.username}" /></c:url>">Delete</a> --%>
 							</c:if>
 						</div>
 					</div>

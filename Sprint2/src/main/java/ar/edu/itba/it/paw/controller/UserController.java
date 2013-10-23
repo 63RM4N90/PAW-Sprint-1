@@ -32,6 +32,7 @@ public class UserController {
 	private HashtagService hashtagService;
 	private CommentService commentService;
 	private UserFormValidator userFormValidator;
+	private static final int MAX_COMMENT_LENGTH = 140;
 
 	@Autowired
 	public UserController(UserService userService,
@@ -49,23 +50,23 @@ public class UserController {
 		if (s.getAttribute("userId") != null) {
 			mav.setViewName("redirect:profile");
 		}
-		//showTopTenHashtags(mav);
+		// showTopTenHashtags(mav);
 		return mav;
 	}
-	
+
 	@RequestMapping(method = RequestMethod.POST)
 	public ModelAndView login(
 			@RequestParam(value = "username", required = false) User user,
 			@RequestParam(value = "password", required = false) String password,
 			HttpSession session) {
 		ModelAndView mav = new ModelAndView();
-		if (user != null) {
+		if (user != null && user.getPassword().equals(password)) {
 			session.setAttribute("username", user.getUsername());
 			mav.setViewName("redirect:profile?user=" + user.getUsername());
 		} else {
 			// mav.addObject("username", username);
 			mav.addObject("error", "Invalid user or password.");
-			mav.setViewName("login");
+			mav.setViewName("user/login");
 		}
 		return mav;
 	}
@@ -74,7 +75,7 @@ public class UserController {
 	public ModelAndView registration() {
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("userForm", new UserForm());
-		//showTopTenHashtags(mav);
+		// showTopTenHashtags(mav);
 		return mav;
 	}
 
@@ -113,12 +114,12 @@ public class UserController {
 		User userSession = userService.getUser((String) session
 				.getAttribute("username"));
 
-		//showTopTenHashtags(mav);
+		// showTopTenHashtags(mav);
 
 		if (profile == null) {
 			if (userSession != null) {
 				if (period == null) {
-					period = 30;					
+					period = 30;
 				}
 				mav.setViewName("redirect:profile?user="
 						+ userSession.getUsername() + "&period=" + period);
@@ -139,7 +140,31 @@ public class UserController {
 			}
 			mav.addObject("comments", comments);
 		}
-		
+
+		return mav;
+	}
+
+	@RequestMapping(method = RequestMethod.POST)
+	public ModelAndView profile(
+			@RequestParam(value = "comment", required = false) Comment comment,
+			@RequestParam(value = "period", required = false) String period,
+			HttpSession session) {
+		ModelAndView mav = new ModelAndView();
+		List<RankedHashtag> top10;
+
+		if (period == null) {
+			//top10 = hashtagService.topHashtags(30);
+		} else {
+			//top10 = hashtagService.topHashtags(Integer.valueOf(period));
+		}
+
+		//mav.addObject("ranking", top10);
+		User user = (User) session.getAttribute("user");
+		if (comment.getComment().length() > 0
+				&& comment.getComment().length() < MAX_COMMENT_LENGTH) {
+			commentService.save(comment);
+		}
+		mav.setViewName("redirect:profile?user=" + user.getUsername());
 		return mav;
 	}
 
@@ -190,11 +215,13 @@ public class UserController {
 			@RequestParam(value = "confirm", required = false) String newPasswordConfirm,
 			@RequestParam(value = "userToRecover", required = false) String userToRecover) {
 		ModelAndView mav = new ModelAndView();
-		User u = userService.getUser(userToRecover);
-		mav.addObject("userSelected", true);
-//		PasswordRecoveryFormValidator validator = new PasswordRecoveryFormValidator(
-//				secretAnswerSubmited, newPassword, newPasswordConfirm,
-//				userToRecover);
+		System.out.println("HOLAAAAA");
+		// User u = userService.getUser(userToRecover);
+		// mav.addObject("userSelected", true);
+		// PasswordRecoveryFormValidator validator = new
+		// PasswordRecoveryFormValidator(
+		// secretAnswerSubmited, newPassword, newPasswordConfirm,
+		// userToRecover);
 		// validator.validate(target, errors);
 		return mav;
 	}
