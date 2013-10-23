@@ -39,6 +39,7 @@ public class HibernateUserDAO extends HibernateGenericDAO<User> implements
 	@Override
 	public User getUser(String username) {
 		Session session = getSession();
+		System.out.println("USERNAME = " + username + ".");
 		Transaction tx = session.beginTransaction(); 
 		Query query = session.createQuery(" from User where username = ?");
 		query.setParameter(0, username);

@@ -5,18 +5,13 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 
 @Entity
-public class Comment implements Comparable<Comment> {
+public class Comment extends PersistentEntity implements Comparable<Comment> {
 
-	@Id
-	@GeneratedValue(strategy = javax.persistence.GenerationType.AUTO)
-	private Integer id;
 	@OneToOne
 	private User author;
 	@Column(nullable = false)
@@ -60,13 +55,5 @@ public class Comment implements Comparable<Comment> {
 
 	public int compareTo(Comment o) {
 		return date.compareTo(o.getDate());
-	}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
 	}
 }
