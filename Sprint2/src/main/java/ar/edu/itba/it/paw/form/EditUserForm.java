@@ -2,7 +2,7 @@ package ar.edu.itba.it.paw.form;
 
 import java.util.Date;
 
-import ar.edu.itba.it.paw.model.User;
+import ar.edu.itba.it.paw.domain.User;
 
 public class EditUserForm {
 

@@ -8,8 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
-import ar.edu.itba.it.paw.model.Comment;
-import ar.edu.itba.it.paw.model.User;
+import ar.edu.itba.it.paw.domain.Comment;
+import ar.edu.itba.it.paw.domain.User;
 import ar.edu.itba.it.paw.services.CommentService;
 import ar.edu.itba.it.paw.services.UserService;
 

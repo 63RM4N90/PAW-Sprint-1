@@ -2,8 +2,8 @@ package ar.edu.itba.it.paw.services;
 
 import java.util.LinkedList;
 
-import ar.edu.itba.it.paw.model.Hashtag;
-import ar.edu.itba.it.paw.model.RankedHashtag;
+import ar.edu.itba.it.paw.domain.Hashtag;
+import ar.edu.itba.it.paw.domain.RankedHashtag;
 
 public interface HashtagService {
 

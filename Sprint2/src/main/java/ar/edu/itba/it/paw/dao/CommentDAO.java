@@ -2,8 +2,8 @@ package ar.edu.itba.it.paw.dao;
 
 import java.util.List;
 
-import ar.edu.itba.it.paw.model.Comment;
-import ar.edu.itba.it.paw.model.User;
+import ar.edu.itba.it.paw.domain.Comment;
+import ar.edu.itba.it.paw.domain.User;
 
 public interface CommentDAO extends GenericDAO<Comment>{
 	

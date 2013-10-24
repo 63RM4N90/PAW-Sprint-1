@@ -1,4 +1,4 @@
-package ar.edu.itba.it.paw.dao.impl;
+package ar.edu.itba.it.paw.domain;
 
 import java.util.List;
 
@@ -6,23 +6,16 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 
-import ar.edu.itba.it.paw.dao.UserDAO;
-import ar.edu.itba.it.paw.domain.User;
+public class HibernateUserRepo extends AbstractHibernateRepo implements
+		UserRepo {
 
-@Repository
-public class HibernateUserDAO extends HibernateGenericDAO<User> implements
-		UserDAO {
-
-	@Autowired
-	public HibernateUserDAO(SessionFactory sessionFactory) {
-		super.setSessionFactory(sessionFactory);
+	public HibernateUserRepo(SessionFactory sessionFactory) {
+		super(sessionFactory);
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
+	@SuppressWarnings("unchecked")
 	public User authenticate(String username, String password) {
 		Session session = getSession();
 		Transaction tx = session.beginTransaction();
@@ -35,12 +28,12 @@ public class HibernateUserDAO extends HibernateGenericDAO<User> implements
 		return result.size() > 0 ? result.get(0) : null;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
+	@SuppressWarnings("unchecked")
 	public User getUser(String username) {
 		Session session = getSession();
 		System.out.println("USERNAME = " + username + ".");
-		Transaction tx = session.beginTransaction(); 
+		Transaction tx = session.beginTransaction();
 		Query query = session.createQuery(" from User where username = ?");
 		query.setParameter(0, username);
 		List<User> result = (List<User>) query.list();
@@ -48,8 +41,8 @@ public class HibernateUserDAO extends HibernateGenericDAO<User> implements
 		return result.size() > 0 ? result.get(0) : null;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
+	@SuppressWarnings("unchecked")
 	public List<User> getUsersWithName(String name) {
 		Session session = getSession();
 		Transaction tx = session.beginTransaction();
@@ -59,4 +52,5 @@ public class HibernateUserDAO extends HibernateGenericDAO<User> implements
 		tx.commit();
 		return (List<User>) query.list();
 	}
+
 }

@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
-import ar.edu.itba.it.paw.model.Hashtag;
+import ar.edu.itba.it.paw.domain.Hashtag;
 import ar.edu.itba.it.paw.services.HashtagService;
 
 @Component

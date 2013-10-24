@@ -9,12 +9,11 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.stereotype.Repository;
 
 import ar.edu.itba.it.paw.dao.HashtagDAO;
-import ar.edu.itba.it.paw.model.Comment;
-import ar.edu.itba.it.paw.model.Hashtag;
+import ar.edu.itba.it.paw.domain.Comment;
+import ar.edu.itba.it.paw.domain.Hashtag;
 
 @Repository
 public class HibernateHashtagDAO extends HibernateGenericDAO<Hashtag> implements HashtagDAO {
@@ -25,6 +24,7 @@ public class HibernateHashtagDAO extends HibernateGenericDAO<Hashtag> implements
 	}
 	
 	@Override
+	@SuppressWarnings("unchecked")
 	public Hashtag getHashtag(String hashtag) {
 		Session session = getSession();
 		Query query = session.createQuery("from Hashtag where hashtag = ?");

@@ -11,8 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ar.edu.itba.it.paw.dao.HashtagDAO;
-import ar.edu.itba.it.paw.model.Hashtag;
-import ar.edu.itba.it.paw.model.RankedHashtag;
+import ar.edu.itba.it.paw.domain.Hashtag;
+import ar.edu.itba.it.paw.domain.RankedHashtag;
 
 
 @Service

@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ar.edu.itba.it.paw.dao.UserDAO;
-import ar.edu.itba.it.paw.model.User;
+import ar.edu.itba.it.paw.domain.User;
 
 
 @Service

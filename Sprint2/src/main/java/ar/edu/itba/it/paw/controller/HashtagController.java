@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import ar.edu.itba.it.paw.model.Comment;
-import ar.edu.itba.it.paw.model.Hashtag;
+import ar.edu.itba.it.paw.domain.Comment;
+import ar.edu.itba.it.paw.domain.Hashtag;
 import ar.edu.itba.it.paw.services.CommentService;
 
 @Controller

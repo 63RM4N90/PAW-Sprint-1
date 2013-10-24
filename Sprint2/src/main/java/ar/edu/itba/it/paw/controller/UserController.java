@@ -16,11 +16,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import ar.edu.itba.it.paw.domain.Comment;
+import ar.edu.itba.it.paw.domain.RankedHashtag;
+import ar.edu.itba.it.paw.domain.User;
 import ar.edu.itba.it.paw.form.UserForm;
 import ar.edu.itba.it.paw.formValidators.UserFormValidator;
-import ar.edu.itba.it.paw.model.Comment;
-import ar.edu.itba.it.paw.model.RankedHashtag;
-import ar.edu.itba.it.paw.model.User;
 import ar.edu.itba.it.paw.services.CommentService;
 import ar.edu.itba.it.paw.services.HashtagService;
 import ar.edu.itba.it.paw.services.UserService;

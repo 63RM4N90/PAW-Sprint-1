@@ -1,4 +1,4 @@
-package ar.edu.itba.it.paw.model;
+package ar.edu.itba.it.paw.domain;
 
 import java.util.Date;
 import java.util.List;

@@ -10,8 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import ar.edu.itba.it.paw.dao.CommentDAO;
-import ar.edu.itba.it.paw.model.Comment;
-import ar.edu.itba.it.paw.model.User;
+import ar.edu.itba.it.paw.domain.Comment;
+import ar.edu.itba.it.paw.domain.User;
 
 @Repository
 public class HibernateCommentDAO extends HibernateGenericDAO<Comment> implements CommentDAO {

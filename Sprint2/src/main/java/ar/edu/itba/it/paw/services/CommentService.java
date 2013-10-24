@@ -2,9 +2,9 @@ package ar.edu.itba.it.paw.services;
 
 import java.util.List;
 
-import ar.edu.itba.it.paw.model.Comment;
-import ar.edu.itba.it.paw.model.Hashtag;
-import ar.edu.itba.it.paw.model.User;
+import ar.edu.itba.it.paw.domain.Comment;
+import ar.edu.itba.it.paw.domain.Hashtag;
+import ar.edu.itba.it.paw.domain.User;
 
 public interface CommentService {
 	
@@ -14,7 +14,6 @@ public interface CommentService {
 	
 	public List<Comment> getComments(User user);
 	
-	public List<Comment> getComments(String hashtag);	
-
+	public List<Comment> getComments(String hashtag);
 }
 

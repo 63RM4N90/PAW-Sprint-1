@@ -5,8 +5,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.TreeMap;
 
-import ar.edu.itba.it.paw.model.Comment;
-import ar.edu.itba.it.paw.model.Hashtag;
+import ar.edu.itba.it.paw.domain.Comment;
+import ar.edu.itba.it.paw.domain.Hashtag;
 
 public interface HashtagDAO extends GenericDAO<Hashtag>{
 

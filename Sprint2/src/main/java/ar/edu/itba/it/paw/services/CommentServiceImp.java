@@ -13,9 +13,9 @@ import org.springframework.stereotype.Service;
 
 import ar.edu.itba.it.paw.dao.CommentDAO;
 import ar.edu.itba.it.paw.dao.HashtagDAO;
-import ar.edu.itba.it.paw.model.Comment;
-import ar.edu.itba.it.paw.model.Hashtag;
-import ar.edu.itba.it.paw.model.User;
+import ar.edu.itba.it.paw.domain.Comment;
+import ar.edu.itba.it.paw.domain.Hashtag;
+import ar.edu.itba.it.paw.domain.User;
 
 @Service
 public class CommentServiceImp implements CommentService {

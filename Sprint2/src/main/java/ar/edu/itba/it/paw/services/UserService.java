@@ -2,7 +2,7 @@ package ar.edu.itba.it.paw.services;
 
 import java.util.List;
 
-import ar.edu.itba.it.paw.model.User;
+import ar.edu.itba.it.paw.domain.User;
 
 public interface UserService {
 
