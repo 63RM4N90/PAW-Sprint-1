@@ -59,9 +59,7 @@ public class HibernateGenericDAO<T> implements GenericDAO<T> {
 	@Override
 	public T store(T obj) {
 		Session session = getSession();
-		Transaction tx = session.beginTransaction();
 		session.save(obj);
-		tx.commit();
 		return obj;
 	}
 }

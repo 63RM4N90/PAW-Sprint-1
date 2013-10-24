@@ -35,11 +35,9 @@ public class HibernateCommentDAO extends HibernateGenericDAO<Comment> implements
 	@SuppressWarnings("unchecked")
 	public List<Comment> getComments(User user) {
 		Session session = getSession();
-		Transaction tx = session.beginTransaction();
 		Query query = session.createQuery("from Comment where author = ?");
 		query.setParameter(0, user);
 		List<Comment> result = (List<Comment>)query.list();
-		tx.commit();
 		return result;
 	}
 

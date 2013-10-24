@@ -11,7 +11,7 @@ public class PersistentEntity {
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 	
-	public int getIdentifier() {
+	public int getId() {
 		return id;
 	}
 	

@@ -109,8 +109,16 @@ public class UserController {
 	public ModelAndView profile(
 			@RequestParam(value = "user", required = false) User profile,
 			@RequestParam(value = "period", required = false) Integer period,
+			@RequestParam(value = "commentid", required = false) Comment comment,
 			HttpSession session) {
 		ModelAndView mav = new ModelAndView();
+		
+        if (comment != null) {
+                commentRepository.delete(comment);
+                mav.setViewName("user/login");
+                return mav;
+        }
+
 		User userSession = userService.getUser((String) session
 				.getAttribute("username"));
 
@@ -135,8 +143,8 @@ public class UserController {
 			session.setAttribute("user", profile);
 			mav.addObject("isEmptyPicture", profile.getPicture() == null);
 			List<Comment> comments = commentService.getComments(profile);
-			for (Comment comment : comments) {
-				comment.setComment(getProcessedComment(comment.getComment()));
+			for (Comment commentt : comments) {
+				comment.setComment(getProcessedComment(commentt.getComment()));
 			}
 			mav.addObject("comments", comments);
 		}
@@ -302,16 +310,16 @@ public class UserController {
 		mav.addObject("description", original.getDescription());
 	}
 
-	private void fillInputs(String name, String surname, String username,
-			String description, String secretQuestion, String secretAnswer,
-			ModelAndView mav) {
-		mav.addObject("name", name);
-		mav.addObject("surname", surname);
-		mav.addObject("username", username);
-		mav.addObject("password", "");
-		mav.addObject("confirm", "");
-		mav.addObject("description", description);
-		mav.addObject("secretQuestion", secretQuestion);
-		mav.addObject("secretAnswer", secretAnswer);
-	}
+//	private void fillInputs(String name, String surname, String username,
+//			String description, String secretQuestion, String secretAnswer,
+//			ModelAndView mav) {
+//		mav.addObject("name", name);
+//		mav.addObject("surname", surname);
+//		mav.addObject("username", username);
+//		mav.addObject("password", "");
+//		mav.addObject("confirm", "");
+//		mav.addObject("description", description);
+//		mav.addObject("secretQuestion", secretQuestion);
+//		mav.addObject("secretAnswer", secretAnswer);
+//	}
 }
