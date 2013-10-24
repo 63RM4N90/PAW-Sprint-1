@@ -43,7 +43,7 @@
 					<div class="form-area">
 						<textarea class="comment-area" rows="5" cols="40"
 							placeholder="you have 140 characters to write down your sins..."
-							name="comment" maxlength="140"></textarea>
+							name="comment"></textarea>
 					</div>
 					<div class="form-buttons">
 						<input type="submit" class="button profile-button" name="submit"

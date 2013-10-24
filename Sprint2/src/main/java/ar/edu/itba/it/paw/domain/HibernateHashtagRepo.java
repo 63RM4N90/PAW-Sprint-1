@@ -11,11 +11,14 @@ import org.hibernate.Query;
 import org.hibernate.ScrollableResults;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class HibernateHashtagRepo extends AbstractHibernateRepo implements
 		HashtagRepo {
 
+	@Autowired
 	public HibernateHashtagRepo(SessionFactory sessionFactory) {
 		super(sessionFactory);
 	}
@@ -65,19 +68,17 @@ public class HibernateHashtagRepo extends AbstractHibernateRepo implements
 		TreeMap<Integer, ArrayList<Hashtag>> rank = new TreeMap<Integer, ArrayList<Hashtag>>();
 
 		Session session = getSession();
-		Transaction tx = session.beginTransaction();
 		Query query = session
-				.createQuery("select c.hashtags.hashtag, count(distinct com_id) as rank from Comment c join c.hastags group by c.hashtags.hashtag order by rank");
+				.createQuery("select h,count(distinct c) from Comment c inner join c.hashtags h group by h order by count(distinct c)");
 
 		ScrollableResults results = query.scroll();
-		tx.commit();
 
 		ArrayList<Hashtag> aux;
 
 		while (results.next()) {
 			Object[] row = results.get();
 			Hashtag hashtag = (Hashtag) row[0];
-			Integer ranking = results.getInteger(1);
+			Integer ranking = ((Long) row[1]).intValue();
 
 			if (rank.containsKey(ranking)) {
 				rank.get(ranking).add(hashtag);

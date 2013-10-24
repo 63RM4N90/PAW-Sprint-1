@@ -14,26 +14,23 @@
 		<%-- 		enctype="multipart/form-data"> --%>
 		<div class="registration-form-field">
 			<label for="name">Name:</label>
-			<form:input type="text" name="name" path="name" maxlength=32 />
+			<form:input type="text" name="name" path="name" />
 		</div>
 		<div class="registration-form-field">
 			<label for="surname">Surname:</label>
-			<form:input type="text" name="surname" path="surname" maxlength=32 />
+			<form:input type="text" name="surname" path="surname" />
 		</div>
 		<div class="registration-form-field">
 			<label for="password">Password:</label>
-			<form:input type="password" name="password" path="password"
-				maxlength=16 />
+			<form:input type="password" name="password" path="password" />
 		</div>
 		<div class="registration-form-field">
 			<label for="confirm">Confirm password:</label>
-			<form:input type="password" name="confirm" path="confirm"
-				maxlength=16 />
+			<form:input type="password" name="confirm" path="confirm" />
 		</div>
 		<div class="registration-form-field">
 			<label for="description">Description:</label>
-			<form:input type="text" name="description" path="description"
-				maxlength=140 />
+			<form:input type="text" name="description" path="description" />
 		</div>
 		<!-- 		<div class="registration-form-field"> -->
 		<!-- 			<label for="picture">Picture:</label> -->
