@@ -39,11 +39,11 @@ public class HibernateCommentRepo extends AbstractHibernateRepo implements
 	}
 
 	@Override
-	public List<Hashtag> getHashtagList(Comment comment) {
+	public List<Hashtag> getHashtagList(String comment, User author) {
 		List<Hashtag> ans = new ArrayList<Hashtag>();
 		String patternStr = "#([A-Za-z0-9_]+)";
 		Pattern pattern = Pattern.compile(patternStr);
-		Matcher matcher = pattern.matcher(comment.getComment());
+		Matcher matcher = pattern.matcher(comment);
 		String result = "";
 
 		while (matcher.find()) {
@@ -51,7 +51,7 @@ public class HibernateCommentRepo extends AbstractHibernateRepo implements
 			String hashtag = result.substring(1);
 			Hashtag tag = hibernateHashtagRepo.getHashtag(hashtag);
 			if (tag == null) {
-				tag = new Hashtag(hashtag, comment.getAuthor(), new Date());
+				tag = new Hashtag(hashtag, author, new Date());
 				hibernateHashtagRepo.save(tag);
 			}
 			ans.add(tag);

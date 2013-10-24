@@ -7,7 +7,7 @@ import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.hibernate.classic.Session;
 
-public class AbstractHibernateRepo {
+public class AbstractHibernateRepo implements HibernateRepo {
 	private final SessionFactory sessionFactory;
 
 	public AbstractHibernateRepo(SessionFactory sessionFactory) {

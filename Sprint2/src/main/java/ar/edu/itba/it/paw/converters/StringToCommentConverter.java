@@ -9,31 +9,31 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 import ar.edu.itba.it.paw.domain.Comment;
+import ar.edu.itba.it.paw.domain.CommentRepo;
 import ar.edu.itba.it.paw.domain.User;
-import ar.edu.itba.it.paw.services.CommentService;
-import ar.edu.itba.it.paw.services.UserService;
+import ar.edu.itba.it.paw.domain.UserRepo;
 
 @Component
 public class StringToCommentConverter implements Converter<String, Comment> {
 
 	private HttpSession session;
-	private UserService userService;
-	private CommentService commentService;
+	private UserRepo userRepo;
+	private CommentRepo commentRepo;
 
 	@Autowired
-	public StringToCommentConverter(UserService userService,
-			CommentService commentService, HttpSession session) {
+	public StringToCommentConverter(UserRepo userService,
+			CommentRepo commentService, HttpSession session) {
 		this.session = session;
-		this.userService = userService;
-		this.commentService = commentService;
+		this.userRepo = userService;
+		this.commentRepo = commentService;
 	}
 
 	@Override
 	public Comment convert(String arg0) {
-		User author = userService.getUser((String) session
+		User author = userRepo.getUser((String) session
 				.getAttribute("username"));
 		return new Comment(author, new Date(), arg0,
-				commentService.getHashtagList(arg0, author));
+				commentRepo.getHashtagList(arg0, author));
 	}
 
 }

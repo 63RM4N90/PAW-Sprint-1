@@ -10,31 +10,32 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.itba.it.paw.domain.User;
-import ar.edu.itba.it.paw.services.UserService;
+import ar.edu.itba.it.paw.domain.UserRepo;
 
 @Controller
 public class SearchController {
 
-	UserService userService;
-	
+	UserRepo userRepo;
+
 	@Autowired
-	public SearchController(UserService userService) {
-		this.userService = userService;
+	public SearchController(UserRepo userService) {
+		this.userRepo = userService;
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView results() {
 		ModelAndView mav = new ModelAndView();
 		return mav;
 	}
-	
+
 	@RequestMapping(method = RequestMethod.POST)
-	public ModelAndView results(@RequestParam(value = "search", required = false) String search) {
+	public ModelAndView results(
+			@RequestParam(value = "search", required = false) String search) {
 		ModelAndView mav = new ModelAndView();
 		if (search == null) {
 			search = " ";
 		}
-		List<User> users = userService.getUsersWithName(search);
+		List<User> users = userRepo.getUsersWithName(search);
 		mav.addObject("users", users);
 		mav.addObject("search", search);
 		return mav;

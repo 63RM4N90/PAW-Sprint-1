@@ -2,7 +2,7 @@ package ar.edu.itba.it.paw.domain;
 
 import java.util.List;
 
-public interface UserRepo {
+public interface UserRepo extends HibernateRepo {
 	
 	public User authenticate(String username, String password);
 

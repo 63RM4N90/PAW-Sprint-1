@@ -12,17 +12,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.itba.it.paw.domain.Comment;
+import ar.edu.itba.it.paw.domain.CommentRepo;
 import ar.edu.itba.it.paw.domain.Hashtag;
-import ar.edu.itba.it.paw.services.CommentService;
 
 @Controller
 public class HashtagController {
 
-	private CommentService commentService;
+	private CommentRepo commentRepo;
 
 	@Autowired
-	public HashtagController(CommentService commentService) {
-		this.commentService = commentService;
+	public HashtagController(CommentRepo commentService) {
+		this.commentRepo = commentService;
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
@@ -31,7 +31,7 @@ public class HashtagController {
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("user", hashtag.getAuthor());
 		mav.addObject("tag", hashtag);
-		List<Comment> comments = commentService.getComments(hashtag
+		List<Comment> comments = commentRepo.getComments(hashtag
 				.getHashtag());
 		for (Comment comment : comments) {
 			comment.setComment(getProcessedComment(comment.getComment()));

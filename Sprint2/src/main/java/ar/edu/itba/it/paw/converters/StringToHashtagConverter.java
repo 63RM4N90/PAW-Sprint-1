@@ -5,20 +5,20 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 import ar.edu.itba.it.paw.domain.Hashtag;
-import ar.edu.itba.it.paw.services.HashtagService;
+import ar.edu.itba.it.paw.domain.HashtagRepo;
 
 @Component
 public class StringToHashtagConverter implements Converter<String, Hashtag> {
 
-	private HashtagService hashtagService;
-	
+	private HashtagRepo hashtagRepo;
+
 	@Autowired
-	public StringToHashtagConverter(HashtagService hashtagService) {
-		this.hashtagService = hashtagService;
+	public StringToHashtagConverter(HashtagRepo hashtagService) {
+		this.hashtagRepo = hashtagService;
 	}
 
 	@Override
 	public Hashtag convert(String hashtag) {
-		return hashtagService.getHashtag(hashtag);
+		return hashtagRepo.getHashtag(hashtag);
 	}
 }

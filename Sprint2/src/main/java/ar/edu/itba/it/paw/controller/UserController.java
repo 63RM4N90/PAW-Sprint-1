@@ -17,30 +17,30 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.itba.it.paw.domain.Comment;
+import ar.edu.itba.it.paw.domain.CommentRepo;
+import ar.edu.itba.it.paw.domain.HashtagRepo;
 import ar.edu.itba.it.paw.domain.RankedHashtag;
 import ar.edu.itba.it.paw.domain.User;
+import ar.edu.itba.it.paw.domain.UserRepo;
 import ar.edu.itba.it.paw.form.UserForm;
 import ar.edu.itba.it.paw.formValidators.UserFormValidator;
-import ar.edu.itba.it.paw.services.CommentService;
-import ar.edu.itba.it.paw.services.HashtagService;
-import ar.edu.itba.it.paw.services.UserService;
 
 @Controller
 public class UserController {
 
-	private UserService userService;
-	private HashtagService hashtagService;
-	private CommentService commentService;
+	private UserRepo userRepo;
+	private HashtagRepo hastagRepo;
+	private CommentRepo commentRepo;
 	private UserFormValidator userFormValidator;
 	private static final int MAX_COMMENT_LENGTH = 140;
 
 	@Autowired
-	public UserController(UserService userService,
-			HashtagService hashtagService, CommentService commentService,
+	public UserController(UserRepo userService,
+			HashtagRepo hashtagService, CommentRepo commentService,
 			UserFormValidator userFormValidator) {
-		this.userService = userService;
-		this.hashtagService = hashtagService;
-		this.commentService = commentService;
+		this.userRepo = userService;
+		this.hastagRepo = hashtagService;
+		this.commentRepo = commentService;
 		this.userFormValidator = userFormValidator;
 	}
 
@@ -95,7 +95,7 @@ public class UserController {
 		}
 
 		try {
-			userService.save(userForm.build());
+			userRepo.save(userForm.build());
 		} catch (Exception e) {
 			errors.rejectValue("username", "duplicated");
 			return null;
@@ -111,7 +111,7 @@ public class UserController {
 			@RequestParam(value = "period", required = false) Integer period,
 			HttpSession session) {
 		ModelAndView mav = new ModelAndView();
-		User userSession = userService.getUser((String) session
+		User userSession = userRepo.getUser((String) session
 				.getAttribute("username"));
 
 		// showTopTenHashtags(mav);
@@ -134,7 +134,7 @@ public class UserController {
 			}
 			session.setAttribute("user", profile);
 			mav.addObject("isEmptyPicture", profile.getPicture() == null);
-			List<Comment> comments = commentService.getComments(profile);
+			List<Comment> comments = commentRepo.getComments(profile);
 			for (Comment comment : comments) {
 				comment.setComment(getProcessedComment(comment.getComment()));
 			}
@@ -162,7 +162,7 @@ public class UserController {
 		User user = (User) session.getAttribute("user");
 		if (comment.getComment().length() > 0
 				&& comment.getComment().length() < MAX_COMMENT_LENGTH) {
-			commentService.save(comment);
+			commentRepo.save(comment);
 		}
 		mav.setViewName("redirect:profile?user=" + user.getUsername());
 		return mav;
@@ -172,7 +172,7 @@ public class UserController {
 	public ModelAndView editProfile(HttpSession session) {
 		ModelAndView mav = new ModelAndView();
 		String username = (String) session.getAttribute("username");
-		User userSession = userService.getUser(username);
+		User userSession = userRepo.getUser(username);
 		mav.addObject("sessionUser", userSession);
 		setDefaults(mav, userSession);
 		return mav;
@@ -185,7 +185,7 @@ public class UserController {
 		User user = null;
 		if (username != null) {
 			if (username != "") {
-				user = userService.getUser(username);
+				user = userRepo.getUser(username);
 			} else {
 				user = new User("", "", "", "", "", null, "", "", null);
 			}
@@ -252,9 +252,9 @@ public class UserController {
 		List<RankedHashtag> top10;
 
 		if (mav.getModel().get("period") == null) {
-			top10 = hashtagService.topHashtags(30);
+			top10 = hastagRepo.topHashtags(30);
 		} else {
-			top10 = hashtagService.topHashtags(Integer.valueOf((String) mav
+			top10 = hastagRepo.topHashtags(Integer.valueOf((String) mav
 					.getModel().get("period")));
 		}
 
