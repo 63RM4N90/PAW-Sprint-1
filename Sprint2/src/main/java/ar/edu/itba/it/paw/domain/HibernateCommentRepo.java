@@ -15,12 +15,15 @@ public class HibernateCommentRepo extends AbstractHibernateRepo implements
 		CommentRepo {
 
 	private HibernateHashtagRepo hibernateHashtagRepo;
+	private HibernateUserRepo hibernateUserRepo;
 
 	@Autowired
 	public HibernateCommentRepo(SessionFactory sessionFactory,
-			HibernateHashtagRepo hibernateHashtagRepo) {
+			HibernateHashtagRepo hibernateHashtagRepo,
+			HibernateUserRepo hibernateUserRepo) {
 		super(sessionFactory);
 		this.hibernateHashtagRepo = hibernateHashtagRepo;
+		this.hibernateUserRepo = hibernateUserRepo;
 	}
 
 	@Override
@@ -55,6 +58,27 @@ public class HibernateCommentRepo extends AbstractHibernateRepo implements
 				hibernateHashtagRepo.save(tag);
 			}
 			ans.add(tag);
+		}
+
+		return ans;
+	}
+
+	@Override
+	public List<User> getReferences(String comment) {
+		List<User> ans = new ArrayList<User>();
+		String patternStr = "(?:\\s|\\A)[@]+([A-Za-z0-9-_]+)";
+		Pattern pattern = Pattern.compile(patternStr);
+		Matcher matcher = pattern.matcher(comment);
+		String result = "";
+		pattern = Pattern.compile(patternStr);
+		matcher = pattern.matcher(comment);
+		while (matcher.find()) {
+			result = matcher.group();
+			result = result.replace(" ", "");
+			ans.add(hibernateUserRepo.getUser(result));
+			String userHTML = "<a href='http://twitter.com/${rawName}'>"
+					+ result + "</a>";
+			comment = comment.replace(result, userHTML);
 		}
 		return ans;
 	}

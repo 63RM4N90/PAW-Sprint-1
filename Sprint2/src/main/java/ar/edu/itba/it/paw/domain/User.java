@@ -1,9 +1,11 @@
 package ar.edu.itba.it.paw.domain;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -30,6 +32,8 @@ public class User extends PersistentEntity {
 	private String secretAnswer;
 	@Column(nullable=false)
 	private Date registrationDate;
+	@ManyToMany
+	private List<User> following;
 
 	User() {
 	}
@@ -65,6 +69,14 @@ public class User extends PersistentEntity {
 		this.secretQuestion = secretQuestion;
 		this.secretAnswer = secretAnswer;
 		this.registrationDate = registrationDate;
+	}
+	
+	public void follow(User user) {
+		following.add(user);
+	}
+	
+	public void unfollow(User user) {
+		following.remove(user);
 	}
 	
 	public void setUsername(String username) {

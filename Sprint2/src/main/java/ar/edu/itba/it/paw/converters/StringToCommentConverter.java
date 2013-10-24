@@ -29,11 +29,11 @@ public class StringToCommentConverter implements Converter<String, Comment> {
 	}
 
 	@Override
-	public Comment convert(String arg0) {
+	public Comment convert(String comment) {
 		User author = userRepo.getUser((String) session
 				.getAttribute("username"));
-		return new Comment(author, new Date(), arg0,
-				commentRepo.getHashtagList(arg0, author));
+		return new Comment(author, new Date(), comment,
+				commentRepo.getHashtagList(comment, author), commentRepo.getReferences(comment));
 	}
 
 }
