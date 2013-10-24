@@ -2,20 +2,33 @@ package ar.edu.itba.it.paw.model;
 
 import java.util.Date;
 
-//@Entity
-public class User extends AbstractModel {
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="userss")
+public class User extends PersistentEntity {
+	
 	public static final int MIN_USERNAME_LENGTH = 8;
 	public static final int MAX_USERNAME_LENGTH = 16;
 	public static final int MIN_PASSWORD_LENGTH = 8;
 	public static final int MAX_PASSWORD_LENGTH = 16;
+	@Column(nullable=false)
 	private String name;
+	@Column(nullable=false)
 	private String surname;
+	@Column(nullable=false)
 	private String username;
 	private String description;
+	@Column(nullable=false)
 	private String password;
 	private byte[] picture;
+	@Column(nullable=false)
 	private String secretQuestion;
+	@Column(nullable=false)
 	private String secretAnswer;
+	@Column(nullable=false)
 	private Date registrationDate;
 
 	User() {
@@ -43,7 +56,6 @@ public class User extends AbstractModel {
 					"The password must contain between " + MIN_USERNAME_LENGTH
 							+ " and " + MAX_USERNAME_LENGTH + " characters.");
 		}
-		setId(-1);
 		this.name = name;
 		this.surname = surname;
 		this.username = username;

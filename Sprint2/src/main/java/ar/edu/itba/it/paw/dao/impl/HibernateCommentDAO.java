@@ -2,39 +2,49 @@ package ar.edu.itba.it.paw.dao.impl;
 
 import java.util.List;
 
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import ar.edu.itba.it.paw.dao.CommentDAO;
 import ar.edu.itba.it.paw.model.Comment;
 import ar.edu.itba.it.paw.model.User;
-//@Repository
+
+@Repository
 public class HibernateCommentDAO extends HibernateGenericDAO<Comment> implements CommentDAO {
 
-	public HibernateCommentDAO() {
+	@Autowired
+	public HibernateCommentDAO(SessionFactory sessionFactory) {
+		super.setSessionFactory(sessionFactory);
 	}
 	
 	@Override
+	@SuppressWarnings("unchecked")
 	public List<Comment> getComments(String hashtag) {
-		// TODO Auto-generated method stub
-		return null;
+		Session session = getSession();
+		Query query = session.createQuery("from Comment c inner join c.hashtags where c.hashtags = ?");
+		query.setParameter(0, hashtag);
+		List<Comment> result = (List<Comment>)query.list();
+		return result;
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public List<Comment> getComments(User user) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void save(Comment comment) {
-		// TODO Auto-generated method stub
-		
+		Session session = getSession();
+		Transaction tx = session.beginTransaction();
+		Query query = session.createQuery("from Comment where author = ?");
+		query.setParameter(0, user);
+		List<Comment> result = (List<Comment>)query.list();
+		tx.commit();
+		return result;
 	}
 
 	@Override
 	public void removeComment(int commentId) {
-		// TODO Auto-generated method stub
-		
+		// TODO Auto-generate method stub		
 	}
-
 }

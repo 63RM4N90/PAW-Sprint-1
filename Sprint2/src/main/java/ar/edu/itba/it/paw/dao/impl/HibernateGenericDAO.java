@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 
 import ar.edu.itba.it.paw.dao.GenericDAO;
 
@@ -58,7 +59,9 @@ public class HibernateGenericDAO<T> implements GenericDAO<T> {
 	@Override
 	public T store(T obj) {
 		Session session = getSession();
+		Transaction tx = session.beginTransaction();
 		session.save(obj);
+		tx.commit();
 		return obj;
 	}
 }

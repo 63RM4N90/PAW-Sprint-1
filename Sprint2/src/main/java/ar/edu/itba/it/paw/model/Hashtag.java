@@ -2,14 +2,17 @@ package ar.edu.itba.it.paw.model;
 
 import java.util.Date;
 
-//@Entity
-public class Hashtag extends AbstractModel {
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.OneToOne;
+
+@Entity
+public class Hashtag extends PersistentEntity {
 	private String hashtag;
-	
-	//@OneToOne
-	//@Column(nullable=false)
+
+	@OneToOne
 	private User author;
-	//@Column(nullable=false)
+	@Column(nullable=false)
 	private Date date;
 
 	public Hashtag() {

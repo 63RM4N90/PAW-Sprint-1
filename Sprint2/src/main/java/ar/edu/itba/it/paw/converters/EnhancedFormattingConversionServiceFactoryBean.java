@@ -18,7 +18,6 @@ public class EnhancedFormattingConversionServiceFactoryBean extends
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
 	protected void installFormatters(FormatterRegistry registry) {
 		super.installFormatters(registry);
 		for (Converter<?, ?> c : converters) {
