@@ -8,8 +8,6 @@ public interface CommentRepo extends HibernateRepo {
 
 	public List<Comment> getAll();
 
-	public Comment getComment(int id);
-
 	public List<Hashtag> getHashtagList(String comment, User author);
 
 	public List<Comment> getComments(String hashtag);

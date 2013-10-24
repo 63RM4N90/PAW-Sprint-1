@@ -2,13 +2,18 @@
 <div class="vertical-container">
 	<div class="info-column profile-column">
 		<div class="user-info">
-			<c:if test="${isEmptyPicture}">	
-				<img src="${pageContext.request.contextPath}/img/default_picture.png" alt="user_picture" />
+			<c:if test="${isEmptyPicture}">
+				<img
+					src="${pageContext.request.contextPath}/img/default_picture.png"
+					alt="user_picture" />
 			</c:if>
 			<c:if test="${!isEmptyPicture}">
-				<img src="image?username=<c:out value="${user.username}" />" alt="user_picture" />
+				<img src="image?username=<c:out value="${user.username}" />"
+					alt="user_picture" />
 			</c:if>
-			<h3><c:out value="${user.username}" /></h3>
+			<h3>
+				<c:out value="${user.username}" />
+			</h3>
 			<h6>Name:</h6>
 			<h5>
 				<c:out value="${user.name}" />
@@ -36,10 +41,13 @@
 			<div class="comment-creator-area">
 				<form method="POST" action="profile">
 					<div class="form-area">
-						<textarea class="comment-area" rows="5" cols="40" placeholder="you have 140 characters to write down your sins..." name="comment" maxlength="140" ></textarea>
+						<textarea class="comment-area" rows="5" cols="40"
+							placeholder="you have 140 characters to write down your sins..."
+							name="comment" maxlength="140"></textarea>
 					</div>
 					<div class="form-buttons">
-						<input type="submit" class="button profile-button" name="submit" value="Post" />
+						<input type="submit" class="button profile-button" name="submit"
+							value="Post" />
 					</div>
 				</form>
 			</div>
@@ -51,10 +59,13 @@
 					<div class="comment">
 						<p>${comment.comment}</p>
 						<div class="comment-reference">
-							<i>Created by: </i><a href="<c:url value="profile"><c:param name="user" value="${comment.author.username}" /></c:url>">${comment.author.username}</a> | 
-							<i><fmt:formatDate value="${comment.date}" pattern="dd-MM-yyyy HH:mm" /></i> | 
+							<i>Created by: </i><a
+								href="<c:url value="profile"><c:param name="user" value="${comment.author.username}" /></c:url>">${comment.author.username}</a>
+							| <i><fmt:formatDate value="${comment.date}"
+									pattern="dd-MM-yyyy HH:mm" /></i> |
 							<c:if test="${isOwner}">
-<%-- 								<a href="<c:url value="commentary"><c:param name="commentid" value="${comment.id}" /><c:param name="user" value="${comment.author.username}" /></c:url>">Delete</a> --%>
+								<a
+									href="<c:url value="profile"><c:param name="commentid" value="${comment.id}" /><c:param name="user" value="${comment.author.username}" /></c:url>">Delete</a>
 							</c:if>
 						</div>
 					</div>
@@ -65,4 +76,5 @@
 	<div class="tag-column profile-column">
 		<%@ include file="../top10.jsp"%>
 	</div>
+</div>
 <%@ include file="../footer.jsp"%>

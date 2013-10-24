@@ -29,17 +29,16 @@ import ar.edu.itba.it.paw.formValidators.UserFormValidator;
 public class UserController {
 
 	private UserRepo userRepo;
-	private HashtagRepo hastagRepo;
+	private HashtagRepo hashtagRepo;
 	private CommentRepo commentRepo;
 	private UserFormValidator userFormValidator;
 	private static final int MAX_COMMENT_LENGTH = 140;
 
 	@Autowired
-	public UserController(UserRepo userService,
-			HashtagRepo hashtagService, CommentRepo commentService,
-			UserFormValidator userFormValidator) {
+	public UserController(UserRepo userService, HashtagRepo hashtagService,
+			CommentRepo commentService, UserFormValidator userFormValidator) {
 		this.userRepo = userService;
-		this.hastagRepo = hashtagService;
+		this.hashtagRepo = hashtagService;
 		this.commentRepo = commentService;
 		this.userFormValidator = userFormValidator;
 	}
@@ -50,7 +49,7 @@ public class UserController {
 		if (s.getAttribute("userId") != null) {
 			mav.setViewName("redirect:profile");
 		}
-		// showTopTenHashtags(mav);
+		showTopTenHashtags(mav);
 		return mav;
 	}
 
@@ -75,7 +74,7 @@ public class UserController {
 	public ModelAndView registration() {
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("userForm", new UserForm());
-		// showTopTenHashtags(mav);
+		showTopTenHashtags(mav);
 		return mav;
 	}
 
@@ -109,12 +108,19 @@ public class UserController {
 	public ModelAndView profile(
 			@RequestParam(value = "user", required = false) User profile,
 			@RequestParam(value = "period", required = false) Integer period,
+			@RequestParam(value = "commentid", required = false) Comment comment,
 			HttpSession session) {
 		ModelAndView mav = new ModelAndView();
 		User userSession = userRepo.getUser((String) session
 				.getAttribute("username"));
 
-		// showTopTenHashtags(mav);
+		if (comment != null) {
+			commentRepo.delete(comment);
+			mav.setViewName("user/login");
+			return mav;
+		}
+
+		showTopTenHashtags(mav);
 
 		if (profile == null) {
 			if (userSession != null) {
@@ -135,8 +141,8 @@ public class UserController {
 			session.setAttribute("user", profile);
 			mav.addObject("isEmptyPicture", profile.getPicture() == null);
 			List<Comment> comments = commentRepo.getComments(profile);
-			for (Comment comment : comments) {
-				comment.setComment(getProcessedComment(comment.getComment()));
+			for (Comment commentt : comments) {
+				commentt.setComment(getProcessedComment(commentt.getComment()));
 			}
 			mav.addObject("comments", comments);
 		}
@@ -153,12 +159,12 @@ public class UserController {
 		List<RankedHashtag> top10;
 
 		if (period == null) {
-			//top10 = hashtagService.topHashtags(30);
+			top10 = hashtagRepo.topHashtags(30);
 		} else {
-			//top10 = hashtagService.topHashtags(Integer.valueOf(period));
+			top10 = hashtagRepo.topHashtags(Integer.valueOf(period));
 		}
 
-		//mav.addObject("ranking", top10);
+		mav.addObject("ranking", top10);
 		User user = (User) session.getAttribute("user");
 		if (comment.getComment().length() > 0
 				&& comment.getComment().length() < MAX_COMMENT_LENGTH) {
@@ -252,9 +258,9 @@ public class UserController {
 		List<RankedHashtag> top10;
 
 		if (mav.getModel().get("period") == null) {
-			top10 = hastagRepo.topHashtags(30);
+			top10 = hashtagRepo.topHashtags(30);
 		} else {
-			top10 = hastagRepo.topHashtags(Integer.valueOf((String) mav
+			top10 = hashtagRepo.topHashtags(Integer.valueOf((String) mav
 					.getModel().get("period")));
 		}
 
@@ -302,16 +308,16 @@ public class UserController {
 		mav.addObject("description", original.getDescription());
 	}
 
-	private void fillInputs(String name, String surname, String username,
-			String description, String secretQuestion, String secretAnswer,
-			ModelAndView mav) {
-		mav.addObject("name", name);
-		mav.addObject("surname", surname);
-		mav.addObject("username", username);
-		mav.addObject("password", "");
-		mav.addObject("confirm", "");
-		mav.addObject("description", description);
-		mav.addObject("secretQuestion", secretQuestion);
-		mav.addObject("secretAnswer", secretAnswer);
-	}
+	// private void fillInputs(String name, String surname, String username,
+	// String description, String secretQuestion, String secretAnswer,
+	// ModelAndView mav) {
+	// mav.addObject("name", name);
+	// mav.addObject("surname", surname);
+	// mav.addObject("username", username);
+	// mav.addObject("password", "");
+	// mav.addObject("confirm", "");
+	// mav.addObject("description", description);
+	// mav.addObject("secretQuestion", secretQuestion);
+	// mav.addObject("secretAnswer", secretAnswer);
+	// }
 }

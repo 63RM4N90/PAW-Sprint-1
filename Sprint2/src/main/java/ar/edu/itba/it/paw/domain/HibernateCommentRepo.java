@@ -37,11 +37,6 @@ public class HibernateCommentRepo extends AbstractHibernateRepo implements
 	}
 
 	@Override
-	public Comment getComment(int id) {
-		return get(Comment.class, id);
-	}
-
-	@Override
 	public List<Hashtag> getHashtagList(String comment, User author) {
 		List<Hashtag> ans = new ArrayList<Hashtag>();
 		String patternStr = "#([A-Za-z0-9_]+)";

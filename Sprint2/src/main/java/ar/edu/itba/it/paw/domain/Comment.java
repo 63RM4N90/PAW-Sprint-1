@@ -19,7 +19,7 @@ public class Comment extends PersistentEntity implements Comparable<Comment> {
 	private Date date;
 	@Column(nullable = false)
 	private String comment;
-	@ManyToMany
+	@ManyToMany	
 	@JoinColumn(name = "com_id")
 	private List<Hashtag> hashtags;
 	@OneToMany

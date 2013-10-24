@@ -1,39 +1,25 @@
 package ar.edu.itba.it.paw.converters;
 
-import java.util.Date;
-
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 import ar.edu.itba.it.paw.domain.Comment;
 import ar.edu.itba.it.paw.domain.CommentRepo;
-import ar.edu.itba.it.paw.domain.User;
-import ar.edu.itba.it.paw.domain.UserRepo;
 
 @Component
 public class StringToCommentConverter implements Converter<String, Comment> {
 
-	private HttpSession session;
-	private UserRepo userRepo;
 	private CommentRepo commentRepo;
 
 	@Autowired
-	public StringToCommentConverter(UserRepo userService,
-			CommentRepo commentService, HttpSession session) {
-		this.session = session;
-		this.userRepo = userService;
-		this.commentRepo = commentService;
+	public StringToCommentConverter(CommentRepo commentRepository) {
+		this.commentRepo = commentRepository;
 	}
 
 	@Override
-	public Comment convert(String comment) {
-		User author = userRepo.getUser((String) session
-				.getAttribute("username"));
-		return new Comment(author, new Date(), comment,
-				commentRepo.getHashtagList(comment, author), commentRepo.getReferences(comment));
+	public Comment convert(String arg0) {
+		int commentId = Integer.parseInt(arg0);
+		return commentRepo.get(Comment.class, commentId);
 	}
-
 }
