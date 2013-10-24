@@ -50,7 +50,7 @@ public class UserController {
 		if (s.getAttribute("userId") != null) {
 			mav.setViewName("redirect:profile");
 		}
-		// showTopTenHashtags(mav);
+		showTopTenHashtags(mav);
 		return mav;
 	}
 
@@ -75,7 +75,7 @@ public class UserController {
 	public ModelAndView registration() {
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("userForm", new UserForm());
-		// showTopTenHashtags(mav);
+		showTopTenHashtags(mav);
 		return mav;
 	}
 
@@ -114,7 +114,7 @@ public class UserController {
 		User userSession = userService.getUser((String) session
 				.getAttribute("username"));
 
-		// showTopTenHashtags(mav);
+		showTopTenHashtags(mav);
 
 		if (profile == null) {
 			if (userSession != null) {
@@ -153,12 +153,12 @@ public class UserController {
 		List<RankedHashtag> top10;
 
 		if (period == null) {
-			//top10 = hashtagService.topHashtags(30);
+			top10 = hashtagService.topHashtags(30);
 		} else {
-			//top10 = hashtagService.topHashtags(Integer.valueOf(period));
+			top10 = hashtagService.topHashtags(Integer.valueOf(period));
 		}
 
-		//mav.addObject("ranking", top10);
+		mav.addObject("ranking", top10);
 		User user = (User) session.getAttribute("user");
 		if (comment.getComment().length() > 0
 				&& comment.getComment().length() < MAX_COMMENT_LENGTH) {

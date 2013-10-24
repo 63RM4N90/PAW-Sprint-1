@@ -9,6 +9,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 
+import org.hibernate.annotations.CollectionOfElements;
+
 @Entity
 public class Comment extends PersistentEntity implements Comparable<Comment> {
 
@@ -19,6 +21,7 @@ public class Comment extends PersistentEntity implements Comparable<Comment> {
 	@Column(nullable = false)
 	private String comment;
 	@ManyToMany
+	@CollectionOfElements	
 	@JoinColumn(name = "com_id")
 	private List<Hashtag> hashtags;
 
