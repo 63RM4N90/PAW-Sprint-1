@@ -1,47 +1,58 @@
 package ar.edu.itba.it.paw.domain;
 
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="userss")
+@Table(name = "userss")
 public class User extends PersistentEntity {
-	
+
 	public static final int MIN_USERNAME_LENGTH = 8;
 	public static final int MAX_USERNAME_LENGTH = 16;
 	public static final int MIN_PASSWORD_LENGTH = 8;
 	public static final int MAX_PASSWORD_LENGTH = 16;
-	@Column(nullable=false)
+	@Column(nullable = false)
 	private String name;
-	@Column(nullable=false)
+	@Column(nullable = false)
 	private String surname;
-	@Column(nullable=false)
+	@Column(nullable = false)
 	private String username;
 	private String description;
-	@Column(nullable=false)
+	@Column(nullable = false)
 	private String password;
 	private byte[] picture;
-	@Column(nullable=false)
+	@Column(nullable = false)
 	private String secretQuestion;
-	@Column(nullable=false)
+	@Column(nullable = false)
 	private String secretAnswer;
-	@Column(nullable=false)
+	@Column(nullable = false)
 	private Date registrationDate;
+	
+	
+	private boolean isPrivate;
+	@OneToMany(mappedBy="author")
+	@JoinColumn(name="usr_id")
+	private Set<Comment> comments;
+	@ManyToMany(mappedBy="followers")
+	private Set<User> following;
 	@ManyToMany
-	private List<User> following;
+	private Set<User> followers;
 
 	User() {
 	}
 
 	public User(String name, String surname, String username,
 			String description, String password, byte[] picture,
-			String secretQuestion, String secretAnswer, Date registrationDate)
-			throws IllegalArgumentException {
+			String secretQuestion, String secretAnswer, Date registrationDate,
+			boolean isPrivate) throws IllegalArgumentException {
 		if (name == null || surname == null || username == null
 				|| password == null || secretQuestion == null
 				|| secretAnswer == null) {
@@ -69,16 +80,52 @@ public class User extends PersistentEntity {
 		this.secretQuestion = secretQuestion;
 		this.secretAnswer = secretAnswer;
 		this.registrationDate = registrationDate;
+		this.isPrivate = isPrivate;
+		this.following = new HashSet<User>();
+		this.followers = new HashSet<User>();
+		this.comments = new HashSet<Comment>();
 	}
 	
+	public Set<Comment> getComments(){
+		return comments;
+	}
+
+	public Set<User> getFollowers() {
+		return followers;
+	}
+
+	public Set<User> getFollowing() {
+		return following;
+	}
+
 	public void follow(User user) {
 		following.add(user);
 	}
-	
+
 	public void unfollow(User user) {
 		following.remove(user);
 	}
 	
+	public int followedBy(){
+		return followers.size();
+	}
+
+	public int following() {
+		return following.size();
+	}
+
+	public void makePrivate() {
+		this.isPrivate = true;
+	}
+
+	public void makePublic() {
+		this.isPrivate = false;
+	}
+
+	public boolean isPrivate() {
+		return isPrivate;
+	}
+
 	public void setUsername(String username) {
 		this.username = username;
 	}
@@ -154,4 +201,31 @@ public class User extends PersistentEntity {
 	public Date getRegistrationDate() {
 		return registrationDate;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((username == null) ? 0 : username.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		User other = (User) obj;
+		if (username == null) {
+			if (other.username != null)
+				return false;
+		} else if (!username.equals(other.username))
+			return false;
+		return true;
+	}
+
 }

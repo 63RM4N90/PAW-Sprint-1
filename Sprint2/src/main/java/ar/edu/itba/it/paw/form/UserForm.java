@@ -104,9 +104,10 @@ public class UserForm {
 
 	public User build() {
 		if (user == null) {
+			//Idem a "EditUserForm"
 			return new User(name, surname, username, description,
 					confirmPassword, null, secretQuestion, secretAnswer,
-					new Date());
+					new Date(),false);
 		} else {
 			user.setName(name);
 			user.setSurname(surname);

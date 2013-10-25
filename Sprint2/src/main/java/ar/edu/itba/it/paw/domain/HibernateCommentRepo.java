@@ -1,8 +1,9 @@
 package ar.edu.itba.it.paw.domain;
 
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -27,18 +28,13 @@ public class HibernateCommentRepo extends AbstractHibernateRepo implements
 	}
 
 	@Override
-	public List<Comment> getComments(User user) {
-		return find("from Comment where author = ?", user);
-	}
-
-	@Override
 	public List<Comment> getAll() {
 		return find("from Comment");
 	}
 
 	@Override
-	public List<Hashtag> getHashtagList(String comment, User author) {
-		List<Hashtag> ans = new ArrayList<Hashtag>();
+	public Set<Hashtag> getHashtagList(String comment, User author) {
+		Set<Hashtag> ans = new HashSet<Hashtag>();
 		String patternStr = "#([A-Za-z0-9_]+)";
 		Pattern pattern = Pattern.compile(patternStr);
 		Matcher matcher = pattern.matcher(comment);
@@ -59,8 +55,8 @@ public class HibernateCommentRepo extends AbstractHibernateRepo implements
 	}
 
 	@Override
-	public List<User> getReferences(String comment) {
-		List<User> ans = new ArrayList<User>();
+	public Set<User> getReferences(String comment) {
+		Set<User> ans = new HashSet<User>();
 		String patternStr = "(?:\\s|\\A)[@]+([A-Za-z0-9-_]+)";
 		Pattern pattern = Pattern.compile(patternStr);
 		Matcher matcher = pattern.matcher(comment);
@@ -78,11 +74,4 @@ public class HibernateCommentRepo extends AbstractHibernateRepo implements
 		return ans;
 	}
 
-	@Override
-	public List<Comment> getComments(String hashtag) {
-		// Deberian ordenarse los comentarios por fecha desde la query hql
-		return find(
-				"from Comment c inner join c.hashtags where c.hashtags = ?",
-				hashtag);
-	}
 }

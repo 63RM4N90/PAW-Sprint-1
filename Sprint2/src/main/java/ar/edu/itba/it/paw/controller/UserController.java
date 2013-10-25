@@ -1,6 +1,7 @@
 package ar.edu.itba.it.paw.controller;
 
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -140,7 +141,7 @@ public class UserController {
 			}
 			session.setAttribute("user", profile);
 			mav.addObject("isEmptyPicture", profile.getPicture() == null);
-			List<Comment> comments = commentRepo.getComments(profile);
+			Set<Comment> comments = profile.getComments();
 			for (Comment commentt : comments) {
 				commentt.setComment(getProcessedComment(commentt.getComment()));
 			}
@@ -193,12 +194,14 @@ public class UserController {
 			if (username != "") {
 				user = userRepo.getUser(username);
 			} else {
-				user = new User("", "", "", "", "", null, "", "", null);
+				//El último parametro, en este caso "false", refiere a la variable isPrivate
+				//Por el momento el default es público. Más adelante se cambia. 
+				user = new User("", "", "", "", "", null, "", "", null,false);
 			}
 		} else {
 			username = "";
 			mav.addObject("userToRecover", username);
-			user = new User("", "", "", "", "", null, "", "", null);
+			user = new User("", "", "", "", "", null, "", "", null,false);
 		}
 		if (username != "" && user.getUsername() == "") {
 			mav.addObject("error", "User does not exist");

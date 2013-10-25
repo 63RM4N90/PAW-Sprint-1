@@ -14,6 +14,7 @@ public class EditUserForm {
 	private String description;
 	private String secretQuestion;
 	private String secretAnswer;
+	//Falta agregar las cosas para la visibilidad del perfil
 
 	public EditUserForm() {
 	}
@@ -94,9 +95,12 @@ public class EditUserForm {
 
 	public User build() {
 		if (user == null) {
+			//El "false" del final refiere a la visibilidad del perfil.
+			//Hasta que se agregue el campo, es false. Después será
+			//opcional desde la registración
 			return new User(name, surname, user.getUsername(), description,
 					confirmPassword, null, secretQuestion, secretAnswer,
-					new Date());
+					new Date(),false);
 		} else {
 			user.setName(name);
 			user.setSurname(surname);

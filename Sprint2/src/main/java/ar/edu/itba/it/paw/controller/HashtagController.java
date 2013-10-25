@@ -1,6 +1,6 @@
 package ar.edu.itba.it.paw.controller;
 
-import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -31,8 +31,7 @@ public class HashtagController {
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("user", hashtag.getAuthor());
 		mav.addObject("tag", hashtag);
-		List<Comment> comments = commentRepo.getComments(hashtag
-				.getHashtag());
+		Set<Comment> comments = hashtag.getComments();
 		for (Comment comment : comments) {
 			comment.setComment(getProcessedComment(comment.getComment()));
 		}

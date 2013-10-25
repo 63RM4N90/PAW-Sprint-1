@@ -1,16 +1,13 @@
 package ar.edu.itba.it.paw.domain;
 
 import java.util.List;
+import java.util.Set;
 
 public interface CommentRepo extends HibernateRepo {
 
-	public List<Comment> getComments(User user);
-
 	public List<Comment> getAll();
 
-	public List<Hashtag> getHashtagList(String comment, User author);
+	public Set<Hashtag> getHashtagList(String comment, User author);
 
-	public List<Comment> getComments(String hashtag);
-
-	public List<User> getReferences(String comment);
+	public Set<User> getReferences(String comment);
 }
