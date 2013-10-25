@@ -118,11 +118,11 @@ public class UserController {
 			HttpSession session) {
 		ModelAndView mav = new ModelAndView();
 		String userSessionString = (String) session.getAttribute("username");
+		if (period == null) {
+			period = 30;
+		}
 		if (profile == null) {
 			if (userSessionString != null) {
-				if (period == null) {
-					period = 30;
-				}
 				mav.setViewName("redirect:profile?user=" + userSessionString
 						+ "&period=" + period);
 			} else {
@@ -131,11 +131,13 @@ public class UserController {
 			return mav;
 		} else {
 			User userSession = userRepo.getUser(userSessionString);
+			System.out.println(userSession);
 			if (id != null) {
 				Comment comment = commentRepo.get(Comment.class, id);
 				if (comment != null) {
 					commentRepo.delete(comment);
-					mav.setViewName("user/login");
+					mav.setViewName("redirect:profile?user="
+							+ userSessionString + "&period=" + period);
 					return mav;
 				}
 			}
@@ -177,8 +179,8 @@ public class UserController {
 		if (comment.getComment().length() > 0
 				&& comment.getComment().length() < MAX_COMMENT_LENGTH) {
 			System.out.println("COMENTE!");
-			user.comment(comment);
-			System.out.println(user.getComments());
+			commentRepo.save(comment);
+			System.out.println(user.getComments().size());
 		}
 		mav.setViewName("redirect:profile?user=" + user.getUsername());
 		return mav;

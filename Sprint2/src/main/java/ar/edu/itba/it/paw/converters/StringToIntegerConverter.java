@@ -8,6 +8,10 @@ public class StringToIntegerConverter implements Converter<String, Integer> {
 
 	@Override
 	public Integer convert(String arg0) {
-		return Integer.parseInt(arg0);
+		try {
+			return Integer.parseInt(arg0);
+		} catch (NumberFormatException e) {
+			return 0;
+		}
 	}
 }

@@ -50,7 +50,6 @@ public class HibernateCommentRepo extends AbstractHibernateRepo implements
 			}
 			ans.add(tag);
 		}
-
 		return ans;
 	}
 

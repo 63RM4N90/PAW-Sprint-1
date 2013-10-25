@@ -4,9 +4,9 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -37,13 +37,12 @@ public class User extends PersistentEntity {
 	private Date registrationDate;
 
 	private boolean isPrivate;
-	@OneToMany(mappedBy = "author")
-	@JoinColumn(name = "usr_id")
-	private Set<Comment> comments;
+	@OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
+	private Set<Comment> comments = new HashSet<Comment>();
 	@ManyToMany(mappedBy = "followers")
-	private Set<User> following;
+	private Set<User> following = new HashSet<User>();
 	@ManyToMany
-	private Set<User> followers;
+	private Set<User> followers = new HashSet<User>();
 
 	User() {
 	}
@@ -80,13 +79,6 @@ public class User extends PersistentEntity {
 		this.secretAnswer = secretAnswer;
 		this.registrationDate = registrationDate;
 		this.isPrivate = isPrivate;
-		this.following = new HashSet<User>();
-		this.followers = new HashSet<User>();
-		this.comments = new HashSet<Comment>();
-	}
-
-	public void comment(Comment comment) {
-		comments.add(comment);
 	}
 
 	public Set<Comment> getComments() {
