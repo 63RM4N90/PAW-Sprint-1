@@ -1,4 +1,4 @@
-package ar.edu.itba.it.paw.controller;
+package ar.edu.itba.it.paw.web;
 
 import java.util.List;
 
@@ -23,9 +23,8 @@ public class SearchController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
-	public ModelAndView results() {
-		ModelAndView mav = new ModelAndView();
-		return mav;
+	public String results() {
+		return "search/results";
 	}
 
 	@RequestMapping(method = RequestMethod.POST)

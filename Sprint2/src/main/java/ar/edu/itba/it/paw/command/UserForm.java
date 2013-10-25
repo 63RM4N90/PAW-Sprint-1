@@ -1,28 +1,29 @@
-package ar.edu.itba.it.paw.form;
+package ar.edu.itba.it.paw.command;
 
 import java.util.Date;
 
 import ar.edu.itba.it.paw.domain.User;
 
-public class EditUserForm {
+public class UserForm {
 
 	private User user;
 	private String name;
 	private String surname;
+	private String username;
 	private String password;
 	private String confirmPassword;
 	private String description;
 	private String secretQuestion;
 	private String secretAnswer;
-	//Falta agregar las cosas para la visibilidad del perfil
-
-	public EditUserForm() {
+	
+	public UserForm() {
 	}
 
-	public EditUserForm(User user) {
+	public UserForm(User user) {
 		this.user = user;
 		this.name = user.getName();
 		this.surname = user.getSurname();
+		this.username = user.getUsername();
 		this.password = user.getPassword();
 		this.description = user.getDescription();
 		this.secretQuestion = user.getSecretQuestion();
@@ -51,6 +52,14 @@ public class EditUserForm {
 
 	public void setSurname(String surname) {
 		this.surname = surname;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	public String getPassword() {
@@ -95,15 +104,14 @@ public class EditUserForm {
 
 	public User build() {
 		if (user == null) {
-			//El "false" del final refiere a la visibilidad del perfil.
-			//Hasta que se agregue el campo, es false. Después será
-			//opcional desde la registración
-			return new User(name, surname, user.getUsername(), description,
+			//Idem a "EditUserForm"
+			return new User(name, surname, username, description,
 					confirmPassword, null, secretQuestion, secretAnswer,
 					new Date(),false);
 		} else {
 			user.setName(name);
 			user.setSurname(surname);
+			user.setUsername(username);
 			user.setPassword(password);
 			user.setDescription(description);
 			user.setSecretQuestion(secretQuestion);
