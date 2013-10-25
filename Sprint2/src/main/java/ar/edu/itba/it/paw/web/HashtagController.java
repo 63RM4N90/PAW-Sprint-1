@@ -1,4 +1,4 @@
-package ar.edu.itba.it.paw.controller;
+package ar.edu.itba.it.paw.web;
 
 import java.util.List;
 import java.util.regex.Matcher;
