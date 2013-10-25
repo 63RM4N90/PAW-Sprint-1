@@ -35,13 +35,12 @@ public class User extends PersistentEntity {
 	private String secretAnswer;
 	@Column(nullable = false)
 	private Date registrationDate;
-	
-	
+
 	private boolean isPrivate;
-	@OneToMany(mappedBy="author")
-	@JoinColumn(name="usr_id")
+	@OneToMany(mappedBy = "author")
+	@JoinColumn(name = "usr_id")
 	private Set<Comment> comments;
-	@ManyToMany(mappedBy="followers")
+	@ManyToMany(mappedBy = "followers")
 	private Set<User> following;
 	@ManyToMany
 	private Set<User> followers;
@@ -85,8 +84,12 @@ public class User extends PersistentEntity {
 		this.followers = new HashSet<User>();
 		this.comments = new HashSet<Comment>();
 	}
-	
-	public Set<Comment> getComments(){
+
+	public void comment(Comment comment) {
+		comments.add(comment);
+	}
+
+	public Set<Comment> getComments() {
 		return comments;
 	}
 
@@ -105,8 +108,8 @@ public class User extends PersistentEntity {
 	public void unfollow(User user) {
 		following.remove(user);
 	}
-	
-	public int followedBy(){
+
+	public int followedBy() {
 		return followers.size();
 	}
 
@@ -227,5 +230,4 @@ public class User extends PersistentEntity {
 			return false;
 		return true;
 	}
-
 }

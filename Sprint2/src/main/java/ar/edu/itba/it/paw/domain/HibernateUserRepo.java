@@ -48,5 +48,4 @@ public class HibernateUserRepo extends AbstractHibernateRepo implements
 				+ "%') or (surname like '%" + name + "%')");
 		return (List<User>) query.list();
 	}
-
 }

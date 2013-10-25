@@ -148,6 +148,7 @@ public class UserController {
 			session.setAttribute("user", profile);
 			mav.addObject("isEmptyPicture", profile.getPicture() == null);
 			Set<Comment> comments = profile.getComments();
+			System.out.println("COMMENTS = " + comments);
 			for (Comment commentt : comments) {
 				commentt.setComment(getProcessedComment(commentt.getComment()));
 			}
@@ -175,7 +176,9 @@ public class UserController {
 		User user = (User) session.getAttribute("user");
 		if (comment.getComment().length() > 0
 				&& comment.getComment().length() < MAX_COMMENT_LENGTH) {
-			commentRepo.save(comment);
+			System.out.println("COMENTE!");
+			user.comment(comment);
+			System.out.println(user.getComments());
 		}
 		mav.setViewName("redirect:profile?user=" + user.getUsername());
 		return mav;
