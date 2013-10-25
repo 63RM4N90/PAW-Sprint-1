@@ -1,9 +1,9 @@
-package ar.edu.itba.it.paw.formValidators;
+package ar.edu.itba.it.paw.validator;
 
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import ar.edu.itba.it.paw.form.EditUserForm;
+import ar.edu.itba.it.paw.command.EditUserForm;
 
 public class EditUserFormValidator implements Validator {
 

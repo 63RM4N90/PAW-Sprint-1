@@ -31,13 +31,13 @@
 					alt="" /> <a href="/Sprint2/bin/user/profile"><img class="home"
 					src="${pageContext.request.contextPath}/img/home.png" alt="home" /></a>
 			</div>
-			<c:if test="${isLogged}">
+			<c:if test="${not empty username}">
 				<img class="separator"
 					src="${pageContext.request.contextPath}/img/topbar_separator.png"
 					alt="" />
 				<div class="user-session">
 					<p>
-						<c:out value="${userSession.username}" />
+						<c:out value="${username}" />
 					</p>
 					<br> <a href="logout">Log out</a>
 				</div>

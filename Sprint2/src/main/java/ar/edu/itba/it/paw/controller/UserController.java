@@ -16,14 +16,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import ar.edu.itba.it.paw.command.UserForm;
 import ar.edu.itba.it.paw.domain.Comment;
 import ar.edu.itba.it.paw.domain.CommentRepo;
 import ar.edu.itba.it.paw.domain.HashtagRepo;
 import ar.edu.itba.it.paw.domain.RankedHashtag;
 import ar.edu.itba.it.paw.domain.User;
 import ar.edu.itba.it.paw.domain.UserRepo;
-import ar.edu.itba.it.paw.form.UserForm;
-import ar.edu.itba.it.paw.formValidators.UserFormValidator;
+import ar.edu.itba.it.paw.validator.UserFormValidator;
 
 @Controller
 public class UserController {
@@ -33,6 +33,8 @@ public class UserController {
 	private CommentRepo commentRepo;
 	private UserFormValidator userFormValidator;
 	private static final int MAX_COMMENT_LENGTH = 140;
+	private static final int MAX_PASSWORD_LENGTH = 16;
+	private static final int MIN_PASSWORD_LENGTH = 8;
 
 	@Autowired
 	public UserController(UserRepo userService, HashtagRepo hashtagService,
@@ -63,11 +65,16 @@ public class UserController {
 			session.setAttribute("username", user.getUsername());
 			mav.setViewName("redirect:profile?user=" + user.getUsername());
 		} else {
-			// mav.addObject("username", username);
 			mav.addObject("error", "Invalid user or password.");
 			mav.setViewName("user/login");
 		}
 		return mav;
+	}
+	
+	@RequestMapping(method = RequestMethod.GET)
+	public String logout(HttpSession s) {
+		s.removeAttribute("username");		
+		return "redirect:login";
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
@@ -79,10 +86,9 @@ public class UserController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public ModelAndView registration(HttpServletRequest req, UserForm userForm,
+	public String registration(HttpServletRequest req, UserForm userForm,
 			Errors errors, HttpSession session) {
 		// DiskFileUpload fu = new DiskFileUpload();
-		ModelAndView mav = new ModelAndView();
 		List<ObjectError> errorList = errors.getAllErrors();
 		for (ObjectError each : errorList) {
 			System.out.println(each.toString());
@@ -100,8 +106,7 @@ public class UserController {
 			return null;
 		}
 		session.setAttribute("username", userForm.getUsername());
-		mav.setViewName("redirect:profile?user=" + userForm.getUsername());
-		return mav;
+		return "redirect:profile?user=" + userForm.getUsername();
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
@@ -111,32 +116,30 @@ public class UserController {
 			@RequestParam(value = "commentid", required = false) Comment comment,
 			HttpSession session) {
 		ModelAndView mav = new ModelAndView();
-		User userSession = userRepo.getUser((String) session
-				.getAttribute("username"));
-
-		if (comment != null) {
-			commentRepo.delete(comment);
-			mav.setViewName("user/login");
-			return mav;
-		}
-
-		showTopTenHashtags(mav);
-
+		String userSessionString = (String) session.getAttribute("username");
 		if (profile == null) {
-			if (userSession != null) {
+			if (userSessionString != null) {
 				if (period == null) {
 					period = 30;
 				}
-				mav.setViewName("redirect:profile?user="
-						+ userSession.getUsername() + "&period=" + period);
+				mav.setViewName("redirect:profile?user=" + userSessionString
+						+ "&period=" + period);
 			} else {
-				mav.setViewName("user/login");
+				mav.setViewName("redirect:login");
 			}
+			return mav;
 		} else {
-			if (userSession != null) {
-				if (profile.getUsername().equals(userSession.getUsername())) {
-					mav.addObject("isOwner", true);
-				}
+			User userSession = userRepo.getUser(userSessionString); 
+			if (comment != null) {
+				commentRepo.delete(comment);
+				mav.setViewName("user/login");
+				return mav;
+			}
+
+			showTopTenHashtags(mav);
+
+			if (profile.getUsername().equals(userSession.getUsername())) {
+				mav.addObject("isOwner", true);
 			}
 			session.setAttribute("user", profile);
 			mav.addObject("isEmptyPicture", profile.getPicture() == null);
@@ -186,24 +189,9 @@ public class UserController {
 
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView recoverPassword(
-			@RequestParam(value = "userToRecover", required = false) String username) {
+			@RequestParam(value = "userToRecover", required = false) User user) {
 		ModelAndView mav = new ModelAndView();
-		User user = null;
-		if (username != null) {
-			if (username != "") {
-				user = userRepo.getUser(username);
-			} else {
-				user = new User("", "", "", "", "", null, "", "", null);
-			}
-		} else {
-			username = "";
-			mav.addObject("userToRecover", username);
-			user = new User("", "", "", "", "", null, "", "", null);
-		}
-		if (username != "" && user.getUsername() == "") {
-			mav.addObject("error", "User does not exist");
-			mav.addObject("userSelected", false);
-		} else if (user.getUsername() != "") {
+		if (user != null) {
 			mav.addObject("success",
 					"Recovering password for " + user.getUsername());
 			mav.addObject("user", user);
@@ -219,16 +207,39 @@ public class UserController {
 			@RequestParam(value = "secretAnswer", required = false) String secretAnswerSubmited,
 			@RequestParam(value = "password", required = false) String newPassword,
 			@RequestParam(value = "confirm", required = false) String newPasswordConfirm,
-			@RequestParam(value = "userToRecover", required = false) String userToRecover) {
+			@RequestParam(value = "userToRecover", required = false) User user) {
 		ModelAndView mav = new ModelAndView();
-		System.out.println("HOLAAAAA");
-		// User u = userService.getUser(userToRecover);
-		// mav.addObject("userSelected", true);
-		// PasswordRecoveryFormValidator validator = new
-		// PasswordRecoveryFormValidator(
-		// secretAnswerSubmited, newPassword, newPasswordConfirm,
-		// userToRecover);
-		// validator.validate(target, errors);
+		mav.addObject("userSelected", true);
+		if (secretAnswerSubmited != null) {
+			boolean matches = user.getSecretAnswer().equals(
+					secretAnswerSubmited);
+			boolean passwordMatches = false;
+			if (newPassword != null && newPasswordConfirm != null) {
+				passwordMatches = newPassword.equals(newPasswordConfirm);
+			}
+			if (!matches) {
+				mav.addObject("error", "Wrong secret Answer");
+				mav.addObject("success",
+						"Recovering password for " + user.getUsername());
+				mav.addObject("user", user);
+			} else {
+				if (passwordMatches
+						&& newPassword.length() <= MAX_PASSWORD_LENGTH
+						&& newPassword.length() >= MIN_PASSWORD_LENGTH) {
+					mav.addObject("passwordRecovered", true);
+					mav.addObject("success",
+							"Your password was changed successfully!");
+					user.setPassword(newPassword);
+					userRepo.save(user);
+				} else {
+					mav.addObject("error",
+							"Passwords dont match or have less than 8 characters or more than 16.");
+					mav.addObject("success",
+							"Recovering password for " + user.getUsername());
+					mav.addObject("user", user);
+				}
+			}
+		}
 		return mav;
 	}
 
