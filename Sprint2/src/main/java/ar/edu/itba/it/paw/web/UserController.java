@@ -71,10 +71,10 @@ public class UserController {
 		}
 		return mav;
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET)
 	public String logout(HttpSession s) {
-		s.removeAttribute("username");		
+		s.removeAttribute("username");
 		return "redirect:login";
 	}
 
@@ -114,7 +114,7 @@ public class UserController {
 	public ModelAndView profile(
 			@RequestParam(value = "user", required = false) User profile,
 			@RequestParam(value = "period", required = false) Integer period,
-			@RequestParam(value = "commentid", required = false) Comment comment,
+			@RequestParam(value = "commentid", required = false) Integer id,
 			HttpSession session) {
 		ModelAndView mav = new ModelAndView();
 		String userSessionString = (String) session.getAttribute("username");
@@ -130,11 +130,14 @@ public class UserController {
 			}
 			return mav;
 		} else {
-			User userSession = userRepo.getUser(userSessionString); 
-			if (comment != null) {
-				commentRepo.delete(comment);
-				mav.setViewName("user/login");
-				return mav;
+			User userSession = userRepo.getUser(userSessionString);
+			if (id != null) {
+				Comment comment = commentRepo.get(Comment.class, id);
+				if (comment != null) {
+					commentRepo.delete(comment);
+					mav.setViewName("user/login");
+					return mav;
+				}
 			}
 
 			showTopTenHashtags(mav);
@@ -192,27 +195,6 @@ public class UserController {
 	public ModelAndView recoverPassword(
 			@RequestParam(value = "userToRecover", required = false) User user) {
 		ModelAndView mav = new ModelAndView();
-
-// TUVE QUE HACER UN MERGE Y NOSE QUE VA Y QUE NO, ASI QUE COMENTO LO QUE HACE CACA!		
-//		User user = null;
-//		if (username != null) {
-//			if (username != "") {
-//				user = userRepo.getUser(username);
-//			} else {
-//				//El último parametro, en este caso "false", refiere a la variable isPrivate
-//				//Por el momento el default es público. Más adelante se cambia. 
-//				user = new User("", "", "", "", "", null, "", "", null,false);
-//			}
-//		} else {
-//			username = "";
-//			mav.addObject("userToRecover", username);
-//			user = new User("", "", "", "", "", null, "", "", null,false);
-//		}
-//		if (username != "" && user.getUsername() == "") {
-//			mav.addObject("error", "User does not exist");
-//			mav.addObject("userSelected", false);
-//		} else if (user.getUsername() != "") {
-
 		if (user != null) {
 			mav.addObject("success",
 					"Recovering password for " + user.getUsername());
