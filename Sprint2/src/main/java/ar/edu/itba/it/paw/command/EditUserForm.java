@@ -6,35 +6,38 @@ import ar.edu.itba.it.paw.domain.User;
 
 public class EditUserForm {
 
-	private User user;
+	private int id;
 	private String name;
 	private String surname;
+	private String username;
 	private String password;
 	private String confirmPassword;
 	private String description;
 	private String secretQuestion;
 	private String secretAnswer;
-	//Falta agregar las cosas para la visibilidad del perfil
+	private Date registrationDate;
 
 	public EditUserForm() {
 	}
 
 	public EditUserForm(User user) {
-		this.user = user;
+		this.id = user.getId();
 		this.name = user.getName();
 		this.surname = user.getSurname();
+		this.username = user.getUsername();
 		this.password = user.getPassword();
 		this.description = user.getDescription();
 		this.secretQuestion = user.getSecretQuestion();
 		this.secretAnswer = user.getSecretAnswer();
+		this.registrationDate = user.getRegistrationDate();
 	}
 
-	public User getUser() {
-		return user;
+	public int getId() {
+		return id;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public String getName() {
@@ -53,22 +56,6 @@ public class EditUserForm {
 		this.surname = surname;
 	}
 
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public String getConfirmPassword() {
-		return confirmPassword;
-	}
-
-	public void setConfirmPassword(String confirmPassword) {
-		this.confirmPassword = confirmPassword;
-	}
-
 	public String getDescription() {
 		return description;
 	}
@@ -77,38 +64,32 @@ public class EditUserForm {
 		this.description = description;
 	}
 
-	public String getSecretQuestion() {
-		return secretQuestion;
+
+	public String getPassword() {
+		return password;
 	}
 
-	public void setSecretQuestion(String secretQuestion) {
-		this.secretQuestion = secretQuestion;
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	
+	public String getConfirmPassword() {
+		return confirmPassword;
+	}
+	
+	public void setConfirmPassword(String confirmPassword) {
+		this.confirmPassword = confirmPassword;
 	}
 
-	public String getSecretAnswer() {
-		return secretAnswer;
+	public void update(User user) {
+		user.setName(name);
+		user.setSurname(surname);
+		user.setDescription(description);
+		user.setPassword(password);
 	}
-
-	public void setSecretAnswer(String secretAnswer) {
-		this.secretAnswer = secretAnswer;
-	}
-
+	
 	public User build() {
-		if (user == null) {
-			//El "false" del final refiere a la visibilidad del perfil.
-			//Hasta que se agregue el campo, es false. Después será
-			//opcional desde la registración
-			return new User(name, surname, user.getUsername(), description,
-					confirmPassword, null, secretQuestion, secretAnswer,
-					new Date(),false);
-		} else {
-			user.setName(name);
-			user.setSurname(surname);
-			user.setPassword(password);
-			user.setDescription(description);
-			user.setSecretQuestion(secretQuestion);
-			user.setSecretAnswer(secretAnswer);
-			return user;
-		}
+		return new User(name, surname, username, description, password, null,
+				secretQuestion, secretAnswer, registrationDate, false);
 	}
 }

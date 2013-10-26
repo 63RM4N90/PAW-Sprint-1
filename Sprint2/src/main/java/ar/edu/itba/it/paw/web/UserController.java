@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import ar.edu.itba.it.paw.command.EditUserForm;
 import ar.edu.itba.it.paw.command.UserForm;
 import ar.edu.itba.it.paw.domain.Comment;
 import ar.edu.itba.it.paw.domain.CommentRepo;
@@ -191,8 +192,8 @@ public class UserController {
 		ModelAndView mav = new ModelAndView();
 		String username = (String) session.getAttribute("username");
 		User userSession = userRepo.getUser(username);
-		mav.addObject("sessionUser", userSession);
-		setDefaults(mav, userSession);
+		mav.addObject(new EditUserForm(userSession));
+		//setDefaults(mav, userSession);
 		return mav;
 	}
 
@@ -320,13 +321,13 @@ public class UserController {
 		return comment;
 	}
 
-	private void setDefaults(ModelAndView mav, User original) {
-		mav.addObject("name", original.getName());
-		mav.addObject("surname", original.getSurname());
-		mav.addObject("password", original.getPassword());
-		mav.addObject("confirm", original.getPassword());
-		mav.addObject("description", original.getDescription());
-	}
+//	private void setDefaults(ModelAndView mav, User original) {
+//		mav.addObject("name", original.getName());
+//		mav.addObject("surname", original.getSurname());
+//		mav.addObject("password", original.getPassword());
+//		mav.addObject("confirm", original.getPassword());
+//		mav.addObject("description", original.getDescription());
+//	}
 
 	// private void fillInputs(String name, String surname, String username,
 	// String description, String secretQuestion, String secretAnswer,

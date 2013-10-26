@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Comment extends PersistentEntity implements Comparable<Comment> {
@@ -23,8 +24,8 @@ public class Comment extends PersistentEntity implements Comparable<Comment> {
 	@ManyToMany	
 	@JoinColumn(name = "com_id")
 	private Set<Hashtag> hashtags;
-	//Consultar la cardinalidad
-	//private Set<User> references;
+	@OneToMany
+	private Set<User> references;
 
 	public Comment() {
 	}
@@ -35,7 +36,7 @@ public class Comment extends PersistentEntity implements Comparable<Comment> {
 		this.date = date;
 		this.comment = comment;
 		this.hashtags = hashtags;
-		//this.references = references;
+		this.references = references;
 	}
 
 	public User getAuthor() {
@@ -58,9 +59,9 @@ public class Comment extends PersistentEntity implements Comparable<Comment> {
 		return hashtags;
 	}
 
-//	public Set<User> getReferences() {
-//		return references;
-//	}
+	public Set<User> getReferences() {
+		return references;
+	}
 
 	public int compareTo(Comment o) {
 		return date.compareTo(o.getDate());

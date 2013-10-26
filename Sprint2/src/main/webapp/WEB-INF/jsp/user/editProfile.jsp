@@ -10,8 +10,11 @@
 	<div class="error">
 		<c:out value="${generalError}" />
 	</div>
-	<form:form method="POST" action="editProfile" commandName="sarasa">
+	<form:form method="POST" action="editProfile"
+		commandName="editUserForm">
 		<%-- 		enctype="multipart/form-data"> --%>
+		<form:errors path="*" />
+		<form:hidden path="id" />
 		<div class="registration-form-field">
 			<label for="name">Name:</label>
 			<form:input type="text" name="name" path="name" />
@@ -26,7 +29,7 @@
 		</div>
 		<div class="registration-form-field">
 			<label for="confirm">Confirm password:</label>
-			<form:input type="password" name="confirm" path="confirm" />
+			<form:input type="password" name="confirm" path="confirmPassword" />
 		</div>
 		<div class="registration-form-field">
 			<label for="description">Description:</label>

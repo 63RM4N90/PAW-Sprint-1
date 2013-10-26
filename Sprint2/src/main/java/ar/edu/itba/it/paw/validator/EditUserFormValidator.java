@@ -1,17 +1,18 @@
 package ar.edu.itba.it.paw.validator;
 
+import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 import ar.edu.itba.it.paw.command.EditUserForm;
 
+@Component
 public class EditUserFormValidator implements Validator {
 
 	private static final int MAX_STRING_LENGTH = 32;
 	private static final int MIN_PASSWORD_LENGTH = 8;
 	private static final int MAX_PASSWORD_LENGTH = 16;
 	private static final int MAX_DESCRIPTION_LENGTH = 140;
-	private static final int MAX_QUE_AND_ANS_LENGTH = 64;
 
 	@Override
 	public boolean supports(Class<?> clazz) {
@@ -57,14 +58,6 @@ public class EditUserFormValidator implements Validator {
 				|| editUserForm.getDescription().length() == 0) {
 			errors.rejectValue("description", "length");
 		}
-		if (editUserForm.getSecretQuestion().length() > MAX_QUE_AND_ANS_LENGTH
-				|| editUserForm.getSecretQuestion().length() == 0) {
-			errors.rejectValue("secretQuestion", "length");
-		}
-		if (editUserForm.getSecretAnswer().length() > MAX_QUE_AND_ANS_LENGTH
-				|| editUserForm.getSecretAnswer().length() == 0) {
-			errors.rejectValue("secretAnswer", "length");
-		}
 	}
 
 	private void checkEmptyInputs(EditUserForm editUserForm, Errors errors) {
@@ -82,12 +75,6 @@ public class EditUserFormValidator implements Validator {
 		}
 		if (editUserForm.getDescription() == null) {
 			errors.rejectValue("description", "empty");
-		}
-		if (editUserForm.getSecretQuestion() == null) {
-			errors.rejectValue("secretQuestion", "empty");
-		}
-		if (editUserForm.getSecretAnswer() == null) {
-			errors.rejectValue("secretAnswer", "empty");
 		}
 	}
 }
