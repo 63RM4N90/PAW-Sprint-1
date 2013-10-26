@@ -11,7 +11,6 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,6 +24,7 @@ import ar.edu.itba.it.paw.domain.HashtagRepo;
 import ar.edu.itba.it.paw.domain.RankedHashtag;
 import ar.edu.itba.it.paw.domain.User;
 import ar.edu.itba.it.paw.domain.UserRepo;
+import ar.edu.itba.it.paw.validator.EditUserFormValidator;
 import ar.edu.itba.it.paw.validator.UserFormValidator;
 
 @Controller
@@ -34,17 +34,20 @@ public class UserController {
 	private HashtagRepo hashtagRepo;
 	private CommentRepo commentRepo;
 	private UserFormValidator userFormValidator;
+	private EditUserFormValidator editUserFormValidator;
 	private static final int MAX_COMMENT_LENGTH = 140;
 	private static final int MAX_PASSWORD_LENGTH = 16;
 	private static final int MIN_PASSWORD_LENGTH = 8;
 
 	@Autowired
 	public UserController(UserRepo userService, HashtagRepo hashtagService,
-			CommentRepo commentService, UserFormValidator userFormValidator) {
+			CommentRepo commentService, UserFormValidator userFormValidator,
+			EditUserFormValidator editUserFormValidator) {
 		this.userRepo = userService;
 		this.hashtagRepo = hashtagService;
 		this.commentRepo = commentService;
 		this.userFormValidator = userFormValidator;
+		this.editUserFormValidator = editUserFormValidator;
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
@@ -184,9 +187,22 @@ public class UserController {
 		ModelAndView mav = new ModelAndView();
 		String username = (String) session.getAttribute("username");
 		User userSession = userRepo.getUser(username);
+		System.out.println("ID BEFORE = " + userSession.getId());
 		mav.addObject(new EditUserForm(userSession));
-		//setDefaults(mav, userSession);
+		// setDefaults(mav, userSession);
 		return mav;
+	}
+
+	@RequestMapping(method = RequestMethod.POST)
+	public String editProfile(EditUserForm editUserForm, Errors errors) {
+		editUserFormValidator.validate(editUserForm, errors);
+		if (errors.hasErrors()) {
+			return null;
+		}
+		System.out.println("ID = " + editUserForm.getId());
+		User oldUser = userRepo.get(User.class, editUserForm.getId());
+		editUserForm.update(oldUser);
+		return "redirect:profile";
 	}
 
 	@RequestMapping(method = RequestMethod.GET)

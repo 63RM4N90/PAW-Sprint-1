@@ -33,6 +33,10 @@ public class EditUserForm {
 		this.registrationDate = user.getRegistrationDate();
 	}
 
+	public boolean userIsNew() {
+		return id == 0;
+	}
+
 	public int getId() {
 		return id;
 	}
