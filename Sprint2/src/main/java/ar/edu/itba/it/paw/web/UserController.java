@@ -2,8 +2,6 @@ package ar.edu.itba.it.paw.web;
 
 import java.util.List;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -149,9 +147,6 @@ public class UserController {
 			session.setAttribute("user", profile);
 			mav.addObject("isEmptyPicture", profile.getPicture() == null);
 			Set<Comment> comments = profile.getComments();
-			for (Comment commentt : comments) {
-				commentt.setComment(getProcessedComment(commentt.getComment()));
-			}
 			mav.addObject("comments", comments);
 		}
 
@@ -187,9 +182,7 @@ public class UserController {
 		ModelAndView mav = new ModelAndView();
 		String username = (String) session.getAttribute("username");
 		User userSession = userRepo.getUser(username);
-		System.out.println("ID BEFORE = " + userSession.getId());
 		mav.addObject(new EditUserForm(userSession));
-		// setDefaults(mav, userSession);
 		return mav;
 	}
 
@@ -199,7 +192,6 @@ public class UserController {
 		if (errors.hasErrors()) {
 			return null;
 		}
-		System.out.println("ID = " + editUserForm.getId());
 		User oldUser = userRepo.get(User.class, editUserForm.getId());
 		editUserForm.update(oldUser);
 		return "redirect:profile";
@@ -276,34 +268,5 @@ public class UserController {
 
 		mav.addObject("ranking", top10);
 		mav.addObject("isempty", isempty);
-	}
-
-	private String getProcessedComment(String comment) {
-		// Search for URLs
-		if (comment != null && comment.contains("http:")) {
-			int indexOfHttp = comment.indexOf("http:");
-			int endPoint = (comment.indexOf(' ', indexOfHttp) != -1) ? comment
-					.indexOf(' ', indexOfHttp) : comment.length();
-			String url = comment.substring(indexOfHttp, endPoint);
-			String targetUrlHtml = "<a href='" + url + "' target='_blank'>"
-					+ url + "</a>";
-			comment = comment.replace(url, targetUrlHtml);
-		}
-
-		String patternStr = "#([A-Za-z0-9_]+)";
-		Pattern pattern = Pattern.compile(patternStr);
-		Matcher matcher = pattern.matcher(comment);
-		String result = "";
-
-		// Search for Hashtags
-		while (matcher.find()) {
-			result = matcher.group();
-			result = result.replace(" ", "");
-			String search = result.replace("#", "");
-			String searchHTML = "<a href='./hashtag?tag=" + search + "'>"
-					+ result + "</a>";
-			comment = comment.replace(result, searchHTML);
-		}
-		return comment;
 	}
 }

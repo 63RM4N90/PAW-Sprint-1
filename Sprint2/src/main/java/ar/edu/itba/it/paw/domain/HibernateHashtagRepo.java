@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.TreeMap;
 
@@ -24,9 +25,13 @@ public class HibernateHashtagRepo extends AbstractHibernateRepo implements
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public Hashtag getHashtag(String hashtag) {
-		return (Hashtag) find(" from Hashtag where hashtag = ?", hashtag)
-				.get(0);
+		Session session = getSession();
+		Query query = session.createQuery(" from Hashtag where hashtag = ?");
+		query.setParameter(0, hashtag);
+		List<Hashtag> result = (List<Hashtag>) query.list();
+		return result.size() > 0 ? result.get(0) : null;
 	}
 
 	@Override
