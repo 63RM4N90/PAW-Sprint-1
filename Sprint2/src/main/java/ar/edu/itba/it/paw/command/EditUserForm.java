@@ -26,6 +26,7 @@ public class EditUserForm {
 		this.surname = user.getSurname();
 		this.username = user.getUsername();
 		this.password = user.getPassword();
+		this.confirmPassword = user.getPassword();
 		this.description = user.getDescription();
 		this.secretQuestion = user.getSecretQuestion();
 		this.secretAnswer = user.getSecretAnswer();
@@ -64,7 +65,6 @@ public class EditUserForm {
 		this.description = description;
 	}
 
-
 	public String getPassword() {
 		return password;
 	}
@@ -72,11 +72,11 @@ public class EditUserForm {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
+
 	public String getConfirmPassword() {
 		return confirmPassword;
 	}
-	
+
 	public void setConfirmPassword(String confirmPassword) {
 		this.confirmPassword = confirmPassword;
 	}
@@ -87,7 +87,7 @@ public class EditUserForm {
 		user.setDescription(description);
 		user.setPassword(password);
 	}
-	
+
 	public User build() {
 		return new User(name, surname, username, description, password, null,
 				secretQuestion, secretAnswer, registrationDate, false);

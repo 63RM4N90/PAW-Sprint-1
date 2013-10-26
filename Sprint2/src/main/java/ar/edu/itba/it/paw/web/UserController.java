@@ -91,10 +91,6 @@ public class UserController {
 	public String registration(HttpServletRequest req, UserForm userForm,
 			Errors errors, HttpSession session) {
 		// DiskFileUpload fu = new DiskFileUpload();
-		List<ObjectError> errorList = errors.getAllErrors();
-		for (ObjectError each : errorList) {
-			System.out.println(each.toString());
-		}
 		userFormValidator.validate(userForm, errors);
 
 		if (errors.hasErrors()) {
@@ -132,7 +128,6 @@ public class UserController {
 			return mav;
 		} else {
 			User userSession = userRepo.getUser(userSessionString);
-			System.out.println(userSession);
 			if (id != null) {
 				Comment comment = commentRepo.get(Comment.class, id);
 				if (comment != null) {
@@ -151,7 +146,6 @@ public class UserController {
 			session.setAttribute("user", profile);
 			mav.addObject("isEmptyPicture", profile.getPicture() == null);
 			Set<Comment> comments = profile.getComments();
-			System.out.println("COMMENTS = " + comments);
 			for (Comment commentt : comments) {
 				commentt.setComment(getProcessedComment(commentt.getComment()));
 			}
@@ -179,9 +173,7 @@ public class UserController {
 		User user = (User) session.getAttribute("user");
 		if (comment.getComment().length() > 0
 				&& comment.getComment().length() < MAX_COMMENT_LENGTH) {
-			System.out.println("COMENTE!");
 			commentRepo.save(comment);
-			System.out.println(user.getComments().size());
 		}
 		mav.setViewName("redirect:profile?user=" + user.getUsername());
 		return mav;
@@ -253,28 +245,6 @@ public class UserController {
 		return mav;
 	}
 
-	/*
-	 * @Override protected void doGet(HttpServletRequest req,
-	 * HttpServletResponse resp) throws ServletException, IOException { User
-	 * user = (User) req.getSession().getAttribute("user"); if (user == null) {
-	 * showTopTenHashtags(req);
-	 * getServletContext().getRequestDispatcher("/WEB-INF/jsp/login.jsp")
-	 * .forward(req, resp); } else { resp.sendRedirect("profile?user=" +
-	 * user.getUsername()); } }
-	 * 
-	 * @Override protected void doPost(HttpServletRequest req,
-	 * HttpServletResponse resp) throws ServletException, IOException {
-	 * showTopTenHashtags(req); String username = req.getParameter("username");
-	 * String password = req.getParameter("password"); User user =
-	 * userService.authenticate(username, password); if (user != null) {
-	 * req.getSession().setAttribute("user", user);
-	 * resp.sendRedirect("profile?user=" + user.getUsername()); } else {
-	 * req.setAttribute("username", username); req.setAttribute("error",
-	 * "Invalid user or password.");
-	 * req.getRequestDispatcher("/WEB-INF/jsp/login.jsp").forward(req, resp); }
-	 * }
-	 */
-
 	private void showTopTenHashtags(ModelAndView mav) {
 		List<RankedHashtag> top10;
 
@@ -320,25 +290,4 @@ public class UserController {
 		}
 		return comment;
 	}
-
-//	private void setDefaults(ModelAndView mav, User original) {
-//		mav.addObject("name", original.getName());
-//		mav.addObject("surname", original.getSurname());
-//		mav.addObject("password", original.getPassword());
-//		mav.addObject("confirm", original.getPassword());
-//		mav.addObject("description", original.getDescription());
-//	}
-
-	// private void fillInputs(String name, String surname, String username,
-	// String description, String secretQuestion, String secretAnswer,
-	// ModelAndView mav) {
-	// mav.addObject("name", name);
-	// mav.addObject("surname", surname);
-	// mav.addObject("username", username);
-	// mav.addObject("password", "");
-	// mav.addObject("confirm", "");
-	// mav.addObject("description", description);
-	// mav.addObject("secretQuestion", secretQuestion);
-	// mav.addObject("secretAnswer", secretAnswer);
-	// }
 }
