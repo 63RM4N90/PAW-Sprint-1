@@ -2,6 +2,8 @@ package ar.edu.itba.it.paw.web;
 
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -147,6 +149,7 @@ public class UserController {
 			session.setAttribute("user", profile);
 			mav.addObject("isEmptyPicture", profile.getPicture() == null);
 			Set<Comment> comments = profile.getComments();
+			transformComments(comments);
 			mav.addObject("comments", comments);
 		}
 
@@ -251,6 +254,41 @@ public class UserController {
 			}
 		}
 		return mav;
+	}
+
+	private void transformComments(Set<Comment> comments) {
+		for (Comment comment : comments) {
+			comment.setComment(getProcessedComment(comment.getComment()));
+		}
+	}
+
+	private String getProcessedComment(String comment) {
+		// Search for URLs
+		if (comment != null && comment.contains("http:")) {
+			int indexOfHttp = comment.indexOf("http:");
+			int endPoint = (comment.indexOf(' ', indexOfHttp) != -1) ? comment
+					.indexOf(' ', indexOfHttp) : comment.length();
+			String url = comment.substring(indexOfHttp, endPoint);
+			String targetUrlHtml = "<a href='" + url + "' target='_blank'>"
+					+ url + "</a>";
+			comment = comment.replace(url, targetUrlHtml);
+		}
+
+		String patternStr = "#([A-Za-z0-9_]+)";
+		Pattern pattern = Pattern.compile(patternStr);
+		Matcher matcher = pattern.matcher(comment);
+		String result = "";
+
+		// Search for Hashtags
+		while (matcher.find()) {
+			result = matcher.group();
+			result = result.replace(" ", "");
+			String search = result.replace("#", "");
+			String searchHTML = "<a href='./hashtag?tag=" + search + "'>"
+					+ result + "</a>";
+			comment = comment.replace(result, searchHTML);
+		}
+		return comment;
 	}
 
 	private void showTopTenHashtags(ModelAndView mav) {
