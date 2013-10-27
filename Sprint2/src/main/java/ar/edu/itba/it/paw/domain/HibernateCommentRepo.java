@@ -29,7 +29,7 @@ public class HibernateCommentRepo extends AbstractHibernateRepo implements
 
 	@Override
 	public List<Comment> getAll() {
-		return find("from Comment");
+		return find("from Comment order by Comment.date asc");
 	}
 
 	@Override
@@ -72,5 +72,4 @@ public class HibernateCommentRepo extends AbstractHibernateRepo implements
 		}
 		return ans;
 	}
-
 }

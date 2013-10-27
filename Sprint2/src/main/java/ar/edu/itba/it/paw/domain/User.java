@@ -1,7 +1,9 @@
 package ar.edu.itba.it.paw.domain;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -38,7 +40,7 @@ public class User extends PersistentEntity {
 
 	private boolean isPrivate;
 	@OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
-	private Set<Comment> comments = new HashSet<Comment>();
+	private List<Comment> comments = new ArrayList<Comment>();
 	@ManyToMany(mappedBy = "followers")
 	private Set<User> following = new HashSet<User>();
 	@ManyToMany
@@ -81,7 +83,7 @@ public class User extends PersistentEntity {
 		this.isPrivate = isPrivate;
 	}
 
-	public Set<Comment> getComments() {
+	public List<Comment> getComments() {
 		return comments;
 	}
 

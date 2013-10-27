@@ -20,7 +20,6 @@ public class Comment extends PersistentEntity implements Comparable<Comment> {
 	private Date date;
 	@Column(nullable = false)
 	private String comment;
-	
 	@ManyToMany	
 	@JoinColumn(name = "com_id")
 	private Set<Hashtag> hashtags;
@@ -63,8 +62,9 @@ public class Comment extends PersistentEntity implements Comparable<Comment> {
 		return references;
 	}
 
+	@Override
 	public int compareTo(Comment o) {
-		return date.compareTo(o.getDate());
+		return -date.compareTo(o.getDate());
 	}
 
 	@Override

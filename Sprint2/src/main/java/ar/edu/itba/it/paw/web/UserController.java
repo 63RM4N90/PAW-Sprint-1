@@ -1,8 +1,8 @@
 package ar.edu.itba.it.paw.web;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -149,11 +149,10 @@ public class UserController {
 			}
 			session.setAttribute("user", profile);
 			mav.addObject("isEmptyPicture", profile.getPicture() == null);
-			Set<Comment> comments = profile.getComments();
-			Set<Comment> transformedComments = transformComments(comments);
+			List<Comment> comments = profile.getComments();
+			SortedSet<Comment> transformedComments = transformComments(comments);
 			mav.addObject("comments", transformedComments);
 		}
-
 		return mav;
 	}
 
@@ -257,8 +256,8 @@ public class UserController {
 		return mav;
 	}
 
-	private Set<Comment> transformComments(Set<Comment> comments) {
-		Set<Comment> ans = new HashSet<Comment>();
+	private SortedSet<Comment> transformComments(List<Comment> comments) {
+		SortedSet<Comment> ans = new TreeSet<Comment>();
 		for (Comment comment : comments) {
 			String processedComment = getProcessedComment(comment.getComment());
 			Comment aux = new Comment(comment.getAuthor(), comment.getDate(),
