@@ -1,5 +1,6 @@
 package ar.edu.itba.it.paw.web;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -149,8 +150,8 @@ public class UserController {
 			session.setAttribute("user", profile);
 			mav.addObject("isEmptyPicture", profile.getPicture() == null);
 			Set<Comment> comments = profile.getComments();
-			transformComments(comments);
-			mav.addObject("comments", comments);
+			Set<Comment> transformedComments = transformComments(comments);
+			mav.addObject("comments", transformedComments);
 		}
 
 		return mav;
@@ -256,10 +257,16 @@ public class UserController {
 		return mav;
 	}
 
-	private void transformComments(Set<Comment> comments) {
+	private Set<Comment> transformComments(Set<Comment> comments) {
+		Set<Comment> ans = new HashSet<Comment>();
 		for (Comment comment : comments) {
-			comment.setComment(getProcessedComment(comment.getComment()));
+			String processedComment = getProcessedComment(comment.getComment());
+			Comment aux = new Comment(comment.getAuthor(), comment.getDate(),
+					processedComment, comment.getHashtags(),
+					comment.getReferences());
+			ans.add(aux);
 		}
+		return ans;
 	}
 
 	private String getProcessedComment(String comment) {
