@@ -270,31 +270,38 @@ public class UserController {
 
 	private String getProcessedComment(String comment) {
 		// Search for URLs
-		if (comment != null && comment.contains("http:")) {
-			int indexOfHttp = comment.indexOf("http:");
-			int endPoint = (comment.indexOf(' ', indexOfHttp) != -1) ? comment
-					.indexOf(' ', indexOfHttp) : comment.length();
-			String url = comment.substring(indexOfHttp, endPoint);
+		String aux = comment;
+		if (aux != null && aux.contains("http:")) {
+			int indexOfHttp = aux.indexOf("http:");
+			int endPoint = (aux.indexOf(' ', indexOfHttp) != -1) ? aux.indexOf(
+					' ', indexOfHttp) : aux.length();
+			String url = aux.substring(indexOfHttp, endPoint);
 			String targetUrlHtml = "<a href='" + url + "' target='_blank'>"
 					+ url + "</a>";
-			comment = comment.replace(url, targetUrlHtml);
+			aux = aux.replace(url, targetUrlHtml);
 		}
-
-		String patternStr = "#([A-Za-z0-9_]+)";
-		Pattern pattern = Pattern.compile(patternStr);
-		Matcher matcher = pattern.matcher(comment);
-		String result = "";
 
 		// Search for Hashtags
-		while (matcher.find()) {
-			result = matcher.group();
-			result = result.replace(" ", "");
-			String search = result.replace("#", "");
-			String searchHTML = "<a href='./hashtag?tag=" + search + "'>"
-					+ result + "</a>";
-			comment = comment.replace(result, searchHTML);
+		String patternStr = "#([A-Za-z0-9_]+)";
+		Pattern pattern = Pattern.compile(patternStr);
+		String[] words = aux.split(" ");
+		String ans = "";
+
+		for (String word : words) {
+			String result = "";
+			Matcher matcher = pattern.matcher(word);
+			if (matcher.find()) {
+				result = matcher.group();
+				result = result.replace(" ", "");
+				String search = result.replace("#", "");
+				String searchHTML = "<a href='../hashtag/detail?tag=" + search + "'>"
+						+ result + "</a>";
+				ans += word.replace(result, searchHTML) + " ";
+			} else {
+				ans += word + " ";
+			}
 		}
-		return comment;
+		return ans;
 	}
 
 	private void showTopTenHashtags(ModelAndView mav) {
@@ -306,10 +313,8 @@ public class UserController {
 			top10 = hashtagRepo.topHashtags(Integer.valueOf((String) mav
 					.getModel().get("period")));
 		}
-
 		boolean isempty = top10.size() == 0;
 		mav.addObject("previous", "login");
-
 		mav.addObject("ranking", top10);
 		mav.addObject("isempty", isempty);
 	}
