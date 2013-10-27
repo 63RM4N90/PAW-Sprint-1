@@ -259,11 +259,8 @@ public class UserController {
 	private SortedSet<Comment> transformComments(List<Comment> comments) {
 		SortedSet<Comment> ans = new TreeSet<Comment>();
 		for (Comment comment : comments) {
-			String processedComment = getProcessedComment(comment.getComment());
-			Comment aux = new Comment(comment.getAuthor(), comment.getDate(),
-					processedComment, comment.getHashtags(),
-					comment.getReferences());
-			ans.add(aux);
+			comment.setComment(getProcessedComment(comment.getComment()));
+			ans.add(comment);
 		}
 		return ans;
 	}
@@ -286,17 +283,36 @@ public class UserController {
 		Pattern pattern = Pattern.compile(patternStr);
 		String[] words = aux.split(" ");
 		String ans = "";
+		String result = "";
 
 		for (String word : words) {
-			String result = "";
 			Matcher matcher = pattern.matcher(word);
 			if (matcher.find()) {
 				result = matcher.group();
 				result = result.replace(" ", "");
 				String search = result.replace("#", "");
-				String searchHTML = "<a href='../hashtag/detail?tag=" + search + "'>"
-						+ result + "</a>";
+				String searchHTML = "<a href='../hashtag/detail?tag=" + search
+						+ "'>" + result + "</a>";
 				ans += word.replace(result, searchHTML) + " ";
+			} else {
+				ans += word + " ";
+			}
+		}
+
+		// Search for Users
+		patternStr = "@([A-Za-z0-9_]+)";
+		pattern = Pattern.compile(patternStr);
+		words = ans.split(" ");
+		ans = "";
+		for (String word : words) {
+			Matcher matcher = pattern.matcher(word);
+			if (matcher.find()) {
+				result = matcher.group();
+				result = result.replace(" ", "");
+				String search = result.replace("@", "");
+				String userHTML = "<a href='?user=" + search + "'>" + result
+						+ "</a>";
+				ans += word.replace(result, userHTML) + " ";
 			} else {
 				ans += word + " ";
 			}

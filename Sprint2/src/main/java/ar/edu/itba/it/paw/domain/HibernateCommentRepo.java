@@ -15,16 +15,16 @@ import org.springframework.stereotype.Repository;
 public class HibernateCommentRepo extends AbstractHibernateRepo implements
 		CommentRepo {
 
-	private HibernateHashtagRepo hibernateHashtagRepo;
-	private HibernateUserRepo hibernateUserRepo;
+	private HashtagRepo hashtagRepo;
+	private UserRepo userRepo;
 
 	@Autowired
 	public HibernateCommentRepo(SessionFactory sessionFactory,
-			HibernateHashtagRepo hibernateHashtagRepo,
-			HibernateUserRepo hibernateUserRepo) {
+			HashtagRepo hibernateHashtagRepo,
+			UserRepo hibernateUserRepo) {
 		super(sessionFactory);
-		this.hibernateHashtagRepo = hibernateHashtagRepo;
-		this.hibernateUserRepo = hibernateUserRepo;
+		this.hashtagRepo = hibernateHashtagRepo;
+		this.userRepo = hibernateUserRepo;
 	}
 
 	@Override
@@ -43,10 +43,10 @@ public class HibernateCommentRepo extends AbstractHibernateRepo implements
 		while (matcher.find()) {
 			result = matcher.group();
 			String hashtag = result.substring(1);
-			Hashtag tag = hibernateHashtagRepo.getHashtag(hashtag);
+			Hashtag tag = hashtagRepo.getHashtag(hashtag);
 			if (tag == null) {
 				tag = new Hashtag(hashtag, author, new Date());
-				hibernateHashtagRepo.save(tag);
+				hashtagRepo.save(tag);
 			}
 			ans.add(tag);
 		}
@@ -56,19 +56,19 @@ public class HibernateCommentRepo extends AbstractHibernateRepo implements
 	@Override
 	public Set<User> getReferences(String comment) {
 		Set<User> ans = new HashSet<User>();
-		String patternStr = "(?:\\s|\\A)[@]+([A-Za-z0-9-_]+)";
+		String patternStr = "@([A-Za-z0-9-_]+)";
 		Pattern pattern = Pattern.compile(patternStr);
 		Matcher matcher = pattern.matcher(comment);
-		String result = "";
 		pattern = Pattern.compile(patternStr);
 		matcher = pattern.matcher(comment);
+		String result = "";
 		while (matcher.find()) {
 			result = matcher.group();
-			result = result.replace(" ", "");
-			ans.add(hibernateUserRepo.getUser(result));
-			String userHTML = "<a href='http://twitter.com/${rawName}'>"
-					+ result + "</a>";
-			comment = comment.replace(result, userHTML);
+			String username = result.substring(1);
+			User user = userRepo.getUser(username);
+			if (user != null) {
+				ans.add(user);				
+			}
 		}
 		return ans;
 	}
