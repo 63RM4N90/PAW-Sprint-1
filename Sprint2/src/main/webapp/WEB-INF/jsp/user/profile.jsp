@@ -43,7 +43,7 @@
 				<c:out value="${commentError}" />
 			</div>
 			<div class="comment-creator-area">
-				<form method="POST" action="profile">
+				<form method="POST" action="../profile">
 					<div class="form-area">
 						<textarea class="comment-area" rows="5" cols="40"
 							placeholder="you have 140 characters to write down your sins..."

@@ -32,6 +32,7 @@ public class EditUserForm {
 		this.secretQuestion = user.getSecretQuestion();
 		this.secretAnswer = user.getSecretAnswer();
 		this.registrationDate = user.getRegistrationDate();
+		this.privacy = user.isPrivate() ? "T" : "F";
 	}
 
 	public String getPrivacy() {
@@ -40,10 +41,6 @@ public class EditUserForm {
 
 	public void setPrivacy(String privacy) {
 		this.privacy = privacy;
-	}
-
-	public boolean userIsNew() {
-		return id == 0;
 	}
 
 	public int getId() {
@@ -99,6 +96,11 @@ public class EditUserForm {
 		user.setSurname(surname);
 		user.setDescription(description);
 		user.setPassword(password);
+		if (privacy.equals("T")) {
+			user.makePrivate();
+		} else {
+			user.makePublic();
+		}
 	}
 
 	public User build() {

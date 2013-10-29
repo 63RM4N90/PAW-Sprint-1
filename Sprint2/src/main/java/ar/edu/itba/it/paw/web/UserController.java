@@ -135,7 +135,7 @@ public class UserController {
 		}
 		if (profile == null) {
 			if (userSessionString != null) {
-				mav.setViewName("redirect:profile");
+				mav.setViewName("redirect:../profile/" + userSessionString);
 			} else {
 				mav.setViewName("redirect:login");
 			}
@@ -201,11 +201,6 @@ public class UserController {
 		String username = (String) session.getAttribute("username");
 		User userSession = userRepo.getUser(username);
 		EditUserForm editUserForm = new EditUserForm(userSession);
-		if (userSession.isPrivate()) {
-			editUserForm.setPrivacy("T");
-		} else {
-			editUserForm.setPrivacy("F");
-		}
 		mav.addObject(editUserForm);
 		return mav;
 	}
@@ -217,11 +212,6 @@ public class UserController {
 			return null;
 		}
 		User oldUser = userRepo.get(User.class, editUserForm.getId());
-		if (editUserForm.getPrivacy().equals("T")) {
-			oldUser.makePrivate();
-		} else {
-			oldUser.makePublic();
-		}
 		editUserForm.update(oldUser);
 		return "redirect:home";
 	}
@@ -336,7 +326,7 @@ public class UserController {
 				result = matcher.group();
 				result = result.replace(" ", "");
 				String search = result.replace("@", "");
-				String userHTML = "<a href='?user=" + search + "'>" + result
+				String userHTML = "<a href='./" + search + "'>" + result
 						+ "</a>";
 				ans += word.replace(result, userHTML) + " ";
 			} else {
