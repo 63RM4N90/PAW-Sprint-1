@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -54,8 +55,8 @@ public class UserController {
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView login(HttpSession s) {
 		ModelAndView mav = new ModelAndView();
-		if (s.getAttribute("userId") != null) {
-			mav.setViewName("redirect:profile");
+		if (s.getAttribute("username") != null) {
+			mav.setViewName("/user/profile/" + s.getAttribute("username"));
 		}
 		showTopTenHashtags(mav);
 		return mav;
@@ -69,7 +70,7 @@ public class UserController {
 		ModelAndView mav = new ModelAndView();
 		if (user != null && user.getPassword().equals(password)) {
 			session.setAttribute("username", user.getUsername());
-			mav.setViewName("redirect:profile?user=" + user.getUsername());
+			mav.setViewName("redirect:./profile/" + user.getUsername());
 		} else {
 			mav.addObject("error", "Invalid user or password.");
 			mav.setViewName("user/login");
@@ -80,7 +81,7 @@ public class UserController {
 	@RequestMapping(method = RequestMethod.GET)
 	public String logout(HttpSession s) {
 		s.removeAttribute("username");
-		return "redirect:login";
+		return "redirect:./login";
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
@@ -108,12 +109,22 @@ public class UserController {
 			return null;
 		}
 		session.setAttribute("username", userForm.getUsername());
-		return "redirect:profile?user=" + userForm.getUsername();
+		return "redirect:profile/" + userForm.getUsername();
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
+	public String home(HttpSession session) {
+		if (session.getAttribute("username") != null) {
+			return "redirect:profile/" + session.getAttribute("username");
+		} else {
+			return "redirect:login";
+		}
+	}
+
+	@RequestMapping(value = "/user/profile/{profile}", method = RequestMethod.GET)
 	public ModelAndView profile(
-			@RequestParam(value = "user", required = false) User profile,
+			@PathVariable User profile,
+			// @RequestParam(value = "user", required = false) User profile,
 			@RequestParam(value = "period", required = false) Integer period,
 			@RequestParam(value = "commentid", required = false) Integer id,
 			HttpSession session) {
@@ -124,8 +135,7 @@ public class UserController {
 		}
 		if (profile == null) {
 			if (userSessionString != null) {
-				mav.setViewName("redirect:profile?user=" + userSessionString
-						+ "&period=" + period);
+				mav.setViewName("redirect:profile");
 			} else {
 				mav.setViewName("redirect:login");
 			}
@@ -136,8 +146,8 @@ public class UserController {
 				Comment comment = commentRepo.get(Comment.class, id);
 				if (comment != null) {
 					commentRepo.delete(comment);
-					mav.setViewName("redirect:profile?user="
-							+ userSessionString + "&period=" + period);
+					mav.setViewName("redirect:profile/" + userSessionString
+							+ "&period=" + period);
 					return mav;
 				}
 			}
@@ -153,6 +163,7 @@ public class UserController {
 			SortedSet<Comment> transformedComments = transformComments(comments);
 			mav.addObject("comments", transformedComments);
 		}
+		mav.setViewName("/user/profile");
 		return mav;
 	}
 
@@ -176,7 +187,7 @@ public class UserController {
 				&& comment.getComment().length() < MAX_COMMENT_LENGTH) {
 			commentRepo.save(comment);
 		}
-		mav.setViewName("redirect:profile?user=" + user.getUsername());
+		mav.setViewName("redirect:./profile/" + user.getUsername());
 		return mav;
 	}
 
