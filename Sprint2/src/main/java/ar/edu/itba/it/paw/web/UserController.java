@@ -142,6 +142,7 @@ public class UserController {
 			return mav;
 		} else {
 			User userSession = userRepo.getUser(userSessionString);
+			userSession.visit();
 			if (id != null) {
 				Comment comment = commentRepo.get(Comment.class, id);
 				if (comment != null) {

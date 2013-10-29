@@ -37,8 +37,8 @@ public class User extends PersistentEntity {
 	private String secretAnswer;
 	@Column(nullable = false)
 	private Date registrationDate;
-
 	private boolean isPrivate;
+	private int visits;
 	@OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
 	private List<Comment> comments = new ArrayList<Comment>();
 	@ManyToMany(mappedBy = "followers")
@@ -81,6 +81,14 @@ public class User extends PersistentEntity {
 		this.secretAnswer = secretAnswer;
 		this.registrationDate = registrationDate;
 		this.isPrivate = isPrivate;
+	}
+
+	public int getVisits() {
+		return visits;
+	}
+
+	public void visit() {
+		this.visits++;
 	}
 
 	public List<Comment> getComments() {

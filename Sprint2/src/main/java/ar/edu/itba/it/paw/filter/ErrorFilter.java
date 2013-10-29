@@ -20,6 +20,7 @@ public class ErrorFilter extends OncePerRequestFilter {
 		try {
 			filterChain.doFilter(request, response);
 		} catch (Exception e) {
+			System.out.println(e.getMessage());
 			request.getRequestDispatcher("/WEB-INF/jsp/error.jsp").forward(
 					request, response);
 		}

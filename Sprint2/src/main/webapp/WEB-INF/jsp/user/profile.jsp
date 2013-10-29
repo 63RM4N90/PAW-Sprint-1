@@ -26,6 +26,10 @@
 			<p>
 				<c:out value="${user.description}" />
 			</p>
+			<h6>Visits:</h6>
+			<p>
+				<c:out value="${user.visits}" />
+			</p>
 		</div>
 		<c:if test="${isOwner}">
 			<form method="GET" action="editProfile">
