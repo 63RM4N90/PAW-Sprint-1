@@ -209,7 +209,7 @@ public class UserController {
 		}
 		User oldUser = userRepo.get(User.class, editUserForm.getId());
 		editUserForm.update(oldUser);
-		return "redirect:profile";
+		return "redirect:home";
 	}
 
 	@RequestMapping(method = RequestMethod.GET)

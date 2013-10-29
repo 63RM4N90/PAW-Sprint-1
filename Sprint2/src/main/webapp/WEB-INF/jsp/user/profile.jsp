@@ -32,7 +32,7 @@
 			</p>
 		</div>
 		<c:if test="${isOwner}">
-			<form method="GET" action="editProfile">
+			<form method="GET" action="../editProfile">
 				<button class="button">Edit</button>
 			</form>
 		</c:if>

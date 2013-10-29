@@ -35,6 +35,10 @@
 			<label for="description">Description:</label>
 			<form:input type="text" name="description" path="description" />
 		</div>
+			<label for="description">Privacy:</label>
+			<form:input type="checkbox" name="privacy" path="privacy"/>
+		<div class="registration-form-field">
+		</div>
 		<!-- 		<div class="registration-form-field"> -->
 		<!-- 			<label for="picture">Picture:</label> -->
 		<!-- 			<input type="file" name="picture" accept="image/"/> -->
