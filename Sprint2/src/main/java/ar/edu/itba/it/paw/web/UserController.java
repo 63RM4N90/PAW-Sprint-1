@@ -197,7 +197,13 @@ public class UserController {
 		ModelAndView mav = new ModelAndView();
 		String username = (String) session.getAttribute("username");
 		User userSession = userRepo.getUser(username);
-		mav.addObject(new EditUserForm(userSession));
+		EditUserForm editUserForm = new EditUserForm(userSession);
+		if (userSession.isPrivate()) {
+			editUserForm.setPrivacy("T");
+		} else {
+			editUserForm.setPrivacy("F");
+		}
+		mav.addObject(editUserForm);
 		return mav;
 	}
 
@@ -208,6 +214,11 @@ public class UserController {
 			return null;
 		}
 		User oldUser = userRepo.get(User.class, editUserForm.getId());
+		if (editUserForm.getPrivacy().equals("T")) {
+			oldUser.makePrivate();
+		} else {
+			oldUser.makePublic();
+		}
 		editUserForm.update(oldUser);
 		return "redirect:home";
 	}

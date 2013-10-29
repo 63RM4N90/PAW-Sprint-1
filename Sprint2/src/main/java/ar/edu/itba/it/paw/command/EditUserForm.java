@@ -16,7 +16,7 @@ public class EditUserForm {
 	private String secretQuestion;
 	private String secretAnswer;
 	private Date registrationDate;
-	private boolean privacy;
+	private String privacy;
 
 	public EditUserForm() {
 	}
@@ -32,14 +32,13 @@ public class EditUserForm {
 		this.secretQuestion = user.getSecretQuestion();
 		this.secretAnswer = user.getSecretAnswer();
 		this.registrationDate = user.getRegistrationDate();
-		this.privacy = user.isPrivate();
 	}
 
-	public boolean getPrivacy() {
+	public String getPrivacy() {
 		return privacy;
 	}
 
-	public void setPrivacy(boolean privacy) {
+	public void setPrivacy(String privacy) {
 		this.privacy = privacy;
 	}
 
