@@ -141,8 +141,13 @@ public class UserController {
 			}
 			return mav;
 		} else {
-			User userSession = userRepo.getUser(userSessionString);
-			userSession.visit();
+			if (userSessionString == null) {
+				if (profile.isPrivate()) {
+					mav.setViewName("privacyError");
+					return mav;
+				}
+			}
+			profile.visit();
 			if (id != null) {
 				Comment comment = commentRepo.get(Comment.class, id);
 				if (comment != null) {
@@ -154,10 +159,8 @@ public class UserController {
 			}
 
 			showTopTenHashtags(mav);
-
-			if (profile.getUsername().equals(userSession.getUsername())) {
-				mav.addObject("isOwner", true);
-			}
+			mav.addObject("isOwner",
+					profile.getUsername().equals(userSessionString));
 			session.setAttribute("user", profile);
 			mav.addObject("isEmptyPicture", profile.getPicture() == null);
 			List<Comment> comments = profile.getComments();
