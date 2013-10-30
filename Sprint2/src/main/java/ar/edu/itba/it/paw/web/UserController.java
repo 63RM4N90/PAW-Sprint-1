@@ -307,7 +307,7 @@ public class UserController {
 				result = matcher.group();
 				result = result.replace(" ", "");
 				String search = result.replace("#", "");
-				String searchHTML = "<a href='../hashtag/detail?tag=" + search
+				String searchHTML = "<a href='../../hashtag/detail?tag=" + search
 						+ "'>" + result + "</a>";
 				ans += word.replace(result, searchHTML) + " ";
 			} else {
