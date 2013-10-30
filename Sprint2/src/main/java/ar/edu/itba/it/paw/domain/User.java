@@ -41,6 +41,8 @@ public class User extends PersistentEntity {
 	private int visits;
 	@OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
 	private List<Comment> comments = new ArrayList<Comment>();
+	@OneToMany(mappedBy = "notificator", cascade = CascadeType.ALL)
+	private List<Notification> notifications = new ArrayList<Notification>();
 	@ManyToMany(mappedBy = "followers")
 	private Set<User> following = new HashSet<User>();
 	@ManyToMany
@@ -81,6 +83,14 @@ public class User extends PersistentEntity {
 		this.secretAnswer = secretAnswer;
 		this.registrationDate = registrationDate;
 		this.isPrivate = isPrivate;
+	}
+
+	public void notify(Notification notification) {
+		notifications.add(notification);
+	}
+
+	public List<Notification> getNotifications() {
+		return notifications;
 	}
 
 	public int getVisits() {

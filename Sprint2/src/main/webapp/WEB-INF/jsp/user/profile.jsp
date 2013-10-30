@@ -30,6 +30,12 @@
 			<p>
 				<c:out value="${user.visits}" />
 			</p>
+			<c:if test="${isOwner}">
+				<p>
+					Notifications:
+					<c:out value="${notifications}" />
+				</p>
+			</c:if>
 		</div>
 		<c:if test="${isOwner}">
 			<form method="GET" action="../editProfile">
@@ -61,16 +67,16 @@
 			<c:forEach items="${comments}" var="comment">
 				<li <c:set var="row" value="${row + 1}" />>
 					<div class="comment">
-						<p>${comment.comment}</p>
+						<p>${comment.transformedComment}</p>
 						<div class="comment-reference">
-							<i>Created by: </i><a
-								href="<c:url value="profile"><c:param name="user" value="${comment.author.username}" /></c:url>">${comment.author.username}</a>
-							| <i><fmt:formatDate value="${comment.date}"
-									pattern="dd-MM-yyyy HH:mm" /></i> |
+							<i>Created by: </i>
+							<c:out value="<a href=\"../../user/profile/${comment.comment.author.username}\">${comment.comment.author.username}</a>" escapeXml="false" />
+							| <i><fmt:formatDate value="${comment.comment.date}"
+										pattern="dd-MM-yyyy HH:mm" /></i> |
 							<c:if test="${isOwner}">
-								<a
-									href="<c:url value="profile"><c:param name="commentid" value="${comment.id}" /><c:param name="user" value="${comment.author.username}" /></c:url>">Delete</a>
-							</c:if>
+									<a
+										href="<c:url value="../profile"><c:param name="commentid" value="${comment.comment.id}" /><c:param name="user" value="${comment.comment.author.username}" /></c:url>">Delete</a>
+								</c:if>
 						</div>
 					</div>
 				</li>

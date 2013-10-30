@@ -148,6 +148,8 @@ public class UserController {
 				}
 			}
 			profile.visit();
+			mav.addObject("notifications", userRepo.getUser(userSessionString)
+					.getNotifications().size());
 			if (id != null) {
 				Comment comment = commentRepo.get(Comment.class, id);
 				if (comment != null) {
@@ -164,7 +166,7 @@ public class UserController {
 			session.setAttribute("user", profile);
 			mav.addObject("isEmptyPicture", profile.getPicture() == null);
 			List<Comment> comments = profile.getComments();
-			SortedSet<Comment> transformedComments = transformComments(comments);
+			SortedSet<CommentWrapper> transformedComments = transformComments(comments);
 			mav.addObject("comments", transformedComments);
 		}
 		mav.setViewName("/user/profile");
@@ -272,11 +274,12 @@ public class UserController {
 		return mav;
 	}
 
-	private SortedSet<Comment> transformComments(List<Comment> comments) {
-		SortedSet<Comment> ans = new TreeSet<Comment>();
+	private SortedSet<CommentWrapper> transformComments(List<Comment> comments) {
+		SortedSet<CommentWrapper> ans = new TreeSet<CommentWrapper>();
 		for (Comment comment : comments) {
-			comment.setComment(getProcessedComment(comment.getComment()));
-			ans.add(comment);
+			CommentWrapper aux = new CommentWrapper(comment,
+					getProcessedComment(comment.getComment()));
+			ans.add(aux);
 		}
 		return ans;
 	}
@@ -307,8 +310,8 @@ public class UserController {
 				result = matcher.group();
 				result = result.replace(" ", "");
 				String search = result.replace("#", "");
-				String searchHTML = "<a href='../../hashtag/detail?tag=" + search
-						+ "'>" + result + "</a>";
+				String searchHTML = "<a href='../../hashtag/detail?tag="
+						+ search + "'>" + result + "</a>";
 				ans += word.replace(result, searchHTML) + " ";
 			} else {
 				ans += word + " ";
@@ -333,6 +336,7 @@ public class UserController {
 				ans += word + " ";
 			}
 		}
+		System.out.println("FINAL COMMENT = " + comment);
 		return ans;
 	}
 

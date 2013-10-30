@@ -18,7 +18,7 @@
 				<div class="comment">
 					<p>${comment.comment}</p>
 					<div class="comment-reference">
-						<i>Created by: </i><a href="<c:url value="/bin/user/profile"><c:param name="user" value="${comment.author.username}" /></c:url>">${comment.author.username}</a> | 
+						<i>Created by: </i><a href="${commentOwnerURL}">${comment.author.username}</a> | 
 						<i><fmt:formatDate value="${comment.date}" pattern="dd-MM-yyyy HH:mm" /></i>
 					</div>
 				</div>

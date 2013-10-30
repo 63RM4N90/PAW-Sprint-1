@@ -7,6 +7,8 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.servlet.http.HttpSession;
+
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -17,14 +19,16 @@ public class HibernateCommentRepo extends AbstractHibernateRepo implements
 
 	private HashtagRepo hashtagRepo;
 	private UserRepo userRepo;
+	private HttpSession session;
 
 	@Autowired
 	public HibernateCommentRepo(SessionFactory sessionFactory,
-			HashtagRepo hibernateHashtagRepo,
-			UserRepo hibernateUserRepo) {
+			HashtagRepo hibernateHashtagRepo, UserRepo hibernateUserRepo,
+			HttpSession session) {
 		super(sessionFactory);
 		this.hashtagRepo = hibernateHashtagRepo;
 		this.userRepo = hibernateUserRepo;
+		this.session = session;
 	}
 
 	@Override
@@ -67,7 +71,10 @@ public class HibernateCommentRepo extends AbstractHibernateRepo implements
 			String username = result.substring(1);
 			User user = userRepo.getUser(username);
 			if (user != null) {
-				ans.add(user);				
+				user.notify(new Notification(userRepo.getUser(username),
+						((String) session.getAttribute("username"))
+								+ " has mentioned you on a comment."));
+				ans.add(user);
 			}
 		}
 		return ans;
