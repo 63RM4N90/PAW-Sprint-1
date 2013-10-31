@@ -9,7 +9,7 @@
 						<p>${notification.notification}</p>
 						<div class="comment-reference">
 							<i> By: </i>
-							<c:out value="<a href=\"../user/profile/${notification.notificator.username}\">${notification.notificator.username}</a>" escapeXml="false" />
+							<a href="../../user/profile/${notification.notificator.username}">${notification.notificator.username}</a>
 							| <i><fmt:formatDate value="${notification.date}"
 										pattern="dd-MM-yyyy HH:mm" /></i> |
 						</div>

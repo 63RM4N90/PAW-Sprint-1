@@ -30,8 +30,9 @@
 			<p>
 				<c:out value="${user.visits}" />
 			</p>
-			<h6><c:out value="<a href=\"../../user/follows?user=${user.username}&type=Followers\">Followers: ${followers}</a>" escapeXml="false" /></h6>
-			<h6><c:out value="<a href=\"../../user/follows?user=${user.username}&type=Following\">Following: ${following}</a>" escapeXml="false" /></h6>
+			
+			<h6><a href="../../user/follows?user=${user.username}&type=Followers">Followers: ${followers}</a></h6>
+			<h6><a href="../../user/follows?user=${user.username}&type=Following">Following: ${following}</a></h6>
 			<c:if test="${isOwner}">
 				<p>
 					Notifications:
@@ -84,13 +85,11 @@
 					<div class="comment">
 						<p>${comment.transformedComment}</p>
 						<div class="comment-reference">
-							<i>Created by: </i>
-							<c:out value="<a href=\"../../user/profile/${comment.comment.author.username}\">${comment.comment.author.username}</a>" escapeXml="false" />
+							<i>Created by: </i> <a href="../../user/profile/${comment.comment.author.username}">${comment.comment.author.username}</a>
 							| <i><fmt:formatDate value="${comment.comment.date}"
 										pattern="dd-MM-yyyy HH:mm" /></i> |
 							<c:if test="${isOwner}">
-									<c:out value="<a href=\"../../user/delete/${comment.comment.id}\">Delete</a>" escapeXml="false" />
-								
+									<a href="../../user/delete/${comment.comment.id}">Delete</a>								
 							</c:if>
 						</div>
 					</div>
