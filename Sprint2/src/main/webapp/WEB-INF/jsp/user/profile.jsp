@@ -35,6 +35,7 @@
 					Notifications:
 					<c:out value="${notifications}" />
 				</p>
+				<a href="../notifications">Notifications</a>
 			</c:if>
 		</div>
 		<c:if test="${isOwner}">

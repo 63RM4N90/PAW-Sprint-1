@@ -23,6 +23,7 @@ import ar.edu.itba.it.paw.command.UserForm;
 import ar.edu.itba.it.paw.domain.Comment;
 import ar.edu.itba.it.paw.domain.CommentRepo;
 import ar.edu.itba.it.paw.domain.HashtagRepo;
+import ar.edu.itba.it.paw.domain.Notification;
 import ar.edu.itba.it.paw.domain.RankedHashtag;
 import ar.edu.itba.it.paw.domain.User;
 import ar.edu.itba.it.paw.domain.UserRepo;
@@ -137,7 +138,7 @@ public class UserController {
 			if (userSessionString != null) {
 				mav.setViewName("redirect:../profile/" + userSessionString);
 			} else {
-				mav.setViewName("redirect:login");
+				mav.setViewName("redirect:../login");
 			}
 			return mav;
 		} else {
@@ -146,10 +147,13 @@ public class UserController {
 					mav.setViewName("privacyError");
 					return mav;
 				}
+			} else {
+				session.setAttribute("username", userSessionString);
 			}
 			profile.visit();
-			mav.addObject("notifications", userRepo.getUser(userSessionString)
-					.getNotifications().size());
+			mav.addObject("notifications",
+					userRepo.getUser(profile.getUsername())
+							.getUncheckedNotifications());
 			if (id != null) {
 				Comment comment = commentRepo.get(Comment.class, id);
 				if (comment != null) {
@@ -163,7 +167,7 @@ public class UserController {
 			showTopTenHashtags(mav);
 			mav.addObject("isOwner",
 					profile.getUsername().equals(userSessionString));
-			session.setAttribute("user", profile);
+			mav.addObject("user", profile);
 			mav.addObject("isEmptyPicture", profile.getPicture() == null);
 			List<Comment> comments = profile.getComments();
 			SortedSet<CommentWrapper> transformedComments = transformComments(comments);
@@ -188,7 +192,8 @@ public class UserController {
 		}
 
 		mav.addObject("ranking", top10);
-		User user = (User) session.getAttribute("user");
+		String username = (String) session.getAttribute("username");
+		User user = userRepo.getUser(username);
 		if (comment.getComment().length() > 0
 				&& comment.getComment().length() < MAX_COMMENT_LENGTH) {
 			commentRepo.save(comment);
@@ -274,6 +279,23 @@ public class UserController {
 		return mav;
 	}
 
+	@RequestMapping(method = RequestMethod.GET)
+	public ModelAndView notifications(HttpSession session) {
+		ModelAndView mav = new ModelAndView();
+		String username = (String) session.getAttribute("username");
+		if (username != null) {
+			User user = userRepo.getUser(username);
+			List<Notification> notifications = user.getNotifications();
+			for (Notification notification : notifications) {
+				notification.check();
+			}
+			mav.addObject("notifications", notifications);
+		} else {
+			mav.setViewName("redirect:login");
+		}
+		return mav;
+	}
+
 	private SortedSet<CommentWrapper> transformComments(List<Comment> comments) {
 		SortedSet<CommentWrapper> ans = new TreeSet<CommentWrapper>();
 		for (Comment comment : comments) {
@@ -336,7 +358,6 @@ public class UserController {
 				ans += word + " ";
 			}
 		}
-		System.out.println("FINAL COMMENT = " + comment);
 		return ans;
 	}
 

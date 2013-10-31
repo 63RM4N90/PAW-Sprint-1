@@ -9,7 +9,7 @@ import javax.persistence.ManyToOne;
 public class Notification extends PersistentEntity {
 
 	private String notification;
-	private Date date;
+	private Date date = new Date();
 	@ManyToOne
 	private User notificator;
 	private boolean checked = false;

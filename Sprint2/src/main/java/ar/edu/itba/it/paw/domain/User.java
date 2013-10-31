@@ -41,7 +41,7 @@ public class User extends PersistentEntity {
 	private int visits;
 	@OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
 	private List<Comment> comments = new ArrayList<Comment>();
-	@OneToMany(mappedBy = "notificator", cascade = CascadeType.ALL)
+	@OneToMany
 	private List<Notification> notifications = new ArrayList<Notification>();
 	@ManyToMany(mappedBy = "followers")
 	private Set<User> following = new HashSet<User>();
@@ -91,6 +91,16 @@ public class User extends PersistentEntity {
 
 	public List<Notification> getNotifications() {
 		return notifications;
+	}
+
+	public int getUncheckedNotifications() {
+		int ans = 0;
+		for (Notification notification : notifications) {
+			if (!notification.isChecked()) {
+				ans++;
+			}
+		}
+		return ans;
 	}
 
 	public int getVisits() {
