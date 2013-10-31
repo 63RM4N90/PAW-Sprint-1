@@ -41,9 +41,9 @@ public class User extends PersistentEntity {
 	private boolean isPrivate;
 	@OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
 	private List<Comment> comments = new ArrayList<Comment>();
-	@ManyToMany(mappedBy = "followers")
-	private Set<User> following = new HashSet<User>();
 	@ManyToMany
+	private Set<User> following = new HashSet<User>();
+	@ManyToMany(mappedBy = "following")
 	private Set<User> followers = new HashSet<User>();
 
 	User() {
@@ -90,6 +90,7 @@ public class User extends PersistentEntity {
 	public Set<User> getFollowers() {
 		return followers;
 	}
+	
 
 	public Set<User> getFollowing() {
 		return following;
@@ -97,6 +98,10 @@ public class User extends PersistentEntity {
 
 	public void follow(User user) {
 		following.add(user);
+	}
+	
+	public void followedBy(User user){
+		followers.add(user);
 	}
 
 	public void unfollow(User user) {
@@ -109,6 +114,14 @@ public class User extends PersistentEntity {
 
 	public int following() {
 		return following.size();
+	}
+	
+	public boolean isFollowing(User user){
+		return following.contains(user);
+	}
+	
+	public boolean isAFollower(User user){
+		return followers.contains(user);
 	}
 
 	public void makePrivate() {

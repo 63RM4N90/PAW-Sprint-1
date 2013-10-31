@@ -15,6 +15,8 @@ public class Comment extends PersistentEntity implements Comparable<Comment> {
 
 	@ManyToOne
 	private User author;
+	
+	private User originalauthor;
 	@Column(nullable = false)
 	private Date date;
 	@Column(nullable = false)
@@ -29,11 +31,12 @@ public class Comment extends PersistentEntity implements Comparable<Comment> {
 	}
 
 	public Comment(User author, Date date, String comment,
-			Set<Hashtag> hashtags, Set<User> references) {
+			Set<Hashtag> hashtags, Set<User> references, User originalauthor) {
 		this.author = author;
 		this.date = date;
 		this.comment = comment;
 		this.hashtags = hashtags;
+		this.originalauthor = originalauthor;
 		this.references = references;
 	}
 
@@ -47,6 +50,10 @@ public class Comment extends PersistentEntity implements Comparable<Comment> {
 
 	public String getComment() {
 		return comment;
+	}
+	
+	public User getOriginalAuthor(){
+		return originalauthor;
 	}
 	
 	public void setComment(String comment){

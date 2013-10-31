@@ -1,5 +1,6 @@
 package ar.edu.itba.it.paw.web;
 
+import java.util.Date;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -21,6 +22,7 @@ import ar.edu.itba.it.paw.command.EditUserForm;
 import ar.edu.itba.it.paw.command.UserForm;
 import ar.edu.itba.it.paw.domain.Comment;
 import ar.edu.itba.it.paw.domain.CommentRepo;
+import ar.edu.itba.it.paw.domain.Hashtag;
 import ar.edu.itba.it.paw.domain.HashtagRepo;
 import ar.edu.itba.it.paw.domain.RankedHashtag;
 import ar.edu.itba.it.paw.domain.User;
@@ -124,6 +126,7 @@ public class UserController {
 		}
 		if (profile == null) {
 			if (userSessionString != null) {
+				System.out.println("ENTRE ACA NOSE DONDE ES");
 				mav.setViewName("redirect:profile?user=" + userSessionString
 						+ "&period=" + period);
 			} else {
@@ -136,6 +139,10 @@ public class UserController {
 				Comment comment = commentRepo.get(Comment.class, id);
 				if (comment != null) {
 					commentRepo.delete(comment);
+					// System.out.println("Cantidad de seguidores: " +
+					// userSession.followedBy());
+					// System.out.println("Cantidad de gente que sigo: " +
+					// userSession.following());
 					mav.setViewName("redirect:profile?user="
 							+ userSessionString + "&period=" + period);
 					return mav;
@@ -147,12 +154,66 @@ public class UserController {
 			if (profile.getUsername().equals(userSession.getUsername())) {
 				mav.addObject("isOwner", true);
 			}
-			session.setAttribute("user", profile);
+
+			if (userSession.isFollowing(profile)) {
+				mav.addObject("isFollowing", true);
+			} else {
+				mav.addObject("isFollowing", false);
+			}
+			session.setAttribute("username", profile.getUsername());
 			mav.addObject("isEmptyPicture", profile.getPicture() == null);
 			List<Comment> comments = profile.getComments();
 			SortedSet<Comment> transformedComments = transformComments(comments);
 			mav.addObject("comments", transformedComments);
 		}
+
+		return mav;
+	}
+
+	@RequestMapping(method = RequestMethod.GET)
+	public ModelAndView recuthulu(
+			@RequestParam(value = "user", required = false) User originalauthor,
+			@RequestParam(value = "comment", required = false) String comment,
+			@RequestParam(value = "commentid", required = false) Integer id,
+			HttpSession session) {
+		ModelAndView mav = new ModelAndView();
+		String userSession = (String) session.getAttribute("username");
+		User author = userRepo.getUser(userSession);
+
+		Comment recuthulu = new Comment(author, new Date(), comment,
+				commentRepo.getHashtagList(comment, originalauthor),
+				commentRepo.getReferences(comment), originalauthor);
+		commentRepo.save(recuthulu);
+		
+		mav.setViewName("redirect:profile?user=" + originalauthor.getUsername());
+
+		return mav;
+
+	}
+
+	@RequestMapping(method = RequestMethod.POST)
+	public ModelAndView follow(HttpSession session) {
+		ModelAndView mav = new ModelAndView();
+		String username = (String) session.getAttribute("username");
+		User sprofile = (User) session.getAttribute("user");
+		User userSession = userRepo.getUser(username);
+
+		userSession.follow(sprofile);
+
+		mav.setViewName("redirect:profile?user=" + sprofile.getUsername());
+		return mav;
+	}
+
+	@RequestMapping(method = RequestMethod.POST)
+	public ModelAndView unfollow(HttpSession session) {
+		ModelAndView mav = new ModelAndView();
+		String username = (String) session.getAttribute("username");
+		User sprofile = (User) session.getAttribute("user");
+		User userSession = userRepo.getUser(username);
+
+		userSession.unfollow(sprofile);
+
+		mav.setViewName("redirect:profile?user=" + sprofile.getUsername());
 		return mav;
 	}
 
@@ -176,6 +237,10 @@ public class UserController {
 				&& comment.getComment().length() < MAX_COMMENT_LENGTH) {
 			commentRepo.save(comment);
 		}
+
+		System.out.println("Entre a profile por POST");
+		// System.out.println("Cant. de gente que sigo: " + user.following());
+		// System.out.println("Cant. de seguidores: " + user.followedBy());
 		mav.setViewName("redirect:profile?user=" + user.getUsername());
 		return mav;
 	}
@@ -303,6 +368,7 @@ public class UserController {
 		patternStr = "@([A-Za-z0-9_]+)";
 		pattern = Pattern.compile(patternStr);
 		words = ans.split(" ");
+		System.out.println("Econtré " + words.length + "referencias");
 		ans = "";
 		for (String word : words) {
 			Matcher matcher = pattern.matcher(word);
@@ -310,6 +376,7 @@ public class UserController {
 				result = matcher.group();
 				result = result.replace(" ", "");
 				String search = result.replace("@", "");
+				System.out.println("Referencia: " + search);
 				String userHTML = "<a href='?user=" + search + "'>" + result
 						+ "</a>";
 				ans += word.replace(result, userHTML) + " ";

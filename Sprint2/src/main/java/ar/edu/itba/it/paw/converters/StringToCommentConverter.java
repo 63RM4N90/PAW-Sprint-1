@@ -34,6 +34,6 @@ public class StringToCommentConverter implements Converter<String, Comment> {
 				.getAttribute("username"));
 		return new Comment(author, new Date(), comment,
 				commentRepo.getHashtagList(comment, author),
-				commentRepo.getReferences(comment));
+				commentRepo.getReferences(comment),null);
 	}
 }

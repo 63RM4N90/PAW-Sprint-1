@@ -33,6 +33,27 @@
 			</form>
 		</c:if>
 	</div>
+	
+	
+	
+		<c:if test="${not isOwner}">
+			
+			<c:if test="${not isFollowing}">
+				<form method="POST" action="follow">
+					<input type="submit" name="submit"
+								value="Follow" />
+				</form>
+			</c:if>
+			
+			<c:if test="${isFollowing}">
+				<form method="POST" action="unfollow">
+						<input type="submit" name="submit"
+							value="Unfollow" />
+				</form>
+			</c:if>			
+				
+		</c:if>
+		
 	<div class="comments-column profile-column">
 		<c:if test="${isOwner}">
 			<div class="commentError">
@@ -57,10 +78,16 @@
 			<c:forEach items="${comments}" var="comment">
 				<li <c:set var="row" value="${row + 1}" />>
 					<div class="comment">
+					 
 						<p>${comment.comment}</p>
 						<div class="comment-reference">
+						<c:if test="${not isOwner}">
+						<i><a href="<c:url value="profile"><c:param name="user" value="${comment.author.username}" /><c:param name="comment" value="${comment.comment}" /><c:param name="commentid" value="${comment.id}" /></c:url>">Recuthulu</a></i>
+						</c:if>
+						
+						
 							<i>Created by: </i><a
-								href="<c:url value="profile"><c:param name="user" value="${comment.author.username}" /></c:url>">${comment.author.username}</a>
+								href="<c:url value="profile"><c:param name="user" value="${comment.originalauthor.username}" /></c:url>">${comment.originalauthor.username}</a>
 							| <i><fmt:formatDate value="${comment.date}"
 									pattern="dd-MM-yyyy HH:mm" /></i> |
 							<c:if test="${isOwner}">
