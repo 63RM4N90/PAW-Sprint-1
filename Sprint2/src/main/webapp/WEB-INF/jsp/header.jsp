@@ -28,7 +28,7 @@
 			<div class="home-link">
 				<img class="separator"
 					src="${pageContext.request.contextPath}/img/topbar_separator.png"
-					alt="" /> <a href="/Sprint2/bin/user/profile"><img class="home"
+					alt="" /> <a href="/Sprint2/bin/user/home"><img class="home"
 					src="${pageContext.request.contextPath}/img/home.png" alt="home" /></a>
 			</div>
 			<c:if test="${not empty username}">
@@ -39,7 +39,7 @@
 					<p>
 						<c:out value="${username}" />
 					</p>
-					<br> <a href="logout">Log out</a>
+					<br> <a href="/Sprint2/bin/user/logout">Log out</a>
 				</div>
 			</c:if>
 		</div>

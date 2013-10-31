@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,8 +23,8 @@ import ar.edu.itba.it.paw.command.EditUserForm;
 import ar.edu.itba.it.paw.command.UserForm;
 import ar.edu.itba.it.paw.domain.Comment;
 import ar.edu.itba.it.paw.domain.CommentRepo;
-import ar.edu.itba.it.paw.domain.Hashtag;
 import ar.edu.itba.it.paw.domain.HashtagRepo;
+import ar.edu.itba.it.paw.domain.Notification;
 import ar.edu.itba.it.paw.domain.RankedHashtag;
 import ar.edu.itba.it.paw.domain.User;
 import ar.edu.itba.it.paw.domain.UserRepo;
@@ -56,8 +57,8 @@ public class UserController {
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView login(HttpSession s) {
 		ModelAndView mav = new ModelAndView();
-		if (s.getAttribute("userId") != null) {
-			mav.setViewName("redirect:profile");
+		if (s.getAttribute("username") != null) {
+			mav.setViewName("/user/profile/" + s.getAttribute("username"));
 		}
 		showTopTenHashtags(mav);
 		return mav;
@@ -71,7 +72,7 @@ public class UserController {
 		ModelAndView mav = new ModelAndView();
 		if (user != null && user.getPassword().equals(password)) {
 			session.setAttribute("username", user.getUsername());
-			mav.setViewName("redirect:profile?user=" + user.getUsername());
+			mav.setViewName("redirect:./profile/" + user.getUsername());
 		} else {
 			mav.addObject("error", "Invalid user or password.");
 			mav.setViewName("user/login");
@@ -82,7 +83,7 @@ public class UserController {
 	@RequestMapping(method = RequestMethod.GET)
 	public String logout(HttpSession s) {
 		s.removeAttribute("username");
-		return "redirect:login";
+		return "redirect:./login";
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
@@ -110,12 +111,22 @@ public class UserController {
 			return null;
 		}
 		session.setAttribute("username", userForm.getUsername());
-		return "redirect:profile?user=" + userForm.getUsername();
+		return "redirect:profile/" + userForm.getUsername();
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
+	public String home(HttpSession session) {
+		if (session.getAttribute("username") != null) {
+			return "redirect:profile/" + session.getAttribute("username");
+		} else {
+			return "redirect:login";
+		}
+	}
+
+	@RequestMapping(value = "/user/profile/{profile}", method = RequestMethod.GET)
 	public ModelAndView profile(
-			@RequestParam(value = "user", required = false) User profile,
+			@PathVariable User profile,
+			// @RequestParam(value = "user", required = false) User profile,
 			@RequestParam(value = "period", required = false) Integer period,
 			@RequestParam(value = "commentid", required = false) Integer id,
 			HttpSession session) {
@@ -126,47 +137,48 @@ public class UserController {
 		}
 		if (profile == null) {
 			if (userSessionString != null) {
-				System.out.println("ENTRE ACA NOSE DONDE ES");
-				mav.setViewName("redirect:profile?user=" + userSessionString
+				mav.setViewName("redirect:../profile/" + userSessionString
 						+ "&period=" + period);
 			} else {
-				mav.setViewName("redirect:login");
+				mav.setViewName("redirect:../login");
 			}
 			return mav;
 		} else {
-			User userSession = userRepo.getUser(userSessionString);
+			if (userSessionString == null) {
+				if (profile.isPrivate()) {
+					mav.setViewName("privacyError");
+					return mav;
+				}
+			} else {
+				session.setAttribute("username", userSessionString);
+				User userSession = userRepo.getUser(userSessionString);
+				boolean following = userSession.isFollowing(profile);
+				mav.addObject("isFollowing", following);
+			}
+			profile.visit();
+			mav.addObject("notifications",
+					userRepo.getUser(profile.getUsername())
+							.getUncheckedNotifications());
 			if (id != null) {
 				Comment comment = commentRepo.get(Comment.class, id);
 				if (comment != null) {
 					commentRepo.delete(comment);
-					// System.out.println("Cantidad de seguidores: " +
-					// userSession.followedBy());
-					// System.out.println("Cantidad de gente que sigo: " +
-					// userSession.following());
-					mav.setViewName("redirect:profile?user="
-							+ userSessionString + "&period=" + period);
+					mav.setViewName("redirect:profile/" + userSessionString
+							+ "&period=" + period);
 					return mav;
 				}
 			}
 
 			showTopTenHashtags(mav);
-
-			if (profile.getUsername().equals(userSession.getUsername())) {
-				mav.addObject("isOwner", true);
-			}
-
-			if (userSession.isFollowing(profile)) {
-				mav.addObject("isFollowing", true);
-			} else {
-				mav.addObject("isFollowing", false);
-			}
 			session.setAttribute("username", profile.getUsername());
+			mav.addObject("isOwner",
+					profile.getUsername().equals(userSessionString));
+			mav.addObject("user", profile);
 			mav.addObject("isEmptyPicture", profile.getPicture() == null);
 			List<Comment> comments = profile.getComments();
-			SortedSet<Comment> transformedComments = transformComments(comments);
+			SortedSet<CommentWrapper> transformedComments = transformComments(comments);
 			mav.addObject("comments", transformedComments);
 		}
-
 		return mav;
 	}
 
@@ -184,7 +196,7 @@ public class UserController {
 				commentRepo.getHashtagList(comment, originalauthor),
 				commentRepo.getReferences(comment), originalauthor);
 		commentRepo.save(recuthulu);
-		
+
 		mav.setViewName("redirect:profile?user=" + originalauthor.getUsername());
 
 		return mav;
@@ -200,7 +212,7 @@ public class UserController {
 
 		userSession.follow(sprofile);
 
-		mav.setViewName("redirect:profile?user=" + sprofile.getUsername());
+		mav.setViewName("redirect:user/profile/" + sprofile.getUsername());
 		return mav;
 	}
 
@@ -213,7 +225,7 @@ public class UserController {
 
 		userSession.unfollow(sprofile);
 
-		mav.setViewName("redirect:profile?user=" + sprofile.getUsername());
+		mav.setViewName("redirect:user/profile/" + sprofile.getUsername());
 		return mav;
 	}
 
@@ -232,16 +244,13 @@ public class UserController {
 		}
 
 		mav.addObject("ranking", top10);
-		User user = (User) session.getAttribute("user");
+		String username = (String) session.getAttribute("username");
+		User user = userRepo.getUser(username);
 		if (comment.getComment().length() > 0
 				&& comment.getComment().length() < MAX_COMMENT_LENGTH) {
 			commentRepo.save(comment);
 		}
-
-		System.out.println("Entre a profile por POST");
-		// System.out.println("Cant. de gente que sigo: " + user.following());
-		// System.out.println("Cant. de seguidores: " + user.followedBy());
-		mav.setViewName("redirect:profile?user=" + user.getUsername());
+		mav.setViewName("redirect:./profile/" + user.getUsername());
 		return mav;
 	}
 
@@ -250,7 +259,8 @@ public class UserController {
 		ModelAndView mav = new ModelAndView();
 		String username = (String) session.getAttribute("username");
 		User userSession = userRepo.getUser(username);
-		mav.addObject(new EditUserForm(userSession));
+		EditUserForm editUserForm = new EditUserForm(userSession);
+		mav.addObject(editUserForm);
 		return mav;
 	}
 
@@ -262,7 +272,7 @@ public class UserController {
 		}
 		User oldUser = userRepo.get(User.class, editUserForm.getId());
 		editUserForm.update(oldUser);
-		return "redirect:profile";
+		return "redirect:home";
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
@@ -321,11 +331,29 @@ public class UserController {
 		return mav;
 	}
 
-	private SortedSet<Comment> transformComments(List<Comment> comments) {
-		SortedSet<Comment> ans = new TreeSet<Comment>();
+	@RequestMapping(method = RequestMethod.GET)
+	public ModelAndView notifications(HttpSession session) {
+		ModelAndView mav = new ModelAndView();
+		String username = (String) session.getAttribute("username");
+		if (username != null) {
+			User user = userRepo.getUser(username);
+			List<Notification> notifications = user.getNotifications();
+			for (Notification notification : notifications) {
+				notification.check();
+			}
+			mav.addObject("notifications", notifications);
+		} else {
+			mav.setViewName("redirect:login");
+		}
+		return mav;
+	}
+
+	private SortedSet<CommentWrapper> transformComments(List<Comment> comments) {
+		SortedSet<CommentWrapper> ans = new TreeSet<CommentWrapper>();
 		for (Comment comment : comments) {
-			comment.setComment(getProcessedComment(comment.getComment()));
-			ans.add(comment);
+			CommentWrapper aux = new CommentWrapper(comment,
+					getProcessedComment(comment.getComment()));
+			ans.add(aux);
 		}
 		return ans;
 	}
@@ -356,8 +384,8 @@ public class UserController {
 				result = matcher.group();
 				result = result.replace(" ", "");
 				String search = result.replace("#", "");
-				String searchHTML = "<a href='../hashtag/detail?tag=" + search
-						+ "'>" + result + "</a>";
+				String searchHTML = "<a href='../../hashtag/detail?tag="
+						+ search + "'>" + result + "</a>";
 				ans += word.replace(result, searchHTML) + " ";
 			} else {
 				ans += word + " ";
@@ -376,8 +404,7 @@ public class UserController {
 				result = matcher.group();
 				result = result.replace(" ", "");
 				String search = result.replace("@", "");
-				System.out.println("Referencia: " + search);
-				String userHTML = "<a href='?user=" + search + "'>" + result
+				String userHTML = "<a href='./" + search + "'>" + result
 						+ "</a>";
 				ans += word.replace(result, userHTML) + " ";
 			} else {

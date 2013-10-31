@@ -26,41 +26,47 @@
 			<p>
 				<c:out value="${user.description}" />
 			</p>
+			<h6>Visits:</h6>
+			<p>
+				<c:out value="${user.visits}" />
+			</p>
+			<c:if test="${isOwner}">
+				<p>
+					Notifications:
+					<c:out value="${notifications}" />
+				</p>
+				<a href="../notifications">Notifications</a>
+			</c:if>
 		</div>
 		<c:if test="${isOwner}">
-			<form method="GET" action="editProfile">
+			<form method="GET" action="../editProfile">
 				<button class="button">Edit</button>
 			</form>
 		</c:if>
 	</div>
-	
-	
-	
-		<c:if test="${not isOwner}">
-			
-			<c:if test="${not isFollowing}">
-				<form method="POST" action="follow">
-					<input type="submit" name="submit"
-								value="Follow" />
-				</form>
-			</c:if>
-			
-			<c:if test="${isFollowing}">
-				<form method="POST" action="unfollow">
-						<input type="submit" name="submit"
-							value="Unfollow" />
-				</form>
-			</c:if>			
-				
+	<c:if test="${not isOwner}">
+
+		<c:if test="${not isFollowing}">
+			<form method="POST" action="follow">
+				<input type="submit" name="submit" value="Follow" />
+			</form>
 		</c:if>
-		
+
+		<c:if test="${isFollowing}">
+			<form method="POST" action="unfollow">
+				<input type="submit" name="submit" value="Unfollow" />
+			</form>
+		</c:if>
+
+	</c:if>
+
 	<div class="comments-column profile-column">
 		<c:if test="${isOwner}">
 			<div class="commentError">
 				<c:out value="${commentError}" />
 			</div>
 			<div class="comment-creator-area">
-				<form method="POST" action="profile">
+				<form method="POST" action="../profile">
 					<div class="form-area">
 						<textarea class="comment-area" rows="5" cols="40"
 							placeholder="you have 140 characters to write down your sins..."
@@ -78,22 +84,16 @@
 			<c:forEach items="${comments}" var="comment">
 				<li <c:set var="row" value="${row + 1}" />>
 					<div class="comment">
-					 
-						<p>${comment.comment}</p>
+						<p>${comment.transformedComment}</p>
 						<div class="comment-reference">
-						<c:if test="${not isOwner}">
-						<i><a href="<c:url value="profile"><c:param name="user" value="${comment.author.username}" /><c:param name="comment" value="${comment.comment}" /><c:param name="commentid" value="${comment.id}" /></c:url>">Recuthulu</a></i>
-						</c:if>
-						
-						
-							<i>Created by: </i><a
-								href="<c:url value="profile"><c:param name="user" value="${comment.originalauthor.username}" /></c:url>">${comment.originalauthor.username}</a>
-							| <i><fmt:formatDate value="${comment.date}"
-									pattern="dd-MM-yyyy HH:mm" /></i> |
+							<i>Created by: </i>
+							<c:out value="<a href=\"../../user/profile/${comment.comment.author.username}\">${comment.comment.author.username}</a>" escapeXml="false" />
+							| <i><fmt:formatDate value="${comment.comment.date}"
+										pattern="dd-MM-yyyy HH:mm" /></i> |
 							<c:if test="${isOwner}">
-								<a
-									href="<c:url value="profile"><c:param name="commentid" value="${comment.id}" /><c:param name="user" value="${comment.author.username}" /></c:url>">Delete</a>
-							</c:if>
+									<a
+										href="<c:url value="../profile"><c:param name="commentid" value="${comment.comment.id}" /><c:param name="user" value="${comment.comment.author.username}" /></c:url>">Delete</a>
+								</c:if>
 						</div>
 					</div>
 				</li>

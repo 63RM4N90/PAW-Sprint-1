@@ -16,12 +16,12 @@ import org.springframework.web.filter.OncePerRequestFilter;
 public class TransactionFilter extends OncePerRequestFilter {
 
 	private SessionFactory sessionFactory;
-	
+
 	@Autowired
 	public TransactionFilter(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}
-	
+
 	@Override
 	protected void doFilterInternal(HttpServletRequest request,
 			HttpServletResponse response, FilterChain filterChain)
@@ -40,11 +40,15 @@ public class TransactionFilter extends OncePerRequestFilter {
 		} catch (Throwable ex) {
 			// Rollback only
 			try {
-				if (sessionFactory.getCurrentSession().getTransaction().isActive())
-					sessionFactory.getCurrentSession().getTransaction().rollback();
+				if (sessionFactory.getCurrentSession().getTransaction()
+						.isActive())
+					sessionFactory.getCurrentSession().getTransaction()
+							.rollback();
 			} catch (Throwable rbEx) {
+				System.out.println(rbEx.getMessage());
 				rbEx.printStackTrace();
 			}
+			System.out.println(ex.getMessage());
 			// Let others handle it...
 			throw new ServletException(ex);
 		}

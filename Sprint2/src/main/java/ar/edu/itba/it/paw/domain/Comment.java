@@ -8,7 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
 @Entity
 public class Comment extends PersistentEntity implements Comparable<Comment> {
@@ -24,7 +23,7 @@ public class Comment extends PersistentEntity implements Comparable<Comment> {
 	@ManyToMany	
 	@JoinColumn(name = "com_id")
 	private Set<Hashtag> hashtags;
-	@OneToMany
+	@ManyToMany
 	private Set<User> references;
 
 	public Comment() {

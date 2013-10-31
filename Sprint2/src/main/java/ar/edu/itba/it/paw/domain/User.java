@@ -37,10 +37,12 @@ public class User extends PersistentEntity {
 	private String secretAnswer;
 	@Column(nullable = false)
 	private Date registrationDate;
-
 	private boolean isPrivate;
+	private int visits;
 	@OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
 	private List<Comment> comments = new ArrayList<Comment>();
+	@OneToMany
+	private List<Notification> notifications = new ArrayList<Notification>();
 	@ManyToMany
 	private Set<User> following = new HashSet<User>();
 	@ManyToMany(mappedBy = "following")
@@ -83,6 +85,32 @@ public class User extends PersistentEntity {
 		this.isPrivate = isPrivate;
 	}
 
+	public void notify(Notification notification) {
+		notifications.add(notification);
+	}
+
+	public List<Notification> getNotifications() {
+		return notifications;
+	}
+
+	public int getUncheckedNotifications() {
+		int ans = 0;
+		for (Notification notification : notifications) {
+			if (!notification.isChecked()) {
+				ans++;
+			}
+		}
+		return ans;
+	}
+
+	public int getVisits() {
+		return visits;
+	}
+
+	public void visit() {
+		this.visits++;
+	}
+
 	public List<Comment> getComments() {
 		return comments;
 	}
@@ -90,7 +118,6 @@ public class User extends PersistentEntity {
 	public Set<User> getFollowers() {
 		return followers;
 	}
-	
 
 	public Set<User> getFollowing() {
 		return following;
@@ -99,8 +126,8 @@ public class User extends PersistentEntity {
 	public void follow(User user) {
 		following.add(user);
 	}
-	
-	public void followedBy(User user){
+
+	public void followedBy(User user) {
 		followers.add(user);
 	}
 
@@ -115,12 +142,12 @@ public class User extends PersistentEntity {
 	public int following() {
 		return following.size();
 	}
-	
-	public boolean isFollowing(User user){
+
+	public boolean isFollowing(User user) {
 		return following.contains(user);
 	}
-	
-	public boolean isAFollower(User user){
+
+	public boolean isAFollower(User user) {
 		return followers.contains(user);
 	}
 

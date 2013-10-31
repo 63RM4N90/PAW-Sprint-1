@@ -22,6 +22,8 @@ public class HashtagController {
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("user", hashtag.getAuthor());
 		mav.addObject("tag", hashtag);
+		mav.addObject("commentOwnerURL",
+				"../user/profile/" + hashtag.getAuthor());
 		Set<Comment> comments = hashtag.getComments();
 		for (Comment comment : comments) {
 			comment.setComment(getProcessedComment(comment.getComment()));

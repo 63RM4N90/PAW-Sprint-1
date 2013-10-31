@@ -15,7 +15,8 @@ public class UserForm {
 	private String description;
 	private String secretQuestion;
 	private String secretAnswer;
-	
+	private String privacy;
+
 	public UserForm() {
 	}
 
@@ -28,6 +29,20 @@ public class UserForm {
 		this.description = user.getDescription();
 		this.secretQuestion = user.getSecretQuestion();
 		this.secretAnswer = user.getSecretAnswer();
+		this.privacy = user.isPrivate() ? "T" : "F";
+	}
+
+	public String getPrivacy() {
+		return privacy;
+	}
+
+	public void setPrivacy(String privacy) {
+		this.privacy = privacy;
+		if (privacy.equals("T")) {
+			user.makePrivate();
+		} else {
+			user.makePublic();
+		}
 	}
 
 	public User getUser() {
@@ -104,10 +119,10 @@ public class UserForm {
 
 	public User build() {
 		if (user == null) {
-			//Idem a "EditUserForm"
+			// Idem a "EditUserForm"
 			return new User(name, surname, username, description,
 					confirmPassword, null, secretQuestion, secretAnswer,
-					new Date(),false);
+					new Date(), false);
 		} else {
 			user.setName(name);
 			user.setSurname(surname);
