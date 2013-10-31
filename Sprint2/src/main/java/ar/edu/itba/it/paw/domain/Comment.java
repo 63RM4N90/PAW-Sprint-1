@@ -14,7 +14,7 @@ public class Comment extends PersistentEntity implements Comparable<Comment> {
 
 	@ManyToOne
 	private User author;
-	
+	@ManyToOne
 	private User originalauthor;
 	@Column(nullable = false)
 	private Date date;

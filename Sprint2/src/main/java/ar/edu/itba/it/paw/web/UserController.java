@@ -170,7 +170,6 @@ public class UserController {
 			}
 
 			showTopTenHashtags(mav);
-			session.setAttribute("username", profile.getUsername());
 			mav.addObject("isOwner",
 					profile.getUsername().equals(userSessionString));
 			mav.addObject("user", profile);
@@ -179,6 +178,7 @@ public class UserController {
 			SortedSet<CommentWrapper> transformedComments = transformComments(comments);
 			mav.addObject("comments", transformedComments);
 		}
+		mav.setViewName("/user/profile");
 		return mav;
 	}
 

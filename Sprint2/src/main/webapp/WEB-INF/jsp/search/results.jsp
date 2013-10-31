@@ -8,8 +8,7 @@
 		<c:forEach items="${users}" var="user">
 			<li
 				<c:set var="row" value="${row + 1}" />>
-				<a
-				href="<c:url value="/bin/user/profile"><c:param name="user" value="${user.username}" /></c:url>">${user.username}</a>
+				<c:out value="<a href=\"../user/profile/${user.username}\">${user.username}</a>" escapeXml="false" />
 				<br />
 				<span>
 					<c:out value="${user.surname}" />

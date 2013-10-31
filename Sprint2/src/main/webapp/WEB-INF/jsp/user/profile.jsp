@@ -44,20 +44,20 @@
 			</form>
 		</c:if>
 	</div>
-	<c:if test="${not isOwner}">
+	<c:if test="${not empty username}">
+		<c:if test="${not isOwner}">
 
-		<c:if test="${not isFollowing}">
-			<form method="POST" action="follow">
-				<input type="submit" name="submit" value="Follow" />
-			</form>
+			<c:if test="${not isFollowing}">
+				<form method="POST" action="follow">
+					<input type="submit" name="submit" value="Follow" />
+				</form>
+			</c:if>
+			<c:if test="${isFollowing}">
+				<form method="POST" action="unfollow">
+					<input type="submit" name="submit" value="Unfollow" />
+				</form>
+			</c:if>
 		</c:if>
-
-		<c:if test="${isFollowing}">
-			<form method="POST" action="unfollow">
-				<input type="submit" name="submit" value="Unfollow" />
-			</form>
-		</c:if>
-
 	</c:if>
 
 	<div class="comments-column profile-column">
