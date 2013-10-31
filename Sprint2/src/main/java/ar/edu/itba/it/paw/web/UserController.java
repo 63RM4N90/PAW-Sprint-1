@@ -42,6 +42,7 @@ public class UserController {
 	private static final int MAX_COMMENT_LENGTH = 140;
 	private static final int MAX_PASSWORD_LENGTH = 16;
 	private static final int MIN_PASSWORD_LENGTH = 8;
+	private static final int DEFAULT_PERIOD = 30;
 
 	@Autowired
 	public UserController(UserRepo userService, HashtagRepo hashtagService,
@@ -124,16 +125,13 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/user/profile/{profile}", method = RequestMethod.GET)
-	public ModelAndView profile(
-			@PathVariable User profile,
-			// @RequestParam(value = "user", required = false) User profile,
+	public ModelAndView profile(@PathVariable User profile,
 			@RequestParam(value = "period", required = false) Integer period,
-			@RequestParam(value = "commentid", required = false) Integer id,
 			HttpSession session) {
 		ModelAndView mav = new ModelAndView();
 		String userSessionString = (String) session.getAttribute("username");
 		if (period == null) {
-			period = 30;
+			period = DEFAULT_PERIOD;
 		}
 		if (profile == null) {
 			if (userSessionString != null) {
@@ -159,15 +157,6 @@ public class UserController {
 			mav.addObject("notifications",
 					userRepo.getUser(profile.getUsername())
 							.getUncheckedNotifications());
-			if (id != null) {
-				Comment comment = commentRepo.get(Comment.class, id);
-				if (comment != null) {
-					commentRepo.delete(comment);
-					mav.setViewName("redirect:profile/" + userSessionString
-							+ "&period=" + period);
-					return mav;
-				}
-			}
 
 			showTopTenHashtags(mav);
 			mav.addObject("isOwner",
@@ -180,6 +169,17 @@ public class UserController {
 		}
 		mav.setViewName("/user/profile");
 		return mav;
+	}
+
+	@RequestMapping(value = "/user/delete/{id}", method = RequestMethod.GET)
+	public String delete(@PathVariable Integer id) {
+		if (id != null) {
+			Comment comment = commentRepo.get(Comment.class, id);
+			if (comment != null) {
+				commentRepo.delete(comment);
+			}
+		}
+		return "redirect:../home";
 	}
 
 	@RequestMapping(method = RequestMethod.GET)

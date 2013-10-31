@@ -91,8 +91,8 @@
 							| <i><fmt:formatDate value="${comment.comment.date}"
 										pattern="dd-MM-yyyy HH:mm" /></i> |
 							<c:if test="${isOwner}">
-									<a
-										href="<c:url value="../profile"><c:param name="commentid" value="${comment.comment.id}" /><c:param name="user" value="${comment.comment.author.username}" /></c:url>">Delete</a>
+									<c:out value="<a href=\"../../user/delete/${comment.comment.id}\">Delete</a>" escapeXml="false" />
+								
 								</c:if>
 						</div>
 					</div>
