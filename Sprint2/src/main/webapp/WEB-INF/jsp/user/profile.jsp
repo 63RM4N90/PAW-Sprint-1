@@ -48,14 +48,10 @@
 		<c:if test="${not isOwner}">
 
 			<c:if test="${not isFollowing}">
-				<form method="POST" action="follow">
-					<input type="submit" name="submit" value="Follow" />
-				</form>
+				<button onclick="location.href='../../user/follow?user=${user.username}'"> Follow </button>
 			</c:if>
 			<c:if test="${isFollowing}">
-				<form method="POST" action="unfollow">
-					<input type="submit" name="submit" value="Unfollow" />
-				</form>
+				<button onclick="location.href='../../user/unfollow?user=${user.username}'"> Unfollow </button>
 			</c:if>
 		</c:if>
 	</c:if>
