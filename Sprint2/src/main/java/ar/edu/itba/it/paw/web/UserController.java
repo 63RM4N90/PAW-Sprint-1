@@ -155,6 +155,8 @@ public class UserController {
 				User userSession = userRepo.getUser(userSessionString);
 				boolean following = userSession.isFollowing(profile);
 				mav.addObject("isFollowing", following);
+				mav.addObject("following", userSession.following());
+				mav.addObject("followers", userSession.followedBy());
 			}
 			profile.visit();
 			mav.addObject("notifications",
@@ -165,6 +167,8 @@ public class UserController {
 			mav.addObject("isOwner",
 					profile.getUsername().equals(userSessionString));
 			mav.addObject("user", profile);
+			mav.addObject("following", profile.following());
+			mav.addObject("followers", profile.followedBy());
 			mav.addObject("isEmptyPicture", profile.getPicture() == null);
 			List<Comment> comments = profile.getComments();
 			SortedSet<CommentWrapper> transformedComments = transformComments(comments);
@@ -234,6 +238,29 @@ public class UserController {
 		mav.setViewName("redirect:../user/profile/" + profile.getUsername());
 		return mav;
 	}
+	
+	@RequestMapping(method = RequestMethod.GET)
+	public ModelAndView follows(
+			@RequestParam(value = "user", required = true) User profile,
+			@RequestParam(value = "type", required = true) String type,
+			HttpSession session){
+		
+		ModelAndView mav = new ModelAndView();
+		
+		mav.addObject("username", profile.getUsername());
+		mav.addObject("type", type);
+		System.out.println("type = " + type);
+		if(type.equals("Followers")){
+			mav.addObject("list", profile.getFollowers());
+		} else {
+			mav.addObject("list", profile.getFollowing());
+		}
+		
+		return mav;
+		
+		
+	}
+	
 
 	@RequestMapping(method = RequestMethod.POST)
 	public ModelAndView profile(

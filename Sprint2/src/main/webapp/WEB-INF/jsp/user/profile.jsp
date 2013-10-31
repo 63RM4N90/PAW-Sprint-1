@@ -30,6 +30,8 @@
 			<p>
 				<c:out value="${user.visits}" />
 			</p>
+			<h6><c:out value="<a href=\"../../user/follows?user=${user.username}&type=Followers\">Followers: ${followers}</a>" escapeXml="false" /></h6>
+			<h6><c:out value="<a href=\"../../user/follows?user=${user.username}&type=Following\">Following: ${following}</a>" escapeXml="false" /></h6>
 			<c:if test="${isOwner}">
 				<p>
 					Notifications:
@@ -89,7 +91,7 @@
 							<c:if test="${isOwner}">
 									<c:out value="<a href=\"../../user/delete/${comment.comment.id}\">Delete</a>" escapeXml="false" />
 								
-								</c:if>
+							</c:if>
 						</div>
 					</div>
 				</li>
