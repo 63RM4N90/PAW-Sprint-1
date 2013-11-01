@@ -30,8 +30,9 @@
 			<p>
 				<c:out value="${user.visits}" />
 			</p>
-			<h6><c:out value="<a href=\"../../user/follows?user=${user.username}&type=Followers\">Followers: ${followers}</a>" escapeXml="false" /></h6>
-			<h6><c:out value="<a href=\"../../user/follows?user=${user.username}&type=Following\">Following: ${following}</a>" escapeXml="false" /></h6>
+			
+			<h6><a href="../../user/follows?user=${user.username}&type=Followers">Followers: ${followers}</a></h6>
+			<h6><a href="../../user/follows?user=${user.username}&type=Following">Following: ${following}</a></h6>
 			<c:if test="${isOwner}">
 				<p>
 					Notifications:
@@ -87,28 +88,28 @@
 							
 							<c:if test="${not empty username}">
 								<c:if test="${comment.favouritee}">
-									<c:out value="<a href=\"../../user/unfavourite?user=${user.username}&id=${comment.comment.id}\">remove favourite</a>" escapeXml="false" />
+									<a href="../../user/unfavourite?user=${user.username}&id=${comment.comment.id}">remove favourite</a>
 								</c:if>
 								<c:if test="${not comment.favouritee}">
-									<c:out value="<a href=\"../../user/favourite?user=${user.username}&id=${comment.comment.id}\">add favourite</a>" escapeXml="false" />
+									<a href="../../user/favourite?user=${user.username}&id=${comment.comment.id}">add favourite</a>
 								</c:if>
 								<c:if test="${not isOwner}">
-									<c:out value="<a href=\"../../user/recuthulu?user=${user.username}&id=${comment.comment.id}\">Recuthulu</a>" escapeXml="false" />
+									<a href="../../user/recuthulu?user=${user.username}&id=${comment.comment.id}">Recuthulu</a>
 								</c:if>
 								<c:if test="${comment.recuthulu}">
 									<i>Recuthuled from: </i>
-									<c:out value="<a href=\"../../user/profile/${comment.comment.originalAuthor.username}\">${comment.comment.originalAuthor.username}</a>" escapeXml="false" />
+									<a href="../../user/profile/${comment.comment.originalAuthor.username}">${comment.comment.originalAuthor.username}</a>
 								</c:if>
 								<c:if test="${not comment.recuthulu}">
 									<i>Created by: </i>
-									<c:out value="<a href=\"../../user/profile/${comment.comment.originalAuthor.username}\">${comment.comment.originalAuthor.username}</a>" escapeXml="false" />
+									<a href="../../user/profile/${comment.comment.originalAuthor.username}">${comment.comment.originalAuthor.username}</a>
 								</c:if>
 							</c:if>
+
 							| <i><fmt:formatDate value="${comment.comment.date}"
 										pattern="dd-MM-yyyy HH:mm" /></i> |
 							<c:if test="${isOwner}">
-									<c:out value="<a href=\"../../user/delete/${comment.comment.id}\">Delete</a>" escapeXml="false" />
-								
+									<a href="../../user/delete/${comment.comment.id}">Delete</a>								
 							</c:if>
 						</div>
 					</div>

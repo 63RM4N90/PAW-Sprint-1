@@ -213,10 +213,6 @@ public class UserController {
 		Comment recuthulu = new Comment(author, new Date(), comment.getComment(),
 				hashtags,users,comment.getOriginalAuthor());
 		commentRepo.save(recuthulu);
-		
-		for (Comment each : author.getComments()) {
-			System.out.println("Comentario: " + each.getId() + " tiene como autor original a " + each.getOriginalAuthor() + ". Es recuthulu? " + each.isRecuthulu());
-		}
 
 		mav.setViewName("redirect:../user/profile/" + originalauthor.getUsername());
 
