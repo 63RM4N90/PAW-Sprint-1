@@ -1,7 +1,9 @@
 package ar.edu.itba.it.paw.web;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.regex.Matcher;
@@ -23,6 +25,7 @@ import ar.edu.itba.it.paw.command.EditUserForm;
 import ar.edu.itba.it.paw.command.UserForm;
 import ar.edu.itba.it.paw.domain.Comment;
 import ar.edu.itba.it.paw.domain.CommentRepo;
+import ar.edu.itba.it.paw.domain.Hashtag;
 import ar.edu.itba.it.paw.domain.HashtagRepo;
 import ar.edu.itba.it.paw.domain.Notification;
 import ar.edu.itba.it.paw.domain.NotificationRepo;
@@ -133,6 +136,7 @@ public class UserController {
 			HttpSession session) {
 		ModelAndView mav = new ModelAndView();
 		String userSessionString = (String) session.getAttribute("username");
+		User userSession = null;
 		if (period == null) {
 			period = DEFAULT_PERIOD;
 		}
@@ -152,11 +156,12 @@ public class UserController {
 				}
 			} else {
 				session.setAttribute("username", userSessionString);
-				User userSession = userRepo.getUser(userSessionString);
+				userSession = userRepo.getUser(userSessionString);
 				boolean following = userSession.isFollowing(profile);
 				mav.addObject("isFollowing", following);
 				mav.addObject("following", userSession.following());
 				mav.addObject("followers", userSession.followedBy());
+				System.out.println("User " + userSession.getUsername() + " tiene  " + userSession.favourites() + " favoritos");
 			}
 			profile.visit();
 			mav.addObject("notifications",
@@ -171,7 +176,7 @@ public class UserController {
 			mav.addObject("followers", profile.followedBy());
 			mav.addObject("isEmptyPicture", profile.getPicture() == null);
 			List<Comment> comments = profile.getComments();
-			SortedSet<CommentWrapper> transformedComments = transformComments(comments);
+			SortedSet<CommentWrapper> transformedComments = transformComments(comments,userSession);
 			mav.addObject("comments", transformedComments);
 		}
 		mav.setViewName("/user/profile");
@@ -192,19 +197,28 @@ public class UserController {
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView recuthulu(
 			@RequestParam(value = "user", required = false) User originalauthor,
-			@RequestParam(value = "comment", required = false) String comment,
-			@RequestParam(value = "commentid", required = false) Integer id,
+			@RequestParam(value = "id", required = false) Integer commentid,
 			HttpSession session) {
+		
+		System.out.println("ENTRE AL METODO RECUTHULU");
+		
 		ModelAndView mav = new ModelAndView();
 		String userSession = (String) session.getAttribute("username");
 		User author = userRepo.getUser(userSession);
 
-		Comment recuthulu = new Comment(author, new Date(), comment,
-				commentRepo.getHashtagList(comment, originalauthor),
-				commentRepo.getReferences(comment), originalauthor);
+		Comment comment = commentRepo.get(Comment.class, commentid);
+		Set<Hashtag> hashtags = new HashSet<Hashtag>(comment.getHashtags());
+		Set<User> users = new HashSet<User>(comment.getReferences());
+		
+		Comment recuthulu = new Comment(author, new Date(), comment.getComment(),
+				hashtags,users,comment.getOriginalAuthor());
 		commentRepo.save(recuthulu);
+		
+		for (Comment each : author.getComments()) {
+			System.out.println("Comentario: " + each.getId() + " tiene como autor original a " + each.getOriginalAuthor() + ". Es recuthulu? " + each.isRecuthulu());
+		}
 
-		mav.setViewName("redirect:profile?user=" + originalauthor.getUsername());
+		mav.setViewName("redirect:../user/profile/" + originalauthor.getUsername());
 
 		return mav;
 
@@ -261,6 +275,45 @@ public class UserController {
 		
 	}
 	
+	@RequestMapping(method = RequestMethod.GET)
+	public ModelAndView favourite(
+			@RequestParam(value = "user", required = true) User profile,
+			@RequestParam(value = "id", required = true) Integer id,
+			HttpSession session){
+		
+		ModelAndView mav = new ModelAndView();
+		
+		Comment comment = commentRepo.get(Comment.class, id);
+		String userSession_str = (String)session.getAttribute("username");
+		User userSession = userRepo.getUser(userSession_str);
+		
+		userSession.addFavourite(comment);
+		
+		mav.setViewName("redirect:../user/profile/" + profile.getUsername());
+		return mav;
+		
+	}
+	
+	@RequestMapping(method = RequestMethod.GET)
+	public ModelAndView unfavourite(
+			@RequestParam(value = "user", required = true) User profile,
+			@RequestParam(value = "id", required = true) Integer id,
+			HttpSession session){
+		
+		ModelAndView mav = new ModelAndView();
+		
+		Comment comment = commentRepo.get(Comment.class, id);
+		String userSession_str = (String)session.getAttribute("username");
+		User userSession = userRepo.getUser(userSession_str);
+		
+		userSession.removeFavourite(comment);
+		
+		mav.setViewName("redirect:../user/profile/" + profile.getUsername());
+		return mav;
+		
+	}
+	
+		
 
 	@RequestMapping(method = RequestMethod.POST)
 	public ModelAndView profile(
@@ -381,11 +434,11 @@ public class UserController {
 		return mav;
 	}
 
-	private SortedSet<CommentWrapper> transformComments(List<Comment> comments) {
+	private SortedSet<CommentWrapper> transformComments(List<Comment> comments, User userSession) {
 		SortedSet<CommentWrapper> ans = new TreeSet<CommentWrapper>();
 		for (Comment comment : comments) {
 			CommentWrapper aux = new CommentWrapper(comment,
-					getProcessedComment(comment.getComment()));
+					getProcessedComment(comment.getComment()),userSession);
 			ans.add(aux);
 		}
 		return ans;

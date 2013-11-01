@@ -84,8 +84,26 @@
 					<div class="comment">
 						<p>${comment.transformedComment}</p>
 						<div class="comment-reference">
-							<i>Created by: </i>
-							<c:out value="<a href=\"../../user/profile/${comment.comment.author.username}\">${comment.comment.author.username}</a>" escapeXml="false" />
+							
+							<c:if test="${not empty username}">
+								<c:if test="${comment.favouritee}">
+									<c:out value="<a href=\"../../user/unfavourite?user=${user.username}&id=${comment.comment.id}\">remove favourite</a>" escapeXml="false" />
+								</c:if>
+								<c:if test="${not comment.favouritee}">
+									<c:out value="<a href=\"../../user/favourite?user=${user.username}&id=${comment.comment.id}\">add favourite</a>" escapeXml="false" />
+								</c:if>
+								<c:if test="${not isOwner}">
+									<c:out value="<a href=\"../../user/recuthulu?user=${user.username}&id=${comment.comment.id}\">Recuthulu</a>" escapeXml="false" />
+								</c:if>
+								<c:if test="${comment.recuthulu}">
+									<i>Recuthuled from: </i>
+									<c:out value="<a href=\"../../user/profile/${comment.comment.originalAuthor.username}\">${comment.comment.originalAuthor.username}</a>" escapeXml="false" />
+								</c:if>
+								<c:if test="${not comment.recuthulu}">
+									<i>Created by: </i>
+									<c:out value="<a href=\"../../user/profile/${comment.comment.originalAuthor.username}\">${comment.comment.originalAuthor.username}</a>" escapeXml="false" />
+								</c:if>
+							</c:if>
 							| <i><fmt:formatDate value="${comment.comment.date}"
 										pattern="dd-MM-yyyy HH:mm" /></i> |
 							<c:if test="${isOwner}">

@@ -47,6 +47,8 @@ public class User extends PersistentEntity {
 	private Set<User> following = new HashSet<User>();
 	@ManyToMany(mappedBy = "following")
 	private Set<User> followers = new HashSet<User>();
+	@ManyToMany
+	private Set<Comment> favourites = new HashSet<Comment>();
 
 	User() {
 	}
@@ -93,6 +95,18 @@ public class User extends PersistentEntity {
 		return notifications;
 	}
 
+	public void addFavourite(Comment comment){
+		favourites.add(comment);
+	}
+	
+	public int favourites(){
+		return favourites.size();
+	}
+	
+	public void removeFavourite(Comment comment){
+		favourites.remove(comment);
+	}
+	
 	public int getUncheckedNotifications() {
 		int ans = 0;
 		for (Notification notification : notifications) {
