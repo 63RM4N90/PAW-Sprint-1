@@ -118,8 +118,10 @@ public class UserForm {
 	}
 
 	public User build() throws IOException {
-		// Idem a "EditUserForm"
-		byte[] bytePicture = picture.getBytes();
+		byte[] bytePicture = null;
+		if (picture.getSize() != 0) {
+			bytePicture = picture.getBytes();
+		}
 		return new User(name, surname, username, description, confirmPassword,
 				bytePicture, secretQuestion, secretAnswer, new Date(), false);
 	}

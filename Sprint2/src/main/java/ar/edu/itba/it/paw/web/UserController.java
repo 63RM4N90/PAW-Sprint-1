@@ -50,7 +50,8 @@ public class UserController {
 
 	@Autowired
 	public UserController(UserRepo userRepo, HashtagRepo hashtagRepo,
-			CommentRepo commentService, NotificationRepo notificationRepo, UserFormValidator userFormValidator,
+			CommentRepo commentService, NotificationRepo notificationRepo,
+			UserFormValidator userFormValidator,
 			EditUserFormValidator editUserFormValidator) {
 		this.userRepo = userRepo;
 		this.hashtagRepo = hashtagRepo;
@@ -111,7 +112,7 @@ public class UserController {
 		}
 
 		try {
-			userRepo.save(userForm.build());
+			userRepo.registerUser(userForm.build());
 		} catch (Exception e) {
 			errors.rejectValue("username", "duplicated");
 			return null;
@@ -183,7 +184,7 @@ public class UserController {
 	@RequestMapping(value = "/user/delete/{id}", method = RequestMethod.GET)
 	public String delete(@PathVariable Integer id) {
 		if (id != null) {
-			Comment comment = commentRepo.get(Comment.class, id);
+			Comment comment = commentRepo.getComment(id);
 			if (comment != null) {
 				commentRepo.delete(comment);
 			}
@@ -204,7 +205,7 @@ public class UserController {
 		Comment recuthulu = new Comment(author, new Date(), comment,
 				commentRepo.getHashtagList(comment, originalauthor),
 				commentRepo.getReferences(comment), originalauthor);
-		commentRepo.save(recuthulu);
+		commentRepo.addComment(recuthulu);
 
 		mav.setViewName("redirect:profile?user=" + originalauthor.getUsername());
 
@@ -219,7 +220,7 @@ public class UserController {
 		ModelAndView mav = new ModelAndView();
 		String username = (String) session.getAttribute("username");
 		User userSession = userRepo.getUser(username);
-		
+
 		Notification notification = userSession.follow(profile);
 		notificationRepo.save(notification);
 
@@ -240,29 +241,27 @@ public class UserController {
 		mav.setViewName("redirect:../user/profile/" + profile.getUsername());
 		return mav;
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView follows(
 			@RequestParam(value = "user", required = true) User profile,
 			@RequestParam(value = "type", required = true) String type,
-			HttpSession session){
-		
+			HttpSession session) {
+
 		ModelAndView mav = new ModelAndView();
-		
+
 		mav.addObject("username", profile.getUsername());
 		mav.addObject("type", type);
 		System.out.println("type = " + type);
-		if(type.equals("Followers")){
+		if (type.equals("Followers")) {
 			mav.addObject("list", profile.getFollowers());
 		} else {
 			mav.addObject("list", profile.getFollowing());
 		}
-		
+
 		return mav;
-		
-		
+
 	}
-	
 
 	@RequestMapping(method = RequestMethod.POST)
 	public ModelAndView profile(
@@ -283,7 +282,7 @@ public class UserController {
 		User user = userRepo.getUser(username);
 		if (comment.getComment().length() > 0
 				&& comment.getComment().length() < MAX_COMMENT_LENGTH) {
-			commentRepo.save(comment);
+			commentRepo.addComment(comment);
 		}
 		mav.setViewName("redirect:./profile/" + user.getUsername());
 		return mav;
@@ -300,12 +299,13 @@ public class UserController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public String editProfile(EditUserForm editUserForm, Errors errors) throws IOException {
+	public String editProfile(EditUserForm editUserForm, Errors errors)
+			throws IOException {
 		editUserFormValidator.validate(editUserForm, errors);
 		if (errors.hasErrors()) {
 			return null;
 		}
-		User oldUser = userRepo.get(User.class, editUserForm.getId());
+		User oldUser = userRepo.getUser(editUserForm.getId());
 		editUserForm.update(oldUser);
 		return "redirect:home";
 	}
@@ -353,7 +353,7 @@ public class UserController {
 					mav.addObject("success",
 							"Your password was changed successfully!");
 					user.setPassword(newPassword);
-					userRepo.save(user);
+					userRepo.registerUser(user);
 				} else {
 					mav.addObject("error",
 							"Passwords dont match or have less than 8 characters or more than 16.");

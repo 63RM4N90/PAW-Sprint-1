@@ -52,7 +52,7 @@ public class HibernateCommentRepo extends AbstractHibernateRepo implements
 			Hashtag tag = hashtagRepo.getHashtag(hashtag);
 			if (tag == null) {
 				tag = new Hashtag(hashtag, author, new Date());
-				hashtagRepo.save(tag);
+				hashtagRepo.addHashtag(tag);
 			}
 			ans.add(tag);
 		}
@@ -84,5 +84,20 @@ public class HibernateCommentRepo extends AbstractHibernateRepo implements
 			}
 		}
 		return ans;
+	}
+
+	@Override
+	public void delete(Comment comment) {
+		super.delete(comment);
+	}
+
+	@Override
+	public Comment getComment(int id) {
+		return super.get(Comment.class, id);
+	}
+
+	@Override
+	public void addComment(Comment comment) {
+		super.save(comment);
 	}
 }

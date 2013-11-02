@@ -25,12 +25,8 @@ public class HibernateHashtagRepo extends AbstractHibernateRepo implements
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public Hashtag getHashtag(String hashtag) {
-		Session session = getSession();
-		Query query = session.createQuery(" from Hashtag where hashtag = ?");
-		query.setParameter(0, hashtag);
-		List<Hashtag> result = (List<Hashtag>) query.list();
+		List<Hashtag> result = find(" from Hashtag where hashtag = ?", hashtag);
 		return result.size() > 0 ? result.get(0) : null;
 	}
 
@@ -95,5 +91,11 @@ public class HibernateHashtagRepo extends AbstractHibernateRepo implements
 			}
 		}
 		return rank;
+	}
+
+	@Override
+	public void addHashtag(Hashtag hashtag) {
+		super.save(hashtag);
+
 	}
 }
