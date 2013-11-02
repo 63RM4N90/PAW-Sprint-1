@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.itba.it.paw.command.EditUserForm;
@@ -151,6 +152,7 @@ public class UserController {
 				session.setAttribute("username", userSessionString);
 				User userSession = userRepo.getUser(userSessionString);
 				boolean following = userSession.isFollowing(profile);
+				System.out.println("picture is = " + userSession.getPicture());
 				mav.addObject("isFollowing", following);
 			}
 			profile.visit();
@@ -346,6 +348,13 @@ public class UserController {
 			mav.setViewName("redirect:login");
 		}
 		return mav;
+	}
+
+	@RequestMapping(method = RequestMethod.GET)
+	@ResponseBody
+	public byte[] image(
+			@RequestParam(value = "username", required = false) User user) {
+		return user.getPicture();
 	}
 
 	private SortedSet<CommentWrapper> transformComments(List<Comment> comments) {

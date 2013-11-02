@@ -2,7 +2,8 @@
 <div class="vertical-container">
 	<h2>Registration</h2>
 
-	<form:form method="POST" action="registration" commandName="userForm">
+	<form:form method="POST" action="registration" commandName="userForm"
+		enctype="multipart/form-data">
 		<div class="field-wrapper">
 			<div class="registration-form-field">
 				<label for="name">Name:</label>
@@ -75,10 +76,10 @@
 				<form:errors path="secretAnswer" />
 			</div>
 		</div>
-		<!-- 		<div class="registration-form-field"> -->
-		<!-- 			<label for="picture">Picture:</label> -->
-		<%-- 			<form:input type="file" path="picture" accept="image/"/> --%>
-		<!-- 		</div> -->
+		<div class="registration-form-field">
+			<label for="picture">Picture:</label>
+			<form:input type="file"  name="picture" path="picture" />
+		</div>
 		<div class="registration-form-buttons">
 			<input type="submit" class="button" name="submit" value="Submit" />
 		</div>

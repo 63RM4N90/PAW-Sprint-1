@@ -8,7 +8,7 @@
 					alt="user_picture" />
 			</c:if>
 			<c:if test="${!isEmptyPicture}">
-				<img src="image?username=<c:out value="${user.username}" />"
+				<img src="../image?username=<c:out value="${user.username}" />"
 					alt="user_picture" />
 			</c:if>
 			<h3>
