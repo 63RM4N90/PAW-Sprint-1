@@ -7,6 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.logging.impl.Log4JLogger;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -20,6 +21,8 @@ public class ErrorFilter extends OncePerRequestFilter {
 		try {
 			filterChain.doFilter(request, response);
 		} catch (Exception e) {
+			Log4JLogger log = new Log4JLogger();
+			log.error(e);
 			System.out.println(e.getMessage());
 			request.getRequestDispatcher("/WEB-INF/jsp/error.jsp").forward(
 					request, response);

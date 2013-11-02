@@ -128,7 +128,4 @@ public class Comment extends PersistentEntity implements Comparable<Comment> {
 			return false;
 		return true;
 	}
-	
-
-
 }

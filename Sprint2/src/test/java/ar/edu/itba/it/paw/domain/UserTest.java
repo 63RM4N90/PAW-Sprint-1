@@ -1,0 +1,86 @@
+package ar.edu.itba.it.paw.domain;
+
+import java.util.Date;
+import java.util.HashSet;
+
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
+public class UserTest {
+
+	private User testUser;
+	
+	@Before
+    public void setUp() {
+		testUser = new User("test", "test", "test", "test", "12345678",
+				null, "test", "test", new Date(), false);
+    }
+	
+	@Test
+	public void followUserTest() {
+		User follow = new User("follow", "follow", "follow", "follow",
+				"12345678", null, "follow", "follow", new Date(), false);
+
+		Assert.assertEquals(testUser.getFollowing(), 0);
+		testUser.follow(follow);
+		Assert.assertEquals(testUser.getFollowing(), 1);
+		Assert.assertEquals(follow.getFollowers(), 1);
+	}
+
+	@Test
+	public void unfollowUserTest() {
+		User follow = new User("follow", "follow", "follow", "follow",
+				"12345678", null, "follow", "follow", new Date(), false);
+
+		testUser.follow(follow);
+		Assert.assertEquals(testUser.getFollowing(), 1);
+		testUser.unfollow(follow);
+		Assert.assertEquals(testUser.getFollowing(), 0);
+		Assert.assertEquals(follow.getFollowers(), 0);
+	}
+
+	@Test
+	public void notifyUserTest() {
+		User notificator = new User("notificator", "notificator",
+				"notificator", "notificator", "12345678", null, "notificator",
+				"notificator", new Date(), false);
+		Notification notification = new Notification(notificator,
+				"notification");
+		Assert.assertEquals(testUser.getUncheckedNotifications(), 0);
+		testUser.notify(notification);
+		Assert.assertEquals(testUser.getUncheckedNotifications(), 1);
+	}
+
+	@Test
+	public void checkNotificationTest() {
+		User notificator = new User("notificator", "notificator",
+				"notificator", "notificator", "12345678", null, "notificator",
+				"notificator", new Date(), false);
+		Notification notification = new Notification(notificator,
+				"notification");
+		testUser.notify(notification);
+		Assert.assertEquals(testUser.getUncheckedNotifications(), 1);
+		testUser.getNotifications();
+		Assert.assertEquals(testUser.getUncheckedNotifications(), 0);
+	}
+
+	@Test
+	public void addFavouriteTest() {
+		Comment favourite = new Comment(testUser, new Date(), "test comment",
+				new HashSet<Hashtag>(), new HashSet<User>(), testUser);
+		Assert.assertEquals(testUser.getFavourites().size(), 0);
+		testUser.addFavourite(favourite);
+		Assert.assertEquals(testUser.getFavourites().size(), 1);
+	}
+
+	@Test
+	public void removeFavouriteTest() {
+		Comment favourite = new Comment(testUser, new Date(), "test comment",
+				new HashSet<Hashtag>(), new HashSet<User>(), testUser);
+		testUser.addFavourite(favourite);
+		Assert.assertEquals(testUser.getFavourites().size(), 1);
+		testUser.removeFavourite(favourite);
+		Assert.assertEquals(testUser.getFavourites().size(), 0);
+	}
+}

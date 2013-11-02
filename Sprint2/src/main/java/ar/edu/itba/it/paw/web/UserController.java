@@ -1,6 +1,7 @@
 package ar.edu.itba.it.paw.web;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -38,7 +39,7 @@ import ar.edu.itba.it.paw.validator.EditUserFormValidator;
 import ar.edu.itba.it.paw.validator.UserFormValidator;
 
 @Controller
-public class UserController {
+public class UserController  extends AbstractController {
 
 	private UserRepo userRepo;
 	private HashtagRepo hashtagRepo;
@@ -200,8 +201,9 @@ public class UserController {
 
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView recuthulu(
-			@RequestParam(value = "user", required = false) User originalauthor,
-			@RequestParam(value = "id", required = false) Integer commentid,
+			@RequestParam(value = "user", required = true) User originalauthor,
+			@RequestParam(value = "id", required = true) Integer commentid,
+			@RequestParam(value = "url", required = true) String url,
 			HttpSession session) {
 		
 		System.out.println("ENTRE AL METODO RECUTHULU");
@@ -219,10 +221,26 @@ public class UserController {
 				hashtags,users,comment.getOriginalAuthor());
 		commentRepo.addComment(recuthulu);
 
-		mav.setViewName("redirect:../user/profile/" + originalauthor.getUsername());
+		mav.setViewName("redirect:../" + url);
 
 		return mav;
 
+	}
+	
+	@RequestMapping(method = RequestMethod.GET)
+	public ModelAndView favourites(
+			@RequestParam(value = "user", required = false) User profile,
+			HttpSession session){
+		
+		ModelAndView mav = new ModelAndView();
+		String usrSession = (String)session.getAttribute("username");
+		User usr = userRepo.getUser(usrSession);
+		List<Comment> favouritecomments = new ArrayList<Comment>(profile.getFavourites());
+		SortedSet<CommentWrapper> transformedComments = transformComments(favouritecomments,usr);
+		mav.addObject("user", profile);
+		mav.addObject("comments", transformedComments);
+		return mav;
+		
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
@@ -277,6 +295,7 @@ public class UserController {
 	public ModelAndView favourite(
 			@RequestParam(value = "user", required = true) User profile,
 			@RequestParam(value = "id", required = true) Integer id,
+			@RequestParam(value = "url", required = true) String url,
 			HttpSession session){
 		
 		ModelAndView mav = new ModelAndView();
@@ -287,7 +306,7 @@ public class UserController {
 		
 		userSession.addFavourite(comment);
 		
-		mav.setViewName("redirect:../user/profile/" + profile.getUsername());
+		mav.setViewName("redirect:../" + url);
 		return mav;
 	}
 	
@@ -295,6 +314,7 @@ public class UserController {
 	public ModelAndView unfavourite(
 			@RequestParam(value = "user", required = true) User profile,
 			@RequestParam(value = "id", required = true) Integer id,
+			@RequestParam(value = "url", required = true) String url,
 			HttpSession session){
 		
 		ModelAndView mav = new ModelAndView();
@@ -305,7 +325,7 @@ public class UserController {
 		
 		userSession.removeFavourite(comment);
 		
-		mav.setViewName("redirect:../user/profile/" + profile.getUsername());
+		mav.setViewName("redirect:../" + url);
 		return mav;
 	}
 	
@@ -419,9 +439,6 @@ public class UserController {
 		if (username != null) {
 			User user = userRepo.getUser(username);
 			List<Notification> notifications = user.getNotifications();
-			for (Notification notification : notifications) {
-				notification.check();
-			}
 			mav.addObject("notifications", notifications);
 		} else {
 			mav.setViewName("redirect:login");

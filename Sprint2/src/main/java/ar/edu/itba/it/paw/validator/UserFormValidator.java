@@ -9,6 +9,7 @@ import ar.edu.itba.it.paw.command.UserForm;
 @Component
 public class UserFormValidator implements Validator {
 
+	private static final int MAX_USERNAME_LENGTH = 11;
 	private static final int MAX_STRING_LENGTH = 32;
 	private static final int MIN_PASSWORD_LENGTH = 8;
 	private static final int MAX_PASSWORD_LENGTH = 16;
@@ -46,7 +47,7 @@ public class UserFormValidator implements Validator {
 				|| userForm.getSurname().length() == 0) {
 			errors.rejectValue("surname", "length");
 		}
-		if (userForm.getUsername().length() > MAX_STRING_LENGTH
+		if (userForm.getUsername().length() > MAX_USERNAME_LENGTH
 				|| userForm.getUsername().length() == 0) {
 			errors.rejectValue("username", "length");
 		}
