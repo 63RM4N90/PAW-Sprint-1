@@ -1,6 +1,8 @@
 package ar.edu.itba.it.paw.command;
 
-import java.util.Date;
+import java.io.IOException;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import ar.edu.itba.it.paw.domain.User;
 
@@ -9,14 +11,11 @@ public class EditUserForm {
 	private int id;
 	private String name;
 	private String surname;
-	private String username;
 	private String password;
 	private String confirmPassword;
 	private String description;
-	private String secretQuestion;
-	private String secretAnswer;
-	private Date registrationDate;
 	private String privacy;
+	private MultipartFile picture;
 
 	public EditUserForm() {
 	}
@@ -25,14 +24,18 @@ public class EditUserForm {
 		this.id = user.getId();
 		this.name = user.getName();
 		this.surname = user.getSurname();
-		this.username = user.getUsername();
 		this.password = user.getPassword();
 		this.confirmPassword = user.getPassword();
 		this.description = user.getDescription();
-		this.secretQuestion = user.getSecretQuestion();
-		this.secretAnswer = user.getSecretAnswer();
-		this.registrationDate = user.getRegistrationDate();
 		this.privacy = user.isPrivate() ? "T" : "F";
+	}
+
+	public MultipartFile getPicture() {
+		return picture;
+	}
+
+	public void setPicture(MultipartFile picture) {
+		this.picture = picture;
 	}
 
 	public String getPrivacy() {
@@ -91,20 +94,18 @@ public class EditUserForm {
 		this.confirmPassword = confirmPassword;
 	}
 
-	public void update(User user) {
+	public void update(User user) throws IOException {
 		user.setName(name);
 		user.setSurname(surname);
 		user.setDescription(description);
 		user.setPassword(password);
+		if (picture.getSize() != 0) {
+			user.setPicture(picture.getBytes());
+		}
 		if (privacy.equals("T")) {
 			user.makePrivate();
 		} else {
 			user.makePublic();
 		}
-	}
-
-	public User build() {
-		return new User(name, surname, username, description, password, null,
-				secretQuestion, secretAnswer, registrationDate, false);
 	}
 }

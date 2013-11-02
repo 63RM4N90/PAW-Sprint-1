@@ -11,8 +11,7 @@
 		<c:out value="${generalError}" />
 	</div>
 	<form:form method="POST" action="editProfile"
-		commandName="editUserForm">
-		<%-- 		enctype="multipart/form-data"> --%>
+		commandName="editUserForm" enctype="multipart/form-data">
 		<form:errors path="*" />
 		<form:hidden path="id" />
 		<div class="registration-form-field">
@@ -39,10 +38,10 @@
 		<form:radiobutton name="privacy" path="privacy" value="T" />Private
 			<form:radiobutton name="privacy" path="privacy" value="F" />Public
 		<div class="registration-form-field"></div>
-		<!-- 		<div class="registration-form-field"> -->
-		<!-- 			<label for="picture">Picture:</label> -->
-		<!-- 			<input type="file" name="picture" accept="image/"/> -->
-		<!-- 		</div> -->
+		<div class="registration-form-field">
+			<label for="picture">Picture:</label>
+			<form:input type="file" name="picture" path="picture" />
+		</div>
 		<div class="form-buttons">
 			<input type="submit" class="button" name="submit" value="Save" />
 		</div>

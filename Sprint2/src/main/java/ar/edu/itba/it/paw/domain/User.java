@@ -215,10 +215,6 @@ public class User extends PersistentEntity {
 		return picture;
 	}
 
-	public void setFile(byte[] picture) {
-		this.picture = picture;
-	}
-
 	public String getSecretQuestion() {
 		return secretQuestion;
 	}

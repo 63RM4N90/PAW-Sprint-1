@@ -78,7 +78,7 @@
 		</div>
 		<div class="registration-form-field">
 			<label for="picture">Picture:</label>
-			<form:input type="file"  name="picture" path="picture" />
+			<form:input type="file" name="picture" path="picture" />
 		</div>
 		<div class="registration-form-buttons">
 			<input type="submit" class="button" name="submit" value="Submit" />

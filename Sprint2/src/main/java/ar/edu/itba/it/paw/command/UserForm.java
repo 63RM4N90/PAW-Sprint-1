@@ -29,7 +29,6 @@ public class UserForm {
 	}
 
 	public void setPicture(MultipartFile picture) throws IOException {
-		System.out.println("SET PICTURE = " + picture.getBytes());
 		this.picture = picture;
 	}
 
@@ -59,7 +58,6 @@ public class UserForm {
 	}
 
 	public void setName(String name) {
-		System.out.println("SET NAME");
 		this.name = name;
 	}
 
@@ -68,7 +66,6 @@ public class UserForm {
 	}
 
 	public void setSurname(String surname) {
-		System.out.println("SET SURNAME");
 		this.surname = surname;
 	}
 
@@ -77,7 +74,6 @@ public class UserForm {
 	}
 
 	public void setUsername(String username) {
-		System.out.println("SET USERNAME");
 		this.username = username;
 	}
 

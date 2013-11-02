@@ -1,5 +1,6 @@
 package ar.edu.itba.it.paw.web;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.SortedSet;
@@ -152,7 +153,6 @@ public class UserController {
 				session.setAttribute("username", userSessionString);
 				User userSession = userRepo.getUser(userSessionString);
 				boolean following = userSession.isFollowing(profile);
-				System.out.println("picture is = " + userSession.getPicture());
 				mav.addObject("isFollowing", following);
 			}
 			profile.visit();
@@ -267,7 +267,7 @@ public class UserController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public String editProfile(EditUserForm editUserForm, Errors errors) {
+	public String editProfile(EditUserForm editUserForm, Errors errors) throws IOException {
 		editUserFormValidator.validate(editUserForm, errors);
 		if (errors.hasErrors()) {
 			return null;
