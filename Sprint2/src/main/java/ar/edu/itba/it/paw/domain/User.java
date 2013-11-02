@@ -103,6 +103,10 @@ public class User extends PersistentEntity {
 		return favourites.size();
 	}
 	
+	public Set<Comment> getFavourites(){
+		return favourites;
+	}
+	
 	public void removeFavourite(Comment comment){
 		favourites.remove(comment);
 	}

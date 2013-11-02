@@ -33,6 +33,7 @@
 			
 			<h6><a href="../../user/follows?user=${user.username}&type=Followers">Followers: ${followers}</a></h6>
 			<h6><a href="../../user/follows?user=${user.username}&type=Following">Following: ${following}</a></h6>
+			<h6><a href="../../user/favourites?user=${user.username}">Favourites</a></h6>
 			<c:if test="${isOwner}">
 				<p>
 					Notifications:
@@ -88,13 +89,13 @@
 							
 							<c:if test="${not empty username}">
 								<c:if test="${comment.favouritee}">
-									<a href="../../user/unfavourite?user=${user.username}&id=${comment.comment.id}">remove favourite</a>
+									<a href="../../user/unfavourite?user=${user.username}&id=${comment.comment.id}&url=user/profile/${user.username}">remove favourite</a>
 								</c:if>
 								<c:if test="${not comment.favouritee}">
-									<a href="../../user/favourite?user=${user.username}&id=${comment.comment.id}">add favourite</a>
+									<a href="../../user/favourite?user=${user.username}&id=${comment.comment.id}&url=user/profile/${user.username}">add favourite</a>
 								</c:if>
 								<c:if test="${not isOwner}">
-									<a href="../../user/recuthulu?user=${user.username}&id=${comment.comment.id}">Recuthulu</a>
+									<a href="../../user/recuthulu?user=${user.username}&id=${comment.comment.id}&url=user/profile/${user.username}">Recuthulu</a>
 								</c:if>
 								<c:if test="${comment.recuthulu}">
 									<i>Recuthuled from: </i>
@@ -109,7 +110,7 @@
 							| <i><fmt:formatDate value="${comment.comment.date}"
 										pattern="dd-MM-yyyy HH:mm" /></i> |
 							<c:if test="${isOwner}">
-									<a href="../../user/delete/${comment.comment.id}">Delete</a>								
+									<a href="../user/delete/${comment.comment.id}">Delete</a>								
 							</c:if>
 						</div>
 					</div>
