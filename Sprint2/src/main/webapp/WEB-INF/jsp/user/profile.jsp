@@ -30,6 +30,9 @@
 			<p>
 				<c:out value="${user.visits}" />
 			</p>
+			
+			<h6><a href="../../user/follows?user=${user.username}&type=Followers">Followers: ${followers}</a></h6>
+			<h6><a href="../../user/follows?user=${user.username}&type=Following">Following: ${following}</a></h6>
 			<c:if test="${isOwner}">
 				<p>
 					Notifications:
@@ -48,14 +51,10 @@
 		<c:if test="${not isOwner}">
 
 			<c:if test="${not isFollowing}">
-				<form method="POST" action="follow">
-					<input type="submit" name="submit" value="Follow" />
-				</form>
+				<button onclick="location.href='../../user/follow?user=${user.username}'"> Follow </button>
 			</c:if>
 			<c:if test="${isFollowing}">
-				<form method="POST" action="unfollow">
-					<input type="submit" name="submit" value="Unfollow" />
-				</form>
+				<button onclick="location.href='../../user/unfollow?user=${user.username}'"> Unfollow </button>
 			</c:if>
 		</c:if>
 	</c:if>
@@ -86,14 +85,12 @@
 					<div class="comment">
 						<p>${comment.transformedComment}</p>
 						<div class="comment-reference">
-							<i>Created by: </i>
-							<c:out value="<a href=\"../../user/profile/${comment.comment.author.username}\">${comment.comment.author.username}</a>" escapeXml="false" />
+							<i>Created by: </i> <a href="../../user/profile/${comment.comment.author.username}">${comment.comment.author.username}</a>
 							| <i><fmt:formatDate value="${comment.comment.date}"
 										pattern="dd-MM-yyyy HH:mm" /></i> |
 							<c:if test="${isOwner}">
-									<c:out value="<a href=\"../../user/delete/${comment.comment.id}\">Delete</a>" escapeXml="false" />
-								
-								</c:if>
+									<a href="../../user/delete/${comment.comment.id}">Delete</a>								
+							</c:if>
 						</div>
 					</div>
 				</li>

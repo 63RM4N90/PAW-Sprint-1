@@ -27,6 +27,7 @@ import ar.edu.itba.it.paw.domain.Comment;
 import ar.edu.itba.it.paw.domain.CommentRepo;
 import ar.edu.itba.it.paw.domain.HashtagRepo;
 import ar.edu.itba.it.paw.domain.Notification;
+import ar.edu.itba.it.paw.domain.NotificationRepo;
 import ar.edu.itba.it.paw.domain.RankedHashtag;
 import ar.edu.itba.it.paw.domain.User;
 import ar.edu.itba.it.paw.domain.UserRepo;
@@ -39,6 +40,7 @@ public class UserController {
 	private UserRepo userRepo;
 	private HashtagRepo hashtagRepo;
 	private CommentRepo commentRepo;
+	private NotificationRepo notificationRepo;
 	private UserFormValidator userFormValidator;
 	private EditUserFormValidator editUserFormValidator;
 	private static final int MAX_COMMENT_LENGTH = 140;
@@ -47,12 +49,13 @@ public class UserController {
 	private static final int DEFAULT_PERIOD = 30;
 
 	@Autowired
-	public UserController(UserRepo userService, HashtagRepo hashtagService,
-			CommentRepo commentService, UserFormValidator userFormValidator,
+	public UserController(UserRepo userRepo, HashtagRepo hashtagRepo,
+			CommentRepo commentService, NotificationRepo notificationRepo, UserFormValidator userFormValidator,
 			EditUserFormValidator editUserFormValidator) {
-		this.userRepo = userService;
-		this.hashtagRepo = hashtagService;
+		this.userRepo = userRepo;
+		this.hashtagRepo = hashtagRepo;
 		this.commentRepo = commentService;
+		this.notificationRepo = notificationRepo;
 		this.userFormValidator = userFormValidator;
 		this.editUserFormValidator = editUserFormValidator;
 	}
@@ -154,6 +157,8 @@ public class UserController {
 				User userSession = userRepo.getUser(userSessionString);
 				boolean following = userSession.isFollowing(profile);
 				mav.addObject("isFollowing", following);
+				mav.addObject("following", userSession.following());
+				mav.addObject("followers", userSession.followedBy());
 			}
 			profile.visit();
 			mav.addObject("notifications",
@@ -164,6 +169,8 @@ public class UserController {
 			mav.addObject("isOwner",
 					profile.getUsername().equals(userSessionString));
 			mav.addObject("user", profile);
+			mav.addObject("following", profile.following());
+			mav.addObject("followers", profile.followedBy());
 			mav.addObject("isEmptyPicture", profile.getPicture() == null);
 			List<Comment> comments = profile.getComments();
 			SortedSet<CommentWrapper> transformedComments = transformComments(comments);
@@ -205,31 +212,57 @@ public class UserController {
 
 	}
 
-	@RequestMapping(method = RequestMethod.POST)
-	public ModelAndView follow(HttpSession session) {
+	@RequestMapping(method = RequestMethod.GET)
+	public ModelAndView follow(
+			@RequestParam(value = "user", required = false) User profile,
+			HttpSession session) {
 		ModelAndView mav = new ModelAndView();
 		String username = (String) session.getAttribute("username");
-		User sprofile = (User) session.getAttribute("user");
 		User userSession = userRepo.getUser(username);
+		
+		Notification notification = userSession.follow(profile);
+		notificationRepo.save(notification);
 
-		userSession.follow(sprofile);
-
-		mav.setViewName("redirect:user/profile/" + sprofile.getUsername());
+		mav.setViewName("redirect:../user/profile/" + profile.getUsername());
 		return mav;
 	}
 
-	@RequestMapping(method = RequestMethod.POST)
-	public ModelAndView unfollow(HttpSession session) {
+	@RequestMapping(method = RequestMethod.GET)
+	public ModelAndView unfollow(
+			@RequestParam(value = "user", required = false) User profile,
+			HttpSession session) {
 		ModelAndView mav = new ModelAndView();
 		String username = (String) session.getAttribute("username");
-		User sprofile = (User) session.getAttribute("user");
 		User userSession = userRepo.getUser(username);
 
-		userSession.unfollow(sprofile);
+		userSession.unfollow(profile);
 
-		mav.setViewName("redirect:user/profile/" + sprofile.getUsername());
+		mav.setViewName("redirect:../user/profile/" + profile.getUsername());
 		return mav;
 	}
+	
+	@RequestMapping(method = RequestMethod.GET)
+	public ModelAndView follows(
+			@RequestParam(value = "user", required = true) User profile,
+			@RequestParam(value = "type", required = true) String type,
+			HttpSession session){
+		
+		ModelAndView mav = new ModelAndView();
+		
+		mav.addObject("username", profile.getUsername());
+		mav.addObject("type", type);
+		System.out.println("type = " + type);
+		if(type.equals("Followers")){
+			mav.addObject("list", profile.getFollowers());
+		} else {
+			mav.addObject("list", profile.getFollowing());
+		}
+		
+		return mav;
+		
+		
+	}
+	
 
 	@RequestMapping(method = RequestMethod.POST)
 	public ModelAndView profile(

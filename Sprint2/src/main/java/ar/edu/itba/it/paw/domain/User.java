@@ -123,8 +123,11 @@ public class User extends PersistentEntity {
 		return following;
 	}
 
-	public void follow(User user) {
+	public Notification follow(User user) {
+		Notification notification = new Notification(this, username + " is following you :).");
+		user.notify(notification);
 		following.add(user);
+		return notification;
 	}
 
 	public void followedBy(User user) {
