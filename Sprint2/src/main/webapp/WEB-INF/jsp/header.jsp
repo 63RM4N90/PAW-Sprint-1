@@ -24,6 +24,7 @@
 					type="submit" class="button" name="submit" value="Search" />
 			</form>
 		</div>
+		<a href="${pageContext.request.contextPath}/bin/hashtag/top10"> Top 10 Hashtags </a>
 		<div class="top-bar-element session">
 			<div class="home-link">
 				<img class="separator"
@@ -39,7 +40,7 @@
 					<p>
 						<c:out value="${username}" />
 					</p>
-					<br> <a href="/Sprint2/bin/user/logout">Log out</a>
+					<br> <a href="${pageContext.request.contextPath}/bin/user/logout">Log out</a>
 				</div>
 			</c:if>
 		</div>
