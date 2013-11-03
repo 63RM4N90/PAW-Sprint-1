@@ -47,7 +47,7 @@ public class UserController extends AbstractController {
 	private static final int MAX_COMMENT_LENGTH = 140;
 	private static final int MAX_PASSWORD_LENGTH = 16;
 	private static final int MIN_PASSWORD_LENGTH = 8;
-	private static final int DEFAULT_PERIOD = 30;
+	
 
 	@Autowired
 	public UserController(UserRepo userRepo, HashtagRepo hashtagRepo,
@@ -68,7 +68,6 @@ public class UserController extends AbstractController {
 		if (s.getAttribute("username") != null) {
 			mav.setViewName("/user/profile/" + s.getAttribute("username"));
 		}
-		showTopTenHashtags(mav);
 		return mav;
 	}
 
@@ -98,7 +97,6 @@ public class UserController extends AbstractController {
 	public ModelAndView registration() {
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("userForm", new UserForm());
-		showTopTenHashtags(mav);
 		return mav;
 	}
 
@@ -138,9 +136,7 @@ public class UserController extends AbstractController {
 		ModelAndView mav = new ModelAndView();
 		String userSessionString = (String) session.getAttribute("username");
 		User userSession = null;
-		if (period == null) {
-			period = DEFAULT_PERIOD;
-		}
+		
 		if (profile == null) {
 			if (userSessionString != null) {
 				mav.setViewName("redirect:../profile/" + userSessionString
@@ -170,7 +166,7 @@ public class UserController extends AbstractController {
 					userRepo.getUser(profile.getUsername())
 							.getUncheckedNotifications());
 
-			showTopTenHashtags(mav);
+			
 			mav.addObject("isOwner",
 					profile.getUsername().equals(userSessionString));
 			mav.addObject("user", profile);
@@ -451,18 +447,4 @@ public class UserController extends AbstractController {
 		return user.getPicture();
 	}
 
-	private void showTopTenHashtags(ModelAndView mav) {
-		List<RankedHashtag> top10;
-
-		if (mav.getModel().get("period") == null) {
-			top10 = hashtagRepo.topHashtags(30);
-		} else {
-			top10 = hashtagRepo.topHashtags(Integer.valueOf((String) mav
-					.getModel().get("period")));
-		}
-		boolean isempty = top10.size() == 0;
-		mav.addObject("previous", "login");
-		mav.addObject("ranking", top10);
-		mav.addObject("isempty", isempty);
-	}
 }

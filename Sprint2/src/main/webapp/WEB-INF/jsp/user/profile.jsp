@@ -118,8 +118,6 @@
 			</c:forEach>
 		</ul>
 	</div>
-	<div class="tag-column profile-column">
-		<%@ include file="../top10.jsp"%>
-	</div>
+
 </div>
 <%@ include file="../footer.jsp"%>

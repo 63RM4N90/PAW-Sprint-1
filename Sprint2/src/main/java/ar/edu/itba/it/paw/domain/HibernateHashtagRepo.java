@@ -1,5 +1,6 @@
 package ar.edu.itba.it.paw.domain;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -39,6 +40,7 @@ public class HibernateHashtagRepo extends AbstractHibernateRepo implements
 		calendar.roll(Calendar.DAY_OF_YEAR, -days);
 		Date from = calendar.getTime();
 
+		System.out.println("Desde hoy hasta " + from);
 		TreeMap<Integer, ArrayList<Hashtag>> top = rankedHashtags(from, to);
 
 		if (top != null) {
@@ -70,8 +72,10 @@ public class HibernateHashtagRepo extends AbstractHibernateRepo implements
 
 		Session session = getSession();
 		Query query = session
-				.createQuery("select h,count(distinct c) from Comment c inner join c.hashtags h group by h order by count(distinct c)");
+				.createQuery("select h,count(distinct c) from Comment c inner join c.hashtags h where c.date <= ? and c.date >= ? group by h order by count(distinct c)");
 
+		query.setTimestamp(0,new Timestamp(to.getTime()));
+		query.setTimestamp(1,new Timestamp(from.getTime()));
 		ScrollableResults results = query.scroll();
 
 		ArrayList<Hashtag> aux;

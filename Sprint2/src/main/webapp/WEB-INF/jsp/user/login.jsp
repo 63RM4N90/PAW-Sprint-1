@@ -35,9 +35,7 @@
 			</a>
 		</div>
 	</div>
-	<div class="login-column column-3">
-		<%@ include file="../top10.jsp"%> 
-	</div>
+
 </div>
 <div class="about-us">
 	<p>

@@ -24,6 +24,7 @@
 					type="submit" class="button" name="submit" value="Search" />
 			</form>
 		</div>
+		<a href="${pageContext.request.contextPath}/bin/hashtag/top10"> Top 10 Hashtags </a>
 		<div class="top-bar-element session">
 			<div class="home-link">
 				<img class="separator"
