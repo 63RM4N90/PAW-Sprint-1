@@ -62,7 +62,6 @@ public abstract class AbstractController {
 		patternStr = "@([A-Za-z0-9_]+)";
 		pattern = Pattern.compile(patternStr);
 		words = ans.split(" ");
-		System.out.println("Econtré " + words.length + "referencias");
 		ans = "";
 		for (String word : words) {
 			Matcher matcher = pattern.matcher(word);

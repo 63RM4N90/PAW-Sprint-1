@@ -40,7 +40,6 @@ public class HibernateHashtagRepo extends AbstractHibernateRepo implements
 		calendar.roll(Calendar.DAY_OF_YEAR, -days);
 		Date from = calendar.getTime();
 
-		System.out.println("Desde hoy hasta " + from);
 		TreeMap<Integer, ArrayList<Hashtag>> top = rankedHashtags(from, to);
 
 		if (top != null) {

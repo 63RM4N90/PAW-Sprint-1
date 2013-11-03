@@ -33,6 +33,7 @@
 			
 			<h6><a href="../../user/follows?user=${user.username}&type=Followers">Followers: ${followers}</a></h6>
 			<h6><a href="../../user/follows?user=${user.username}&type=Following">Following: ${following}</a></h6>
+			<h6><a href="../../user/suggestedUsers">Suggested users</a></h6>
 			<h6><a href="../../user/favourites?user=${user.username}">Favourites</a></h6>
 			<c:if test="${isOwner}">
 				<p>

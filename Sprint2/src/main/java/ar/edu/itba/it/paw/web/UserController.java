@@ -1,10 +1,17 @@
 package ar.edu.itba.it.paw.web;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.HashSet;
+import java.util.InvalidPropertiesFormatException;
 import java.util.List;
+import java.util.Properties;
+import java.util.Random;
 import java.util.Set;
 import java.util.SortedSet;
 
@@ -47,7 +54,7 @@ public class UserController extends AbstractController {
 	private static final int MAX_COMMENT_LENGTH = 140;
 	private static final int MAX_PASSWORD_LENGTH = 16;
 	private static final int MIN_PASSWORD_LENGTH = 8;
-	
+	private static final int SUGGESTED_FRIEND_AMOUNT = 3;
 
 	@Autowired
 	public UserController(UserRepo userRepo, HashtagRepo hashtagRepo,
@@ -136,7 +143,7 @@ public class UserController extends AbstractController {
 		ModelAndView mav = new ModelAndView();
 		String userSessionString = (String) session.getAttribute("username");
 		User userSession = null;
-		
+
 		if (profile == null) {
 			if (userSessionString != null) {
 				mav.setViewName("redirect:../profile/" + userSessionString
@@ -158,15 +165,12 @@ public class UserController extends AbstractController {
 				mav.addObject("isFollowing", following);
 				mav.addObject("following", userSession.following());
 				mav.addObject("followers", userSession.followedBy());
-				System.out.println("User " + userSession.getUsername()
-						+ " tiene  " + userSession.favourites() + " favoritos");
 			}
 			profile.visit();
 			mav.addObject("notifications",
 					userRepo.getUser(profile.getUsername())
 							.getUncheckedNotifications());
 
-			
 			mav.addObject("isOwner",
 					profile.getUsername().equals(userSessionString));
 			mav.addObject("user", profile);
@@ -190,7 +194,6 @@ public class UserController extends AbstractController {
 				commentRepo.delete(comment);
 			}
 		}
-		System.out.println("PASE...");
 		return "redirect:../home";
 	}
 
@@ -200,8 +203,6 @@ public class UserController extends AbstractController {
 			@RequestParam(value = "id", required = true) Integer commentid,
 			@RequestParam(value = "url", required = true) String url,
 			HttpSession session) {
-
-		System.out.println("ENTRE AL METODO RECUTHULU");
 
 		ModelAndView mav = new ModelAndView();
 		String userSession = (String) session.getAttribute("username");
@@ -276,7 +277,6 @@ public class UserController extends AbstractController {
 
 		mav.addObject("username", profile.getUsername());
 		mav.addObject("type", type);
-		System.out.println("type = " + type);
 		if (type.equals("Followers")) {
 			mav.addObject("list", profile.getFollowers());
 		} else {
@@ -447,4 +447,63 @@ public class UserController extends AbstractController {
 		return user.getPicture();
 	}
 
+	@RequestMapping(method = RequestMethod.GET)
+	public ModelAndView suggestedUsers(HttpSession session)
+			throws InvalidPropertiesFormatException, IOException {
+		ModelAndView mav = new ModelAndView();
+		String username = (String) session.getAttribute("username");
+		User user = userRepo.getUser(username);
+		if (user != null) {
+			List<User> suggestedUsers = getSuggestedFriends(user);
+			mav.addObject("suggestedUsers", suggestedUsers);
+		}
+		return mav;
+	}
+
+	private List<User> getSuggestedFriends(User user)
+			throws InvalidPropertiesFormatException, IOException {
+		Set<User> following = user.getFollowing();
+		Bag<User> bag = new MapBag<User>();
+		int n = getNValue();
+		for (User each : following) {
+			bag.add(each.getFollowers());
+		}
+		List<User> aux = new ArrayList<User>();
+		List<User> ans = new ArrayList<User>();
+		int ansSize = 0;
+		while (ansSize < SUGGESTED_FRIEND_AMOUNT && n > 0) {
+			bag.getNOrGreaterMatching(n, aux);
+			ansSize = randomize(aux, ans, user);
+			n--;
+		}
+		return ans;
+	}
+
+	private int randomize(List<User> aux, List<User> ans, User user) {
+		Random randomGenerator = new Random();
+		int i = ans.size();
+		while (i < SUGGESTED_FRIEND_AMOUNT && aux.size() > 0) {
+			int rand = randomGenerator.nextInt(aux.size());
+			User auxUser = aux.get(rand);
+			if (!user.getUsername().equals(auxUser.getUsername())) {
+				ans.add(auxUser);
+			}
+			aux.remove(rand);
+			i++;
+		}
+		return ans.size();
+	}
+
+	private int getNValue() throws InvalidPropertiesFormatException,
+			IOException {
+		File file = new File("src/main/resources/parameters.xml");
+		FileInputStream fileInput = new FileInputStream(file);
+		Properties properties = new Properties();
+		properties.loadFromXML(fileInput);
+		fileInput.close();
+
+		int commonFollowers = Integer.parseInt(properties
+				.getProperty("common-followers"));
+		return commonFollowers;
+	}
 }
