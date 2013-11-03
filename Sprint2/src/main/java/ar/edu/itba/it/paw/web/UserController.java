@@ -7,9 +7,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
-import java.util.TreeSet;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -39,7 +36,7 @@ import ar.edu.itba.it.paw.validator.EditUserFormValidator;
 import ar.edu.itba.it.paw.validator.UserFormValidator;
 
 @Controller
-public class UserController  extends AbstractController {
+public class UserController extends AbstractController {
 
 	private UserRepo userRepo;
 	private HashtagRepo hashtagRepo;
@@ -165,7 +162,8 @@ public class UserController  extends AbstractController {
 				mav.addObject("isFollowing", following);
 				mav.addObject("following", userSession.following());
 				mav.addObject("followers", userSession.followedBy());
-				System.out.println("User " + userSession.getUsername() + " tiene  " + userSession.favourites() + " favoritos");
+				System.out.println("User " + userSession.getUsername()
+						+ " tiene  " + userSession.favourites() + " favoritos");
 			}
 			profile.visit();
 			mav.addObject("notifications",
@@ -180,7 +178,8 @@ public class UserController  extends AbstractController {
 			mav.addObject("followers", profile.followedBy());
 			mav.addObject("isEmptyPicture", profile.getPicture() == null);
 			List<Comment> comments = profile.getComments();
-			SortedSet<CommentWrapper> transformedComments = transformComments(comments,userSession);
+			SortedSet<CommentWrapper> transformedComments = transformComments(
+					comments, userSession);
 			mav.addObject("comments", transformedComments);
 		}
 		mav.setViewName("/user/profile");
@@ -205,42 +204,41 @@ public class UserController  extends AbstractController {
 			@RequestParam(value = "id", required = true) Integer commentid,
 			@RequestParam(value = "url", required = true) String url,
 			HttpSession session) {
-		
+
 		System.out.println("ENTRE AL METODO RECUTHULU");
-		
+
 		ModelAndView mav = new ModelAndView();
 		String userSession = (String) session.getAttribute("username");
 		User author = userRepo.getUser(userSession);
 
-
 		Comment comment = commentRepo.getComment(commentid);
 		Set<Hashtag> hashtags = new HashSet<Hashtag>(comment.getHashtags());
 		Set<User> users = new HashSet<User>(comment.getReferences());
-		
-		Comment recuthulu = new Comment(author, new Date(), comment.getComment(),
-				hashtags,users,comment.getOriginalAuthor());
-		commentRepo.addComment(recuthulu);
 
+		Comment recuthulu = new Comment(author, new Date(),
+				comment.getComment(), hashtags, users,
+				comment.getOriginalAuthor());
+		commentRepo.addComment(recuthulu);
 		mav.setViewName("redirect:../" + url);
 
 		return mav;
-
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView favourites(
 			@RequestParam(value = "user", required = false) User profile,
-			HttpSession session){
-		
+			HttpSession session) {
+
 		ModelAndView mav = new ModelAndView();
-		String usrSession = (String)session.getAttribute("username");
+		String usrSession = (String) session.getAttribute("username");
 		User usr = userRepo.getUser(usrSession);
-		List<Comment> favouritecomments = new ArrayList<Comment>(profile.getFavourites());
-		SortedSet<CommentWrapper> transformedComments = transformComments(favouritecomments,usr);
+		List<Comment> favouritecomments = new ArrayList<Comment>(
+				profile.getFavourites());
+		SortedSet<CommentWrapper> transformedComments = transformComments(
+				favouritecomments, usr);
 		mav.addObject("user", profile);
 		mav.addObject("comments", transformedComments);
 		return mav;
-		
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
@@ -290,45 +288,45 @@ public class UserController  extends AbstractController {
 		}
 		return mav;
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView favourite(
 			@RequestParam(value = "user", required = true) User profile,
 			@RequestParam(value = "id", required = true) Integer id,
 			@RequestParam(value = "url", required = true) String url,
-			HttpSession session){
-		
+			HttpSession session) {
+
 		ModelAndView mav = new ModelAndView();
-		
+
 		Comment comment = commentRepo.getComment(id);
-		String userSession_str = (String)session.getAttribute("username");
+		String userSession_str = (String) session.getAttribute("username");
 		User userSession = userRepo.getUser(userSession_str);
-		
+
 		userSession.addFavourite(comment);
-		
+
 		mav.setViewName("redirect:../" + url);
 		return mav;
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView unfavourite(
 			@RequestParam(value = "user", required = true) User profile,
 			@RequestParam(value = "id", required = true) Integer id,
 			@RequestParam(value = "url", required = true) String url,
-			HttpSession session){
-		
+			HttpSession session) {
+
 		ModelAndView mav = new ModelAndView();
-		
+
 		Comment comment = commentRepo.getComment(id);
-		String userSession_str = (String)session.getAttribute("username");
+		String userSession_str = (String) session.getAttribute("username");
 		User userSession = userRepo.getUser(userSession_str);
-		
+
 		userSession.removeFavourite(comment);
-		
+
 		mav.setViewName("redirect:../" + url);
 		return mav;
 	}
-	
+
 	@RequestMapping(method = RequestMethod.POST)
 	public ModelAndView profile(
 			@RequestParam(value = "comment", required = false) Comment comment,
@@ -451,72 +449,6 @@ public class UserController  extends AbstractController {
 	public byte[] image(
 			@RequestParam(value = "username", required = false) User user) {
 		return user.getPicture();
-	}
-
-	private SortedSet<CommentWrapper> transformComments(List<Comment> comments, User userSession) {
-		SortedSet<CommentWrapper> ans = new TreeSet<CommentWrapper>();
-		for (Comment comment : comments) {
-			CommentWrapper aux = new CommentWrapper(comment,
-					getProcessedComment(comment.getComment()),userSession);
-			ans.add(aux);
-		}
-		return ans;
-	}
-
-	private String getProcessedComment(String comment) {
-		// Search for URLs
-		String aux = comment;
-		if (aux != null && aux.contains("http:")) {
-			int indexOfHttp = aux.indexOf("http:");
-			int endPoint = (aux.indexOf(' ', indexOfHttp) != -1) ? aux.indexOf(
-					' ', indexOfHttp) : aux.length();
-			String url = aux.substring(indexOfHttp, endPoint);
-			String targetUrlHtml = "<a href='" + url + "' target='_blank'>"
-					+ url + "</a>";
-			aux = aux.replace(url, targetUrlHtml);
-		}
-
-		// Search for Hashtags
-		String patternStr = "#([A-Za-z0-9_]+)";
-		Pattern pattern = Pattern.compile(patternStr);
-		String[] words = aux.split(" ");
-		String ans = "";
-		String result = "";
-
-		for (String word : words) {
-			Matcher matcher = pattern.matcher(word);
-			if (matcher.find()) {
-				result = matcher.group();
-				result = result.replace(" ", "");
-				String search = result.replace("#", "");
-				String searchHTML = "<a href='../../hashtag/detail?tag="
-						+ search + "'>" + result + "</a>";
-				ans += word.replace(result, searchHTML) + " ";
-			} else {
-				ans += word + " ";
-			}
-		}
-
-		// Search for Users
-		patternStr = "@([A-Za-z0-9_]+)";
-		pattern = Pattern.compile(patternStr);
-		words = ans.split(" ");
-		System.out.println("Econtré " + words.length + "referencias");
-		ans = "";
-		for (String word : words) {
-			Matcher matcher = pattern.matcher(word);
-			if (matcher.find()) {
-				result = matcher.group();
-				result = result.replace(" ", "");
-				String search = result.replace("@", "");
-				String userHTML = "<a href='./" + search + "'>" + result
-						+ "</a>";
-				ans += word.replace(result, userHTML) + " ";
-			} else {
-				ans += word + " ";
-			}
-		}
-		return ans;
 	}
 
 	private void showTopTenHashtags(ModelAndView mav) {

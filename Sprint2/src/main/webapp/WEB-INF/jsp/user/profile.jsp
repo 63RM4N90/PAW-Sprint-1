@@ -110,7 +110,7 @@
 							| <i><fmt:formatDate value="${comment.comment.date}"
 										pattern="dd-MM-yyyy HH:mm" /></i> |
 							<c:if test="${isOwner}">
-									<a href="../user/delete/${comment.comment.id}">Delete</a>								
+									<a href="../delete/${comment.comment.id}">Delete</a>								
 							</c:if>
 						</div>
 					</div>
