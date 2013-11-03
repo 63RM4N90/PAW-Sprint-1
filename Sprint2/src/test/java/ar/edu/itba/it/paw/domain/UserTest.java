@@ -10,22 +10,21 @@ import org.junit.Test;
 public class UserTest {
 
 	private User testUser;
-	
+
 	@Before
-    public void setUp() {
-		testUser = new User("test", "test", "test", "test", "12345678",
-				null, "test", "test", new Date(), false);
-    }
-	
+	public void setUp() {
+		testUser = new User("test", "test", "test", "test", "12345678", null,
+				"test", "test", new Date(), false);
+	}
+
 	@Test
 	public void followUserTest() {
 		User follow = new User("follow", "follow", "follow", "follow",
 				"12345678", null, "follow", "follow", new Date(), false);
 
-		Assert.assertEquals(testUser.getFollowing(), 0);
+		Assert.assertEquals(testUser.getFollowing().size(), 0);
 		testUser.follow(follow);
-		Assert.assertEquals(testUser.getFollowing(), 1);
-		Assert.assertEquals(follow.getFollowers(), 1);
+		Assert.assertEquals(testUser.following(), 1);
 	}
 
 	@Test
@@ -34,10 +33,9 @@ public class UserTest {
 				"12345678", null, "follow", "follow", new Date(), false);
 
 		testUser.follow(follow);
-		Assert.assertEquals(testUser.getFollowing(), 1);
+		Assert.assertEquals(testUser.getFollowing().size(), 1);
 		testUser.unfollow(follow);
-		Assert.assertEquals(testUser.getFollowing(), 0);
-		Assert.assertEquals(follow.getFollowers(), 0);
+		Assert.assertEquals(testUser.getFollowing().size(), 0);
 	}
 
 	@Test
