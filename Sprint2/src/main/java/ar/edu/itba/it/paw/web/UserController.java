@@ -471,8 +471,8 @@ public class UserController extends AbstractController {
 		
 		bag.getNOrGreaterMatching(n, aux);
 		
-		 int usrs_left= SUGGESTED_FRIEND_AMOUNT - randomize(aux,ans,user);
 		
+		 int usrs_left= SUGGESTED_FRIEND_AMOUNT - randomize(aux,ans,user);		
 		 if(usrs_left != 0 ){
 			 ans.addAll(hashtagRepo.mostFollowed(usrs_left));
 		 }		
