@@ -1,7 +1,3 @@
--- Table: userss
-
--- DROP TABLE userss;
-
 CREATE TABLE userss
 (
   id serial NOT NULL,
@@ -201,3 +197,49 @@ WITH (
 );
 ALTER TABLE userss_userss
   OWNER TO paw;
+
+commit;
+
+INSERT INTO userss(id, description, isprivate, name, password, picture, registrationdate, secretanswer, secretquestion, surname, username, visits)
+
+SELECT id, description, 'FALSE', name, password, picture, registrationdate, secretanswer, secretquestion, surname, username, '0'
+
+FROM users;
+
+
+INSERT INTO comment(id, comment, date, author_id, originalauthor_id) 
+
+SELECT comments.id, comments.comment, comments.date, users.id, users.id
+
+FROM comments, users where comments.username = users.username;
+
+
+INSERT INTO hashtag(date, hashtag, author_id)
+
+SELECT date, hashtag, users.id
+
+FROM hashtags, users where users.username = hashtags.creator;
+
+
+INSERT INTO comment_hashtag(comments_id, hashtags_id)
+
+SELECT hashtagsincomments.commentid, hashtag.id
+
+FROM hashtagsincomments, hashtag, hashtags
+
+WHERE hashtags.hashtag = hashtag.hashtag and hashtagsincomments.hashtag = hashtag.hashtag;
+
+DROP TABLE hashtagsincomments;
+
+DROP TABLE hashtags;
+
+DROP TABLE comments;
+
+DROP TABLE users;
+
+
+SELECT SETVAL('userss_id_seq', (SELECT MAX(id) FROM userss) + 1);
+
+SELECT SETVAL('comment_id_seq', (SELECT MAX(id) FROM comment) + 1);
+
+SELECT SETVAL('hashtag_id_seq', (SELECT MAX(id) FROM hashtag) + 1);

@@ -1,67 +1,63 @@
-INSERT INTO users (name,surname,password,username,description,secretquestion,secretanswer,registrationdate) VALUES('german','romarion','passpass1','gerchux','soy gerchux','quien soy?','gerchux reloaded','2013-07-17 00:00:00');
-INSERT INTO users (name,surname,password,username,description,secretquestion,secretanswer,registrationdate) VALUES('florencia','besteiro','passpass2','florchax','soy florchax','quien soy?','florchax reloaded','2013-07-17 00:00:01');
-INSERT INTO users (name,surname,password,username,description,secretquestion,secretanswer,registrationdate) VALUES('gabriel','zanzotti','passpass3','gabox','soy gabox','quien soy?','gabox reloaded','2013-07-17 00:00:02');
+into userss (id, description, isPrivate, name, password, registrationDate, secretAnswer, secretQuestion, surname, username, visits) values ('4', 'soy bahui', 'FALSE', 'Juan', '12345678', '2013-08-01 00:00:26', 'jbuireo', 'quien soy?', 'Buireo', 'jbuireo', '0');
+insert into userss (id, description, isPrivate, name, password, registrationDate, secretAnswer, secretQuestion, surname, username, visits) values ('5', 'soy faca', 'FALSE', 'Facundo', '12345678', '2013-08-01 00:00:27', 'fmenzella', 'quien soy?', 'Menzella', 'fmenzella', '0');
+insert into userss (id, description, isPrivate, name, password, registrationDate, secretAnswer, secretQuestion, surname, username, visits) values ('6', 'soy masiii', 'FALSE', 'Maximiliano', '12345678', '2013-08-01 00:00:28', 'maxix', 'quien soy?', 'Valverde', 'maxix', '0');
+insert into userss (id, description, isPrivate, name, password, registrationDate, secretAnswer, secretQuestion, surname, username, visits) values ('7', 'soy matix', 'FALSE', 'Matias', '12345678', '2013-08-01 00:00:29', 'matix', 'quien soy?', 'Rivas', 'matix', '0');
+insert into userss (id, description, isPrivate, name, password, registrationDate, secretAnswer, secretQuestion, surname, username, visits) values ('8', 'soy esteporg', 'FALSE', 'Stefano', '12345678', '2013-08-01 00:00:30', 'esteporg', 'quien soy?', 'Baratuche', 'esteporg', '0');
+insert into userss (id, description, isPrivate, name, password, registrationDate, secretAnswer, secretQuestion, surname, username, visits) values ('9', 'soy luchox', 'FALSE', 'Stefano', '12345678', '2013-08-01 00:00:31', 'luchox', 'quien soy?', 'Cappetta', 'luchox', '0');
 
-INSERT INTO comments (username,date,comment) VALUES('gerchux','2013-08-01 00:00:23','Este comment no tiene hashtags');
-INSERT INTO comments (username,date,comment) VALUES('gerchux','2013-08-04 00:00:23','Este comment tiene 2 hashtags: #a y #b');
-INSERT INTO comments (username,date,comment) VALUES('gerchux','2013-08-25 00:00:23','Este comment tiene 1 hashtag: #prueba');
-INSERT INTO comments (username,date,comment) VALUES('florchax','2013-08-26 00:00:23','Este comment tiene 3 hashtags: #prueba, #c y #d');
-INSERT INTO comments (username,date,comment) VALUES('florchax','2013-08-30 00:00:23','Este comment tiene 1 hashtag: #d');
-INSERT INTO comments (username,date,comment) VALUES('florchax','2013-08-31 00:00:23','Este comment tiene 3 hashtags: #prueba,#e y #f');
-INSERT INTO comments (username,date,comment) VALUES('gabox','2013-08-27 00:00:23','Este comment tiene 2 hashtags: #d y #f');
-INSERT INTO comments (username,date,comment) VALUES('gabox','2013-09-17 00:00:23','Este comment tiene 3 hashtags: #prueba, #e y #g');
-INSERT INTO comments (username,date,comment) VALUES('gerchux','2013-09-16 00:00:23','Este comment tiene 4 hashtags: #prueba,#d,#h e #i');
-INSERT INTO comments (username,date,comment) VALUES('gerchux','2013-09-18 00:00:23','Este comment tiene 2 hashtags: #f y #g');
-INSERT INTO comments (username,date,comment) VALUES('florchax','2013-09-18 00:10:23','Este comment tiene 3 hashtags: #prueba y #h');  
-INSERT INTO comments (username,date,comment) VALUES('florchax','2013-09-05 00:00:23','Este comment tiene 5 hashtags: #f, #j , #k, #l y #m');
-INSERT INTO comments (username,date,comment) VALUES('gabox','2013-09-19 00:00:23','Este comment tiene 4 hashtags: #f, #d, #m y #g');
+insert into Notification (id, checked, date, notification, notificator_id) values ('1', 'FALSE', '2013-11-01 00:00:30', 'gerchux has mentioned you in a comment', '1');
+insert into Comment (author_id, comment, date, originalAuthor_id) values ('1', 'Este comment menciona a @Gabox', '2013-11-01 00:00:30', '1');
+insert into userss_Notification (userss_id, notifications_id) values ('3', '1');
+insert into Comment_userss (Comment_id, references_id) values ('13', '3');
 
-INSERT INTO hashtags (hashtag,creator,date) VALUES('a','gerchux','2013-08-04 00:00:23');
-INSERT INTO hashtags (hashtag,creator,date) VALUES('b','gerchux','2013-08-04 00:00:23');
-INSERT INTO hashtags (hashtag,creator,date) VALUES('prueba','gerchux','2013-08-25 00:00:23');
-INSERT INTO hashtags (hashtag,creator,date) VALUES('c','florchax','2013-08-26 00:00:23');
-INSERT INTO hashtags (hashtag,creator,date) VALUES('d','florchax','2013-08-26 00:00:23');
-INSERT INTO hashtags (hashtag,creator,date) VALUES('e','florchax','2013-08-31 00:00:23');
-INSERT INTO hashtags (hashtag,creator,date) VALUES('f','florchax','2013-08-31 00:00:23');
-INSERT INTO hashtags (hashtag,creator,date) VALUES('g','gabox','2013-09-17 00:00:23');
-INSERT INTO hashtags (hashtag,creator,date) VALUES('h','gerchux','2013-09-16 00:00:23');
-INSERT INTO hashtags (hashtag,creator,date) VALUES('i','gerchux','2013-09-16 00:00:23');
-INSERT INTO hashtags (hashtag,creator,date) VALUES('j','florchax','2013-09-05 00:00:23');
-INSERT INTO hashtags (hashtag,creator,date) VALUES('k','florchax','2013-09-05 00:00:23');
-INSERT INTO hashtags (hashtag,creator,date) VALUES('l','florchax','2013-09-05 00:00:23');
-INSERT INTO hashtags (hashtag,creator,date) VALUES('m','florchax','2013-09-05 00:00:23');
+insert into Notification (id, checked, date, notification, notificator_id) values ('2', 'FALSE', '2013-11-01 00:00:30', 'gerchux is following you', '1');
+insert into userss_Notification (userss_id, notifications_id) values ('2', '2');
+insert into userss_userss (followers_id, following_id) values ('1', '2');
 
-commit;
+insert into Notification (id, checked, date, notification, notificator_id) values ('3', 'FALSE', '2013-11-01 00:00:30', 'gerchux is following you', '1');
+insert into userss_Notification (userss_id, notifications_id) values ('3', '3');
+insert into userss_userss (followers_id, following_id) values ('1', '3');
 
-INSERT INTO hashtagsincomments (commentid,hashtag) VALUES(2,'a');
-INSERT INTO hashtagsincomments (commentid,hashtag) VALUES(2,'b');
-INSERT INTO hashtagsincomments (commentid,hashtag) VALUES(3,'prueba');
-INSERT INTO hashtagsincomments (commentid,hashtag) VALUES(4,'prueba');
-INSERT INTO hashtagsincomments (commentid,hashtag) VALUES(4,'c');
-INSERT INTO hashtagsincomments (commentid,hashtag) VALUES(4,'d');
-INSERT INTO hashtagsincomments (commentid,hashtag) VALUES(5,'d');
-INSERT INTO hashtagsincomments (commentid,hashtag) VALUES(6,'prueba');
-INSERT INTO hashtagsincomments (commentid,hashtag) VALUES(6,'e');
-INSERT INTO hashtagsincomments (commentid,hashtag) VALUES(6,'f');
-INSERT INTO hashtagsincomments (commentid,hashtag) VALUES(7,'d');
-INSERT INTO hashtagsincomments (commentid,hashtag) VALUES(7,'f');
-INSERT INTO hashtagsincomments (commentid,hashtag) VALUES(8,'prueba');
-INSERT INTO hashtagsincomments (commentid,hashtag) VALUES(8,'e');
-INSERT INTO hashtagsincomments (commentid,hashtag) VALUES(8,'g');
-INSERT INTO hashtagsincomments (commentid,hashtag) VALUES(9,'prueba');
-INSERT INTO hashtagsincomments (commentid,hashtag) VALUES(9,'d');
-INSERT INTO hashtagsincomments (commentid,hashtag) VALUES(9,'h');
-INSERT INTO hashtagsincomments (commentid,hashtag) VALUES(9,'i');
-INSERT INTO hashtagsincomments (commentid,hashtag) VALUES(10,'f');
-INSERT INTO hashtagsincomments (commentid,hashtag) VALUES(10,'g');
-INSERT INTO hashtagsincomments (commentid,hashtag) VALUES(11,'prueba');
-INSERT INTO hashtagsincomments (commentid,hashtag) VALUES(11,'h');
-INSERT INTO hashtagsincomments (commentid,hashtag) VALUES(12,'f');
-INSERT INTO hashtagsincomments (commentid,hashtag) VALUES(12,'j');
-INSERT INTO hashtagsincomments (commentid,hashtag) VALUES(12,'k');
-INSERT INTO hashtagsincomments (commentid,hashtag) VALUES(12,'l');
-INSERT INTO hashtagsincomments (commentid,hashtag) VALUES(12,'m');
-INSERT INTO hashtagsincomments (commentid,hashtag) VALUES(13,'f');
-INSERT INTO hashtagsincomments (commentid,hashtag) VALUES(13,'d');
-INSERT INTO hashtagsincomments (commentid,hashtag) VALUES(13,'m');
-INSERT INTO hashtagsincomments (commentid,hashtag) VALUES(13,'g');
+insert into Notification (id, checked, date, notification, notificator_id) values ('4', 'FALSE', '2013-11-01 00:00:30', 'gerchux is following you', '1');
+insert into userss_Notification (userss_id, notifications_id) values ('8', '4');
+insert into userss_userss (followers_id, following_id) values ('1', '8');
+
+insert into Notification (id, checked, date, notification, notificator_id) values ('5', 'FALSE', '2013-11-01 00:00:30', 'matix is following you', '7');
+insert into userss_Notification (userss_id, notifications_id) values ('2', '5');
+insert into userss_userss (followers_id, following_id) values ('7', '2');
+
+insert into Notification (id, checked, date, notification, notificator_id) values ('6', 'FALSE', '2013-11-01 00:00:30', 'matix is following you', '7');
+insert into userss_Notification (userss_id, notifications_id) values ('3', '6');
+insert into userss_userss (followers_id, following_id) values ('7', '3');
+
+insert into Notification (id, checked, date, notification, notificator_id) values ('7', 'FALSE', '2013-11-01 00:00:30', 'matix is following you', '7');
+insert into userss_Notification (userss_id, notifications_id) values ('8', '7');
+insert into userss_userss (followers_id, following_id) values ('7', '8');
+
+insert into Notification (id, checked, date, notification, notificator_id) values ('8', 'FALSE', '2013-11-01 00:00:30', 'jbuireo is following you', '4');
+insert into userss_Notification (userss_id, notifications_id) values ('2', '8');
+insert into userss_userss (followers_id, following_id) values ('4', '2');
+
+insert into Notification (id, checked, date, notification, notificator_id) values ('9', 'FALSE', '2013-11-01 00:00:30', 'jbuireo is following you', '4');
+insert into userss_Notification (userss_id, notifications_id) values ('3', '9');
+insert into userss_userss (followers_id, following_id) values ('4', '3');
+
+insert into Notification (id, checked, date, notification, notificator_id) values ('10', 'FALSE', '2013-11-01 00:00:30', 'fmenzella is following you', '5');
+insert into userss_Notification (userss_id, notifications_id) values ('2', '10');
+insert into userss_userss (followers_id, following_id) values ('5', '2');
+
+insert into Notification (id, checked, date, notification, notificator_id) values ('11', 'FALSE', '2013-11-01 00:00:30', 'maxix is following you', '6');
+insert into userss_Notification (userss_id, notifications_id) values ('2', '11');
+insert into userss_userss (followers_id, following_id) values ('6', '2');
+
+insert into Notification (id, checked, date, notification, notificator_id) values ('12', 'FALSE', '2013-11-01 00:00:30', 'maxix is following you', '6');
+insert into userss_Notification (userss_id, notifications_id) values ('3', '12');
+insert into userss_userss (followers_id, following_id) values ('6', '3');
+
+insert into Notification (id, checked, date, notification, notificator_id) values ('13', 'FALSE', '2013-11-01 00:00:30', 'luchox is following you', '9');
+insert into userss_Notification (userss_id, notifications_id) values ('2', '13');
+insert into userss_userss (followers_id, following_id) values ('9', '2');
+
+insert into Notification (id, checked, date, notification, notificator_id) values ('14', 'FALSE', '2013-11-01 00:00:30', 'luchox is following you', '9');
+insert into userss_Notification (userss_id, notifications_id) values ('8', '14');
+insert into userss_userss (followers_id, following_id) values ('9', '8');
