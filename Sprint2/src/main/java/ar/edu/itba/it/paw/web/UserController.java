@@ -1,13 +1,17 @@
 package ar.edu.itba.it.paw.web;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.InvalidPropertiesFormatException;
 import java.util.List;
+import java.util.Properties;
+import java.util.Random;
 import java.util.Set;
 import java.util.SortedSet;
-import java.util.TreeSet;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -19,6 +23,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import ar.edu.itba.it.paw.command.EditUserForm;
@@ -36,7 +41,7 @@ import ar.edu.itba.it.paw.validator.EditUserFormValidator;
 import ar.edu.itba.it.paw.validator.UserFormValidator;
 
 @Controller
-public class UserController {
+public class UserController extends AbstractController {
 
 	private UserRepo userRepo;
 	private HashtagRepo hashtagRepo;
@@ -47,11 +52,12 @@ public class UserController {
 	private static final int MAX_COMMENT_LENGTH = 140;
 	private static final int MAX_PASSWORD_LENGTH = 16;
 	private static final int MIN_PASSWORD_LENGTH = 8;
-	private static final int DEFAULT_PERIOD = 30;
+	private static final int SUGGESTED_FRIEND_AMOUNT = 3;
 
 	@Autowired
 	public UserController(UserRepo userRepo, HashtagRepo hashtagRepo,
-			CommentRepo commentService, NotificationRepo notificationRepo, UserFormValidator userFormValidator,
+			CommentRepo commentService, NotificationRepo notificationRepo,
+			UserFormValidator userFormValidator,
 			EditUserFormValidator editUserFormValidator) {
 		this.userRepo = userRepo;
 		this.hashtagRepo = hashtagRepo;
@@ -67,7 +73,6 @@ public class UserController {
 		if (s.getAttribute("username") != null) {
 			mav.setViewName("/user/profile/" + s.getAttribute("username"));
 		}
-		showTopTenHashtags(mav);
 		return mav;
 	}
 
@@ -97,7 +102,6 @@ public class UserController {
 	public ModelAndView registration() {
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("userForm", new UserForm());
-		showTopTenHashtags(mav);
 		return mav;
 	}
 
@@ -112,7 +116,7 @@ public class UserController {
 		}
 
 		try {
-			userRepo.save(userForm.build());
+			userRepo.registerUser(userForm.build());
 		} catch (Exception e) {
 			errors.rejectValue("username", "duplicated");
 			return null;
@@ -137,9 +141,7 @@ public class UserController {
 		ModelAndView mav = new ModelAndView();
 		String userSessionString = (String) session.getAttribute("username");
 		User userSession = null;
-		if (period == null) {
-			period = DEFAULT_PERIOD;
-		}
+
 		if (profile == null) {
 			if (userSessionString != null) {
 				mav.setViewName("redirect:../profile/" + userSessionString
@@ -161,14 +163,12 @@ public class UserController {
 				mav.addObject("isFollowing", following);
 				mav.addObject("following", userSession.following());
 				mav.addObject("followers", userSession.followedBy());
-				System.out.println("User " + userSession.getUsername() + " tiene  " + userSession.favourites() + " favoritos");
 			}
 			profile.visit();
 			mav.addObject("notifications",
 					userRepo.getUser(profile.getUsername())
 							.getUncheckedNotifications());
 
-			showTopTenHashtags(mav);
 			mav.addObject("isOwner",
 					profile.getUsername().equals(userSessionString));
 			mav.addObject("user", profile);
@@ -176,7 +176,8 @@ public class UserController {
 			mav.addObject("followers", profile.followedBy());
 			mav.addObject("isEmptyPicture", profile.getPicture() == null);
 			List<Comment> comments = profile.getComments();
-			SortedSet<CommentWrapper> transformedComments = transformComments(comments,userSession);
+			SortedSet<CommentWrapper> transformedComments = transformComments(
+					comments, userSession);
 			mav.addObject("comments", transformedComments);
 		}
 		mav.setViewName("/user/profile");
@@ -186,7 +187,7 @@ public class UserController {
 	@RequestMapping(value = "/user/delete/{id}", method = RequestMethod.GET)
 	public String delete(@PathVariable Integer id) {
 		if (id != null) {
-			Comment comment = commentRepo.get(Comment.class, id);
+			Comment comment = commentRepo.getComment(id);
 			if (comment != null) {
 				commentRepo.delete(comment);
 			}
@@ -196,28 +197,43 @@ public class UserController {
 
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView recuthulu(
-			@RequestParam(value = "user", required = false) User originalauthor,
-			@RequestParam(value = "id", required = false) Integer commentid,
+			@RequestParam(value = "user", required = true) User originalauthor,
+			@RequestParam(value = "id", required = true) Integer commentid,
+			@RequestParam(value = "url", required = true) String url,
 			HttpSession session) {
-		
-		System.out.println("ENTRE AL METODO RECUTHULU");
-		
+
 		ModelAndView mav = new ModelAndView();
 		String userSession = (String) session.getAttribute("username");
 		User author = userRepo.getUser(userSession);
 
-		Comment comment = commentRepo.get(Comment.class, commentid);
+		Comment comment = commentRepo.getComment(commentid);
 		Set<Hashtag> hashtags = new HashSet<Hashtag>(comment.getHashtags());
 		Set<User> users = new HashSet<User>(comment.getReferences());
-		
-		Comment recuthulu = new Comment(author, new Date(), comment.getComment(),
-				hashtags,users,comment.getOriginalAuthor());
-		commentRepo.save(recuthulu);
 
-		mav.setViewName("redirect:../user/profile/" + originalauthor.getUsername());
+		Comment recuthulu = new Comment(author, new Date(),
+				comment.getComment(), hashtags, users,
+				comment.getOriginalAuthor());
+		commentRepo.addComment(recuthulu);
+		mav.setViewName("redirect:../" + url);
 
 		return mav;
+	}
 
+	@RequestMapping(method = RequestMethod.GET)
+	public ModelAndView favourites(
+			@RequestParam(value = "user", required = false) User profile,
+			HttpSession session) {
+
+		ModelAndView mav = new ModelAndView();
+		String usrSession = (String) session.getAttribute("username");
+		User usr = userRepo.getUser(usrSession);
+		List<Comment> favouritecomments = new ArrayList<Comment>(
+				profile.getFavourites());
+		SortedSet<CommentWrapper> transformedComments = transformComments(
+				favouritecomments, usr);
+		mav.addObject("user", profile);
+		mav.addObject("comments", transformedComments);
+		return mav;
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
@@ -227,7 +243,7 @@ public class UserController {
 		ModelAndView mav = new ModelAndView();
 		String username = (String) session.getAttribute("username");
 		User userSession = userRepo.getUser(username);
-		
+
 		Notification notification = userSession.follow(profile);
 		notificationRepo.save(notification);
 
@@ -248,68 +264,62 @@ public class UserController {
 		mav.setViewName("redirect:../user/profile/" + profile.getUsername());
 		return mav;
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView follows(
 			@RequestParam(value = "user", required = true) User profile,
 			@RequestParam(value = "type", required = true) String type,
-			HttpSession session){
-		
+			HttpSession session) {
+
 		ModelAndView mav = new ModelAndView();
-		
+
 		mav.addObject("username", profile.getUsername());
 		mav.addObject("type", type);
-		System.out.println("type = " + type);
-		if(type.equals("Followers")){
+		if (type.equals("Followers")) {
 			mav.addObject("list", profile.getFollowers());
 		} else {
 			mav.addObject("list", profile.getFollowing());
 		}
-		
 		return mav;
-		
-		
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView favourite(
 			@RequestParam(value = "user", required = true) User profile,
 			@RequestParam(value = "id", required = true) Integer id,
-			HttpSession session){
-		
+			@RequestParam(value = "url", required = true) String url,
+			HttpSession session) {
+
 		ModelAndView mav = new ModelAndView();
-		
-		Comment comment = commentRepo.get(Comment.class, id);
-		String userSession_str = (String)session.getAttribute("username");
+
+		Comment comment = commentRepo.getComment(id);
+		String userSession_str = (String) session.getAttribute("username");
 		User userSession = userRepo.getUser(userSession_str);
-		
+
 		userSession.addFavourite(comment);
-		
-		mav.setViewName("redirect:../user/profile/" + profile.getUsername());
+
+		mav.setViewName("redirect:../" + url);
 		return mav;
-		
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET)
 	public ModelAndView unfavourite(
 			@RequestParam(value = "user", required = true) User profile,
 			@RequestParam(value = "id", required = true) Integer id,
-			HttpSession session){
-		
+			@RequestParam(value = "url", required = true) String url,
+			HttpSession session) {
+
 		ModelAndView mav = new ModelAndView();
-		
-		Comment comment = commentRepo.get(Comment.class, id);
-		String userSession_str = (String)session.getAttribute("username");
+
+		Comment comment = commentRepo.getComment(id);
+		String userSession_str = (String) session.getAttribute("username");
 		User userSession = userRepo.getUser(userSession_str);
-		
+
 		userSession.removeFavourite(comment);
-		
-		mav.setViewName("redirect:../user/profile/" + profile.getUsername());
+
+		mav.setViewName("redirect:../" + url);
 		return mav;
-		
 	}
-	
-		
 
 	@RequestMapping(method = RequestMethod.POST)
 	public ModelAndView profile(
@@ -330,7 +340,7 @@ public class UserController {
 		User user = userRepo.getUser(username);
 		if (comment.getComment().length() > 0
 				&& comment.getComment().length() < MAX_COMMENT_LENGTH) {
-			commentRepo.save(comment);
+			commentRepo.addComment(comment);
 		}
 		mav.setViewName("redirect:./profile/" + user.getUsername());
 		return mav;
@@ -347,12 +357,13 @@ public class UserController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public String editProfile(EditUserForm editUserForm, Errors errors) {
+	public String editProfile(EditUserForm editUserForm, Errors errors)
+			throws IOException {
 		editUserFormValidator.validate(editUserForm, errors);
 		if (errors.hasErrors()) {
 			return null;
 		}
-		User oldUser = userRepo.get(User.class, editUserForm.getId());
+		User oldUser = userRepo.getUser(editUserForm.getId());
 		editUserForm.update(oldUser);
 		return "redirect:home";
 	}
@@ -400,7 +411,7 @@ public class UserController {
 					mav.addObject("success",
 							"Your password was changed successfully!");
 					user.setPassword(newPassword);
-					userRepo.save(user);
+					userRepo.registerUser(user);
 				} else {
 					mav.addObject("error",
 							"Passwords dont match or have less than 8 characters or more than 16.");
@@ -420,9 +431,6 @@ public class UserController {
 		if (username != null) {
 			User user = userRepo.getUser(username);
 			List<Notification> notifications = user.getNotifications();
-			for (Notification notification : notifications) {
-				notification.check();
-			}
 			mav.addObject("notifications", notifications);
 		} else {
 			mav.setViewName("redirect:login");
@@ -430,84 +438,70 @@ public class UserController {
 		return mav;
 	}
 
-	private SortedSet<CommentWrapper> transformComments(List<Comment> comments, User userSession) {
-		SortedSet<CommentWrapper> ans = new TreeSet<CommentWrapper>();
-		for (Comment comment : comments) {
-			CommentWrapper aux = new CommentWrapper(comment,
-					getProcessedComment(comment.getComment()),userSession);
-			ans.add(aux);
+	@RequestMapping(method = RequestMethod.GET)
+	@ResponseBody
+	public byte[] image(
+			@RequestParam(value = "username", required = false) User user) {
+		return user.getPicture();
+	}
+
+	@RequestMapping(method = RequestMethod.GET)
+	public ModelAndView suggestedUsers(HttpSession session)
+			throws InvalidPropertiesFormatException, IOException {
+		ModelAndView mav = new ModelAndView();
+		String username = (String) session.getAttribute("username");
+		User user = userRepo.getUser(username);
+		if (user != null) {
+			List<User> suggestedUsers = getSuggestedFriends(user);
+			mav.addObject("suggestedUsers", suggestedUsers);
+		}
+		return mav;
+	}
+
+	private List<User> getSuggestedFriends(User user)
+			throws InvalidPropertiesFormatException, IOException {
+		Set<User> following = user.getFollowing();
+		Bag<User> bag = new MapBag<User>();
+		int n = getNValue();
+		for (User each : following) {
+			bag.add(each.getFollowers());
+		}
+		List<User> aux = new ArrayList<User>();
+		List<User> ans = new ArrayList<User>();
+		int ansSize = 0;
+		while (ansSize < SUGGESTED_FRIEND_AMOUNT && n > 0) {
+			bag.getNOrGreaterMatching(n, aux);
+			ansSize = randomize(aux, ans, user);
+			n--;
 		}
 		return ans;
 	}
 
-	private String getProcessedComment(String comment) {
-		// Search for URLs
-		String aux = comment;
-		if (aux != null && aux.contains("http:")) {
-			int indexOfHttp = aux.indexOf("http:");
-			int endPoint = (aux.indexOf(' ', indexOfHttp) != -1) ? aux.indexOf(
-					' ', indexOfHttp) : aux.length();
-			String url = aux.substring(indexOfHttp, endPoint);
-			String targetUrlHtml = "<a href='" + url + "' target='_blank'>"
-					+ url + "</a>";
-			aux = aux.replace(url, targetUrlHtml);
-		}
-
-		// Search for Hashtags
-		String patternStr = "#([A-Za-z0-9_]+)";
-		Pattern pattern = Pattern.compile(patternStr);
-		String[] words = aux.split(" ");
-		String ans = "";
-		String result = "";
-
-		for (String word : words) {
-			Matcher matcher = pattern.matcher(word);
-			if (matcher.find()) {
-				result = matcher.group();
-				result = result.replace(" ", "");
-				String search = result.replace("#", "");
-				String searchHTML = "<a href='../../hashtag/detail?tag="
-						+ search + "'>" + result + "</a>";
-				ans += word.replace(result, searchHTML) + " ";
-			} else {
-				ans += word + " ";
+	private int randomize(List<User> aux, List<User> ans, User user) {
+		Random randomGenerator = new Random();
+		int i = ans.size();
+		while (i < SUGGESTED_FRIEND_AMOUNT && aux.size() > 0) {
+			int rand = randomGenerator.nextInt(aux.size());
+			User auxUser = aux.get(rand);
+			if (!user.getUsername().equals(auxUser.getUsername())) {
+				ans.add(auxUser);
 			}
+			aux.remove(rand);
+			i++;
 		}
-
-		// Search for Users
-		patternStr = "@([A-Za-z0-9_]+)";
-		pattern = Pattern.compile(patternStr);
-		words = ans.split(" ");
-		System.out.println("Econtré " + words.length + "referencias");
-		ans = "";
-		for (String word : words) {
-			Matcher matcher = pattern.matcher(word);
-			if (matcher.find()) {
-				result = matcher.group();
-				result = result.replace(" ", "");
-				String search = result.replace("@", "");
-				String userHTML = "<a href='./" + search + "'>" + result
-						+ "</a>";
-				ans += word.replace(result, userHTML) + " ";
-			} else {
-				ans += word + " ";
-			}
-		}
-		return ans;
+		return ans.size();
 	}
 
-	private void showTopTenHashtags(ModelAndView mav) {
-		List<RankedHashtag> top10;
+	private int getNValue() throws InvalidPropertiesFormatException,
+			IOException {
+		File file = new File("src/main/resources/parameters.xml");
+		FileInputStream fileInput = new FileInputStream(file);
+		Properties properties = new Properties();
+		properties.loadFromXML(fileInput);
+		fileInput.close();
 
-		if (mav.getModel().get("period") == null) {
-			top10 = hashtagRepo.topHashtags(30);
-		} else {
-			top10 = hashtagRepo.topHashtags(Integer.valueOf((String) mav
-					.getModel().get("period")));
-		}
-		boolean isempty = top10.size() == 0;
-		mav.addObject("previous", "login");
-		mav.addObject("ranking", top10);
-		mav.addObject("isempty", isempty);
+		int commonFollowers = Integer.parseInt(properties
+				.getProperty("common-followers"));
+		return commonFollowers;
 	}
 }

@@ -10,23 +10,29 @@ import javax.persistence.OneToOne;
 
 @Entity
 public class Hashtag extends PersistentEntity {
-	
 
 	private String hashtag;
 
 	@OneToOne
 	private User author;
-	@Column(nullable=false)
+	@Column(nullable = false)
 	private Date date;
-	
-	@ManyToMany(mappedBy="hashtags")
+
+	@ManyToMany(mappedBy = "hashtags")
 	private Set<Comment> comments;
+	private static final int MAX_HASHTAG_SIZE = 139;
 
 	public Hashtag() {
 	}
-	
+
 	public Hashtag(String hashtag, User author, Date date) {
+		if (hashtag.length() > MAX_HASHTAG_SIZE) {
+			throw new IllegalArgumentException();
+		}
 		this.hashtag = hashtag;
+		if (author == null || date == null) {
+			throw new IllegalArgumentException();
+		}
 		this.author = author;
 		this.date = date;
 	}
@@ -42,11 +48,11 @@ public class Hashtag extends PersistentEntity {
 	public Date getDate() {
 		return date;
 	}
-	
-	public Set<Comment> getComments(){
+
+	public Set<Comment> getComments() {
 		return comments;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;

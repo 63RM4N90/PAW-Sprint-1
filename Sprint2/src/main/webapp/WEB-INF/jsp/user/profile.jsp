@@ -8,7 +8,7 @@
 					alt="user_picture" />
 			</c:if>
 			<c:if test="${!isEmptyPicture}">
-				<img src="image?username=<c:out value="${user.username}" />"
+				<img src="../image?username=<c:out value="${user.username}" />"
 					alt="user_picture" />
 			</c:if>
 			<h3>
@@ -33,12 +33,16 @@
 			
 			<h6><a href="../../user/follows?user=${user.username}&type=Followers">Followers: ${followers}</a></h6>
 			<h6><a href="../../user/follows?user=${user.username}&type=Following">Following: ${following}</a></h6>
+			<h6><a href="../../user/suggestedUsers">Suggested users</a></h6>
+			<h6><a href="../../user/favourites?user=${user.username}">Favourites</a></h6>
 			<c:if test="${isOwner}">
-				<p>
-					Notifications:
-					<c:out value="${notifications}" />
-				</p>
-				<a href="../notifications">Notifications</a>
+				<a href="../notifications">
+					<div class="notifications">
+						<p>
+							<c:out value="${notifications}" />
+						</p>
+					</div>
+				</a>
 			</c:if>
 		</div>
 		<c:if test="${isOwner}">
@@ -82,19 +86,19 @@
 			<c:set var="row" value="0" />
 			<c:forEach items="${comments}" var="comment">
 				<li <c:set var="row" value="${row + 1}" />>
-					<div class="comment">
+					<div class="comment pull-right">
 						<p>${comment.transformedComment}</p>
 						<div class="comment-reference">
 							
 							<c:if test="${not empty username}">
 								<c:if test="${comment.favouritee}">
-									<a href="../../user/unfavourite?user=${user.username}&id=${comment.comment.id}">remove favourite</a>
+									<a href="../../user/unfavourite?user=${user.username}&id=${comment.comment.id}&url=user/profile/${user.username}">remove favourite</a>
 								</c:if>
 								<c:if test="${not comment.favouritee}">
-									<a href="../../user/favourite?user=${user.username}&id=${comment.comment.id}">add favourite</a>
+									<a href="../../user/favourite?user=${user.username}&id=${comment.comment.id}&url=user/profile/${user.username}">add favourite</a>
 								</c:if>
 								<c:if test="${not isOwner}">
-									<a href="../../user/recuthulu?user=${user.username}&id=${comment.comment.id}">Recuthulu</a>
+									<a href="../../user/recuthulu?user=${user.username}&id=${comment.comment.id}&url=user/profile/${user.username}">Recuthulu</a>
 								</c:if>
 								<c:if test="${comment.recuthulu}">
 									<i>Recuthuled from: </i>
@@ -109,7 +113,7 @@
 							| <i><fmt:formatDate value="${comment.comment.date}"
 										pattern="dd-MM-yyyy HH:mm" /></i> |
 							<c:if test="${isOwner}">
-									<a href="../../user/delete/${comment.comment.id}">Delete</a>								
+									<a href="../delete/${comment.comment.id}">Delete</a>								
 							</c:if>
 						</div>
 					</div>
@@ -117,8 +121,6 @@
 			</c:forEach>
 		</ul>
 	</div>
-	<div class="tag-column profile-column">
-		<%@ include file="../top10.jsp"%>
-	</div>
+
 </div>
 <%@ include file="../footer.jsp"%>

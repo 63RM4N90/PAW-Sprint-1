@@ -10,8 +10,7 @@
 	<div class="error">
 		<c:out value="${generalError}" />
 	</div>
-	<form:form method="POST" action="editProfile" commandName="editUserForm" class="form-horizontal registration-form">
-		<%-- 		enctype="multipart/form-data"> --%>
+	<form:form method="POST" action="editProfile" commandName="editUserForm" enctype="multipart/form-data" class="form-horizontal registration-form">
 		<form:errors path="*" />
 		<form:hidden path="id" />
 		<div class="control-group">
@@ -49,6 +48,12 @@
 			<div class="controls registration-field">
 				<form:radiobutton name="privacy" path="privacy" value="T" />Private
 				<form:radiobutton name="privacy" path="privacy" value="F" />Public
+			</div>
+		</div>
+		<div class="control-group">
+			<label for="picture">Picture:</label>
+			<div class="controls registration-field">
+				<form:input type="file" name="picture" path="picture" />
 			</div>
 		</div>
 		<div class="form-buttons">

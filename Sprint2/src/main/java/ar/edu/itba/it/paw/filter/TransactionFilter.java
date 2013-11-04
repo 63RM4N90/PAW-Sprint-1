@@ -45,10 +45,8 @@ public class TransactionFilter extends OncePerRequestFilter {
 					sessionFactory.getCurrentSession().getTransaction()
 							.rollback();
 			} catch (Throwable rbEx) {
-				System.out.println(rbEx.getMessage());
 				rbEx.printStackTrace();
 			}
-			System.out.println(ex.getMessage());
 			// Let others handle it...
 			throw new ServletException(ex);
 		}

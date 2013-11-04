@@ -16,20 +16,21 @@ public class Comment extends PersistentEntity implements Comparable<Comment> {
 	private User author;
 	@ManyToOne
 	private User originalAuthor;
-	
+
 	@Column(nullable = false)
 	private Date date;
 	@Column(nullable = false)
 	private String comment;
-	@ManyToMany	
+	@ManyToMany
 	@JoinColumn(name = "com_id")
 	private Set<Hashtag> hashtags;
 	@ManyToMany
 	private Set<User> references;
-	
-	@ManyToMany(mappedBy="favourites")
+
+	@ManyToMany(mappedBy = "favourites")
 	private Set<User> favouritees;
-	
+
+	private static final int MAX_COMMENT_LENGTH = 140;
 
 	public Comment() {
 	}
@@ -38,7 +39,13 @@ public class Comment extends PersistentEntity implements Comparable<Comment> {
 			Set<Hashtag> hashtags, Set<User> references, User originalauthor) {
 		this.author = author;
 		this.date = date;
+		if (comment.length() > MAX_COMMENT_LENGTH) {
+			throw new IllegalArgumentException();
+		}
 		this.comment = comment;
+		if (author == null || originalauthor == null) {
+			throw new IllegalArgumentException();
+		}
 		this.hashtags = hashtags;
 		this.originalAuthor = originalauthor;
 		this.references = references;
@@ -51,20 +58,20 @@ public class Comment extends PersistentEntity implements Comparable<Comment> {
 	public Date getDate() {
 		return date;
 	}
-	
-	public boolean favouritedBy(User user){
+
+	public boolean favouritedBy(User user) {
 		return favouritees.contains(user);
 	}
 
 	public String getComment() {
 		return comment;
 	}
-	
-	public User getOriginalAuthor(){
+
+	public User getOriginalAuthor() {
 		return originalAuthor;
 	}
-	
-	public void setComment(String comment){
+
+	public void setComment(String comment) {
 		this.comment = comment;
 	}
 
@@ -75,8 +82,8 @@ public class Comment extends PersistentEntity implements Comparable<Comment> {
 	public Set<User> getReferences() {
 		return references;
 	}
-	
-	public boolean isRecuthulu(){
+
+	public boolean isRecuthulu() {
 		return !author.equals(originalAuthor);
 	}
 
@@ -128,7 +135,4 @@ public class Comment extends PersistentEntity implements Comparable<Comment> {
 			return false;
 		return true;
 	}
-	
-
-
 }

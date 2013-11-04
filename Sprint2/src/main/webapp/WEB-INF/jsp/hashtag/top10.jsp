@@ -1,13 +1,13 @@
-
+<%@ include file="../header.jsp" %>
 <div class="top container-fluid">
 	<h3>
 		TOP 10 Hashtags
 	</h3>
-	<form action="">
-		<a href="<c:url value="${previous}"><c:param name="period" value="1" /></c:url>">1 day |</a>
-		<a href="<c:url value="${previous}"><c:param name="period" value="7" /></c:url>">1 week |</a>
-		<a href="<c:url value="${previous}"><c:param name="period" value="30" /></c:url>">1 month</a>
-	</form>
+	
+	<a href="../hashtag/top10?period=1">1 day |</a>
+	<a href="../hashtag/top10?period=7">1 week |</a>
+	<a href="../hashtag/top10?period=30">1 month</a>
+	
 
 <c:if test="${!isempty}">
 	<ul>
@@ -18,7 +18,7 @@
 				<div class="tag-info">
 					<a href="<c:url value="profile"><c:param name="user" value="${hashtag.hashtag.author.username}" /></c:url>">${hashtag.hashtag.author.username}</a>
 					<fmt:formatDate value="${hashtag.hashtag.date}" pattern="dd-MM-yyyy" />
-					AMOUNT:<c:out value="${hashtag.rank}" />
+					tagged <c:out value="${hashtag.rank}" /> times
 				</div>
 			</li>
 		</c:forEach>
@@ -30,3 +30,4 @@
 </c:if>
 
 </div>
+<%@ include file="../footer.jsp" %>

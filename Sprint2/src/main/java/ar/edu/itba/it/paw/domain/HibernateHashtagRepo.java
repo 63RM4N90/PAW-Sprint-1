@@ -1,5 +1,6 @@
 package ar.edu.itba.it.paw.domain;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -25,12 +26,8 @@ public class HibernateHashtagRepo extends AbstractHibernateRepo implements
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public Hashtag getHashtag(String hashtag) {
-		Session session = getSession();
-		Query query = session.createQuery(" from Hashtag where hashtag = ?");
-		query.setParameter(0, hashtag);
-		List<Hashtag> result = (List<Hashtag>) query.list();
+		List<Hashtag> result = find(" from Hashtag where hashtag = ?", hashtag);
 		return result.size() > 0 ? result.get(0) : null;
 	}
 
@@ -74,8 +71,10 @@ public class HibernateHashtagRepo extends AbstractHibernateRepo implements
 
 		Session session = getSession();
 		Query query = session
-				.createQuery("select h,count(distinct c) from Comment c inner join c.hashtags h group by h order by count(distinct c)");
+				.createQuery("select h,count(distinct c) from Comment c inner join c.hashtags h where c.date <= ? and c.date >= ? group by h order by count(distinct c)");
 
+		query.setTimestamp(0,new Timestamp(to.getTime()));
+		query.setTimestamp(1,new Timestamp(from.getTime()));
 		ScrollableResults results = query.scroll();
 
 		ArrayList<Hashtag> aux;
@@ -95,5 +94,11 @@ public class HibernateHashtagRepo extends AbstractHibernateRepo implements
 			}
 		}
 		return rank;
+	}
+
+	@Override
+	public void addHashtag(Hashtag hashtag) {
+		super.save(hashtag);
+
 	}
 }

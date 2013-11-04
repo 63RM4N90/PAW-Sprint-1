@@ -28,11 +28,12 @@
 					type="submit" class="btn-inverse search-button" name="submit" value="Search" />
 			</form>
 		</div>
+		<a href="${pageContext.request.contextPath}/bin/hashtag/top10"><img class="top-hashtags" src="${pageContext.request.contextPath}/img/t10h.png" alt=""/></a>
 		<div class="top-bar-element session">
 			<div class="home-link">
 				<img class="separator"
 					src="${pageContext.request.contextPath}/img/topbar_separator.png"
-					alt="" /> <a href="/Sprint2/bin/user/home"><img class="home"
+					alt="" /> <a href="${pageContext.request.contextPath}/bin/user/home"><img class="home"
 					src="${pageContext.request.contextPath}/img/home.png" alt="home" /></a>
 			</div>
 			<c:if test="${not empty username}">
@@ -43,7 +44,7 @@
 					<p>
 						<c:out value="${username}" />
 					</p>
-					<br> <a href="/Sprint2/bin/user/logout">Log out</a>
+					<br> <a href="${pageContext.request.contextPath}/bin/user/logout">Log out</a>
 				</div>
 			</c:if>
 		</div>

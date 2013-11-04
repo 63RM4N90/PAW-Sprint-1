@@ -13,7 +13,10 @@
 	<!-- Beans relacionados con Spring MVC -->
 	<import resource="classpath:mvc.xml" />
 
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
+
 	<!-- Beans relacionados con Spring MVC -->
 	<import resource="classpath:data.xml" />
-	
+
 </beans>

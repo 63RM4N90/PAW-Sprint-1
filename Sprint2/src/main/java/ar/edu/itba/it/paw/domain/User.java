@@ -92,6 +92,9 @@ public class User extends PersistentEntity {
 	}
 
 	public List<Notification> getNotifications() {
+		for (Notification notification : notifications) {
+			notification.check();
+		}
 		return notifications;
 	}
 
@@ -101,6 +104,10 @@ public class User extends PersistentEntity {
 	
 	public int favourites(){
 		return favourites.size();
+	}
+	
+	public Set<Comment> getFavourites(){
+		return favourites;
 	}
 	
 	public void removeFavourite(Comment comment){
@@ -230,10 +237,6 @@ public class User extends PersistentEntity {
 
 	public byte[] getPicture() {
 		return picture;
-	}
-
-	public void setFile(byte[] picture) {
-		this.picture = picture;
 	}
 
 	public String getSecretQuestion() {
