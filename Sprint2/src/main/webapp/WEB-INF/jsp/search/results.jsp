@@ -9,7 +9,7 @@
 		<c:set var="row" value="0" />
 		<c:forEach items="${users}" var="user">
 			<li class="search-result" <c:set var="row" value="${row + 1}" />><a
-				href="../../user/profile/${user.username}">${user.username}</a> <br />
+				href="../user/profile/${user.username}">${user.username}</a> <br />
 				<span> <c:out value="${user.name}" /> </span>
 				<span> <c:out value="${user.surname}" /> | </span>
 				<span> Registered on <fmt:formatDate value="${user.registrationDate}" pattern="dd-MM-yyyy HH:mm" /> </span>
