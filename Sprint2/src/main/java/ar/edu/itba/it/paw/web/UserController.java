@@ -468,12 +468,15 @@ public class UserController extends AbstractController {
 		}
 		List<User> aux = new ArrayList<User>();
 		List<User> ans = new ArrayList<User>();
-		int ansSize = 0;
-		while (ansSize < SUGGESTED_FRIEND_AMOUNT && n > 0) {
-			bag.getNOrGreaterMatching(n, aux);
-			ansSize = randomize(aux, ans, user);
-			n--;
-		}
+		
+		bag.getNOrGreaterMatching(n, aux);
+		
+		
+		 int usrs_left= SUGGESTED_FRIEND_AMOUNT - randomize(aux,ans,user);		
+		 if(usrs_left != 0 ){
+			 ans.addAll(hashtagRepo.mostFollowed(usrs_left));
+		 }		
+		
 		return ans;
 	}
 
