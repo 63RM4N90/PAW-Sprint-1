@@ -11,6 +11,10 @@
 <html>
 <head>
 <link rel="stylesheet" type="text/css"
+	href="${pageContext.request.contextPath}/styles/bootstrap.css" />
+<link rel="stylesheet" type="text/css"
+	href="${pageContext.request.contextPath}/styles/bootstrap-responsive.css" />
+<link rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath}/styles/style.css" />
 </head>
 <body>
@@ -21,10 +25,10 @@
 		<div class="top-bar-element search-bar">
 			<form method="POST" action="/Sprint2/bin/search/results">
 				<input type="text" placeholder="Find Soul..." name="search" /> <input
-					type="submit" class="button" name="submit" value="Search" />
+					type="submit" class="btn-inverse search-button" name="submit" value="Search" />
 			</form>
 		</div>
-		<a href="${pageContext.request.contextPath}/bin/hashtag/top10"> Top 10 Hashtags </a>
+		<a href="${pageContext.request.contextPath}/bin/hashtag/top10"><img class="top-hashtags" src="${pageContext.request.contextPath}/img/t10h.png" alt=""/></a>
 		<div class="top-bar-element session">
 			<div class="home-link">
 				<img class="separator"
