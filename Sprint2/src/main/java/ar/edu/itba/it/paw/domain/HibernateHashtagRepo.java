@@ -101,4 +101,22 @@ public class HibernateHashtagRepo extends AbstractHibernateRepo implements
 		super.save(hashtag);
 
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<User> mostFollowed(int maxResults) {
+		Session session = getSession();
+		Query query = session.createQuery("select uf,count(distinct uf) from User u inner join u.followers uf group by uf order by count(distinct uf) desc");
+		query.setMaxResults(maxResults);
+		
+		ScrollableResults results = query.scroll();
+		List<User> mostFollowed = new ArrayList<User>();
+		
+		while(results.next()){
+			Object[] row = results.get();
+			mostFollowed.add((User)row[0]);
+		}
+		
+		return mostFollowed;
+	}
 }
