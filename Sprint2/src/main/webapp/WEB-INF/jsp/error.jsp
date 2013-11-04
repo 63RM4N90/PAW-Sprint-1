@@ -1,5 +1,5 @@
 <%@ include file="header.jsp" %>
-<div class="container">
+<div class="login-container">
 	<div class="error-container">
 		<h2>Error</h2>
 		<div class="form-field">

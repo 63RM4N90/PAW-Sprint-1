@@ -1,5 +1,5 @@
 <%@ include file="../header.jsp"%>
-<div class="container">
+<div class="vertical-container">
 	<div class="error-container">
 		<h2>Notifications</h2>
 		<div class="form-field">

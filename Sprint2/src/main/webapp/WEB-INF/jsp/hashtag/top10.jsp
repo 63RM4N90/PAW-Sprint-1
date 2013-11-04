@@ -1,5 +1,5 @@
 <%@ include file="../header.jsp" %>
-<div class="top container-fluid">
+<div class="top container-fluid vertical-container">
 	<h3>
 		TOP 10 Hashtags
 	</h3>

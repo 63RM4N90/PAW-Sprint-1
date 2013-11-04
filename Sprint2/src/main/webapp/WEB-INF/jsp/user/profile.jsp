@@ -3,12 +3,12 @@
 	<div class="info-column profile-column">
 		<div class="user-info">
 			<c:if test="${isEmptyPicture}">
-				<img
+				<img class="profile-picture"
 					src="${pageContext.request.contextPath}/img/default_picture.png"
 					alt="user_picture" />
 			</c:if>
 			<c:if test="${!isEmptyPicture}">
-				<img src="../image?username=<c:out value="${user.username}" />"
+				<img class="profile-picture" src="../image?username=<c:out value="${user.username}" />"
 					alt="user_picture" />
 			</c:if>
 			<h3>
@@ -31,10 +31,20 @@
 				<c:out value="${user.visits}" />
 			</p>
 			
-			<h6><a href="../../user/follows?user=${user.username}&type=Followers">Followers: ${followers}</a></h6>
-			<h6><a href="../../user/follows?user=${user.username}&type=Following">Following: ${following}</a></h6>
-			<h6><a href="../../user/suggestedUsers">Suggested users</a></h6>
-			<h6><a href="../../user/favourites?user=${user.username}">Favourites</a></h6>
+			<a href="../../user/follows?user=${user.username}&type=Followers">
+				<div class="followers">
+					<p>
+						${followers}
+					</p>
+				</div>
+			</a>
+			<a href="../../user/follows?user=${user.username}&type=Following">
+				<div class="following">
+					<p>
+						${following}
+					</p>
+				</div>
+			</a>
 			<c:if test="${isOwner}">
 				<a href="../notifications">
 					<div class="notifications">
@@ -43,25 +53,27 @@
 						</p>
 					</div>
 				</a>
+				<a href="../../user/suggestedUsers"><img src="${pageContext.request.contextPath}/img/suggest_friends.png" alt=""/></a>
 			</c:if>
+			<a href="../../user/favourites?user=${user.username}"><img src="${pageContext.request.contextPath}/img/Favourites.png" alt=""/></a>
 		</div>
 		<c:if test="${isOwner}">
 			<form method="GET" action="../editProfile">
-				<button class="button">Edit</button>
+				<button class="btn-inverse search-button">Edit</button>
 			</form>
 		</c:if>
-	</div>
-	<c:if test="${not empty username}">
-		<c:if test="${not isOwner}">
-
-			<c:if test="${not isFollowing}">
-				<button onclick="location.href='../../user/follow?user=${user.username}'"> Follow </button>
-			</c:if>
-			<c:if test="${isFollowing}">
-				<button onclick="location.href='../../user/unfollow?user=${user.username}'"> Unfollow </button>
+		<c:if test="${not empty username}">
+			<c:if test="${not isOwner}">
+	
+				<c:if test="${not isFollowing}">
+					<button class="btn-inverse search-button" onclick="location.href='../../user/follow?user=${user.username}'"> Follow </button>
+				</c:if>
+				<c:if test="${isFollowing}">
+					<button class="btn-inverse search-button" onclick="location.href='../../user/unfollow?user=${user.username}'"> Unfollow </button>
+				</c:if>
 			</c:if>
 		</c:if>
-	</c:if>
+	</div>
 
 	<div class="comments-column profile-column">
 		<c:if test="${isOwner}">
