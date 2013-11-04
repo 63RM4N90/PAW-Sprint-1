@@ -10,9 +10,11 @@
 		</div>
 		<c:if test="${!userSelected}">
 			<form method="GET" action="recoverPassword">
-				<div class="recover-form-field">
-					<label for="userToRecover"> Insert your Username: </label> <input
-						type="text" name="userToRecover" />
+				<div class="control-group">
+					<label class="control-label" for="userToRecover"> Insert your Username: </label> 
+					<div class="controls">
+						<input type="text" name="userToRecover" />
+					</div>
 				</div>
 				<div class="form-buttons recover">
 					<input type="submit" class="button user-register-button"
@@ -21,22 +23,29 @@
 			</form>
 		</c:if>
 		<c:if test="${userSelected && !passwordRecovered}">
-			<form method="POST" action="recoverPassword">
-				<div class="recover-form-field">
-					<label><c:out value="${user.secretQuestion}" /></label> <input
-						type="text" name="secretAnswer" />
+			<form class="form-horizontal" method="POST" action="recoverPassword">
+				<div class="control-group">
+					<label class="control-label"><c:out value="${user.secretQuestion}" /></label> 
+					<div class="controls">
+						<input type="text" name="secretAnswer" />
+					</div>
 				</div>
-				<div class="recover-form-field">
-					<label>New Password:</label> <input type="password" name="password" />
+				<div class="control-group">
+					<label class="control-label">New Password:</label> 
+					<div class="controls">
+						<input type="password" name="password" />
+					</div>
 				</div>
-				<div class="recover-form-field">
-					<label>Confirm New Password:</label> <input type="password"
-						name="confirm" />
+				<div class="control-group">
+					<label class="control-label">Confirm New Password:</label>
+					<div class="controls">
+					 	<input type="password" name="confirm" />
+					 </div>
 				</div>
 				<input type="hidden" name="userToRecover"
 					value="<c:out value="${user.username}"/>" />
 				<c:if test="${!passwordRecovered}">
-					<div class="form-buttons recover">
+					<div class="control-group">
 						<input type="submit" class="button" name="submit"
 							value="submit answer" />
 					</div>

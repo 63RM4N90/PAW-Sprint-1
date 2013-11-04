@@ -309,15 +309,10 @@ h5 {
  	position: relative;
  	width: 450px;
  }
- 
- .recover-button {
- 	position: absolute;
-	right: 120px;
-}
 
 a button.back-button {
 	position: absolute;
-	right: 0;
+	left: 0;
 }
 
 .user-register-button {
@@ -451,4 +446,8 @@ li p {
 	margin: 0px 7px;
 	color: #000000;
 	font-weight: bold;
+}
+
+form {
+	margin:0;
 }
