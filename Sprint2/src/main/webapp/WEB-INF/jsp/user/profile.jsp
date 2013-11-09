@@ -34,14 +34,18 @@
 			<a href="../../user/follows?user=${user.username}&type=Followers">
 				<div class="followers">
 					<p>
-						${followers}
+						<c:if test="${!empty followers}">
+							${followers}
+						</c:if>
 					</p>
 				</div>
 			</a>
 			<a href="../../user/follows?user=${user.username}&type=Following">
 				<div class="following">
 					<p>
-						${following}
+						<c:if test="${!empty following}">
+							${following}
+						</c:if>
 					</p>
 				</div>
 			</a>
