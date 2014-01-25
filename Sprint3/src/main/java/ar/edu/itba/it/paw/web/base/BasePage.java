@@ -4,18 +4,13 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.model.ResourceModel;
 
 import ar.edu.itba.it.paw.web.SocialCthulhuApp;
 import ar.edu.itba.it.paw.web.SocialCthulhuSession;
-import ar.edu.itba.it.paw.web.common.LoginPage;
-import ar.edu.itba.it.paw.web.common.SearchPage;
 
 public class BasePage extends WebPage {
 	
@@ -23,8 +18,6 @@ public class BasePage extends WebPage {
 
 	@SuppressWarnings("serial")
 	public BasePage() {
-		add(new Label("username", new PropertyModel<String>(SocialCthulhuSession.get(), "username")));
-
 		add(new Link<Void>("logout") {
 			private static final long serialVersionUID = 1L;
 
@@ -34,7 +27,7 @@ public class BasePage extends WebPage {
 				setResponsePage(getApplication().getHomePage());
 			}
 		});
-		add(new Label("username", ((SocialCthulhuSession)getSession()).getUsername()));
+		add(new Label("user", ((SocialCthulhuSession)getSession()).getUsername()));
 		add(new Image("separator", SocialCthulhuApp.SEPARTOR));
 		add(new Link<Void>("home") {
 
@@ -54,7 +47,7 @@ public class BasePage extends WebPage {
 			}
 			
 		}.add(new Image("home", SocialCthulhuApp.TOP_10_HASHTAGS)));
-		Form<SearchPage> form = new Form<SearchPage>("searchForm", new CompoundPropertyModel<SearchPage>(new SearchPage())) {
+		Form<BasePage> form = new Form<BasePage>("searchForm", new CompoundPropertyModel<BasePage>(this)) {
 			
 			private static final long serialVersionUID = 1L;
 
@@ -66,6 +59,7 @@ public class BasePage extends WebPage {
 
 		form.add(new TextField<String>("searchField"));
 		form.add(new Button("searchButton"));
-		add(new Image("SocialCthulhuTitle", SocialCthulhuApp.TITLE));
+		add(form);
+		add(new Image("socialCthulhuTitle", SocialCthulhuApp.TITLE));
 	}
 }

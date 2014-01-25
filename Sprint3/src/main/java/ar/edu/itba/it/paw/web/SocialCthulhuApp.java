@@ -21,9 +21,9 @@ import ar.edu.itba.it.paw.web.common.LoginPage;
 public class SocialCthulhuApp extends WebApplication {
 
 	private final SessionFactory sessionFactory;
-	public static final ResourceReference SEPARTOR = new PackageResourceReference(SocialCthulhuApp.class, "resources/separator.png");
+	public static final ResourceReference SEPARTOR = new PackageResourceReference(SocialCthulhuApp.class, "resources/topbar_separator.png");
 	public static final ResourceReference HOME = new PackageResourceReference(SocialCthulhuApp.class, "resources/home.png");
-	public static final ResourceReference TOP_10_HASHTAGS = new PackageResourceReference(SocialCthulhuApp.class, "resources/top_10_hashtags.png");
+	public static final ResourceReference TOP_10_HASHTAGS = new PackageResourceReference(SocialCthulhuApp.class, "resources/t10h.png");
 	public static final ResourceReference TITLE = new PackageResourceReference(SocialCthulhuApp.class, "resources/title.png");
 
 	
