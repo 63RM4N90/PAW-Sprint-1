@@ -9,11 +9,13 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import ar.edu.itba.it.paw.domain.user.UserRepo;
+import ar.edu.itba.it.paw.domain.UserRepo;
 import ar.edu.itba.it.paw.web.SocialCthulhuSession;
 import ar.edu.itba.it.paw.web.base.BasePage;
 
 public class LoginPage extends BasePage {
+	
+	private static final long serialVersionUID = 1L;
 
 	@SpringBean
 	private UserRepo users;
@@ -24,6 +26,9 @@ public class LoginPage extends BasePage {
 	public LoginPage() {
 		add(new FeedbackPanel("feedback"));
 		Form<LoginPage> form = new Form<LoginPage>("loginForm", new CompoundPropertyModel<LoginPage>(this)) {
+			
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void onSubmit() {
 				SocialCthulhuSession session = SocialCthulhuSession.get();
