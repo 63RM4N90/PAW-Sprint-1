@@ -7,6 +7,8 @@ import org.apache.wicket.Session;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
+import org.apache.wicket.request.resource.PackageResourceReference;
+import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,11 @@ import ar.edu.itba.it.paw.web.user.ProfilePage;
 public class SocialCthulhuApp extends WebApplication {
 
 	private final SessionFactory sessionFactory;
+	public static final ResourceReference SEPARTOR = new PackageResourceReference(SocialCthulhuApp.class, "resources/separator.png");
+	public static final ResourceReference HOME = new PackageResourceReference(SocialCthulhuApp.class, "resources/home.png");
+	public static final ResourceReference TOP_10_HASHTAGS = new PackageResourceReference(SocialCthulhuApp.class, "resources/top_10_hashtags.png");
+	public static final ResourceReference TITLE = new PackageResourceReference(SocialCthulhuApp.class, "resources/title.png");
+
 	
 	@Autowired
 	public SocialCthulhuApp(SessionFactory sessionFactory) {
