@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 
 import ar.edu.itba.it.paw.web.common.HibernateRequestCycleListener;
 import ar.edu.itba.it.paw.web.common.LoginPage;
-import ar.edu.itba.it.paw.web.user.ProfilePage;
 
 @Component
 public class SocialCthulhuApp extends WebApplication {

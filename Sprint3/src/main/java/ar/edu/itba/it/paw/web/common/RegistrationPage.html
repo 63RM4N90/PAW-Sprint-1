@@ -1,0 +1,95 @@
+<html>
+	<body>
+		<wicket:extend>
+			<div class="vertical-container">
+				<h2>Registration</h2>
+				<div wicket:id="errorPanel" class="error" />
+				<form wicket:id="registrationForm"
+					class="form-horizontal registration-form" method="POST"
+					action="registration" enctype="multipart/form-data">
+					<div class="control-group">
+						<label class="control-label registration-label" for="name">
+							<wicket:message key="name">Name</wicket:message>:
+						</label>
+						<div class="controls registration-field">
+							<input type="text" path="name" wicket:id="name" />
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label registration-label" for="surname">
+							<wicket:message key="surname">Surname</wicket:message>:
+						</label>
+						<div class="controls registration-field">
+							<input type="text" path="surname" wicket:id="surname" />
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label registration-label" for="username">
+							<wicket:message key="username">Username</wicket:message>:
+						</label>
+						<div class="controls registration-field">
+							<input type="text" path="username" wicket:id="username" />
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label registration-label" for="password">
+							<wicket:message key="password">Password</wicket:message>:
+						</label>
+						<div class="controls registration-field">
+							<input type="password" path="password" wicket:id="password" />
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label registration-label"
+							for="confirmPassword"> <wicket:message
+								key="confirmPassword">Confirm password</wicket:message>:
+						</label>
+						<div class="controls registration-field">
+							<input type="password" path="confirmPassword"
+								wicket:id="confirmPassword" />
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label registration-label" for="description">
+							<wicket:message key="description">Description</wicket:message>:
+						</label>
+						<div class="controls registration-field">
+							<input type="text" path="description" wicket:id="description" />
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label registration-label" for="secretQuestion">
+							<wicket:message key="secretQuestion">Secret question</wicket:message>:
+						</label>
+						<div class="controls registration-field">
+							<input type="text" path="secretQuestion" wicket:id="secretQuestion" />
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label registration-label" for="secretAnswer">
+							<wicket:message key="secretAnswer">Secret answer</wicket:message>:
+						</label>
+						<div class="controls registration-field">
+							<input type="text" path="secretAnswer" wicket:id="secretAnswer" />
+						</div>
+					</div>
+					<!-- 		<div class="registration-form-field"> -->
+					<!-- 			<label for="picture"><wicket:message key="picture"> -->
+					<!-- 				Picture</wicket:message>: -->
+					<!-- 			</label> -->
+					<!-- 			<form:input type="file" name="picture" path="picture" wicket:id="picture"/> -->
+					<!-- 		</div> -->
+					<div class="registration-form-buttons">
+						<input type="submit" class="btn-inverse pull-right cthulhu-button"
+							name="submit" value="Submit" wicket:id="register" />
+					</div>
+					<!-- 		<div class="alreadyRegistered pull-right"> -->
+					<!-- 			<a wicket:id="reg_already_registered"> -->
+					<!-- 				<wicket:message key="already_registered_message" >Already registered? Login!</wicket:message> -->
+					<!-- 			</a> -->
+					<!-- 		</div> -->
+				</form>
+			</div>
+		</wicket:extend>
+	</body>
+</html>

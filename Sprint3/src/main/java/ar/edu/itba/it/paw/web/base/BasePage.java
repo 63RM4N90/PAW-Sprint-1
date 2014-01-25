@@ -15,6 +15,8 @@ public class BasePage extends WebPage {
 		add(new Label("username", new PropertyModel<String>(SocialCthulhuSession.get(), "username")));
 
 		add(new Link<Void>("logout") {
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public void onClick() {
 				((SocialCthulhuSession) getSession()).signOut();
