@@ -7,6 +7,8 @@ import ar.edu.itba.it.paw.web.common.LoginPage;
 
 public abstract class SecuredPage extends BasePage {
 
+	private static final long serialVersionUID = 1L;
+
 	public SecuredPage() {
 		SocialCthulhuSession session = getSocialCthulhuSession();
 		if (!session.isSignedIn()) {
