@@ -21,7 +21,7 @@
 						</div>
 						<div class="control-group">
 							<input class="btn-inverse pull-right cthulhu-button" type="submit" wicket:id="login"/>
-							<a class="pull-right" href="recoverPassword">forgotten password?</a>
+							<a class="pull-right" href="recoverPassword" wicket:id="forgotPassword">forgotten password?</a>
 						</div>	
 					</form>
 				</div>
@@ -33,7 +33,7 @@
 						Wanna join us? <br>					
 					</wicket:message></p>
 					<div class="notRegistered">
-						<a href="registration">
+						<a href="registration" wicket:id="registration">
 							<button class="btn-inverse cthulhu-button"><wicket:message key="register">
 								Register
 							</wicket:message></button>

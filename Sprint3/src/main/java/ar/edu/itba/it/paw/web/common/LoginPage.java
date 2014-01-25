@@ -4,14 +4,15 @@ import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import ar.edu.itba.it.paw.domain.user.UserRepo;
 import ar.edu.itba.it.paw.web.SocialCthulhuSession;
 import ar.edu.itba.it.paw.web.base.BasePage;
+import ar.edu.itba.it.paw.web.user.ForgotPasswordPage;
 
 public class LoginPage extends BasePage {
 
@@ -42,5 +43,7 @@ public class LoginPage extends BasePage {
 		form.add(new PasswordTextField("password"));
 		form.add(new Button("login", new ResourceModel("login")));
 		add(form);
+		add(new BookmarkablePageLink<Void>("forgotPassword", ForgotPasswordPage.class));
+		add(new BookmarkablePageLink<Void>("registration", RegistrationPage.class));
 	}
 }

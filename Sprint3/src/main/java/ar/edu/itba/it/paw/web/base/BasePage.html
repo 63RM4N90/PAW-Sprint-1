@@ -12,33 +12,27 @@
 <body>
 	<div class="top-bar">
 		<div class="top-bar-element title">
-			<img src="${pageContext.request.contextPath}/img/title.png" alt="Social Cthulhu" />
+			<img wicket:id="socialCthulhuTitle"/>
 		</div>
 		<div class="top-bar-element search-bar">
-			<form method="POST" action="/Sprint2/bin/search/results">
-				<input type="text" placeholder="Find Soul..." name="search" /> <input
-					type="submit" class="btn-inverse search-button" name="submit" value="Search" />
+			<form wicket:id="searchForm">
+				<input type="text" placeholder="Find Soul..." wicket:id="searchField"/> 
+				<input type="submit" class="btn-inverse search-button" wicket:id="searchButton"/>
 			</form>
 		</div>
-		<a href="${pageContext.request.contextPath}/bin/hashtag/top10"><img class="top-hashtags" src="${pageContext.request.contextPath}/img/t10h.png" alt=""/></a>
+		<a wicket:id="top10hashtags">top 10 htags</a>
 		<div class="top-bar-element session">
 			<div class="home-link">
-				<img class="separator"
-					src="${pageContext.request.contextPath}/img/topbar_separator.png"
-					alt="" /> <a href="${pageContext.request.contextPath}/bin/user/home"><img class="home"
-					src="${pageContext.request.contextPath}/img/home.png" alt="home" /></a>
+				<img class="separator" wicket:id="separator"/>
+				<a wicket:id="home">home</a>
 			</div>
-			<c:if test="${not empty username}">
-				<img class="separator"
-					src="${pageContext.request.contextPath}/img/topbar_separator.png"
-					alt="" />
-				<div class="user-session">
-					<p>
-						<c:out value="${username}" />
-					</p>
-					<br> <a href="${pageContext.request.contextPath}/bin/user/logout">Log out</a>
-				</div>
-			</c:if>
+			<img class="separator" wicket:id="separator"/>
+			<div class="user-session">
+				<p>
+					<span wicket:id="username">user</span>
+				</p>
+				<br> <a wicket:id="logout">Log out</a>
+			</div>
 		</div>
 	</div>
 		<wicket:child />

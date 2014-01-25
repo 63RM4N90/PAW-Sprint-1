@@ -8,22 +8,14 @@ import ar.edu.itba.it.paw.web.common.LoginPage;
 public abstract class SecuredPage extends BasePage {
 
 	public SecuredPage() {
-		SocialCthulhuSession session = getDemoWicketSession();
+		SocialCthulhuSession session = getSocialCthulhuSession();
 		if (!session.isSignedIn()) {
 			redirectToInterceptPage(new LoginPage());
 			
 		}
-
-		add(new Link<Void>("logout") {
-			@Override
-			public void onClick() {
-				getDemoWicketSession().signOut();
-				setResponsePage(getApplication().getHomePage());
-			}
-		});
 	}
 
-	protected SocialCthulhuSession getDemoWicketSession() {
+	protected SocialCthulhuSession getSocialCthulhuSession() {
 		return (SocialCthulhuSession) getSession();
 	}
 }

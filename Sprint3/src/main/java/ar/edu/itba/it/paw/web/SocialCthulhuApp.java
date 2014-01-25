@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import ar.edu.itba.it.paw.web.common.HibernateRequestCycleListener;
+import ar.edu.itba.it.paw.web.common.LoginPage;
 import ar.edu.itba.it.paw.web.user.ProfilePage;
 
 @Component
@@ -29,7 +30,7 @@ public class SocialCthulhuApp extends WebApplication {
 	
 	@Override
 	public Class<? extends Page> getHomePage() {
-		return ProfilePage.class;
+		return LoginPage.class;
 	}
 	
 	@Override
