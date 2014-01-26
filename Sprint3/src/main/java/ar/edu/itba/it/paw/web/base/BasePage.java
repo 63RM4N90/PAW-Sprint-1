@@ -28,7 +28,8 @@ public class BasePage extends WebPage {
 			}
 		});
 		add(new Label("user", ((SocialCthulhuSession)getSession()).getUsername()));
-		add(new Image("separator", SocialCthulhuApp.SEPARTOR));
+		add(new Image("separator1", SocialCthulhuApp.SEPARTOR));
+		add(new Image("separator2", SocialCthulhuApp.SEPARTOR));
 		add(new Link<Void>("home") {
 
 			@Override
@@ -37,7 +38,7 @@ public class BasePage extends WebPage {
 				
 			}
 			
-		}.add(new Image("home", SocialCthulhuApp.HOME)));
+		}.add(new Image("home_image", SocialCthulhuApp.HOME)));
 		add(new Link<Void>("top10hashtags"){
 
 			@Override
@@ -46,8 +47,8 @@ public class BasePage extends WebPage {
 				
 			}
 			
-		}.add(new Image("home", SocialCthulhuApp.TOP_10_HASHTAGS)));
-		Form<BasePage> form = new Form<BasePage>("searchForm", new CompoundPropertyModel<BasePage>(this)) {
+		}.add(new Image("top10hashtags_image", SocialCthulhuApp.TOP_10_HASHTAGS)));
+		Form<BasePage> form = new Form<BasePage>("searchForm") {
 			
 			private static final long serialVersionUID = 1L;
 

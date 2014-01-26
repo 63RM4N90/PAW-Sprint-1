@@ -98,6 +98,7 @@ a, a :visited {
 }
 
 .login-column {
+	vertical-align:top;
 	display: inline-block;
 	padding: 20px;
 }
@@ -107,7 +108,6 @@ a, a :visited {
 }
 
 .column-2 {
-	position: absolute;
 }
 
 .column-3 {
@@ -366,7 +366,6 @@ li p {
 }
 
 .cthulhu-button {
-	margin-left: 260px;
 	border-radius: 5px;
 	padding: 4px 10px;
 }
