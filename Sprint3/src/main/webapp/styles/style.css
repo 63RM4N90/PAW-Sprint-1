@@ -77,15 +77,10 @@ img.home {
 	margin-top: 5px;
 }
 
-.session img {
-	float: left;
-}
-
 .user-session {
 	display: inline-block;
 	margin-top: 5px;
-	position: relative;
-	float: right;
+	vertical-align: top;
 }
 
 .user-session p{
@@ -108,10 +103,17 @@ a, a :visited {
 }
 
 .column-2 {
+	padding-right:60px;
 }
 
 .column-3 {
-	float: right;
+	width: 25%;
+	text-align: center;
+}
+
+.column-3 table {
+	width: 25%;
+	position: absolute;
 }
 
 
@@ -326,7 +328,6 @@ a button.back-button {
 
 .home-link {
 	display: inline-block;
-	float: left;
 }
 
 li p {

@@ -50,5 +50,6 @@ public class LoginPage extends BasePage {
 		add(form);
 		add(new BookmarkablePageLink<Void>("forgotPassword", ForgotPasswordPage.class));
 		add(new BookmarkablePageLink<Void>("registration", RegistrationPage.class));
+		add(new Top10HashtagsPanel("top10hashtags"));
 	}
 }
