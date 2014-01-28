@@ -8,13 +8,14 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import ar.edu.itba.it.paw.domain.User;
 import ar.edu.itba.it.paw.domain.UserRepo;
+import ar.edu.itba.it.paw.web.base.BasePage;
 
 public class ForgotPasswordPanel extends Panel {
 	private static final long serialVersionUID = 1L;
 	private String userToRecover;
 	@SpringBean
 	private UserRepo users;
-	
+
 	public ForgotPasswordPanel(String id) {
 		super(id);
 		Form<ForgotPasswordPanel> form = new Form<ForgotPasswordPanel>(
@@ -26,8 +27,9 @@ public class ForgotPasswordPanel extends Panel {
 			protected void onSubmit() {
 				User user = users.getUser(userToRecover);
 				if (user != null) {
-					get("recoverPasswordPanel").setVisible(true);
-					setVisible(false);
+					BasePage responsePage = new RecoverPasswordPage(
+							user.getSecretQuestion(), user.getUsername());
+					setResponsePage(responsePage);
 				} else {
 					System.out.println("ERROR - USER NULL");
 				}
