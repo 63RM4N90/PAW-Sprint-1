@@ -108,10 +108,17 @@ a, a :visited {
 }
 
 .column-2 {
+	padding-right:60px;
 }
 
 .column-3 {
-	float: right;
+	width: 25%;
+	text-align: center;
+}
+
+.column-3 table {
+	width: 25%;
+	position: absolute;
 }
 
 

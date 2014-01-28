@@ -39,15 +39,6 @@ public class BasePage extends WebPage {
 			}
 			
 		}.add(new Image("home_image", SocialCthulhuApp.HOME)));
-		add(new Link<Void>("top10hashtags"){
-
-			@Override
-			public void onClick() {
-				// TODO Auto-generated method stub
-				
-			}
-			
-		}.add(new Image("top10hashtags_image", SocialCthulhuApp.TOP_10_HASHTAGS)));
 		Form<BasePage> form = new Form<BasePage>("searchForm") {
 			
 			private static final long serialVersionUID = 1L;
