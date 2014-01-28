@@ -438,6 +438,14 @@ li p {
 	position: relative;
 }
 
+.feedbackPanelERROR {
+	list-style: none;
+	height: auto;
+	margin-right: 10px;
+	margin-bottom: 5px;
+	display: inline-block;
+}
+
 .notifications p, .following p, .followers p {
 	position: absolute;
 	top: 11px;
