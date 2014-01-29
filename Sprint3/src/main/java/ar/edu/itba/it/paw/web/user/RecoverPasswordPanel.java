@@ -33,7 +33,7 @@ public class RecoverPasswordPanel extends Panel {
 					BasePage responsePage = new ChangePasswordPage(username);
 					setResponsePage(responsePage);
 				} else {
-					System.out.println("ERROR - USER NULL");
+					error(getString("secretAnswer_mismatch"));
 				}
 			}
 		};

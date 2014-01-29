@@ -31,7 +31,7 @@ public class ForgotPasswordPanel extends Panel {
 							user.getSecretQuestion(), user.getUsername());
 					setResponsePage(responsePage);
 				} else {
-					System.out.println("ERROR - USER NULL");
+					error(getString("username_nonexisting"));
 				}
 			}
 		};

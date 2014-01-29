@@ -36,7 +36,7 @@ public class ChangePasswordPanel extends Panel {
 					LoginPage responsePage = new LoginPage();
 					setResponsePage(responsePage);
 				} else {
-					System.out.println("ERROR - USER NULL");
+					error(getString("password_mismatch"));
 				}
 			}
 		};
