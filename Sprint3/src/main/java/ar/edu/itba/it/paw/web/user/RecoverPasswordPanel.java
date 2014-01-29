@@ -30,7 +30,7 @@ public class RecoverPasswordPanel extends Panel {
 			protected void onSubmit() {
 				User user = users.getUser(username);
 				if (secretAnswer.equals(user.getSecretAnswer())) {
-					BasePage responsePage = new ChangePasswordPage(user.getPassword());
+					BasePage responsePage = new ChangePasswordPage(username);
 					setResponsePage(responsePage);
 				} else {
 					System.out.println("ERROR - USER NULL");
