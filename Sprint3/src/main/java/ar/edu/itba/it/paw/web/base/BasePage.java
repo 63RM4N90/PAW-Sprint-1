@@ -18,24 +18,12 @@ public class BasePage extends WebPage {
 
 	@SuppressWarnings("serial")
 	public BasePage() {
-		add(new Link<Void>("logout") {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public void onClick() {
-				((SocialCthulhuSession) getSession()).signOut();
-				setResponsePage(getApplication().getHomePage());
-			}
-		});
-		add(new Label("user", ((SocialCthulhuSession)getSession()).getUsername()));
 		add(new Image("separator1", SocialCthulhuApp.SEPARTOR));
-		add(new Image("separator2", SocialCthulhuApp.SEPARTOR));
 		add(new Link<Void>("home") {
 
 			@Override
 			public void onClick() {
-				// TODO Auto-generated method stub
-				
+				setResponsePage(getApplication().getHomePage());
 			}
 			
 		}.add(new Image("home_image", SocialCthulhuApp.HOME)));
@@ -48,10 +36,32 @@ public class BasePage extends WebPage {
 
 			}
 		};
-
 		form.add(new TextField<String>("searchField"));
 		form.add(new Button("searchButton"));
 		add(form);
 		add(new Image("socialCthulhuTitle", SocialCthulhuApp.TITLE));
+
+		/*session related info*/
+		
+		SocialCthulhuSession session = (SocialCthulhuSession) getSession();
+		Link logout = new Link<Void>("logout") {
+			private static final long serialVersionUID = 1L;
+			
+			@Override
+			public void onClick() {
+				((SocialCthulhuSession) getSession()).signOut();
+				setResponsePage(getApplication().getHomePage());
+			}
+		};
+		add(logout);
+		Image separator2 = new Image("separator2", SocialCthulhuApp.SEPARTOR); 
+		add(separator2);
+		Label user = new Label("user", session.getUsername());
+		add(user);
+		if(!session.isSignedIn()) {
+			logout.setVisible(false);
+			separator2.setVisible(false);
+			user.setVisible(false);
+		}
 	}
 }
