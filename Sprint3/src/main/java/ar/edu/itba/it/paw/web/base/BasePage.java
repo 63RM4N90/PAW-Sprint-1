@@ -7,13 +7,11 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.PropertyModel;
 
 import ar.edu.itba.it.paw.web.SocialCthulhuApp;
 import ar.edu.itba.it.paw.web.SocialCthulhuSession;
 import ar.edu.itba.it.paw.web.common.SearchPage;
-import ar.edu.itba.it.paw.web.user.RecoverPasswordPage;
 
 public class BasePage extends WebPage {
 	
@@ -49,7 +47,7 @@ public class BasePage extends WebPage {
 		/*session related info*/
 		
 		SocialCthulhuSession session = (SocialCthulhuSession) getSession();
-		Link logout = new Link<Void>("logout") {
+		Link<Void> logout = new Link<Void>("logout") {
 			private static final long serialVersionUID = 1L;
 			
 			@Override
