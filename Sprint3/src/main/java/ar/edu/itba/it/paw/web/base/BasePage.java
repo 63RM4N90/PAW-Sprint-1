@@ -8,14 +8,18 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.PropertyModel;
 
 import ar.edu.itba.it.paw.web.SocialCthulhuApp;
 import ar.edu.itba.it.paw.web.SocialCthulhuSession;
+import ar.edu.itba.it.paw.web.common.SearchPage;
+import ar.edu.itba.it.paw.web.user.RecoverPasswordPage;
 
 public class BasePage extends WebPage {
 	
 	private static final long serialVersionUID = 1L;
-
+	private String searchText;
+	
 	@SuppressWarnings("serial")
 	public BasePage() {
 		add(new Image("separator1", SocialCthulhuApp.SEPARTOR));
@@ -33,10 +37,11 @@ public class BasePage extends WebPage {
 
 			@Override
 			protected void onSubmit() {
-
+				SearchPage responsePage = new SearchPage(searchText);
+				setResponsePage(responsePage);
 			}
 		};
-		form.add(new TextField<String>("searchField"));
+		form.add(new TextField<String>("searchField", new PropertyModel<String>(this, "searchText")));
 		form.add(new Button("searchButton"));
 		add(form);
 		add(new Image("socialCthulhuTitle", SocialCthulhuApp.TITLE));

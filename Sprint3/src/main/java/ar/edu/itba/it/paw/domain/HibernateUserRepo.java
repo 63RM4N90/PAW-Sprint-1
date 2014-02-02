@@ -45,4 +45,10 @@ public class HibernateUserRepo extends AbstractHibernateRepo implements
 	public User getUser(int id) {
 		return super.get(User.class, id);
 	}
+
+	@Override
+	public List<User> getAll() {
+		List<User> result = find(" from User ");
+		return result;
+	}
 }

@@ -26,41 +26,46 @@ public class Top10HashtagsPanel extends Panel{
 	
 	@SpringBean
 	private HashtagRepo hashtags;
+	private int period = 30;
+	private Label emptyList;
 
 	public Top10HashtagsPanel(String id) {
 		super(id);
 		
-		add(new Label("emptyHashtagList"));
+		emptyList = new Label("emptyHashtagList", getString("no_hashtags"));
+		emptyList.setVisible(false);
+		add(emptyList);
 		add(new Link<Void>("1day") {
 
 			@Override
 			public void onClick() {
-				// TODO Auto-generated method stub
-				
+				period = 1;
 			}
 		});
 		add(new Link<Void>("1week") {
 
 			@Override
 			public void onClick() {
-				// TODO Auto-generated method stub
-				
+				period = 7;				
 			}
 		});
 		add(new Link<Void>("1month") {
 
 			@Override
 			public void onClick() {
-				// TODO Auto-generated method stub
-				
+				period = 30;				
 			}
 		});
 		add(new RefreshingView<RankedHashtag>("hashtag") {
 			@Override
 			protected Iterator<IModel<RankedHashtag>> getItemModels() {
 				List<IModel<RankedHashtag>> result = new ArrayList<IModel<RankedHashtag>>();
-				for (RankedHashtag h : hashtags.topHashtags(1)) {
+				List<RankedHashtag> hashtagList = hashtags.topHashtags(period);
+				for (RankedHashtag h : hashtagList) {
 					result.add(new EntityModel<RankedHashtag>(RankedHashtag.class, h));
+				}
+				if(result.isEmpty()) {
+					emptyList.setVisible(true);
 				}
 				return result.iterator();
 			}

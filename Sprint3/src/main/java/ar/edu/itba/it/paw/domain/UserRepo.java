@@ -13,4 +13,6 @@ public interface UserRepo {
 	public void registerUser(User user);
 	
 	public User getUser(int id);
+	
+	public List<User> getAll();
 }

@@ -3,6 +3,7 @@ package ar.edu.itba.it.paw.web.user;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -10,6 +11,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import ar.edu.itba.it.paw.domain.User;
 import ar.edu.itba.it.paw.domain.UserRepo;
 import ar.edu.itba.it.paw.web.base.BasePage;
+import ar.edu.itba.it.paw.web.common.LoginPage;
 
 public class ForgotPasswordPage extends BasePage {
 
@@ -40,5 +42,13 @@ public class ForgotPasswordPage extends BasePage {
 		form.add(new TextField<String>("userToRecover").setRequired(true));
 		add(form);
 		add(new Label("success", " "));
+		add(new Link<Void>("back") {
+
+			@Override
+			public void onClick() {
+				LoginPage responsePage = new LoginPage();
+				setResponsePage(responsePage);
+			}
+		});
 	}
 }

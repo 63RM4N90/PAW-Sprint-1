@@ -112,8 +112,7 @@ a, a :visited {
 }
 
 .column-3 table {
-	width: 25%;
-	position: absolute;
+	width: 100%;
 }
 
 
@@ -304,7 +303,11 @@ h5 {
  }
  
  form .recover {
- 	float: left;
+ 	float: right;
+ }
+ 
+ .forgot-password-form {
+ 	width:222px;
  }
  
  .recover-container {
@@ -458,4 +461,16 @@ li p {
 
 form {
 	margin:0;
+}
+
+.recoverPasswordForm {
+	width: 323px;
+}
+
+.back-button {
+	margin-left:100px;
+}
+
+form.form-horizontal .control-group.recover {
+	width: 117px;
 }
