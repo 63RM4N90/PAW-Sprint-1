@@ -1,7 +1,5 @@
 package ar.edu.itba.it.paw.web.base;
 
-import org.apache.wicket.markup.html.link.Link;
-
 import ar.edu.itba.it.paw.web.SocialCthulhuSession;
 import ar.edu.itba.it.paw.web.common.LoginPage;
 

@@ -39,7 +39,6 @@ public class HibernateHashtagRepo extends AbstractHibernateRepo implements
 		Calendar calendar = Calendar.getInstance();
 		calendar.roll(Calendar.DAY_OF_YEAR, -days);
 		Date from = calendar.getTime();
-
 		TreeMap<Integer, ArrayList<Hashtag>> top = rankedHashtags(from, to);
 
 		if (top != null) {
