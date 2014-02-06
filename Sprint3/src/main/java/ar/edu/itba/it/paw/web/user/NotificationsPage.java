@@ -15,24 +15,24 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import ar.edu.itba.it.paw.domain.EntityModel;
 import ar.edu.itba.it.paw.domain.Notification;
 import ar.edu.itba.it.paw.domain.UserRepo;
+import ar.edu.itba.it.paw.web.SocialCthulhuSession;
 import ar.edu.itba.it.paw.web.base.SecuredPage;
 
 public class NotificationsPage extends SecuredPage {
 
 	private static final long serialVersionUID = 1L;
-	private transient int userId;
 	@SpringBean
 	private UserRepo users;
 
-	public NotificationsPage(int user) {
-		userId = user;
+	public NotificationsPage() {
 		add(new RefreshingView<Notification>("notification") {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected Iterator<IModel<Notification>> getItemModels() {
 				List<IModel<Notification>> ans = new ArrayList<IModel<Notification>>();
-				List<Notification> notifications = users.getUser(userId)
+				List<Notification> notifications = users.getUser(
+						new SocialCthulhuSession(getRequest()).getId())
 						.getNotifications();
 				for (Notification n : notifications) {
 					ans.add(new EntityModel<Notification>(Notification.class, n));

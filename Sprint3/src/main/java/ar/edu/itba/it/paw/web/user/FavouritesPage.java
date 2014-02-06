@@ -18,9 +18,9 @@ import ar.edu.itba.it.paw.domain.EntityModel;
 import ar.edu.itba.it.paw.domain.User;
 import ar.edu.itba.it.paw.domain.UserRepo;
 import ar.edu.itba.it.paw.web.SocialCthulhuSession;
-import ar.edu.itba.it.paw.web.base.BasePage;
+import ar.edu.itba.it.paw.web.base.SecuredPage;
 
-public class FavouritesPage extends BasePage {
+public class FavouritesPage extends SecuredPage {
 
 	private static final long serialVersionUID = 1L;
 	private transient User user;
