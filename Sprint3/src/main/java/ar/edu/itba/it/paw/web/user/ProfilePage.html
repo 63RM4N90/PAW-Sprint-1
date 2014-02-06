@@ -5,7 +5,7 @@
 			<div class="vertical-container">
 				<div class="info-column profile-column">
 					<div class="user-info">
-						<img class="profile-picture" wicket:id="profilePicture"/>
+					<img wicket:id="profilePicture" class="profile-picture">
 						<h3 wicket:id="profileUsername">
 							username
 						</h3>
@@ -33,7 +33,7 @@
 								</p>
 							</div>
 						</a>
-						<a wicket:id="followigLink">
+						<a wicket:id="followingLink">
 							<div class="following">
 								<p wicket:id="followingAmount">
 									0
@@ -83,7 +83,7 @@
 						</form>
 					</div>
 					<ul>
-						<li wicket:id="comment">
+						<li wicket:id="wrapperComment">
 							<div class="comment pull-right">
 								<p wicket:id="transformedComment">comment</p>
 								<div class="comment-reference">

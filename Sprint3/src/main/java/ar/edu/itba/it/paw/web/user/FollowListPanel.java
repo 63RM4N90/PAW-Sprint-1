@@ -24,7 +24,7 @@ public abstract class FollowListPanel extends Panel {
 	public FollowListPanel(String id, int userId) {
 		super(id);
 		this.userId = userId;
-		add(new RefreshingView<User>("user") {
+		add(new RefreshingView<User>("follow") {
 			@Override
 			protected Iterator<IModel<User>> getItemModels() {
 				List<IModel<User>> result = new ArrayList<IModel<User>>();

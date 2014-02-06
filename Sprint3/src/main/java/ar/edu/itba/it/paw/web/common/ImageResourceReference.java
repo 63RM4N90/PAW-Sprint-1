@@ -9,7 +9,7 @@ public class ImageResourceReference extends ResourceReference{
 	private byte[] img;
 	
 	 public ImageResourceReference(byte[] img) {
-	        super(ImageResourceReference.class, "imagesTuiter");
+	        super(ImageResourceReference.class, "Social_cthulhus_horocrux_" + System.currentTimeMillis());
 	        this.img = img;
 	    }
 

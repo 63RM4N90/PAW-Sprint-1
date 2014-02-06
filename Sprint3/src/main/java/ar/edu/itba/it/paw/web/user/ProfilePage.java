@@ -31,6 +31,7 @@ public class ProfilePage extends BasePage {
 	private static final long serialVersionUID = 1L;
 	@SpringBean
 	private UserRepo users;
+	private String commentTextarea;
 
 	@SuppressWarnings("serial")
 	public ProfilePage(final int userId)  {
@@ -50,59 +51,52 @@ public class ProfilePage extends BasePage {
 
 			@Override
 			public void onClick() {
-				// TODO Auto-generated method stub
-				
+				setResponsePage(new FollowersPage(userId));
 			}
-		}).add(new Label("followersAmount", new PropertyModel<String>(userModel, "followers.length")));
+		}.add(new Label("followersAmount", new PropertyModel<String>(userModel, "followers.size"))));
 		add(new Link<String>("followingLink") {
 
 			@Override
 			public void onClick() {
-				// TODO Auto-generated method stub
-				
+				setResponsePage(new FollowingPage(userId));
 			}
-		}).add(new Label("followingAmount", new PropertyModel<String>(userModel, "following.length")));
+		}.add(new Label("followingAmount", new PropertyModel<String>(userModel, "following.size"))));
 		add(new Link<String>("notificationsLink") {
 
 			@Override
 			public void onClick() {
-				// TODO Auto-generated method stub
-				
+				setResponsePage(new NotificationsPage());
 			}
-		}).add(new Label("notifications", new PropertyModel<String>(userModel, "notifications.length")));
+		}.add(new Label("notifications", new PropertyModel<String>(userModel, "notifications.size"))));
 		add(new Link<String>("suggestedUsersLink") {
 
 			@Override
 			public void onClick() {
-				// TODO Auto-generated method stub
-				
+				setResponsePage(new SuggestedFriendsPage());
 			}
-		}).add(new Image("suggestedUsers", SocialCthulhuApp.SUGGESTED_USERS));
+		}.add(new Image("suggestedUsers", SocialCthulhuApp.SUGGESTED_USERS)));
 
 		add(new Link<String>("favouritesLink") {
 
 			@Override
 			public void onClick() {
-				// TODO Auto-generated method stub
-				
+				setResponsePage(new FavouritesPage());
 			}
-		}).add(new Image("favourites", SocialCthulhuApp.FAVOURITES));
+		}.add(new Image("favourites", SocialCthulhuApp.FAVOURITES)));
 		add(new Link<String>("editProfileLink") {
 
 			@Override
 			public void onClick() {
-				// TODO Auto-generated method stub
-				
+				setResponsePage(new EditProfilePage());
 			}
-		}).add(new Label("edit", getString("edit")));
+		}.add(new Label("edit", getString("edit"))));
 		add(new Link<String>("followLink") {
 
 			@Override
 			public void onClick() {
-				// TODO Auto-generated method stub
-				
+					// TODO Auto-generated method stub				
 			}
-		}).add(new Label("follow", getString("follow")));
+		}.add(new Label("follow", getString("follow"))));
 		add(new Link<String>("unfollowLink") {
 
 			@Override
@@ -110,7 +104,7 @@ public class ProfilePage extends BasePage {
 				// TODO Auto-generated method stub
 				
 			}
-		}).add(new Label("unfollow", getString("unfollow")));
+		}.add(new Label("unfollow", getString("unfollow"))));
 		add(new FeedbackPanel("errorPanel"));
 		Form<ProfilePage> form = new Form<ProfilePage>(
 				"commentForm",
@@ -122,8 +116,8 @@ public class ProfilePage extends BasePage {
 
 			}
 		};
-		form.add(new TextArea<String>("commentTextArea").setRequired(true));
-		
+		form.add(new TextArea<String>("commentTextarea").setRequired(true));
+		add(form);
 		add(new RefreshingView<CommentWrapper>("wrapperComment") {
 			@Override
 			protected Iterator<IModel<CommentWrapper>> getItemModels() {
@@ -164,7 +158,7 @@ public class ProfilePage extends BasePage {
 				};
 				addFavouriteLink.add(new Label("addFavourite", getString("add_favourite")));
 				item.add(addFavouriteLink);
-				Link<String> recuthulhuLink = new Link<String>("recuthulhuLink") {
+				Link<String> recuthulhuLink = new Link<String>("recthulhuLink") {
 
 					@Override
 					public void onClick() {
@@ -179,8 +173,7 @@ public class ProfilePage extends BasePage {
 
 					@Override
 					public void onClick() {
-						// TODO Auto-generated method stub
-						
+//						setResponsePage(new ProfilePage(item.getModelObject().getComment().getAuthor().getId()));
 					}
 					
 				};
@@ -190,8 +183,7 @@ public class ProfilePage extends BasePage {
 
 					@Override
 					public void onClick() {
-						// TODO Auto-generated method stub
-						
+//						setResponsePage(new ProfilePage(item.getModelObject().getComment().getOriginalAuthor().getId()));						
 					}
 					
 				};
