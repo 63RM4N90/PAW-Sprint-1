@@ -9,10 +9,12 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+
 import ar.edu.itba.it.paw.domain.UserRepo;
 import ar.edu.itba.it.paw.web.SocialCthulhuSession;
 import ar.edu.itba.it.paw.web.base.BasePage;
 import ar.edu.itba.it.paw.web.user.ForgotPasswordPage;
+import ar.edu.itba.it.paw.web.user.ProfilePage;
 
 public class LoginPage extends BasePage {
 	
@@ -35,9 +37,8 @@ public class LoginPage extends BasePage {
 				SocialCthulhuSession session = SocialCthulhuSession.get();
 
 				if (session.signIn(username, password, users)) {
-					if (!continueToOriginalDestination()) {
-						setResponsePage(getApplication().getHomePage());
-					}
+					continueToOriginalDestination();
+					setResponsePage(new ProfilePage(users.getUser(session.getUsername()).getId()));
 				} else {
 					error(getString("invalidCredentials"));
 				}

@@ -25,6 +25,9 @@ public class SocialCthulhuApp extends WebApplication {
 	public static final ResourceReference HOME = new PackageResourceReference(SocialCthulhuApp.class, "resources/home.png");
 	public static final ResourceReference TOP_10_HASHTAGS = new PackageResourceReference(SocialCthulhuApp.class, "resources/t10h.png");
 	public static final ResourceReference TITLE = new PackageResourceReference(SocialCthulhuApp.class, "resources/title.png");
+	public static final ResourceReference SUGGESTED_USERS = new PackageResourceReference(SocialCthulhuApp.class, "resources/suggest_friends.png");
+	public static final ResourceReference FAVOURITES = new PackageResourceReference(SocialCthulhuApp.class, "resources/Favourites.png");
+	public static final ResourceReference DEFAULT_IMAGE = new PackageResourceReference(SocialCthulhuApp.class, "resources/default_image.png");
 
 	
 	@Autowired

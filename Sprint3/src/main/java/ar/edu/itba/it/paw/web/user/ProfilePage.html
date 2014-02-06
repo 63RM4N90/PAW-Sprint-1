@@ -1,0 +1,108 @@
+<html>
+	<body>
+		<wicket:extend>
+		
+			<div class="vertical-container">
+				<div class="info-column profile-column">
+					<div class="user-info">
+						<img class="profile-picture" wicket:id="profilePicture"/>
+						<h3 wicket:id="profileUsername">
+							username
+						</h3>
+						<h6><wicket:message key="profileName"/></h6>
+						<h5 wicket:id="profileName">
+							name
+						</h5>
+						<h6><wicket:message key="profileSurname"/></h6>
+						<h5 wicket:id="profileSurname">
+							surname
+						</h5>
+						<h6><wicket:message key="profileDescription"/></h6>
+						<p wicket:id="profileDescription">
+							description
+						</p>
+						<h6><wicket:message key="profileVisits"/></h6>
+						<p wicket:id="profileVisits">
+							visits
+						</p>
+						
+						<a wicket:id="followersLink">
+							<div class="followers">
+								<p wicket:id="followersAmount">
+									0
+								</p>
+							</div>
+						</a>
+						<a wicket:id="followigLink">
+							<div class="following">
+								<p wicket:id="followingAmount">
+									0
+								</p>
+							</div>
+						</a>
+						<a wicket:id="notificationsLink">
+							<div class="notifications">
+								<p wicket:id="notifications">
+									0
+								</p>
+							</div>
+						</a>
+						<a wicket:id="suggestedUsersLink">
+							<img wicket:id="suggestedUsers"/>
+						</a>
+						<a wicket:id="favouritesLink">
+							<img wicket:id="favourites"/>
+						</a>
+					</div>
+					<a wicket:id="editProfileLink">
+						<button class="btn-inverse search-button" wicket:id="edit">
+							Edit
+						</button>
+					</a>
+					<a wicket:id="followLink">
+						<button class="btn-inverse search-button" wicket:id="follow"> Follow </button>
+					</a>
+					<a wicket:id="unfollowLink">
+						<button class="btn-inverse search-button" wicket:id="unfollow"> Unfollow </button>
+					</a>
+				</div>
+			
+				<div class="comments-column profile-column">
+					<div wicket:id="errorPanel" class="error" />
+					<div class="comment-creator-area">
+						<form wicket:id="commentForm">
+							<div class="form-area">
+								<textarea wicket:id="commentTextarea" class="comment-area" rows="5" cols="40"
+									placeholder="you have 140 characters to write down your sins..."
+									name="comment"></textarea>
+							</div>
+							<div class="form-buttons">
+								<input type="submit" class="button profile-button" name="submit"
+									value="Post" />
+							</div>
+						</form>
+					</div>
+					<ul>
+						<li wicket:id="comment">
+							<div class="comment pull-right">
+								<p wicket:id="transformedComment">comment</p>
+								<div class="comment-reference">
+									<a wicket:id="removeFavouriteLink"><span wicket:id="removeFavourite">remove favourite</span></a>
+									<a wicket:id="addFavouriteLink"><span wicket:id="addFavourite">add favourite</span></a>
+									<a wicket:id="recthulhuLink"><span wicket:id="recthulhu">Recuthulu</span></a>
+									<i><wicket:message key="recthuled_from"/></i>&nbsp;
+									<a wicket:id="commentUsernameLink"><span wicket:id="comment.author.username">username</span></a>
+									<i><wicket:message key="created_by"/></i>&nbsp;
+									<a wicket:id="authorUsernameLink"><span wicket:id="comment.originalAuthor.username">author</span></a>
+									| <i><span wicket:id="comment.date">date</span></i> |
+									<a wicket:id="deleteCommentLink"><span wicket:id="deleteComment">Delete</span></a>								
+								</div>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+
+		</wicket:extend>
+	</body>
+</html>
