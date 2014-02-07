@@ -16,6 +16,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import ar.edu.itba.it.paw.domain.User;
 import ar.edu.itba.it.paw.domain.UserRepo;
+import ar.edu.itba.it.paw.web.SocialCthulhuSession;
 import ar.edu.itba.it.paw.web.base.SecuredPage;
 
 public class EditProfilePage extends SecuredPage {
@@ -39,7 +40,8 @@ public class EditProfilePage extends SecuredPage {
 	@SpringBean
 	private UserRepo users;
 
-	public EditProfilePage(String username) {
+	public EditProfilePage() {
+		String username = new SocialCthulhuSession(getRequest()).getUsername();
 		user = users.getUser(username);
 		name = user.getName();
 		surname = user.getSurname();

@@ -29,6 +29,8 @@ public class SearchPage extends BasePage{
 		search = searchText;
 		add(new Label("search", new PropertyModel<String>(this, "search")));
 		add(new RefreshingView<User>("userResult") {
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected Iterator<IModel<User>> getItemModels() {
 				List<IModel<User>> result = new ArrayList<IModel<User>>();
@@ -47,6 +49,7 @@ public class SearchPage extends BasePage{
 			@Override
 			protected void populateItem(Item<User> item) {
 				Link<String> usernameLink = new Link<String>("usernameLink") {
+					private static final long serialVersionUID = 1L;
 
 					@Override
 					public void onClick() {

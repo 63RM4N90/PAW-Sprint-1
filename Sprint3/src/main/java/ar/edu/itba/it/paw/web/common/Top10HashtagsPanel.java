@@ -76,7 +76,6 @@ public class Top10HashtagsPanel extends Panel{
 				item.add(new Label("rank", new PropertyModel<String>(item.getModel(), "rank")));
 			}
 		});
-		
 	}
 
 }

@@ -1,0 +1,29 @@
+<html>
+	<body>
+		<wicket:extend>
+			<div class="vertical-container">
+				<h2>
+					<span wicket:id="username" /><span wicket:id="username_suffix">'s
+						favourites</span>
+				</h2>
+	
+				<br>
+				<ul style="padding: 0;">
+					<li wicket:id="favourite_cthulhu">
+						<div class="comment">
+							<p wicket:id="comment_text">Comment</p>
+							<div class="comment-reference">
+								<a wicket:id="unfavourite"><span wicket:id="unfavourite_text">Remove
+										favourite</span></a> <a wicket:id="recthulhu">Recuthulu</a> <i
+									wicket:id="created_or_recthulued_from">Author: <a
+									wicket:id="author"><span wicket:id="author_username"></span></a></i>
+								| <i wicket:id="creation_date">Creation date</i> | <a
+									wicket:id="delete_comment">Delete</a>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</wicket:extend>
+	</body>
+</html>

@@ -65,9 +65,8 @@ public class RegistrationPage extends BasePage {
 					users.registerUser(newUser);
 					SocialCthulhuSession session = SocialCthulhuSession.get();
 					session.signIn(username, password, users);
-					if (!continueToOriginalDestination()) {
-						setResponsePage(getApplication().getHomePage());
-					}
+					continueToOriginalDestination();
+					setResponsePage(getApplication().getHomePage());
 				} else {
 					error(getString("password_nonmatch"));
 				}
@@ -127,7 +126,6 @@ public class RegistrationPage extends BasePage {
 		form.add(new TextField<String>("description").setRequired(true));
 		form.add(new TextField<String>("secretQuestion").setRequired(true));
 		form.add(new TextField<String>("secretAnswer").setRequired(true));
-		//form.add();
 		form.add(new BookmarkablePageLink<Void>("alreadyRegistered", LoginPage.class));
 		form.add(new Button("register", new ResourceModel("register")));
 		add(form);
