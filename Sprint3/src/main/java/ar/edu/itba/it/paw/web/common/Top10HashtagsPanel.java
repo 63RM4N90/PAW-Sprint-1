@@ -28,6 +28,7 @@ public class Top10HashtagsPanel extends Panel{
 	public Top10HashtagsPanel(String id) {
 		super(id);
 		
+		
 		emptyList = new Label("emptyHashtagList", getString("no_hashtags"));
 		emptyList.setVisible(false);
 		add(emptyList);
@@ -60,6 +61,8 @@ public class Top10HashtagsPanel extends Panel{
 				for (RankedHashtag h : hashtagList) {
 					result.add(new EntityModel<RankedHashtag>(RankedHashtag.class, h));
 				}
+				
+				
 				if(result.isEmpty()) {
 					emptyList.setVisible(true);
 				}

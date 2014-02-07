@@ -1,0 +1,31 @@
+<html>
+	<body>
+		<wicket:panel>
+		
+			<h3 wicket:message key="top10hashtagsTitle">
+				TOP 10 Hashtags
+			</h3>	
+			<a wicket:id="1day">1 day</a> |
+			<a wicket:id="1week">1 week</a> |
+			<a wicket:id="1month">1 month</a>
+			<table>
+				<thead>
+					<tr>
+						<th><wicket:message key="hashtag">hashtag</wicket:message></th>
+						<th><wicket:message key="creator">creator</wicket:message></th>
+						<th><wicket:message key="rank">rank</wicket:message></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr wicket:id="hashtag">
+						<td><a wicket:id="name">#hashtag</a></td>
+						<td><a wicket:id="username">user</a></td>
+						<td><label wicket:id="rank">n times</label></td>
+					</tr>
+				</tbody>
+			</table>
+			<label wicket:id="emptyHashtagList">no htags</label>
+			
+		</wicket:panel>
+	</body>
+</html>

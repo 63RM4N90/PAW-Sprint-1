@@ -1,6 +1,6 @@
 package ar.edu.itba.it.paw.domain;
 
-public class RankedHashtag {
+public class RankedHashtag extends PersistentEntity{
 
 	private Hashtag hashtag;
 	private int rank;
@@ -16,5 +16,9 @@ public class RankedHashtag {
 
 	public int getRank() {
 		return rank;
+	}
+	
+	public Integer getId(){
+		return hashtag.getId();
 	}
 }
