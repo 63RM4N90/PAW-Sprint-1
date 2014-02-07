@@ -1,6 +1,8 @@
 package ar.edu.itba.it.paw.web.user;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.InvalidPropertiesFormatException;
 import java.util.Iterator;
 import java.util.List;
 
@@ -77,7 +79,15 @@ public class ProfilePage extends BasePage {
 
 			@Override
 			public void onClick() {
-//				setResponsePage(new SuggestedFriendsPage());
+				try {
+					setResponsePage(new SuggestedFriendsPage());
+				} catch (InvalidPropertiesFormatException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		};
 		suggestedUsersLink.add(new Image("suggestedUsers", SocialCthulhuApp.SUGGESTED_USERS));
@@ -86,7 +96,7 @@ public class ProfilePage extends BasePage {
 
 			@Override
 			public void onClick() {
-				setResponsePage(new FavouritesPage());
+//				setResponsePage(new FavouritesPage());
 			}
 		}.add(new Image("favourites", SocialCthulhuApp.FAVOURITES)));
 		

@@ -21,6 +21,7 @@ import ar.edu.itba.it.paw.web.base.SecuredPage;
 public class NotificationsPage extends SecuredPage {
 
 	private static final long serialVersionUID = 1L;
+	private transient List<Notification> notifications;
 	@SpringBean
 	private UserRepo users;
 
@@ -31,8 +32,8 @@ public class NotificationsPage extends SecuredPage {
 			@Override
 			protected Iterator<IModel<Notification>> getItemModels() {
 				List<IModel<Notification>> ans = new ArrayList<IModel<Notification>>();
-				List<Notification> notifications = users.getUser(
-						new SocialCthulhuSession(getRequest()).getId())
+				notifications = users.getUser(
+						SocialCthulhuSession.get().getUsername())
 						.getNotifications();
 				for (Notification n : notifications) {
 					ans.add(new EntityModel<Notification>(Notification.class, n));
@@ -58,10 +59,15 @@ public class NotificationsPage extends SecuredPage {
 								"notification")));
 				item.add(new Label("notification_date",
 						new PropertyModel<String>(item.getModel(), "date")));
+				item.add(new Label("notification_by", getString("notification")));
 				item.add(notificatorLink);
 			}
 		});
 		add(new Label("notifications_title", getString("notifications_title")));
-		add(new Label("notification_by", getString("notification_by")));
+		Label noNotifications = new Label("no_notifications", getString("no_notifications"));
+		if (notifications != null && !notifications.isEmpty()) {
+			noNotifications.setVisible(false);
+		}
+		add(noNotifications);
 	}
 }
