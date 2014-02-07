@@ -37,7 +37,7 @@ public class SuggestedFriendsPage extends SecuredPage {
 	private static final int SUGGESTED_FRIEND_AMOUNT = 3;
 	
 	public SuggestedFriendsPage() throws InvalidPropertiesFormatException, IOException {
-		User user = users.getUser(new SocialCthulhuSession(getRequest()).getId());
+		User user = users.getUser(SocialCthulhuSession.get().getUsername());
 		suggestedFriends = getSuggestedFriends(user);
 		
 		add(new RefreshingView<User>("suggested_friend") {
@@ -58,16 +58,19 @@ public class SuggestedFriendsPage extends SecuredPage {
 
 					@Override
 					public void onClick() {
-						// TODO Auto-generated method stub
-						
+						// TODO Auto-generated method stub		
 					}
-					
 				};
 				cthuluerLink.add(new Label("cthulhuer_username", new PropertyModel<String>(item.getModel(), "username")));
 				item.add(cthuluerLink);
 				item.add(new Label("suggested_user_title", getString("suggested_user_title")));
 			}
 		});
+		Label noSuggestedFriends = new Label("no_suggested_friends", getString("no_suggested_friends"));
+		if (suggestedFriends != null && !suggestedFriends.isEmpty()) {
+			noSuggestedFriends.setVisible(false);
+		}
+		add(noSuggestedFriends);
 		add(new Label("suggested_friends_title", getString("suggested_friends_title")));
 	}
 	

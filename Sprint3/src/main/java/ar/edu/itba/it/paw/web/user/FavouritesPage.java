@@ -24,19 +24,20 @@ public class FavouritesPage extends SecuredPage {
 
 	private static final long serialVersionUID = 1L;
 	private transient User user;
+	private transient Set<Comment> favourites;
 	@SpringBean
 	private UserRepo users;
 
 	public FavouritesPage() {
-		user = users.getUser(new SocialCthulhuSession(getRequest()).getId());
+		user = users.getUser(SocialCthulhuSession.get().getUsername());
 		add(new RefreshingView<Comment>("favourite_cthulhu") {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected Iterator<IModel<Comment>> getItemModels() {
 				List<IModel<Comment>> ans = new ArrayList<IModel<Comment>>();
-				Set<Comment> comments = user.getFavourites();
-				for (Comment c : comments) {
+				favourites = user.getFavourites();
+				for (Comment c : favourites) {
 					ans.add(new EntityModel<Comment>(Comment.class, c));
 				}
 				return ans.iterator();
@@ -93,6 +94,11 @@ public class FavouritesPage extends SecuredPage {
 				item.add(unfavouriteLink);
 			}
 		});
+		Label noFavourites = new Label("no_favourites", getString("no_favourites"));
+		if (favourites != null && !favourites.isEmpty()) {
+			noFavourites.setVisible(false);
+		}
+		add(noFavourites);
 		add(new Label("username", user.getUsername()));
 		add(new Label("username_suffix", getString("username_suffix")));
 	}
