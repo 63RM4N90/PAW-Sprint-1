@@ -1,0 +1,59 @@
+<html>
+	<body>
+		<wicket:extend>
+			<div class="vertical-container">
+				<h2>Edit Profile</h2>
+				<div wicket:id="errorPanel" class="error" />
+				<form wicket:id="editProfileForm" class="form-horizontal registration-form">
+					<div class="control-group">
+						<label class="control-label registration-label" for="name">Name:</label>
+						<div class="controls registration-field">
+							<input type="text" wicket:id="name" />
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label registration-label" for="surname">Surname:</label>
+						<div class="controls registration-field">
+							<input type="text" wicket:id="surname" />
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label registration-label" for="password">Password:</label>
+						<div class="controls registration-field">
+							<input type="password" wicket:id="password" />
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label registration-label" for="confirm">Confirm
+							password:</label>
+						<div class="controls registration-field">
+							<input type="password" wicket:id="confirmPassword" />
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label registration-label" for="description">Description:</label>
+						<div class="controls registration-field">
+							<input type="text" wicket:id="description" />
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label registration-label" for="description">Privacy:</label>
+						<div class="controls registration-field">
+							<span wicket:id="privateUser"/>
+						</div>
+					</div>
+<!-- 					<div class="control-group"> -->
+<!-- 						<label for="picture">Picture:</label> -->
+<!-- 						<div class="controls registration-field"> -->
+<!-- 							<input type="file" name="picture" /> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+					<div class="form-buttons">
+						<input type="submit" class="btn-inverse pull-right cthulhu-button"
+						 	wicket:id="submit" value="Save" />
+					</div>
+				</form>
+			</div>
+		</wicket:extend>
+	</body>
+</html>

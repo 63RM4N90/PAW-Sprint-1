@@ -1,0 +1,21 @@
+<html>
+	<body>
+		<wicket:extend>
+		
+			<div class="vertical-container">
+				<h2>
+					<wicket:message key="searchTitle">Results for "</wicket:message><span wicket:id="search"/>"
+				</h2>
+				<ul>
+					<li class="search-result" wicket:id="userResult">
+						<a wicket:id="usernameLink"><span wicket:id="username">name</span></a><br>
+						<span wicket:id="name">name</span>&nbsp;
+						<span><span wicket:id="surname">surname</span> | </span>
+						<span><wicket:message key="registeredOn"> Registered on </wicket:message><span wicket:id="registrationDate"/></span>
+					</li>
+				</ul>
+			</div>
+			
+		</wicket:extend>
+	</body>
+</html>
