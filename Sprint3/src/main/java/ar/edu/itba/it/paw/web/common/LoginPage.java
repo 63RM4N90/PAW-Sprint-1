@@ -27,6 +27,10 @@ public class LoginPage extends BasePage {
 	private transient String password;
 
 	public LoginPage() {
+		if(((SocialCthulhuSession)getSession()).isSignedIn()) {
+			SocialCthulhuSession session = SocialCthulhuSession.get();
+			setResponsePage(new ProfilePage(users.getUser(session.getUsername()).getId()));
+		}
 		add(new FeedbackPanel("feedback"));
 		Form<LoginPage> form = new Form<LoginPage>("loginForm", new CompoundPropertyModel<LoginPage>(this)) {
 			

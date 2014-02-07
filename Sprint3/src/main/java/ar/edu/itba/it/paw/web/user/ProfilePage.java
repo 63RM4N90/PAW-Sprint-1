@@ -22,6 +22,7 @@ import ar.edu.itba.it.paw.domain.EntityModel;
 import ar.edu.itba.it.paw.domain.User;
 import ar.edu.itba.it.paw.domain.UserRepo;
 import ar.edu.itba.it.paw.web.SocialCthulhuApp;
+import ar.edu.itba.it.paw.web.SocialCthulhuSession;
 import ar.edu.itba.it.paw.web.base.BasePage;
 import ar.edu.itba.it.paw.web.common.CommentWrapper;
 import ar.edu.itba.it.paw.web.common.ImageResourceReference;
@@ -61,21 +62,26 @@ public class ProfilePage extends BasePage {
 				setResponsePage(new FollowingPage(userId));
 			}
 		}.add(new Label("followingAmount", new PropertyModel<String>(userModel, "following.size"))));
-		add(new Link<String>("notificationsLink") {
+		
+		Link notificationsLink =new Link<String>("notificationsLink") {
 
 			@Override
 			public void onClick() {
 				setResponsePage(new NotificationsPage());
 			}
-		}.add(new Label("notifications", new PropertyModel<String>(userModel, "notifications.size"))));
-		add(new Link<String>("suggestedUsersLink") {
+		};
+		notificationsLink.add(new Label("notifications", new PropertyModel<String>(userModel, "notifications.size")));
+
+		add(notificationsLink);
+		Link suggestedUsersLink = new Link<String>("suggestedUsersLink") {
 
 			@Override
 			public void onClick() {
-				setResponsePage(new SuggestedFriendsPage());
+//				setResponsePage(new SuggestedFriendsPage());
 			}
-		}.add(new Image("suggestedUsers", SocialCthulhuApp.SUGGESTED_USERS)));
-
+		};
+		suggestedUsersLink.add(new Image("suggestedUsers", SocialCthulhuApp.SUGGESTED_USERS));
+		add(suggestedUsersLink);
 		add(new Link<String>("favouritesLink") {
 
 			@Override
@@ -83,29 +89,37 @@ public class ProfilePage extends BasePage {
 				setResponsePage(new FavouritesPage());
 			}
 		}.add(new Image("favourites", SocialCthulhuApp.FAVOURITES)));
-		add(new Link<String>("editProfileLink") {
+		
+		Link editProfileLink = new Link<String>("editProfileLink") {
 
 			@Override
 			public void onClick() {
-				setResponsePage(new EditProfilePage());
+//				setResponsePage(new EditProfilePage());
 			}
-		}.add(new Label("edit", getString("edit"))));
-		add(new Link<String>("followLink") {
+		};
+		editProfileLink.add(new Label("edit", getString("edit")));
+		add(editProfileLink);
+		Link followLink = new Link<String>("followLink") {
 
 			@Override
 			public void onClick() {
 					// TODO Auto-generated method stub				
 			}
-		}.add(new Label("follow", getString("follow"))));
-		add(new Link<String>("unfollowLink") {
+		};
+		followLink.add(new Label("follow", getString("follow")));
+		add(followLink);
+		Link unfollowLink = new Link<String>("unfollowLink") {
 
 			@Override
 			public void onClick() {
 				// TODO Auto-generated method stub
 				
 			}
-		}.add(new Label("unfollow", getString("unfollow"))));
-		add(new FeedbackPanel("errorPanel"));
+		};
+		unfollowLink.add(new Label("unfollow", getString("unfollow")));
+		add(unfollowLink);
+		FeedbackPanel errorPanel = new FeedbackPanel("errorPanel");
+		add(errorPanel);
 		Form<ProfilePage> form = new Form<ProfilePage>(
 				"commentForm",
 				new CompoundPropertyModel<ProfilePage>(this)) {
@@ -205,6 +219,23 @@ public class ProfilePage extends BasePage {
 				item.add(deleteCommentLink);
 			}
 		});
+		
+		if(profileUser.getUsername().equals(((SocialCthulhuSession)getSession()).getUsername())) {
+			followLink.setVisible(false);
+			unfollowLink.setVisible(false);
+		} else {
+			notificationsLink.setVisible(false);
+			suggestedUsersLink.setVisible(false);
+			form.setVisible(false);
+			errorPanel.setVisible(false);
+			editProfileLink.setVisible(false);
+			
+			if(users.getUser(((SocialCthulhuSession)getSession()).getUsername()).getFollowing().contains(profileUser)){
+				followLink.setVisible(false);
+			} else {
+				unfollowLink.setVisible(false);
+			}
+		}
 		
 	}
 	

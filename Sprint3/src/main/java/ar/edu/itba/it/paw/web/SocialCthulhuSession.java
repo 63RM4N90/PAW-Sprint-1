@@ -11,6 +11,7 @@ public class SocialCthulhuSession extends WebSession {
 
 	private static final long serialVersionUID = 1L;
 	private String username;
+	private int userId;
 
 	public static SocialCthulhuSession get() {
 		return (SocialCthulhuSession) Session.get();
@@ -23,11 +24,15 @@ public class SocialCthulhuSession extends WebSession {
 	public String getUsername() {
 		return username;
 	}
+	public int getUserId() {
+		return userId;
+	}
 
 	public boolean signIn(String username, String password, UserRepo users) {
 		User user = users.getUser(username);
 		if (user != null && user.checkPassword(password)) {
 			this.username = username;
+			this.userId = user.getId();
 			return true;
 		}
 		return false;
