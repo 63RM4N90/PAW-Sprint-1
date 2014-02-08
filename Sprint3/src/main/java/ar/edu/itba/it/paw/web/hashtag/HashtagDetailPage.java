@@ -1,55 +1,71 @@
 package ar.edu.itba.it.paw.web.hashtag;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.repeater.Item;
-import org.apache.wicket.markup.repeater.RefreshingView;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.PropertyListView;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import ar.edu.itba.it.paw.domain.Comment;
-import ar.edu.itba.it.paw.domain.EntityModel;
 import ar.edu.itba.it.paw.domain.Hashtag;
+import ar.edu.itba.it.paw.domain.User;
+import ar.edu.itba.it.paw.domain.UserRepo;
+import ar.edu.itba.it.paw.web.SocialCthulhuSession;
 import ar.edu.itba.it.paw.web.base.BasePage;
 
 public class HashtagDetailPage extends BasePage {
 
 	private static final long serialVersionUID = 1L;
 	private transient Hashtag cthulhu;
+	private transient User user;
+	@SpringBean
+	private transient UserRepo users;
 
-	public HashtagDetailPage(Hashtag hashtag) {  
+	public HashtagDetailPage(Hashtag hashtag) {
+		user = users.getUser(SocialCthulhuSession.get().getUsername());
 		add(new Label("cthulhuName", hashtag.getHashtag()));
 		add(new Label("cthulhuAuthor", hashtag.getAuthor().getName()));
 		add(new Label("cthulhuCreationDate", hashtag.getDate().toString()));
 		cthulhu = hashtag;
-		
-		add(new RefreshingView<Comment>("cthulhu") {
+
+		final IModel<List<Comment>> comments = new LoadableDetachableModel<List<Comment>>() {
 			private static final long serialVersionUID = 1L;
-			@Override
-			protected Iterator<IModel<Comment>> getItemModels() {
-				List<IModel<Comment>> comments = new ArrayList<IModel<Comment>>();
-				Set<Comment> commentsHashtag = cthulhu.getComments();
-				for (Comment c : commentsHashtag) {
-					comments.add(new EntityModel<Comment>(Comment.class, c));
-				}
-				return comments.iterator();
-			}
 
 			@Override
-			protected void populateItem(Item<Comment> item) {
-				Link<String> favouriteLink = new Link<String>("favourite") {
+			protected List<Comment> load() {
+				List<Comment> comments = new ArrayList<Comment>();
+				Set<Comment> commentsHashtag = cthulhu.getComments();
+				for (Comment c : commentsHashtag) {
+					comments.add(c);
+				}
+				return comments;
+			}
+		};
+
+		add(new PropertyListView<Comment>("cthulhu", comments) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void populateItem(ListItem<Comment> item) {
+				
+				Link<Comment> favouriteLink = new Link<Comment>("favourite",
+						item.getModel()) {
 					private static final long serialVersionUID = 1L;
 
 					@Override
 					public void onClick() {
+						Comment comment = getModelObject();
+						user.addFavourite(comment);
 					}
 				};
-				
+
 				Link<String> recthulhuLink = new Link<String>("recthulhu") {
 					private static final long serialVersionUID = 1L;
 
@@ -57,15 +73,16 @@ public class HashtagDetailPage extends BasePage {
 					public void onClick() {
 					}
 				};
-				
-				Link<String> recthulhuedFromLink = new Link<String>("recthulhuedFrom") {
+
+				Link<String> recthulhuedFromLink = new Link<String>(
+						"recthulhuedFrom") {
 					private static final long serialVersionUID = 1L;
 
 					@Override
 					public void onClick() {
 					}
 				};
-				
+
 				Link<String> createdByLink = new Link<String>("createdBy") {
 					private static final long serialVersionUID = 1L;
 
@@ -73,10 +90,13 @@ public class HashtagDetailPage extends BasePage {
 					public void onClick() {
 					}
 				};
-				
+
 				recthulhuLink.add(new Label("recthulhuText", "Recthulu"));
-				recthulhuedFromLink.add(new Label("recthulhuedFromText", new PropertyModel<String>(item.getModel(), "author")));
-				createdByLink.add(new Label("createdByText", new PropertyModel<String>(item.getModel(), "originalAuthor")));
+				recthulhuedFromLink.add(new Label("recthulhuedFromText",
+						new PropertyModel<String>(item.getModel(), "author")));
+				createdByLink.add(new Label("createdByText",
+						new PropertyModel<String>(item.getModel(),
+								"originalAuthor")));
 				item.add(favouriteLink);
 				item.add(recthulhuLink);
 				item.add(recthulhuedFromLink);

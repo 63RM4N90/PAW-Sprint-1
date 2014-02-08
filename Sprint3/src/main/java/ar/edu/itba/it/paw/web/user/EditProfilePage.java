@@ -41,7 +41,7 @@ public class EditProfilePage extends SecuredPage {
 	private UserRepo users;
 
 	public EditProfilePage() {
-		String username = new SocialCthulhuSession(getRequest()).getUsername();
+		String username = SocialCthulhuSession.get().getUsername();
 		user = users.getUser(username);
 		name = user.getName();
 		surname = user.getSurname();
@@ -57,7 +57,9 @@ public class EditProfilePage extends SecuredPage {
 
 			@Override
 			protected void onSubmit() {
+				System.out.println("Validate input = " + validateInput() );
 				if (validateInput()) {
+					System.out.println(password);
 					user.setName(name);
 					user.setSurname(surname);
 					user.setPassword(password);
@@ -68,12 +70,13 @@ public class EditProfilePage extends SecuredPage {
 						user.makePublic();
 					}
 				}
+				System.out.println("NEW PASSWORD = " + user.getPassword());
 			}
 
 			private boolean validateInput() {
 				return checkInputLength()
-						&& password.length() > MIN_PASSWORD_LENGTH
-						&& password.length() < MAX_PASSWORD_LENGTH
+						&& password.length() >= MIN_PASSWORD_LENGTH
+						&& password.length() <= MAX_PASSWORD_LENGTH
 						&& checkPasswordConfirm();
 			}
 
@@ -107,7 +110,7 @@ public class EditProfilePage extends SecuredPage {
 				}
 				if (description.length() > MAX_DESCRIPTION_LENGTH
 						|| description.length() == 0) {
-					error(getString("name_length"));
+					error(getString("description_length"));
 					return false;
 				}
 				return true;
