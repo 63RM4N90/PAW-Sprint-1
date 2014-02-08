@@ -37,45 +37,54 @@ public class ProfilePage extends BasePage {
 	private String commentTextarea;
 
 	@SuppressWarnings("serial")
-	public ProfilePage(final int userId)  {
+	public ProfilePage(final int userId) {
 		IModel<User> userModel = new EntityModel<User>(User.class, userId);
 		User profileUser = userModel.getObject();
-		if(profileUser.getPicture() != null) {
-			add(new Image("profilePicture", new ImageResourceReference(profileUser.getPicture())));
+		if (profileUser.getPicture() != null) {
+			add(new Image("profilePicture", new ImageResourceReference(
+					profileUser.getPicture())));
 		} else {
 			add(new Image("profilePicture", SocialCthulhuApp.DEFAULT_IMAGE));
 		}
-		add(new Label("profileUsername", new PropertyModel<String>(userModel, "username")));
-		add(new Label("profileName", new PropertyModel<String>(userModel, "name")));
-		add(new Label("profileSurname", new PropertyModel<String>(userModel, "surname")));
-		add(new Label("profileDescription", new PropertyModel<String>(userModel, "description")));
-		add(new Label("profileVisits", new PropertyModel<String>(userModel, "visits")));
+		add(new Label("profileUsername", new PropertyModel<String>(userModel,
+				"username")));
+		add(new Label("profileName", new PropertyModel<String>(userModel,
+				"name")));
+		add(new Label("profileSurname", new PropertyModel<String>(userModel,
+				"surname")));
+		add(new Label("profileDescription", new PropertyModel<String>(
+				userModel, "description")));
+		add(new Label("profileVisits", new PropertyModel<String>(userModel,
+				"visits")));
 		add(new Link<String>("followersLink") {
 
 			@Override
 			public void onClick() {
 				setResponsePage(new FollowersPage(userId));
 			}
-		}.add(new Label("followersAmount", new PropertyModel<String>(userModel, "followers.size"))));
+		}.add(new Label("followersAmount", new PropertyModel<String>(userModel,
+				"followers.size"))));
 		add(new Link<String>("followingLink") {
 
 			@Override
 			public void onClick() {
 				setResponsePage(new FollowingPage(userId));
 			}
-		}.add(new Label("followingAmount", new PropertyModel<String>(userModel, "following.size"))));
-		
-		Link notificationsLink =new Link<String>("notificationsLink") {
+		}.add(new Label("followingAmount", new PropertyModel<String>(userModel,
+				"following.size"))));
+
+		Link<String> notificationsLink = new Link<String>("notificationsLink") {
 
 			@Override
 			public void onClick() {
 				setResponsePage(new NotificationsPage());
 			}
 		};
-		notificationsLink.add(new Label("notifications", new PropertyModel<String>(userModel, "notifications.size")));
+		notificationsLink.add(new Label("notifications",
+				new PropertyModel<String>(userModel, "notifications.size")));
 
 		add(notificationsLink);
-		Link suggestedUsersLink = new Link<String>("suggestedUsersLink") {
+		Link<String> suggestedUsersLink = new Link<String>("suggestedUsersLink") {
 
 			@Override
 			public void onClick() {
@@ -90,48 +99,49 @@ public class ProfilePage extends BasePage {
 				}
 			}
 		};
-		suggestedUsersLink.add(new Image("suggestedUsers", SocialCthulhuApp.SUGGESTED_USERS));
+		suggestedUsersLink.add(new Image("suggestedUsers",
+				SocialCthulhuApp.SUGGESTED_USERS));
 		add(suggestedUsersLink);
 		add(new Link<String>("favouritesLink") {
 
 			@Override
 			public void onClick() {
-//				setResponsePage(new FavouritesPage());
+				// setResponsePage(new FavouritesPage());
 			}
 		}.add(new Image("favourites", SocialCthulhuApp.FAVOURITES)));
-		
-		Link editProfileLink = new Link<String>("editProfileLink") {
+
+		Link<String> editProfileLink = new Link<String>("editProfileLink") {
 
 			@Override
 			public void onClick() {
-//				setResponsePage(new EditProfilePage());
+				setResponsePage(new EditProfilePage(
+						users.getUser(SocialCthulhuSession.get().getUsername())));
 			}
 		};
 		editProfileLink.add(new Label("edit", getString("edit")));
 		add(editProfileLink);
-		Link followLink = new Link<String>("followLink") {
-
-			@Override
-			public void onClick() {
-					// TODO Auto-generated method stub				
-			}
-		};
-		followLink.add(new Label("follow", getString("follow")));
-		add(followLink);
-		Link unfollowLink = new Link<String>("unfollowLink") {
+		Link<String> followLink = new Link<String>("followLink") {
 
 			@Override
 			public void onClick() {
 				// TODO Auto-generated method stub
-				
+			}
+		};
+		followLink.add(new Label("follow", getString("follow")));
+		add(followLink);
+		Link<String> unfollowLink = new Link<String>("unfollowLink") {
+
+			@Override
+			public void onClick() {
+				// TODO Auto-generated method stub
+
 			}
 		};
 		unfollowLink.add(new Label("unfollow", getString("unfollow")));
 		add(unfollowLink);
 		FeedbackPanel errorPanel = new FeedbackPanel("errorPanel");
 		add(errorPanel);
-		Form<ProfilePage> form = new Form<ProfilePage>(
-				"commentForm",
+		Form<ProfilePage> form = new Form<ProfilePage>("commentForm",
 				new CompoundPropertyModel<ProfilePage>(this)) {
 			private static final long serialVersionUID = 1L;
 
@@ -145,14 +155,18 @@ public class ProfilePage extends BasePage {
 		add(new RefreshingView<CommentWrapper>("wrapperComment") {
 			@Override
 			protected Iterator<IModel<CommentWrapper>> getItemModels() {
-				IModel<User> userModel = new EntityModel<User>(User.class, userId);
+				IModel<User> userModel = new EntityModel<User>(User.class,
+						userId);
 				User commenter = userModel.getObject();
-				
+
 				List<IModel<CommentWrapper>> result = new ArrayList<IModel<CommentWrapper>>();
 				List<Comment> commentList = commenter.getComments();
-				List<CommentWrapper> transformedComments = transformComments(commentList, commenter);
+				List<CommentWrapper> transformedComments = transformComments(
+						commentList, commenter);
 				for (CommentWrapper c : transformedComments) {
-					result.add(new CompoundPropertyModel<CommentWrapper>(new EntityModel<CommentWrapper>(CommentWrapper.class, c)));
+					result.add(new CompoundPropertyModel<CommentWrapper>(
+							new EntityModel<CommentWrapper>(
+									CommentWrapper.class, c)));
 				}
 				return result.iterator();
 			}
@@ -160,77 +174,90 @@ public class ProfilePage extends BasePage {
 			@Override
 			protected void populateItem(Item<CommentWrapper> item) {
 				item.add(new Label("transformedComment"));
-				Link<String> removeFavouriteLink = new Link<String>("removeFavouriteLink") {
+				Link<String> removeFavouriteLink = new Link<String>(
+						"removeFavouriteLink") {
 
 					@Override
 					public void onClick() {
 						// TODO Auto-generated method stub
-						
+
 					}
-					
+
 				};
-				removeFavouriteLink.add(new Label("removeFavourite", getString("remove_favourite")));
+				removeFavouriteLink.add(new Label("removeFavourite",
+						getString("remove_favourite")));
 				item.add(removeFavouriteLink);
-				Link<String> addFavouriteLink = new Link<String>("addFavouriteLink") {
+				Link<String> addFavouriteLink = new Link<String>(
+						"addFavouriteLink") {
 
 					@Override
 					public void onClick() {
 						// TODO Auto-generated method stub
-						
+
 					}
-					
+
 				};
-				addFavouriteLink.add(new Label("addFavourite", getString("add_favourite")));
+				addFavouriteLink.add(new Label("addFavourite",
+						getString("add_favourite")));
 				item.add(addFavouriteLink);
 				Link<String> recuthulhuLink = new Link<String>("recthulhuLink") {
 
 					@Override
 					public void onClick() {
 						// TODO Auto-generated method stub
-						
+
 					}
-					
+
 				};
-				recuthulhuLink.add(new Label("recthulhu", getString("recthulhu")));
+				recuthulhuLink.add(new Label("recthulhu",
+						getString("recthulhu")));
 				item.add(recuthulhuLink);
-				Link<String> commentUsernameLink = new Link<String>("commentUsernameLink") {
+				Link<String> commentUsernameLink = new Link<String>(
+						"commentUsernameLink") {
 
 					@Override
 					public void onClick() {
-//						setResponsePage(new ProfilePage(item.getModelObject().getComment().getAuthor().getId()));
+						// setResponsePage(new
+						// ProfilePage(item.getModelObject().getComment().getAuthor().getId()));
 					}
-					
+
 				};
 				commentUsernameLink.add(new Label("comment.author.username"));
 				item.add(commentUsernameLink);
-				Link<String> authorUsernameLink = new Link<String>("authorUsernameLink") {
+				Link<String> authorUsernameLink = new Link<String>(
+						"authorUsernameLink") {
 
 					@Override
 					public void onClick() {
-//						setResponsePage(new ProfilePage(item.getModelObject().getComment().getOriginalAuthor().getId()));						
+						// setResponsePage(new
+						// ProfilePage(item.getModelObject().getComment().getOriginalAuthor().getId()));
 					}
-					
+
 				};
-				authorUsernameLink.add(new Label("comment.originalAuthor.username"));
+				authorUsernameLink.add(new Label(
+						"comment.originalAuthor.username"));
 				item.add(authorUsernameLink);
-				
+
 				item.add(new Label("comment.date"));
-				
-				Link<String> deleteCommentLink = new Link<String>("deleteCommentLink") {
+
+				Link<String> deleteCommentLink = new Link<String>(
+						"deleteCommentLink") {
 
 					@Override
 					public void onClick() {
 						// TODO Auto-generated method stub
-						
+
 					}
-					
+
 				};
-				deleteCommentLink.add(new Label("deleteComment", getString("delete_comment")));
+				deleteCommentLink.add(new Label("deleteComment",
+						getString("delete_comment")));
 				item.add(deleteCommentLink);
 			}
 		});
-		
-		if(profileUser.getUsername().equals(((SocialCthulhuSession)getSession()).getUsername())) {
+
+		if (profileUser.getUsername().equals(
+				((SocialCthulhuSession) getSession()).getUsername())) {
 			followLink.setVisible(false);
 			unfollowLink.setVisible(false);
 		} else {
@@ -239,20 +266,25 @@ public class ProfilePage extends BasePage {
 			form.setVisible(false);
 			errorPanel.setVisible(false);
 			editProfileLink.setVisible(false);
-			
-			if(users.getUser(((SocialCthulhuSession)getSession()).getUsername()).getFollowing().contains(profileUser)){
+
+			if (users
+					.getUser(
+							((SocialCthulhuSession) getSession()).getUsername())
+					.getFollowing().contains(profileUser)) {
 				followLink.setVisible(false);
 			} else {
 				unfollowLink.setVisible(false);
 			}
 		}
-		
+
 	}
-	
-	private List<CommentWrapper> transformComments(List<Comment> commentList, User u) {
+
+	private List<CommentWrapper> transformComments(List<Comment> commentList,
+			User u) {
 		List<CommentWrapper> result = new ArrayList<CommentWrapper>();
-		for(Comment c : commentList) {
-			result.add(new CommentWrapper(c, getProcessedComment(c.getComment()), u));
+		for (Comment c : commentList) {
+			result.add(new CommentWrapper(c,
+					getProcessedComment(c.getComment()), u));
 		}
 		return result;
 	}
