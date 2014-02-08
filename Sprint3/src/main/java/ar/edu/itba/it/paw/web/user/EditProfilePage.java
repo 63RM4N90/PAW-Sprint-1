@@ -5,6 +5,7 @@ import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.form.validation.EqualPasswordInputValidator;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.ResourceModel;
@@ -66,6 +67,7 @@ public class EditProfilePage extends SecuredPage {
 		form.add(descriptionField);
 
 		form.add(new CheckBox("isPrivate"));
+		form.add(new EqualPasswordInputValidator(passwordField, confirmPasswordField));
 		add(form);
 	}
 }
