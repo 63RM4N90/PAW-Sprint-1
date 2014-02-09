@@ -26,7 +26,7 @@ public class CaptchaValidator implements IValidator<String> {
 		ValidationError error = new ValidationError();
 		
 		String kaptchaExpected = (String) session
-			.getAttribute(Constants.KAPTCHA_SESSION_CONFIG_KEY);
+			.getAttribute(Constants.KAPTCHA_SESSION_KEY);
  
 		System.out.println("El captcha recibido es " + kaptchaReceived);
 		System.out.println("El captcha esperado es " + kaptchaExpected);

@@ -9,6 +9,7 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -33,6 +34,8 @@ public class RegistrationPage extends BasePage {
 	private transient String secretQuestion;
 	private transient String secretAnswer;
 	//private transient MultipartFile picture;
+	
+	private String captchaInput;
 
 	private static transient final int MIN_NAME_LENGTH = 1;
 	private static transient final int MAX_NAME_LENGTH = 32;
@@ -50,6 +53,8 @@ public class RegistrationPage extends BasePage {
 	private static transient final int MAX_SECRET_ANSWER_LENGTH = 64;
 
 	public RegistrationPage() {
+		
+		
 		add(new FeedbackPanel("errorPanel"));
 		Form<RegistrationPage> form = new Form<RegistrationPage>(
 				"registrationForm",
@@ -116,6 +121,13 @@ public class RegistrationPage extends BasePage {
 				return true;
 			}
 		};
+		
+		final CaptchaImage captchaImage = new CaptchaImage("kaptchaImage");
+		captchaImage.setOutputMarkupId(true);
+ 
+		TextField<String> captchaTF = new TextField<String>("captcha",
+				new PropertyModel<String>(this, "captchaInput"));
+		captchaTF.add(new CaptchaValidator());
 
 		form.setMultiPart(true);
 		form.add(new TextField<String>("name").setRequired(true));
@@ -128,6 +140,8 @@ public class RegistrationPage extends BasePage {
 		form.add(new TextField<String>("secretAnswer").setRequired(true));
 		form.add(new BookmarkablePageLink<Void>("alreadyRegistered", LoginPage.class));
 		form.add(new Button("register", new ResourceModel("register")));
+		form.add(captchaImage); 
+		form.add(captchaTF);
 		add(form);
 	}
 }

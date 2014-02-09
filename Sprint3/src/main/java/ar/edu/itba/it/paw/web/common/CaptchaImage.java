@@ -3,14 +3,12 @@ package ar.edu.itba.it.paw.web.common;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 
-import javax.servlet.http.HttpServletRequest;
 
 import org.apache.wicket.markup.html.image.NonCachingImage;
-import org.apache.wicket.request.Request;
-import org.apache.wicket.request.cycle.RequestCycle;
-import org.apache.wicket.protocol.http.WebRequest;
 import org.apache.wicket.request.resource.DynamicImageResource;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+
+import ar.edu.itba.it.paw.web.SocialCthulhuSession;
 
 import com.google.code.kaptcha.Constants;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
@@ -49,15 +47,18 @@ public class CaptchaImage extends NonCachingImage {
  
 			private BufferedImage getImageCaptchaService() {
  
-				Request request = RequestCycle.get().getRequest();
-				HttpServletRequest httpRequest = ((WebRequest) request)
-						.getHttpServletRequest();
+				//Request request = RequestCycle.get().getRequest();
+				//HttpServletRequest httpRequest = ((WebRequest) request)
+						//.getHttpServletRequest();
  
 				String capText = captchaProducer.createText();
  
 				// store the text in the session
-				httpRequest.getSession().setAttribute(
-						Constants.KAPTCHA_SESSION_KEY, capText);
+				//httpRequest.getSession().setAttribute(
+						//Constants.KAPTCHA_SESSION_KEY, capText);
+				
+				SocialCthulhuSession session = SocialCthulhuSession.get();
+				session.setAttribute(Constants.KAPTCHA_SESSION_KEY, capText);
  
 				// create the image with the text
 				BufferedImage bi = captchaProducer.createImage(capText);
