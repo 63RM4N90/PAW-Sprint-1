@@ -1,8 +1,5 @@
 package ar.edu.itba.it.paw.web.user;
 
-import org.apache.wicket.spring.injection.annot.SpringBean;
-
-import ar.edu.itba.it.paw.domain.UserRepo;
 import ar.edu.itba.it.paw.web.base.BasePage;
 
 public class FollowersPage extends BasePage {

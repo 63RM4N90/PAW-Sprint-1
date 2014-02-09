@@ -22,6 +22,7 @@ import ar.edu.itba.it.paw.domain.User;
 import ar.edu.itba.it.paw.domain.UserRepo;
 import ar.edu.itba.it.paw.web.SocialCthulhuApp;
 import ar.edu.itba.it.paw.web.SocialCthulhuSession;
+import ar.edu.itba.it.paw.web.common.CookieService;
 import ar.edu.itba.it.paw.web.common.SearchPage;
 
 public class BasePage extends WebPage {
@@ -125,6 +126,9 @@ public class BasePage extends WebPage {
 			@Override
 			public void onClick() {
 				((SocialCthulhuSession) getSession()).signOut();
+				CookieService cookieService = SocialCthulhuSession.get().getCookieService();
+		        cookieService.removeCookieIfPresent(getRequest(), getResponse(), "usernameCookie");
+		        cookieService.removeCookieIfPresent(getRequest(), getResponse(), "userIdCookie");
 				setResponsePage(getApplication().getHomePage());
 			}
 		};
