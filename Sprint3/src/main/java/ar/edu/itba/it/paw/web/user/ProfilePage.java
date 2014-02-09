@@ -2,6 +2,7 @@ package ar.edu.itba.it.paw.web.user;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.InvalidPropertiesFormatException;
 import java.util.Iterator;
 import java.util.List;
@@ -21,6 +22,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.ocpsoft.prettytime.PrettyTime;
 
 import ar.edu.itba.it.paw.domain.Comment;
+import ar.edu.itba.it.paw.domain.CommentRepo;
 import ar.edu.itba.it.paw.domain.EntityModel;
 import ar.edu.itba.it.paw.domain.User;
 import ar.edu.itba.it.paw.domain.UserRepo;
@@ -35,6 +37,8 @@ public class ProfilePage extends BasePage {
 	private static final long serialVersionUID = 1L;
 	@SpringBean
 	private UserRepo users;
+	@SpringBean
+	private CommentRepo comments;
 	private String commentTextarea;
 
 	@SuppressWarnings("serial")
@@ -107,7 +111,7 @@ public class ProfilePage extends BasePage {
 
 			@Override
 			public void onClick() {
-				// setResponsePage(new FavouritesPage());
+				setResponsePage(new FavouritesPage());
 			}
 		}.add(new Image("favourites", SocialCthulhuApp.FAVOURITES)));
 
@@ -148,7 +152,13 @@ public class ProfilePage extends BasePage {
 
 			@Override
 			protected void onSubmit() {
-
+				User author = users.getUser(SocialCthulhuSession.get()
+						.getUsername());
+				Comment comment = new Comment(author, new Date(),
+						commentTextarea, comments.getHashtagList(
+								commentTextarea, author),
+						comments.getReferences(commentTextarea), author);
+				comments.addComment(comment);
 			}
 		};
 		form.add(new TextArea<String>("commentTextarea").setRequired(true));
@@ -159,7 +169,8 @@ public class ProfilePage extends BasePage {
 				IModel<User> userModel = new EntityModel<User>(User.class,
 						userId);
 				User commenter = userModel.getObject();
-
+				System.out.println("COMMENTER USERNAME = "
+						+ commenter.getUsername());
 				List<IModel<CommentWrapper>> result = new ArrayList<IModel<CommentWrapper>>();
 				List<Comment> commentList = commenter.getComments();
 				List<CommentWrapper> transformedComments = transformComments(
@@ -175,44 +186,54 @@ public class ProfilePage extends BasePage {
 			@Override
 			protected void populateItem(Item<CommentWrapper> item) {
 				item.add(new Label("transformedComment"));
-				Link<String> removeFavouriteLink = new Link<String>(
-						"removeFavouriteLink") {
+				Link<CommentWrapper> removeFavouriteLink = new Link<CommentWrapper>(
+						"removeFavouriteLink", item.getModel()) {
 
 					@Override
 					public void onClick() {
-						// TODO Auto-generated method stub
-
+						User user = users.getUser(SocialCthulhuSession.get()
+								.getUsername());
+						user.removeFavourite(getModelObject().getComment());
 					}
 
 				};
 				removeFavouriteLink.add(new Label("removeFavourite",
 						getString("remove_favourite")));
 				item.add(removeFavouriteLink);
-				Link<String> addFavouriteLink = new Link<String>(
-						"addFavouriteLink") {
+				Link<CommentWrapper> addFavouriteLink = new Link<CommentWrapper>(
+						"addFavouriteLink", item.getModel()) {
 
 					@Override
 					public void onClick() {
-						// TODO Auto-generated method stub
-
+						User author = users.getUser(SocialCthulhuSession.get()
+								.getUsername());
+						Comment comment = new Comment(author, new Date(),
+								commentTextarea, comments.getHashtagList(
+										commentTextarea, author),
+								comments.getReferences(commentTextarea), author);
+						users.getUser(SocialCthulhuSession.get().getUsername()).addFavourite(comment);
 					}
 
 				};
 				addFavouriteLink.add(new Label("addFavourite",
 						getString("add_favourite")));
 				item.add(addFavouriteLink);
-				Link<String> recuthulhuLink = new Link<String>("recthulhuLink") {
+				Link<CommentWrapper> recthulhuLink = new Link<CommentWrapper>(
+						"recthulhuLink", item.getModel()) {
 
 					@Override
 					public void onClick() {
-						// TODO Auto-generated method stub
-
+						setResponsePage(new ProfilePage(getModelObject()
+								.getComment().getAuthor().getId()));
 					}
 
 				};
-				recuthulhuLink.add(new Label("recthulhu",
-						getString("recthulhu")));
-				item.add(recuthulhuLink);
+				recthulhuLink
+						.add(new Label("recthulhu", getString("recthulhu")));
+				item.add(recthulhuLink);
+				if (!item.getModelObject().getComment().isRecuthulu()) {
+					recthulhuLink.setVisible(false);
+				}
 				Link<String> commentUsernameLink = new Link<String>(
 						"commentUsernameLink") {
 
