@@ -43,6 +43,7 @@ public class ForgotPasswordPage extends BasePage {
 		add(form);
 		add(new Label("success", " "));
 		add(new Link<Void>("back") {
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void onClick() {

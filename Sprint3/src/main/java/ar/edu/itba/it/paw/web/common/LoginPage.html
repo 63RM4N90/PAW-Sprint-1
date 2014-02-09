@@ -1,55 +1,75 @@
 <html>
-	<body>
-		<wicket:extend>
-			<div class="login-container">
-				<div class="login-column column-1">	
-					<h2><wicket:message key="login">Login</wicket:message></h2>
-					<div wicket:id="feedback" class="formErrors"/>
-					<form wicket:id="loginForm">
-						<div class="control-group">
-							<label class="control-label"><wicket:message key="username">Username</wicket:message>:</label>
-							<div class="controls">
-								<input type="text" wicket:id="username"/>
-							</div>
+<body>
+	<wicket:extend>
+		<div class="login-container">
+			<div class="login-column column-1">
+				<h2>
+					<wicket:message key="login">Login</wicket:message>
+				</h2>
+				<div wicket:id="feedback" class="formErrors" />
+				<form wicket:id="loginForm">
+					<div class="control-group">
+						<label class="control-label"><wicket:message
+								key="username">Username</wicket:message>:</label>
+						<div class="controls">
+							<input type="text" wicket:id="username" />
 						</div>
-						<div class="control-group">
-							<label class="control-label"><wicket:message key="password">Password</wicket:message>:</label>
-							<div class="controls">
-								<input type="password" wicket:id="password" />
-							</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label"><wicket:message
+								key="password">Password</wicket:message>:</label>
+						<div class="controls">
+							<input type="password" wicket:id="password" />
 						</div>
-						<div class="control-group">
-							<input class="btn-inverse cthulhu-button" type="submit" wicket:id="login"/>
-						</div>	
-					</form>
-					<a wicket:id="forgotPassword">forgotten password?</a>
-				</div>
-				<div class="login-column column-2">
-					<h2><wicket:message key="welcome">Welcome to Social Cthulhu!</wicket:message></h2>
-					<p><wicket:message key="site_description">
+					</div>
+					<div class="control-group">
+						<div class="controls">
+							<label class="checkbox"> <input type="checkbox"
+								wicket:id="rememberMe"> Remember me on this computer
+							</label>
+						</div>
+					</div>
+					<div class="control-group">
+						<input class="btn-inverse cthulhu-button" type="submit"
+							wicket:id="login" />
+					</div>
+				</form>
+				<a wicket:id="forgotPassword">forgotten password?</a>
+			</div>
+			<div class="login-column column-2">
+				<h2>
+					<wicket:message key="welcome">Welcome to Social Cthulhu!</wicket:message>
+				</h2>
+				<p>
+					<wicket:message key="site_description">
 						A place were you can become a Cthulhu follower and show your love <br>
 						to our beloved god by posting comments in your own personal space. <br>
-						Wanna join us? <br>					
-					</wicket:message></p>
-					<div class="notRegistered">
-						<a href="registration" wicket:id="registration">
-							<button class="btn-inverse cthulhu-button"><wicket:message key="register">
+						Wanna join us? <br>
+					</wicket:message>
+				</p>
+				<div class="notRegistered">
+					<a href="registration" wicket:id="registration">
+						<button class="btn-inverse cthulhu-button">
+							<wicket:message key="register">
 								Register
-							</wicket:message></button>
-						</a>
-					</div>
-				</div>
-				<div class="login-column column-3">
-					<div wicket:id="top10hashtags"/>
+							</wicket:message>
+						</button>
+					</a>
 				</div>
 			</div>
-			<div class="about-us">
-				<p><wicket:message key="about_us">
+			<div class="login-column column-3">
+				<div wicket:id="top10hashtags" />
+			</div>
+		</div>
+		<div class="about-us">
+			<p>
+				<wicket:message key="about_us">
 					Special Project Done By<br>
 					Florencia Besteiro - German Romarion - Gabriel Zanzotti
-				</wicket:message></p>
-			</div>
+				</wicket:message>
+			</p>
+		</div>
 
-		</wicket:extend>
-	</body>
+	</wicket:extend>
+</body>
 </html>

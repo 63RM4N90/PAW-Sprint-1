@@ -11,7 +11,7 @@ import org.apache.wicket.util.resource.ResourceStreamNotFoundException;
 import ar.edu.itba.it.paw.web.SocialCthulhuApp;
 
 public class ImageResource extends DynamicImageResource {
-	
+	private static final long serialVersionUID = 1L;
 	private byte[] img;
 
 	public ImageResource(byte[] img) {

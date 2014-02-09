@@ -1,20 +1,20 @@
 package ar.edu.itba.it.paw.web.user;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.repeater.Item;
-import org.apache.wicket.markup.repeater.RefreshingView;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.PropertyListView;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.ocpsoft.prettytime.PrettyTime;
 
 import ar.edu.itba.it.paw.domain.Comment;
-import ar.edu.itba.it.paw.domain.EntityModel;
 import ar.edu.itba.it.paw.domain.User;
 import ar.edu.itba.it.paw.domain.UserRepo;
 import ar.edu.itba.it.paw.web.SocialCthulhuSession;
@@ -28,44 +28,58 @@ public class FavouritesPage extends SecuredPage {
 	private UserRepo users;
 
 	public FavouritesPage() {
-		user = users.getUser(new SocialCthulhuSession(getRequest()).getId());
-		add(new RefreshingView<Comment>("favourite_cthulhu") {
+		user = users.getUser(SocialCthulhuSession.get().getUsername());
+
+		final IModel<List<Comment>> favourites = new LoadableDetachableModel<List<Comment>>() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected Iterator<IModel<Comment>> getItemModels() {
-				List<IModel<Comment>> ans = new ArrayList<IModel<Comment>>();
-				Set<Comment> comments = user.getFavourites();
-				for (Comment c : comments) {
-					ans.add(new EntityModel<Comment>(Comment.class, c));
+			protected List<Comment> load() {
+				Set<Comment> favourites = users.getUser(
+						SocialCthulhuSession.get().getUsername())
+						.getFavourites();
+				List<Comment> ans = new ArrayList<Comment>();
+				for (Comment n : favourites) {
+					ans.add(n);
 				}
-				return ans.iterator();
+				return ans;
 			}
+		};
+
+		add(new PropertyListView<Comment>("favourite_cthulhu", favourites) {
+			private static final long serialVersionUID = 1L;
 
 			@Override
-			protected void populateItem(Item<Comment> item) {
-				Link<String> authorLink = new Link<String>("author") {
+			protected void populateItem(ListItem<Comment> item) {
+				Link<Comment> authorLink = new Link<Comment>("author",
+						item.getModel()) {
 					private static final long serialVersionUID = 1L;
 
 					@Override
 					public void onClick() {
+						User author = getModelObject().getAuthor();
+						setResponsePage(new ProfilePage(author.getId()));
 					}
 				};
 
-				Link<String> unfavouriteLink = new Link<String>("unfavourite") {
+				Link<Comment> unfavouriteLink = new Link<Comment>(
+						"unfavourite", item.getModel()) {
 					private static final long serialVersionUID = 1L;
 
 					@Override
 					public void onClick() {
+						Comment comment = getModelObject();
+						user.removeFavourite(comment);
 					}
 				};
 
-				Link<String> deleteCommentLink = new Link<String>(
-						"delete_comment") {
+				Link<Comment> deleteCommentLink = new Link<Comment>(
+						"delete_comment", item.getModel()) {
 					private static final long serialVersionUID = 1L;
 
 					@Override
 					public void onClick() {
+						user.getComments().remove(getModelObject());
 					}
 				};
 
@@ -84,15 +98,22 @@ public class FavouritesPage extends SecuredPage {
 
 				item.add(new Label("comment_text", new PropertyModel<String>(
 						item.getModel(), "comment")));
-				item.add(new Label("notification_date",
-						new PropertyModel<String>(item.getModel(), "date")));
-				unfavouriteLink
-						.add(new Label("unfavourite_text", getString("unfavourite")));
+				PrettyTime p = new PrettyTime();
+				item.add(new Label("creation_date", p.format(item
+						.getModelObject().getDate())));
+				unfavouriteLink.add(new Label("unfavourite_text",
+						getString("unfavourite")));
 				item.add(deleteCommentLink);
 				item.add(authorLink);
 				item.add(unfavouriteLink);
 			}
 		});
+		Label noFavourites = new Label("no_favourites",
+				getString("no_favourites"));
+		if (favourites != null && !favourites.getObject().isEmpty()) {
+			noFavourites.setVisible(false);
+		}
+		add(noFavourites);
 		add(new Label("username", user.getUsername()));
 		add(new Label("username_suffix", getString("username_suffix")));
 	}

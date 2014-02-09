@@ -474,3 +474,9 @@ form {
 form.form-horizontal .control-group.recover {
 	width: 117px;
 }
+
+.wicket-aa-container {
+	background: black;
+	color: green;
+	padding-left: 10px;		
+}

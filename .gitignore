@@ -8,5 +8,11 @@
 .classpath
 .project
 .settings/*
+Sprint3/target/*
+Sprint3/bin/*
 target/*
 bin/*
+Sprint3/.classpath
+Sprint3/.project
+Sprint3/.settings/*
+
