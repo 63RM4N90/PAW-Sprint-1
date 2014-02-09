@@ -12,6 +12,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.ocpsoft.prettytime.PrettyTime;
 
 import ar.edu.itba.it.paw.domain.Comment;
 import ar.edu.itba.it.paw.domain.Hashtag;
@@ -32,7 +33,8 @@ public class HashtagDetailPage extends BasePage {
 		user = users.getUser(SocialCthulhuSession.get().getUsername());
 		add(new Label("cthulhuName", hashtag.getHashtag()));
 		add(new Label("cthulhuAuthor", hashtag.getAuthor().getName()));
-		add(new Label("cthulhuCreationDate", hashtag.getDate().toString()));
+		PrettyTime p = new PrettyTime();
+		add(new Label("cthulhuCreationDate", p.format(hashtag.getDate())));
 		cthulhu = hashtag;
 
 		final IModel<List<Comment>> comments = new LoadableDetachableModel<List<Comment>>() {
@@ -54,7 +56,7 @@ public class HashtagDetailPage extends BasePage {
 
 			@Override
 			protected void populateItem(ListItem<Comment> item) {
-				
+
 				Link<Comment> favouriteLink = new Link<Comment>("favourite",
 						item.getModel()) {
 					private static final long serialVersionUID = 1L;

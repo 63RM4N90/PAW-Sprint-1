@@ -10,6 +10,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.ocpsoft.prettytime.PrettyTime;
 
 import ar.edu.itba.it.paw.domain.Notification;
 import ar.edu.itba.it.paw.domain.UserRepo;
@@ -56,8 +57,9 @@ public class NotificationsPage extends SecuredPage {
 				item.add(new Label("notification_text",
 						new PropertyModel<String>(item.getModel(),
 								"notification")));
-				item.add(new Label("notification_date",
-						new PropertyModel<String>(item.getModel(), "date")));
+				PrettyTime p = new PrettyTime();
+				item.add(new Label("notification_date", p.format(item
+						.getModelObject().getDate())));
 				item.add(new Label("notification_by", getString("notification")));
 				item.add(notificatorLink);
 			}

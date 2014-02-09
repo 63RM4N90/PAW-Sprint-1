@@ -12,11 +12,9 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
 
@@ -114,7 +112,6 @@ public class BasePage extends WebPage {
 		            }
 		        });
 		
-//		form.add(new TextField<String>("searchField", new PropertyModel<String>(this, "searchText")));
 		form.add(new Button("searchButton"));
 		add(form);
 		add(new Image("socialCthulhuTitle", SocialCthulhuApp.TITLE));

@@ -12,6 +12,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.ocpsoft.prettytime.PrettyTime;
 
 import ar.edu.itba.it.paw.domain.Comment;
 import ar.edu.itba.it.paw.domain.User;
@@ -97,8 +98,9 @@ public class FavouritesPage extends SecuredPage {
 
 				item.add(new Label("comment_text", new PropertyModel<String>(
 						item.getModel(), "comment")));
-				item.add(new Label("notification_date",
-						new PropertyModel<String>(item.getModel(), "date")));
+				PrettyTime p = new PrettyTime();
+				item.add(new Label("creation_date", p.format(item
+						.getModelObject().getDate())));
 				unfavouriteLink.add(new Label("unfavourite_text",
 						getString("unfavourite")));
 				item.add(deleteCommentLink);
