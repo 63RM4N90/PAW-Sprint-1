@@ -11,6 +11,7 @@ import org.apache.wicket.markup.repeater.RefreshingView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.ocpsoft.prettytime.PrettyTime;
 
 import ar.edu.itba.it.paw.domain.EntityModel;
 import ar.edu.itba.it.paw.domain.User;
@@ -28,7 +29,8 @@ public class SearchPage extends BasePage {
 	public SearchPage(String searchText) {
 		super();
 		search = searchText;
-		add(new Label("search", getString("searchTitle") + searchText));
+		add(new Label("search", getString("searchTitle") + "\"" + searchText
+				+ "\""));
 		add(new RefreshingView<User>("userResult") {
 			private static final long serialVersionUID = 1L;
 
@@ -67,9 +69,9 @@ public class SearchPage extends BasePage {
 						.getModel(), "name")));
 				item.add(new Label("surname", new PropertyModel<String>(item
 						.getModel(), "surname")));
-				item.add(new Label("registrationDate",
-						new PropertyModel<String>(item.getModel(),
-								"registrationDate")));
+				PrettyTime p = new PrettyTime();
+				item.add(new Label("registrationDate", p.format(item
+						.getModelObject().getRegistrationDate())));
 			}
 		});
 	}

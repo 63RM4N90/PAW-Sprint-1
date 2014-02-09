@@ -28,7 +28,7 @@ import ar.edu.itba.it.paw.web.common.SearchPage;
 public class BasePage extends WebPage {
 	
 	private static final long serialVersionUID = 1L;
-	private String searchText;
+	private transient String searchText;
 	private StringBuilder values = new StringBuilder();
 	@SpringBean
 	private UserRepo users;
@@ -57,21 +57,19 @@ public class BasePage extends WebPage {
 		
 		final IModel<String> model = new IModel<String>()
 		        {
-		            private String value = null;
-
 		            @Override
 		            public String getObject()
 		            {
-		                return value;
+		                return searchText;
 		            }
 
 		            @Override
 		            public void setObject(String object)
 		            {
-		                value = object;
+		                searchText = object;
 
 		                values.append("\n");
-		                values.append(value);
+		                values.append(searchText);
 		            }
 
 		            @Override
