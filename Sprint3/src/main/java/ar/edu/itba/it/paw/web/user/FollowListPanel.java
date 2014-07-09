@@ -20,15 +20,21 @@ import ar.edu.itba.it.paw.domain.User;
 public abstract class FollowListPanel extends Panel {
 	
 	private int userId;
+	private Label noFollow;
 
 	public FollowListPanel(String id, int userId) {
 		super(id);
 		this.userId = userId;
+		noFollow = new Label("no_follow", getString("no_follow"));
+		add(noFollow);
 		add(new RefreshingView<User>("follow") {
 			@Override
 			protected Iterator<IModel<User>> getItemModels() {
 				List<IModel<User>> result = new ArrayList<IModel<User>>();
 				Set<User> userList = getFollows(FollowListPanel.this.userId);
+				if (userList != null && !userList.isEmpty()) {
+					noFollow.setVisible(false);
+				}
 				for (User u : userList) {
 					result.add(new EntityModel<User>(User.class, u));
 				}
@@ -48,6 +54,7 @@ public abstract class FollowListPanel extends Panel {
 				}.add(new Label("userFollowUsername", new PropertyModel<String>(item.getModel(), "username"))));
 			}
 		});
+		Set<User> userList = getFollows(FollowListPanel.this.userId);
 	}
 	
 	protected abstract Set<User> getFollows(int userId);
