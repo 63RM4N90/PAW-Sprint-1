@@ -44,7 +44,7 @@ public class ProfilePage extends BasePage {
 	@SuppressWarnings("serial")
 	public ProfilePage(final int userId) {
 		IModel<User> userModel = new EntityModel<User>(User.class, userId);
-		User profileUser = userModel.getObject();
+		final User profileUser = userModel.getObject();
 		if (profileUser.getPicture() != null) {
 			add(new Image("profilePicture", new ImageResourceReference(
 					profileUser.getPicture())));
@@ -231,9 +231,8 @@ public class ProfilePage extends BasePage {
 				recthulhuLink
 						.add(new Label("recthulhu", getString("recthulhu")));
 				item.add(recthulhuLink);
-				if (!item.getModelObject().getComment().isRecuthulu()) {
-					recthulhuLink.setVisible(false);
-				}
+				Label recuthuledFrom = new Label("recthuled_from", getString("recthuled_from"));
+				item.add(recuthuledFrom);
 				Link<String> commentUsernameLink = new Link<String>(
 						"commentUsernameLink") {
 
@@ -256,6 +255,13 @@ public class ProfilePage extends BasePage {
 					}
 
 				};
+				if (!item.getModelObject().getComment().isRecuthulu()) {
+					if (profileUser.getUsername().equals(((SocialCthulhuSession) getSession()).getUsername())) {
+						recthulhuLink.setVisible(false);
+					}
+					recuthuledFrom.setVisible(false);
+					commentUsernameLink.setVisible(false);
+				}
 				authorUsernameLink.add(new Label(
 						"comment.originalAuthor.username"));
 				item.add(authorUsernameLink);
