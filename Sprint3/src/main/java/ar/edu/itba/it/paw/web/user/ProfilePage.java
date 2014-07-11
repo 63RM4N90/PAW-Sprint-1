@@ -183,6 +183,9 @@ public class ProfilePage extends BasePage {
 
 			@Override
 			protected void populateItem(Item<CommentWrapper> item) {
+				
+				boolean equalUsers = item.getModelObject().getComment().getAuthor().equals(item.getModelObject().getComment().getOriginalAuthor());
+				
 				item.add(new Label("transformedComment", item.getModelObject()
 						.getTransformedComment()));
 				Object cw = item.getModel().getObject();
@@ -207,14 +210,9 @@ public class ProfilePage extends BasePage {
 					@Override
 					public void onClick() {
 						CommentWrapper comment = getModelObject();
-						System.out.println("COMMENT IS NULL = "
-								+ (comment == null));
-						User author = users.getUser(SocialCthulhuSession.get()
-								.getUsername());
 						users.getUser(SocialCthulhuSession.get().getUsername())
 								.addFavourite(comment.getComment());
 					}
-
 				};
 				addFavouriteLink.add(new Label("addFavourite",
 						getString("add_favourite")));
@@ -227,14 +225,11 @@ public class ProfilePage extends BasePage {
 						setResponsePage(new ProfilePage(getModelObject()
 								.getComment().getAuthor().getId()));
 					}
-
 				};
 				recthulhuLink
 						.add(new Label("recthulhu", getString("recthulhu")));
+				recthulhuLink.setVisible(!equalUsers);
 				item.add(recthulhuLink);
-				if (!item.getModelObject().getComment().isRecuthulu()) {
-					recthulhuLink.setVisible(false);
-				}
 				Link<CommentWrapper> commentUsernameLink = new Link<CommentWrapper>(
 						"commentUsernameLink", item.getModel()) {
 
@@ -243,12 +238,12 @@ public class ProfilePage extends BasePage {
 						setResponsePage(new ProfilePage(getModelObject()
 								.getComment().getAuthor().getId()));
 					}
-
 				};
 				commentUsernameLink.add(new Label("comment_username", item
 						.getModelObject().getComment().getAuthor()
 						.getUsername()));
 				item.add(commentUsernameLink);
+				Label recthuledFrom = new Label("recthuled_from", getString("recthuled_from"));
 				Link<CommentWrapper> authorUsernameLink = new Link<CommentWrapper>(
 						"authorUsernameLink", item.getModel()) {
 
@@ -257,13 +252,14 @@ public class ProfilePage extends BasePage {
 						setResponsePage(new ProfilePage(getModelObject()
 								.getComment().getOriginalAuthor().getId()));
 					}
-
 				};
+				authorUsernameLink.setVisible(!equalUsers);
+				recthuledFrom.setVisible(!equalUsers);
 				authorUsernameLink.add(new Label("comment_author", item
 						.getModelObject().getComment().getAuthor()
 						.getUsername()));
 				item.add(authorUsernameLink);
-
+				item.add(recthuledFrom);
 				PrettyTime p = new PrettyTime();
 				item.add(new Label("commentDate", p.format(item
 						.getModelObject().getComment().getDate())));
@@ -276,7 +272,6 @@ public class ProfilePage extends BasePage {
 						CommentWrapper cw = getModelObject();
 						comments.delete(cw.getComment());
 					}
-
 				};
 				deleteCommentLink.add(new Label("deleteComment",
 						getString("delete_comment")));
