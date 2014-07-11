@@ -5,6 +5,8 @@ import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.form.upload.FileUpload;
+import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.form.validation.EqualPasswordInputValidator;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -22,18 +24,21 @@ import ar.edu.itba.it.paw.web.common.SurnameValidator;
 public class EditProfilePage extends SecuredPage {
 
 	private static final long serialVersionUID = 1L;
+	private FileUploadField fileUpload;
 
 	public EditProfilePage(User user) {
 		add(new FeedbackPanel("errorPanel"));
 		Form<User> form = new Form<User>("editProfileForm",
 				new CompoundPropertyModel<User>(new EntityModel<User>(
 						User.class, user)));
-
+		form.setMultiPart(true);
 		form.add(new Button("submit", new ResourceModel("submit")) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void onSubmit() {
+				System.out.println("FILENAME = "
+						+ fileUpload.getFileUpload().getClientFileName());
 				setResponsePage(new ProfilePage(SocialCthulhuSession.get()
 						.getUserId()));
 			}
@@ -65,9 +70,13 @@ public class EditProfilePage extends SecuredPage {
 		descriptionField.setRequired(true);
 		descriptionField.add(new DescriptionValidator());
 		form.add(descriptionField);
-
+		
+		FileUploadField fileUploadField = new FileUploadField("picture");
+		form.add(fileUploadField);
+		
 		form.add(new CheckBox("isPrivate"));
-		form.add(new EqualPasswordInputValidator(passwordField, confirmPasswordField));
+		form.add(new EqualPasswordInputValidator(passwordField,
+				confirmPasswordField));
 		add(form);
 	}
 }

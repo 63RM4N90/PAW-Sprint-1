@@ -30,6 +30,7 @@ import ar.edu.itba.it.paw.web.SocialCthulhuApp;
 import ar.edu.itba.it.paw.web.SocialCthulhuSession;
 import ar.edu.itba.it.paw.web.base.BasePage;
 import ar.edu.itba.it.paw.web.common.CommentWrapper;
+import ar.edu.itba.it.paw.web.common.CommentWrapperROM;
 import ar.edu.itba.it.paw.web.common.ImageResourceReference;
 
 public class ProfilePage extends BasePage {
@@ -164,21 +165,18 @@ public class ProfilePage extends BasePage {
 		form.add(new TextArea<String>("commentTextarea").setRequired(true));
 		add(form);
 		add(new RefreshingView<CommentWrapper>("wrapperComment") {
+
 			@Override
 			protected Iterator<IModel<CommentWrapper>> getItemModels() {
 				IModel<User> userModel = new EntityModel<User>(User.class,
 						userId);
 				User commenter = userModel.getObject();
-				System.out.println("COMMENTER USERNAME = "
-						+ commenter.getUsername());
 				List<IModel<CommentWrapper>> result = new ArrayList<IModel<CommentWrapper>>();
 				List<Comment> commentList = commenter.getComments();
 				List<CommentWrapper> transformedComments = transformComments(
 						commentList, commenter);
 				for (CommentWrapper c : transformedComments) {
-					result.add(new CompoundPropertyModel<CommentWrapper>(
-							new EntityModel<CommentWrapper>(
-									CommentWrapper.class, c)));
+					result.add(new CommentWrapperROM<CommentWrapper>(c));
 				}
 				return result.iterator();
 			}
@@ -186,14 +184,18 @@ public class ProfilePage extends BasePage {
 			@Override
 			protected void populateItem(Item<CommentWrapper> item) {
 				item.add(new Label("transformedComment"));
-				Link<CommentWrapper> removeFavouriteLink = new Link<CommentWrapper>(
+				Object cw = item.getModel().getObject();
+				Object self = item;
+				Link<CommentWrapper> removeFavouriteLink = new Link<CommentWrapper> (
 						"removeFavouriteLink", item.getModel()) {
-
+				
 					@Override
 					public void onClick() {
 						User user = users.getUser(SocialCthulhuSession.get()
 								.getUsername());
+						CommentWrapper cw = getModelObject();
 						user.removeFavourite(getModelObject().getComment());
+						System.out.println("paséee!");
 					}
 
 				};
@@ -201,7 +203,7 @@ public class ProfilePage extends BasePage {
 						getString("remove_favourite")));
 				item.add(removeFavouriteLink);
 				Link<CommentWrapper> addFavouriteLink = new Link<CommentWrapper>(
-						"addFavouriteLink", item.getModel()) {
+						"addFavouriteLink") {
 
 					@Override
 					public void onClick() {
@@ -211,7 +213,8 @@ public class ProfilePage extends BasePage {
 								commentTextarea, comments.getHashtagList(
 										commentTextarea, author),
 								comments.getReferences(commentTextarea), author);
-						users.getUser(SocialCthulhuSession.get().getUsername()).addFavourite(comment);
+						users.getUser(SocialCthulhuSession.get().getUsername())
+								.addFavourite(comment);
 					}
 
 				};
@@ -231,7 +234,8 @@ public class ProfilePage extends BasePage {
 				recthulhuLink
 						.add(new Label("recthulhu", getString("recthulhu")));
 				item.add(recthulhuLink);
-				if (!item.getModelObject().getComment().isRecuthulu()) {
+				if (!item.getModelObject().getComment()
+						.isRecuthulu()) {
 					recthulhuLink.setVisible(false);
 				}
 				Link<String> commentUsernameLink = new Link<String>(
