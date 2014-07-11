@@ -4,8 +4,8 @@ import org.apache.wicket.model.IModel;
 
 public class CommentWrapperROM<T> implements IModel<T> {
 
-	private static final long serialVersionUID = 1L;
-	private T commentWrapper;
+	private static final long serialVersionUID = 5312924914928923754L;
+	private transient T commentWrapper;
 	
 	public CommentWrapperROM(T commentWrapper) {
 		this.commentWrapper = commentWrapper;

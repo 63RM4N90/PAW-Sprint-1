@@ -183,19 +183,18 @@ public class ProfilePage extends BasePage {
 
 			@Override
 			protected void populateItem(Item<CommentWrapper> item) {
-				item.add(new Label("transformedComment"));
+				item.add(new Label("transformedComment", item.getModelObject()
+						.getTransformedComment()));
 				Object cw = item.getModel().getObject();
 				Object self = item;
-				Link<CommentWrapper> removeFavouriteLink = new Link<CommentWrapper> (
+				Link<CommentWrapper> removeFavouriteLink = new Link<CommentWrapper>(
 						"removeFavouriteLink", item.getModel()) {
-				
+
 					@Override
 					public void onClick() {
 						User user = users.getUser(SocialCthulhuSession.get()
 								.getUsername());
-						CommentWrapper cw = getModelObject();
 						user.removeFavourite(getModelObject().getComment());
-						System.out.println("paséee!");
 					}
 
 				};
@@ -203,18 +202,17 @@ public class ProfilePage extends BasePage {
 						getString("remove_favourite")));
 				item.add(removeFavouriteLink);
 				Link<CommentWrapper> addFavouriteLink = new Link<CommentWrapper>(
-						"addFavouriteLink") {
+						"addFavouriteLink", item.getModel()) {
 
 					@Override
 					public void onClick() {
+						CommentWrapper comment = getModelObject();
+						System.out.println("COMMENT IS NULL = "
+								+ (comment == null));
 						User author = users.getUser(SocialCthulhuSession.get()
 								.getUsername());
-						Comment comment = new Comment(author, new Date(),
-								commentTextarea, comments.getHashtagList(
-										commentTextarea, author),
-								comments.getReferences(commentTextarea), author);
 						users.getUser(SocialCthulhuSession.get().getUsername())
-								.addFavourite(comment);
+								.addFavourite(comment.getComment());
 					}
 
 				};
@@ -234,47 +232,49 @@ public class ProfilePage extends BasePage {
 				recthulhuLink
 						.add(new Label("recthulhu", getString("recthulhu")));
 				item.add(recthulhuLink);
-				if (!item.getModelObject().getComment()
-						.isRecuthulu()) {
+				if (!item.getModelObject().getComment().isRecuthulu()) {
 					recthulhuLink.setVisible(false);
 				}
-				Link<String> commentUsernameLink = new Link<String>(
-						"commentUsernameLink") {
+				Link<CommentWrapper> commentUsernameLink = new Link<CommentWrapper>(
+						"commentUsernameLink", item.getModel()) {
 
 					@Override
 					public void onClick() {
-						// setResponsePage(new
-						// ProfilePage(item.getModelObject().getComment().getAuthor().getId()));
+						setResponsePage(new ProfilePage(getModelObject()
+								.getComment().getAuthor().getId()));
 					}
 
 				};
-				commentUsernameLink.add(new Label("comment.author.username"));
+				commentUsernameLink.add(new Label("comment_username", item
+						.getModelObject().getComment().getAuthor()
+						.getUsername()));
 				item.add(commentUsernameLink);
-				Link<String> authorUsernameLink = new Link<String>(
-						"authorUsernameLink") {
+				Link<CommentWrapper> authorUsernameLink = new Link<CommentWrapper>(
+						"authorUsernameLink", item.getModel()) {
 
 					@Override
 					public void onClick() {
-						// setResponsePage(new
-						// ProfilePage(item.getModelObject().getComment().getOriginalAuthor().getId()));
+						setResponsePage(new ProfilePage(getModelObject()
+								.getComment().getOriginalAuthor().getId()));
 					}
 
 				};
-				authorUsernameLink.add(new Label(
-						"comment.originalAuthor.username"));
+				authorUsernameLink.add(new Label("comment_author", item
+						.getModelObject().getComment().getAuthor()
+						.getUsername()));
 				item.add(authorUsernameLink);
 
 				PrettyTime p = new PrettyTime();
 				item.add(new Label("commentDate", p.format(item
 						.getModelObject().getComment().getDate())));
 
-				Link<String> deleteCommentLink = new Link<String>(
-						"deleteCommentLink") {
+				Link<CommentWrapper> deleteCommentLink = new Link<CommentWrapper>(
+						"deleteCommentLink", item.getModel()) {
 
 					@Override
 					public void onClick() {
-						// TODO Auto-generated method stub
-
+						CommentWrapper cw = getModelObject();
+						comments.delete(cw.getComment());
 					}
 
 				};
