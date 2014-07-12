@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.basic.MultiLineLabel;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.image.Image;
@@ -196,7 +197,7 @@ public class ProfilePage extends BasePage {
 						.getFavourites()
 						.contains(item.getModelObject().getComment());
 
-				item.add(new Label("transformedComment", item.getModelObject()
+				item.add(new MultiLineLabel("transformedComment", item.getModelObject()
 						.getTransformedComment()));
 				Link<CommentWrapper> removeFavouriteLink = new Link<CommentWrapper>(
 						"removeFavouriteLink", item.getModel()) {
@@ -281,8 +282,6 @@ public class ProfilePage extends BasePage {
 					@Override
 					public void onClick() {
 						CommentWrapper cw = getModelObject();
-						users.getUser(SocialCthulhuSession.get().getUsername())
-								.getComments().remove(cw.getComment());
 						comments.delete(cw.getComment());
 					}
 				};
