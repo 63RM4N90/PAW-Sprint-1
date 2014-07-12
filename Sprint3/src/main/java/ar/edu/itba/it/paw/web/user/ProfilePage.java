@@ -183,13 +183,21 @@ public class ProfilePage extends BasePage {
 
 			@Override
 			protected void populateItem(Item<CommentWrapper> item) {
-				
-				boolean equalUsers = item.getModelObject().getComment().getAuthor().equals(item.getModelObject().getComment().getOriginalAuthor());
-				
+
+				boolean equalUsers = item
+						.getModelObject()
+						.getComment()
+						.getAuthor()
+						.equals(item.getModelObject().getComment()
+								.getOriginalAuthor());
+
+				boolean alreadyFavourited = users
+						.getUser(SocialCthulhuSession.get().getUsername())
+						.getFavourites()
+						.contains(item.getModelObject().getComment());
+
 				item.add(new Label("transformedComment", item.getModelObject()
 						.getTransformedComment()));
-				Object cw = item.getModel().getObject();
-				Object self = item;
 				Link<CommentWrapper> removeFavouriteLink = new Link<CommentWrapper>(
 						"removeFavouriteLink", item.getModel()) {
 
@@ -203,6 +211,7 @@ public class ProfilePage extends BasePage {
 				};
 				removeFavouriteLink.add(new Label("removeFavourite",
 						getString("remove_favourite")));
+				removeFavouriteLink.setVisible(alreadyFavourited);
 				item.add(removeFavouriteLink);
 				Link<CommentWrapper> addFavouriteLink = new Link<CommentWrapper>(
 						"addFavouriteLink", item.getModel()) {
@@ -216,6 +225,7 @@ public class ProfilePage extends BasePage {
 				};
 				addFavouriteLink.add(new Label("addFavourite",
 						getString("add_favourite")));
+				addFavouriteLink.setVisible(!alreadyFavourited);
 				item.add(addFavouriteLink);
 				Link<CommentWrapper> recthulhuLink = new Link<CommentWrapper>(
 						"recthulhuLink", item.getModel()) {
@@ -243,7 +253,8 @@ public class ProfilePage extends BasePage {
 						.getModelObject().getComment().getAuthor()
 						.getUsername()));
 				item.add(commentUsernameLink);
-				Label recthuledFrom = new Label("recthuled_from", getString("recthuled_from"));
+				Label recthuledFrom = new Label("recthuled_from",
+						getString("recthuled_from"));
 				Link<CommentWrapper> authorUsernameLink = new Link<CommentWrapper>(
 						"authorUsernameLink", item.getModel()) {
 
@@ -270,6 +281,8 @@ public class ProfilePage extends BasePage {
 					@Override
 					public void onClick() {
 						CommentWrapper cw = getModelObject();
+						users.getUser(SocialCthulhuSession.get().getUsername())
+								.getComments().remove(cw.getComment());
 						comments.delete(cw.getComment());
 					}
 				};
