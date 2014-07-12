@@ -198,7 +198,7 @@ public class ProfilePage extends BasePage {
 						.contains(item.getModelObject().getComment());
 
 				item.add(new MultiLineLabel("transformedComment", item.getModelObject()
-						.getTransformedComment()));
+						.getTransformedComment()).setEscapeModelStrings(false));
 				Link<CommentWrapper> removeFavouriteLink = new Link<CommentWrapper>(
 						"removeFavouriteLink", item.getModel()) {
 
