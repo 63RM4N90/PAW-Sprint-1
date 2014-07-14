@@ -162,6 +162,7 @@ public class ProfilePage extends BasePage {
 								commentTextarea, author),
 						comments.getReferences(commentTextarea), author);
 				comments.addComment(comment);
+				commentTextarea = "";
 			}
 		};
 		form.add(new TextArea<String>("commentTextarea").setRequired(true));
@@ -286,8 +287,6 @@ public class ProfilePage extends BasePage {
 					@Override
 					public void onClick() {
 						CommentWrapper cw = getModelObject();
-						User user = users.getUser(SocialCthulhuSession.get().getUsername());
-						user.getComments().remove(cw.getComment());
 						comments.delete(cw.getComment());
 					}
 				};

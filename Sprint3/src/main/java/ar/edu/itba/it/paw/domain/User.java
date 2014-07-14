@@ -271,6 +271,10 @@ public class User extends PersistentEntity {
 		this.password = password;
 	}
 	
+	public void deleteComment(Comment comment) {
+		comments.remove(comment);
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

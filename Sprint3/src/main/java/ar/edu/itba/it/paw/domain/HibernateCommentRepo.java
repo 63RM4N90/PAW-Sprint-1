@@ -89,6 +89,7 @@ public class HibernateCommentRepo extends AbstractHibernateRepo implements
 	@Override
 	public void delete(Comment comment) {
 		comment.getAuthor().removeFavourite(comment);
+		comment.getAuthor().deleteComment(comment);
 		super.delete(comment);
 	}
 
