@@ -131,7 +131,8 @@ public class ProfilePage extends BasePage {
 
 			@Override
 			public void onClick() {
-				User user = users.getUser(SocialCthulhuSession.get().getUsername());
+				User user = users.getUser(SocialCthulhuSession.get()
+						.getUsername());
 				user.follow(getModelObject());
 			}
 		};
@@ -324,7 +325,7 @@ public class ProfilePage extends BasePage {
 		List<CommentWrapper> result = new ArrayList<CommentWrapper>();
 		for (Comment c : commentList) {
 			result.add(new CommentWrapper(c,
-					getProcessedComment(c.getComment()), u));
+					getProcessedComment(c.getComment()), c.favouritedBy(u)));
 		}
 		return result;
 	}

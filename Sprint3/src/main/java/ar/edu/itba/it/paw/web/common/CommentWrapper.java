@@ -10,10 +10,10 @@ public class CommentWrapper extends PersistentEntity implements Comparable<Comme
 	private String transformedComment;
 	private boolean favouritee;
 
-	public CommentWrapper(Comment comment, String transformedComment, User userSession) {
+	public CommentWrapper(Comment comment, String transformedComment, boolean favouritee) {
 		this.comment = comment;
 		this.transformedComment = transformedComment;
-		this.favouritee = comment.favouritedBy(userSession);
+		this.favouritee = favouritee;
 	}
 
 	public Comment getComment() {

@@ -10,13 +10,13 @@ public class CommentWrapperROM implements IModel<CommentWrapper> {
 	private static final long serialVersionUID = 5312924914928923754L;
 	private IModel<Comment> comment;
 	private String transformedComment;
-	private User userSession;
+	private boolean favouritee;
 
 	public CommentWrapperROM(IModel<Comment> comment,
 			String transformedComment, User userSession) {
 		this.comment = comment;
 		this.transformedComment = transformedComment;
-		this.userSession = userSession;
+		this.favouritee = comment.getObject().favouritedBy(userSession);
 	}
 
 	@Override
@@ -27,7 +27,7 @@ public class CommentWrapperROM implements IModel<CommentWrapper> {
 	@Override
 	public CommentWrapper getObject() {
 		return new CommentWrapper(comment.getObject(), transformedComment,
-				userSession);
+				favouritee);
 	}
 
 	@Override
