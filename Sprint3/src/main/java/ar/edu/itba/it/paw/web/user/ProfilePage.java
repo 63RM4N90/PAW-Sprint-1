@@ -127,11 +127,12 @@ public class ProfilePage extends BasePage {
 		};
 		editProfileLink.add(new Label("edit", getString("edit")));
 		add(editProfileLink);
-		Link<String> followLink = new Link<String>("followLink") {
+		Link<User> followLink = new Link<User>("followLink", userModel) {
 
 			@Override
 			public void onClick() {
-				// TODO Auto-generated method stub
+				User user = users.getUser(SocialCthulhuSession.get().getUsername());
+				user.follow(getModelObject());
 			}
 		};
 		followLink.add(new Label("follow", getString("follow")));
@@ -177,7 +178,9 @@ public class ProfilePage extends BasePage {
 				List<CommentWrapper> transformedComments = transformComments(
 						commentList, commenter);
 				for (CommentWrapper c : transformedComments) {
-					result.add(new CommentWrapperROM<CommentWrapper>(c));
+					result.add(new CommentWrapperROM(new EntityModel<Comment>(
+							Comment.class, c.getComment()), c
+							.getTransformedComment(), commenter));
 				}
 				return result.iterator();
 			}
@@ -197,8 +200,9 @@ public class ProfilePage extends BasePage {
 						.getFavourites()
 						.contains(item.getModelObject().getComment());
 
-				item.add(new MultiLineLabel("transformedComment", item.getModelObject()
-						.getTransformedComment()).setEscapeModelStrings(false));
+				item.add(new MultiLineLabel("transformedComment", item
+						.getModelObject().getTransformedComment())
+						.setEscapeModelStrings(false));
 				Link<CommentWrapper> removeFavouriteLink = new Link<CommentWrapper>(
 						"removeFavouriteLink", item.getModel()) {
 
@@ -282,6 +286,8 @@ public class ProfilePage extends BasePage {
 					@Override
 					public void onClick() {
 						CommentWrapper cw = getModelObject();
+						User user = users.getUser(SocialCthulhuSession.get().getUsername());
+						user.getComments().remove(cw.getComment());
 						comments.delete(cw.getComment());
 					}
 				};

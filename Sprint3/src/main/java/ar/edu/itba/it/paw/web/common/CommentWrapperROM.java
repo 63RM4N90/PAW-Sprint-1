@@ -2,26 +2,35 @@ package ar.edu.itba.it.paw.web.common;
 
 import org.apache.wicket.model.IModel;
 
-public class CommentWrapperROM<T> implements IModel<T> {
+import ar.edu.itba.it.paw.domain.Comment;
+import ar.edu.itba.it.paw.domain.User;
+
+public class CommentWrapperROM implements IModel<CommentWrapper> {
 
 	private static final long serialVersionUID = 5312924914928923754L;
-	private transient T commentWrapper;
-	
-	public CommentWrapperROM(T commentWrapper) {
-		this.commentWrapper = commentWrapper;
+	private IModel<Comment> comment;
+	private String transformedComment;
+	private User userSession;
+
+	public CommentWrapperROM(IModel<Comment> comment,
+			String transformedComment, User userSession) {
+		this.comment = comment;
+		this.transformedComment = transformedComment;
+		this.userSession = userSession;
 	}
-	
+
 	@Override
 	public void detach() {
+		comment.detach();
 	}
 
 	@Override
-	public T getObject() {
-		return commentWrapper;
+	public CommentWrapper getObject() {
+		return new CommentWrapper(comment.getObject(), transformedComment,
+				userSession);
 	}
 
 	@Override
-	public void setObject(T object) {
-		commentWrapper = object;
+	public void setObject(CommentWrapper object) {
 	}
 }
