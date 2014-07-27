@@ -51,16 +51,17 @@ public class NotificationsPage extends SecuredPage {
 					}
 				};
 
-				notificatorLink.add(new Label("notificator_name",
-						new PropertyModel<String>(item.getModel(),
-								"originalAuthor.username")));
+				notificatorLink
+						.add(new Label("notificator_name", item.getModel()
+								.getObject().getNotificator().getUsername()));
 				item.add(new Label("notification_text",
 						new PropertyModel<String>(item.getModel(),
 								"notification")));
 				PrettyTime p = new PrettyTime();
 				item.add(new Label("notification_date", p.format(item
 						.getModelObject().getDate())));
-				item.add(new Label("notification_by", getString("notification")));
+				item.add(new Label("notification_by",
+						getString("notification_by")));
 				item.add(notificatorLink);
 			}
 		});
