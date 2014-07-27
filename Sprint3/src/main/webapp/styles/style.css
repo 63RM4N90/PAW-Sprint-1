@@ -421,24 +421,19 @@ li p {
 }
 
 .notifications {
-	background: url(../img/notifications.png);
 	width: 208px;
 	height: 48px;
 	position: relative;
+	border-radius: 10px;
+	margin-bottom: 15px;
 }
 
-.followers {
-	background: url(../img/followers.png);
+.followers, .following, .suggested-users, .favourites {
 	width: 208px;
 	height: 48px;
 	position: relative;
-}
-
-.following {
-	background: url(../img/following.png);
-	width: 208px;
-	height: 48px;
-	position: relative;
+	border-radius: 10px;
+	margin-bottom: 15px;
 }
 
 .feedbackPanelERROR {
@@ -451,11 +446,10 @@ li p {
 
 .notifications p, .following p, .followers p {
 	position: absolute;
-	top: 11px;
-	padding: 3px;
-	border-radius: 10px;
-	margin: 0px 7px;
-	color: #000000;
+	height: 100%;
+	top: 0;
+	width: 20px;
+	line-height: 42px;
 	font-weight: bold;
 }
 

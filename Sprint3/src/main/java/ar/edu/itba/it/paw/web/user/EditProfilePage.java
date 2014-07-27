@@ -11,6 +11,7 @@ import org.apache.wicket.markup.html.form.validation.EqualPasswordInputValidator
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.ResourceModel;
+import org.apache.wicket.util.lang.Bytes;
 
 import ar.edu.itba.it.paw.domain.EntityModel;
 import ar.edu.itba.it.paw.domain.User;
@@ -71,6 +72,8 @@ public class EditProfilePage extends SecuredPage {
 		descriptionField.add(new DescriptionValidator());
 		form.add(descriptionField);
 		
+		form.setMaxSize(Bytes.kilobytes(500));
+
 		FileUploadField fileUploadField = new FileUploadField("picture");
 		form.add(fileUploadField);
 		

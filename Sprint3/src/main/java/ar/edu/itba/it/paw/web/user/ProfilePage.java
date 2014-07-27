@@ -106,8 +106,6 @@ public class ProfilePage extends BasePage {
 				}
 			}
 		};
-		suggestedUsersLink.add(new Image("suggestedUsers",
-				SocialCthulhuApp.SUGGESTED_USERS));
 		add(suggestedUsersLink);
 		add(new Link<String>("favouritesLink") {
 
@@ -115,7 +113,7 @@ public class ProfilePage extends BasePage {
 			public void onClick() {
 				setResponsePage(new FavouritesPage());
 			}
-		}.add(new Image("favourites", SocialCthulhuApp.FAVOURITES)));
+		});
 
 		Link<String> editProfileLink = new Link<String>("editProfileLink") {
 

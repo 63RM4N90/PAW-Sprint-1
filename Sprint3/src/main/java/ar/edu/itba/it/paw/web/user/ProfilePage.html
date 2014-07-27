@@ -27,36 +27,43 @@
 						</p>
 						
 						<a wicket:id="followersLink">
-							<div class="followers">
+							<button class="followers btn-inverse">
 								<p wicket:id="followersAmount">
 									0
 								</p>
-							</div>
+								<span><wicket:message key="followers"/></span>
+							</button>
 						</a>
 						<a wicket:id="followingLink">
-							<div class="following">
+							<button class="following btn-inverse">
 								<p wicket:id="followingAmount">
 									0
 								</p>
-							</div>
+								<span><wicket:message key="following"/></span>
+							</button>
 						</a>
 						<a wicket:id="notificationsLink">
-							<div class="notifications">
+							<button class="notifications btn-inverse">
 								<p wicket:id="notifications">
 									0
 								</p>
-							</div>
+								<span><wicket:message key="notifications"/></span>
+							</button>
 						</a>
 						<a wicket:id="suggestedUsersLink">
-							<img wicket:id="suggestedUsers"/>
+							<button class="btn-inverse suggested-users">
+								<span><wicket:message key="suggestedUsers"/></span>
+							</button>	
 						</a>
 						<a wicket:id="favouritesLink">
-							<img wicket:id="favourites"/>
+							<button class="btn-inverse favourites">
+								<span><wicket:message key="favourites"/></span>
+							</button>
 						</a>
 					</div>
 					<a wicket:id="editProfileLink">
 						<button class="btn-inverse search-button" wicket:id="edit">
-							Edit
+							edit
 						</button>
 					</a>
 					<a wicket:id="followLink">
