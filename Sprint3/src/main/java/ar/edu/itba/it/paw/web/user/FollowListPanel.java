@@ -12,13 +12,14 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.RefreshingView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.ocpsoft.prettytime.PrettyTime;
 
 import ar.edu.itba.it.paw.domain.EntityModel;
 import ar.edu.itba.it.paw.domain.User;
 
 @SuppressWarnings("serial")
 public abstract class FollowListPanel extends Panel {
-	
+
 	private int userId;
 	private Label noFollow;
 
@@ -43,20 +44,27 @@ public abstract class FollowListPanel extends Panel {
 
 			@Override
 			protected void populateItem(Item<User> item) {
-				item.add(new Link<String>("userFollowLink"){
+				item.add(new Link<User>("usernameLink", item.getModel()) {
 
 					@Override
 					public void onClick() {
-						// TODO Auto-generated method stub
-						
+						setResponsePage(new ProfilePage(getModelObject()
+								.getId()));
 					}
-					
-				}.add(new Label("userFollowUsername", new PropertyModel<String>(item.getModel(), "username"))));
+
+				}.add(new Label("username", item.getModelObject().getUsername())));
+
+				item.add(new Label("fullName", item.getModelObject()
+						.getFullName()));
+				item.add(new Label("registeredOn", getString("registered_on")));
+				PrettyTime p = new PrettyTime();
+				item.add(new Label("registrationDate", p.format(item
+						.getModelObject().getRegistrationDate())));
 			}
 		});
-		Set<User> userList = getFollows(FollowListPanel.this.userId);
+		// Set<User> userList = getFollows(FollowListPanel.this.userId);
 	}
-	
+
 	protected abstract Set<User> getFollows(int userId);
 
 }

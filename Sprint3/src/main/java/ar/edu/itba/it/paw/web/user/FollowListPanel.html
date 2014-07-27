@@ -2,13 +2,11 @@
 	<body>
 		<wicket:panel>
 			<span wicket:id="no_follow">There are no users to show...</span>
-			<ul style="padding: 0;">
-				<li wicket:id="follow">
-					<div class="comment">
-						<div class="comment-reference">
-							<i><wicket:message key="user"/> </i> <a wicket:id="userFollowLink"><span wicket:id="userFollowUsername">username</span></a>
-						</div>
-					</div>
+			<ul>
+				<li class="search-result" wicket:id="follow">
+					<a wicket:id="usernameLink"><span wicket:id="username">username</span></a><br>
+					<span><span wicket:id="fullName">fullName</span> | </span>
+					<span><span wicket:id="registeredOn"> Registered on </span><span wicket:id="registrationDate"/></span>
 				</li>
 			</ul>
 

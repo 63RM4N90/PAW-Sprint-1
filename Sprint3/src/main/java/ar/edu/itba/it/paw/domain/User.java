@@ -218,6 +218,10 @@ public class User extends PersistentEntity {
 		this.surname = surname;
 	}
 
+	public String getFullName() {
+		return name + " " + surname;
+	}
+
 	public String getUsername() {
 		return username;
 	}

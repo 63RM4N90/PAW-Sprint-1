@@ -331,7 +331,6 @@ public class ProfilePage extends BasePage {
 				unfollowLink.setVisible(false);
 			}
 		}
-
 	}
 
 	private List<CommentWrapper> transformComments(List<Comment> commentList,
