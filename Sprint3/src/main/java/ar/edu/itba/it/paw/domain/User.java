@@ -98,26 +98,26 @@ public class User extends PersistentEntity {
 		return notifications;
 	}
 
-	public void addFavourite(Comment comment){
+	public void addFavourite(Comment comment) {
 		favourites.add(comment);
 	}
-	
-	public int favourites(){
+
+	public int favourites() {
 		return favourites.size();
 	}
-	
-	public Set<Comment> getFavourites(){
+
+	public Set<Comment> getFavourites() {
 		return favourites;
 	}
-	
-	public void removeFavourite(Comment comment){
+
+	public void removeFavourite(Comment comment) {
 		favourites.remove(comment);
 	}
-	
+
 	public boolean checkPassword(String password) {
 		return this.password.equals(password);
 	}
-	
+
 	public int getUncheckedNotifications() {
 		int ans = 0;
 		for (Notification notification : notifications) {
@@ -148,8 +148,7 @@ public class User extends PersistentEntity {
 		return following;
 	}
 
-	public Notification follow(User user) {
-		Notification notification = new Notification(this, username + " is following you :).");
+	public Notification follow(User user, Notification notification) {
 		user.notify(notification);
 		following.add(user);
 		return notification;
@@ -219,6 +218,10 @@ public class User extends PersistentEntity {
 		this.surname = surname;
 	}
 
+	public String getFullName() {
+		return name + " " + surname;
+	}
+
 	public String getUsername() {
 		return username;
 	}
@@ -266,15 +269,15 @@ public class User extends PersistentEntity {
 	public String getConfirmPassword() {
 		return password;
 	}
-	
+
 	public void setConfirmPassword(String password) {
 		this.password = password;
 	}
-	
+
 	public void deleteComment(Comment comment) {
 		comments.remove(comment);
 	}
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
