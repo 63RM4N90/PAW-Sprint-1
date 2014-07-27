@@ -25,6 +25,8 @@ import org.ocpsoft.prettytime.PrettyTime;
 import ar.edu.itba.it.paw.domain.Comment;
 import ar.edu.itba.it.paw.domain.CommentRepo;
 import ar.edu.itba.it.paw.domain.EntityModel;
+import ar.edu.itba.it.paw.domain.Notification;
+import ar.edu.itba.it.paw.domain.NotificationRepo;
 import ar.edu.itba.it.paw.domain.User;
 import ar.edu.itba.it.paw.domain.UserRepo;
 import ar.edu.itba.it.paw.web.SocialCthulhuApp;
@@ -41,11 +43,17 @@ public class ProfilePage extends BasePage {
 	private UserRepo users;
 	@SpringBean
 	private CommentRepo comments;
+	@SpringBean
+	private NotificationRepo notifications;
 	private String commentTextarea;
 
 	@SuppressWarnings("serial")
 	public ProfilePage(final int userId) {
 		IModel<User> userModel = new EntityModel<User>(User.class, userId);
+		boolean isFollowing = users
+				.getUser(SocialCthulhuSession.get().getUsername())
+				.getFollowing().contains(userModel.getObject());
+		System.out.println("IS FOLLOWING = " + isFollowing);
 		User profileUser = userModel.getObject();
 		if (profileUser.getPicture() != null) {
 			add(new Image("profilePicture", new ImageResourceReference(
@@ -133,20 +141,26 @@ public class ProfilePage extends BasePage {
 			public void onClick() {
 				User user = users.getUser(SocialCthulhuSession.get()
 						.getUsername());
-				user.follow(getModelObject());
+				Notification notification = new Notification(user,
+						user.getUsername() + " is following you :).");
+				notifications.save(notification);
+				user.follow(getModelObject(), notification);
 			}
 		};
 		followLink.add(new Label("follow", getString("follow")));
+		followLink.setVisible(!isFollowing);
 		add(followLink);
-		Link<String> unfollowLink = new Link<String>("unfollowLink") {
+		Link<User> unfollowLink = new Link<User>("unfollowLink", userModel) {
 
 			@Override
 			public void onClick() {
-				// TODO Auto-generated method stub
-
+				User user = users.getUser(SocialCthulhuSession.get()
+						.getUsername());
+				user.unfollow(getModelObject());
 			}
 		};
 		unfollowLink.add(new Label("unfollow", getString("unfollow")));
+		unfollowLink.setVisible(isFollowing);
 		add(unfollowLink);
 		FeedbackPanel errorPanel = new FeedbackPanel("errorPanel");
 		add(errorPanel);
