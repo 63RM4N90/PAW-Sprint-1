@@ -23,7 +23,7 @@ public class UserTest {
 				"12345678", null, "follow", "follow", new Date(), false);
 
 		Assert.assertEquals(testUser.getFollowing().size(), 0);
-		testUser.follow(follow);
+		testUser.follow(follow, new Notification(follow, "notification"));
 		Assert.assertEquals(testUser.following(), 1);
 	}
 
@@ -32,7 +32,7 @@ public class UserTest {
 		User follow = new User("follow", "follow", "follow", "follow",
 				"12345678", null, "follow", "follow", new Date(), false);
 
-		testUser.follow(follow);
+		testUser.follow(follow, new Notification(follow, "notification"));
 		Assert.assertEquals(testUser.getFollowing().size(), 1);
 		testUser.unfollow(follow);
 		Assert.assertEquals(testUser.getFollowing().size(), 0);
