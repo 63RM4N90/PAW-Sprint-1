@@ -53,7 +53,6 @@ public class ProfilePage extends BasePage {
 		boolean isFollowing = users
 				.getUser(SocialCthulhuSession.get().getUsername())
 				.getFollowing().contains(userModel.getObject());
-		System.out.println("IS FOLLOWING = " + isFollowing);
 		User profileUser = userModel.getObject();
 		if (profileUser.getPicture() != null) {
 			add(new Image("profilePicture", new ImageResourceReference(
@@ -299,8 +298,7 @@ public class ProfilePage extends BasePage {
 
 					@Override
 					public void onClick() {
-						CommentWrapper cw = getModelObject();
-						comments.delete(cw.getComment());
+						comments.delete(getModelObject().getComment());
 					}
 				};
 				deleteCommentLink.add(new Label("deleteComment",

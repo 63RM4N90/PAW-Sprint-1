@@ -72,6 +72,7 @@ public class HibernateCommentRepo extends AbstractHibernateRepo implements
 			result = matcher.group();
 			String username = result.substring(1);
 			User user = userRepo.getUser(username);
+			System.out.println(session.getAttributeNames());
 			User sessionUser = userRepo.getUser((String) session
 					.getAttribute("username"));
 			if (user != null) {
