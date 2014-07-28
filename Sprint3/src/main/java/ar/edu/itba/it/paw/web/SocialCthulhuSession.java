@@ -22,10 +22,12 @@ public class SocialCthulhuSession extends WebSession {
 	public SocialCthulhuSession(Request request) {
 		super(request);
 		String username = cookieService.getUsername(request, "usernameCookie");
-		int userId = cookieService.getUserId(request, "userIdCookie");
-		if (username != null && userId != -1) {
-			this.username = username;
-			this.userId = userId;
+		if(username != null) {
+			int userId = cookieService.getUserId(request, "userIdCookie");
+			if (userId != -1) {
+				this.username = username;
+				this.userId = userId;
+			}
 		}
 	}
 
