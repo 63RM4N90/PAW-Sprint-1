@@ -1,13 +1,12 @@
 package ar.edu.itba.it.paw.web.common;
 
-import org.apache.wicket.util.lang.Classes;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 
-import com.google.code.kaptcha.Constants;
-
 import ar.edu.itba.it.paw.web.SocialCthulhuSession;
+
+import com.google.code.kaptcha.Constants;
  
 public class CaptchaValidator implements IValidator<String> {
  
@@ -28,9 +27,6 @@ public class CaptchaValidator implements IValidator<String> {
 		String kaptchaExpected = (String) session
 			.getAttribute(Constants.KAPTCHA_SESSION_KEY);
  
-		System.out.println("El captcha recibido es " + kaptchaReceived);
-		System.out.println("El captcha esperado es " + kaptchaExpected);
-		
 		if (kaptchaReceived == null
 				|| !kaptchaReceived.equalsIgnoreCase(kaptchaExpected)) {
 			error.addKey("captcha_error");

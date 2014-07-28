@@ -1,26 +1,19 @@
 package ar.edu.itba.it.paw.web.user;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.InvalidPropertiesFormatException;
-import java.util.Iterator;
-import java.util.List;
 
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.basic.MultiLineLabel;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
-import org.apache.wicket.markup.repeater.Item;
-import org.apache.wicket.markup.repeater.RefreshingView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.ocpsoft.prettytime.PrettyTime;
 
 import ar.edu.itba.it.paw.domain.Comment;
 import ar.edu.itba.it.paw.domain.CommentRepo;
@@ -32,8 +25,6 @@ import ar.edu.itba.it.paw.domain.UserRepo;
 import ar.edu.itba.it.paw.web.SocialCthulhuApp;
 import ar.edu.itba.it.paw.web.SocialCthulhuSession;
 import ar.edu.itba.it.paw.web.base.BasePage;
-import ar.edu.itba.it.paw.web.common.CommentWrapper;
-import ar.edu.itba.it.paw.web.common.CommentWrapperROM;
 import ar.edu.itba.it.paw.web.common.ImageResourceReference;
 
 public class ProfilePage extends BasePage {
@@ -179,133 +170,7 @@ public class ProfilePage extends BasePage {
 		};
 		form.add(new TextArea<String>("commentTextarea").setRequired(true));
 		add(form);
-		add(new RefreshingView<CommentWrapper>("wrapperComment") {
-
-			@Override
-			protected Iterator<IModel<CommentWrapper>> getItemModels() {
-				IModel<User> userModel = new EntityModel<User>(User.class,
-						userId);
-				User commenter = userModel.getObject();
-				List<IModel<CommentWrapper>> result = new ArrayList<IModel<CommentWrapper>>();
-				List<Comment> commentList = commenter.getComments();
-				List<CommentWrapper> transformedComments = transformComments(
-						commentList, commenter);
-				for (CommentWrapper c : transformedComments) {
-					result.add(new CommentWrapperROM(new EntityModel<Comment>(
-							Comment.class, c.getComment()), c
-							.getTransformedComment(), commenter));
-				}
-				return result.iterator();
-			}
-
-			@Override
-			protected void populateItem(Item<CommentWrapper> item) {
-
-				boolean equalUsers = item
-						.getModelObject()
-						.getComment()
-						.getAuthor()
-						.equals(item.getModelObject().getComment()
-								.getOriginalAuthor());
-
-				boolean alreadyFavourited = users
-						.getUser(SocialCthulhuSession.get().getUsername())
-						.getFavourites()
-						.contains(item.getModelObject().getComment());
-
-				item.add(new MultiLineLabel("transformedComment", item
-						.getModelObject().getTransformedComment())
-						.setEscapeModelStrings(false));
-				Link<CommentWrapper> removeFavouriteLink = new Link<CommentWrapper>(
-						"removeFavouriteLink", item.getModel()) {
-
-					@Override
-					public void onClick() {
-						User user = users.getUser(SocialCthulhuSession.get()
-								.getUsername());
-						user.removeFavourite(getModelObject().getComment());
-					}
-
-				};
-				removeFavouriteLink.add(new Label("removeFavourite",
-						getString("remove_favourite")));
-				removeFavouriteLink.setVisible(alreadyFavourited);
-				item.add(removeFavouriteLink);
-				Link<CommentWrapper> addFavouriteLink = new Link<CommentWrapper>(
-						"addFavouriteLink", item.getModel()) {
-
-					@Override
-					public void onClick() {
-						CommentWrapper comment = getModelObject();
-						users.getUser(SocialCthulhuSession.get().getUsername())
-								.addFavourite(comment.getComment());
-					}
-				};
-				addFavouriteLink.add(new Label("addFavourite",
-						getString("add_favourite")));
-				addFavouriteLink.setVisible(!alreadyFavourited);
-				item.add(addFavouriteLink);
-				Link<CommentWrapper> recthulhuLink = new Link<CommentWrapper>(
-						"recthulhuLink", item.getModel()) {
-
-					@Override
-					public void onClick() {
-						setResponsePage(new ProfilePage(getModelObject()
-								.getComment().getAuthor().getId()));
-					}
-				};
-				recthulhuLink
-						.add(new Label("recthulhu", getString("recthulhu")));
-				recthulhuLink.setVisible(!equalUsers);
-				item.add(recthulhuLink);
-				Link<CommentWrapper> commentUsernameLink = new Link<CommentWrapper>(
-						"commentUsernameLink", item.getModel()) {
-
-					@Override
-					public void onClick() {
-						setResponsePage(new ProfilePage(getModelObject()
-								.getComment().getAuthor().getId()));
-					}
-				};
-				commentUsernameLink.add(new Label("comment_username", item
-						.getModelObject().getComment().getAuthor()
-						.getUsername()));
-				item.add(commentUsernameLink);
-				Label recthuledFrom = new Label("recthuled_from",
-						getString("recthuled_from"));
-				Link<CommentWrapper> authorUsernameLink = new Link<CommentWrapper>(
-						"authorUsernameLink", item.getModel()) {
-
-					@Override
-					public void onClick() {
-						setResponsePage(new ProfilePage(getModelObject()
-								.getComment().getOriginalAuthor().getId()));
-					}
-				};
-				authorUsernameLink.setVisible(!equalUsers);
-				recthuledFrom.setVisible(!equalUsers);
-				authorUsernameLink.add(new Label("comment_author", item
-						.getModelObject().getComment().getAuthor()
-						.getUsername()));
-				item.add(authorUsernameLink);
-				item.add(recthuledFrom);
-				PrettyTime p = new PrettyTime();
-				item.add(new Label("commentDate", p.format(item
-						.getModelObject().getComment().getDate())));
-
-				Link<CommentWrapper> deleteCommentLink = new Link<CommentWrapper>(
-						"deleteCommentLink", item.getModel()) {
-
-					@Override
-					public void onClick() {
-						comments.delete(getModelObject().getComment());
-					}
-				};
-				deleteCommentLink.add(new Label("deleteComment",
-						getString("delete_comment")));
-				item.add(deleteCommentLink);
-			}
-		});
+		add(new CommentsPanel("comments-panel", userId, false));
 
 		if (profileUser.getUsername().equals(
 				((SocialCthulhuSession) getSession()).getUsername())) {
@@ -327,15 +192,5 @@ public class ProfilePage extends BasePage {
 				unfollowLink.setVisible(false);
 			}
 		}
-	}
-
-	private List<CommentWrapper> transformComments(List<Comment> commentList,
-			User u) {
-		List<CommentWrapper> result = new ArrayList<CommentWrapper>();
-		for (Comment c : commentList) {
-			result.add(new CommentWrapper(c,
-					getProcessedComment(c.getComment()), c.favouritedBy(u)));
-		}
-		return result;
 	}
 }

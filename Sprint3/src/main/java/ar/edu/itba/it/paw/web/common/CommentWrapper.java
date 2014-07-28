@@ -2,7 +2,6 @@ package ar.edu.itba.it.paw.web.common;
 
 import ar.edu.itba.it.paw.domain.Comment;
 import ar.edu.itba.it.paw.domain.PersistentEntity;
-import ar.edu.itba.it.paw.domain.User;
 
 public class CommentWrapper extends PersistentEntity implements Comparable<CommentWrapper> {
 	

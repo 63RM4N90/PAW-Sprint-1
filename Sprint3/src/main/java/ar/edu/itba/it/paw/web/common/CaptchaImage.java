@@ -3,7 +3,6 @@ package ar.edu.itba.it.paw.web.common;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 
-
 import org.apache.wicket.markup.html.image.NonCachingImage;
 import org.apache.wicket.request.resource.DynamicImageResource;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -17,6 +16,8 @@ import com.sun.image.codec.jpeg.JPEGImageEncoder;
  
 public class CaptchaImage extends NonCachingImage {
  
+	private static final long serialVersionUID = 3404537221672885808L;
+
 	private static final String CAPTCHA_PRODUCER = "captchaProducer";
  
 	// inject via Spring
@@ -29,10 +30,8 @@ public class CaptchaImage extends NonCachingImage {
  
 		setImageResource(new DynamicImageResource() {
  
-			
 			public byte[] getImageData(Attributes attributes) {
 				ByteArrayOutputStream os = new ByteArrayOutputStream();
- 
 				JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(os);
  
 				try {
@@ -42,7 +41,6 @@ public class CaptchaImage extends NonCachingImage {
 				} catch (Exception e) {
 					throw new RuntimeException(e);
 				}
- 
 			}
  
 			private BufferedImage getImageCaptchaService() {
@@ -65,11 +63,7 @@ public class CaptchaImage extends NonCachingImage {
  
 				return bi;
  
-			}
-
-
-
-			
+			}			
 		});
  
 	}
