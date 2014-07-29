@@ -80,10 +80,9 @@ public class CommentsPanel extends Panel {
 				boolean userCanRecthulhu = !SocialCthulhuSession
 						.get()
 						.getUsername()
-						.equals(item.getModelObject().getComment()
-								.getAuthor().getUsername());
-				System.out.println("CAN RECTHULHU = " + userCanRecthulhu);
-				
+						.equals(item.getModelObject().getComment().getAuthor()
+								.getUsername());
+
 				boolean alreadyFavourited = users
 						.getUser(SocialCthulhuSession.get().getUsername())
 						.getFavourites()
@@ -201,6 +200,9 @@ public class CommentsPanel extends Panel {
 				};
 				deleteCommentLink.add(new Label("deleteComment",
 						getString("delete_comment")));
+				deleteCommentLink.setVisible(users.getUser(userId)
+						.getUsername()
+						.equals(SocialCthulhuSession.get().getUsername()));
 				item.add(deleteCommentLink);
 			}
 		});
