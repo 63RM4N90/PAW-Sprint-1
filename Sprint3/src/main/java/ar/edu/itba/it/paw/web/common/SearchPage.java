@@ -28,8 +28,12 @@ public class SearchPage extends BasePage {
 
 	public SearchPage(String searchText) {
 		super();
-		search = searchText;
-		add(new Label("search", getString("searchTitle") + "\"" + searchText
+		if(searchText != null) {
+			search = searchText;
+		} else {
+			search = "";
+		}
+		add(new Label("search", getString("searchTitle") + "\"" + search
 				+ "\""));
 		add(new RefreshingView<User>("userResult") {
 			private static final long serialVersionUID = 1L;
