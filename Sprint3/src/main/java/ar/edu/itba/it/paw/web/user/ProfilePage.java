@@ -136,6 +136,7 @@ public class ProfilePage extends BasePage {
 						user.getUsername() + " is following you :).");
 				notifications.save(notification);
 				user.follow(getModelObject(), notification);
+				setResponsePage(new ProfilePage(userId));
 			}
 		};
 		followLink.add(new Label("follow", getString("follow")));
@@ -148,6 +149,7 @@ public class ProfilePage extends BasePage {
 				User user = users.getUser(SocialCthulhuSession.get()
 						.getUsername());
 				user.unfollow(getModelObject());
+				setResponsePage(new ProfilePage(userId));
 			}
 		};
 		unfollowLink.add(new Label("unfollow", getString("unfollow")));
