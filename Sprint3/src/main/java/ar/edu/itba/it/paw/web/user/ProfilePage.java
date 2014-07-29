@@ -51,6 +51,8 @@ public class ProfilePage extends BasePage {
 		} else {
 			add(new Image("profilePicture", SocialCthulhuApp.DEFAULT_IMAGE));
 		}
+		if(!users.getUser(userId).getUsername().equals(SocialCthulhuSession.get().getUsername()))
+			users.getUser(userId).visit();
 		add(new Label("profileUsername", new PropertyModel<String>(userModel,
 				"username")));
 		add(new Label("profileName", new PropertyModel<String>(userModel,
