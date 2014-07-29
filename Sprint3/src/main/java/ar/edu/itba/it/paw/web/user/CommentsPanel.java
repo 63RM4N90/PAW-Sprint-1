@@ -1,6 +1,7 @@
 package ar.edu.itba.it.paw.web.user;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -69,13 +70,20 @@ public class CommentsPanel extends Panel {
 			@Override
 			protected void populateItem(Item<CommentWrapper> item) {
 
-				boolean equalUsers = item
+				boolean canShowRecthulhuedFrom = !item
 						.getModelObject()
 						.getComment()
 						.getAuthor()
 						.equals(item.getModelObject().getComment()
 								.getOriginalAuthor());
 
+				boolean userCanRecthulhu = !SocialCthulhuSession
+						.get()
+						.getUsername()
+						.equals(item.getModelObject().getComment()
+								.getAuthor().getUsername());
+				System.out.println("CAN RECTHULHU = " + userCanRecthulhu);
+				
 				boolean alreadyFavourited = users
 						.getUser(SocialCthulhuSession.get().getUsername())
 						.getFavourites()
@@ -124,13 +132,23 @@ public class CommentsPanel extends Panel {
 
 					@Override
 					public void onClick() {
-						setResponsePage(new ProfilePage(getModelObject()
-								.getComment().getAuthor().getId()));
+						String comment = getModelObject().getComment()
+								.getComment();
+						User originalAuthor = getModelObject().getComment()
+								.getOriginalAuthor();
+						User author = users.getUser(SocialCthulhuSession.get()
+								.getUsername());
+						Comment rechtulhu = new Comment(author, new Date(),
+								comment, comments.getHashtagList(comment,
+										author),
+								comments.getReferences(comment), originalAuthor);
+						if (!author.getComments().contains(rechtulhu))
+							comments.addComment(rechtulhu);
 					}
 				};
 				recthulhuLink
 						.add(new Label("recthulhu", getString("recthulhu")));
-				recthulhuLink.setVisible(!equalUsers);
+				recthulhuLink.setVisible(userCanRecthulhu);
 				item.add(recthulhuLink);
 				Link<CommentWrapper> commentUsernameLink = new Link<CommentWrapper>(
 						"commentUsernameLink", item.getModel()) {
@@ -160,10 +178,10 @@ public class CommentsPanel extends Panel {
 								.getComment().getOriginalAuthor().getId()));
 					}
 				};
-				authorUsernameLink.setVisible(!equalUsers);
-				recthuledFrom.setVisible(!equalUsers);
+				authorUsernameLink.setVisible(canShowRecthulhuedFrom);
+				recthuledFrom.setVisible(canShowRecthulhuedFrom);
 				authorUsernameLink.add(new Label("comment_author", item
-						.getModelObject().getComment().getAuthor()
+						.getModelObject().getComment().getOriginalAuthor()
 						.getUsername()));
 				item.add(authorUsernameLink);
 				item.add(recthuledFrom);

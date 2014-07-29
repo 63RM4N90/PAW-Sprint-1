@@ -124,11 +124,6 @@ public class Comment extends PersistentEntity implements Comparable<Comment> {
 				return false;
 		} else if (!comment.equals(other.comment))
 			return false;
-		if (date == null) {
-			if (other.date != null)
-				return false;
-		} else if (!date.equals(other.date))
-			return false;
 		if (originalAuthor == null) {
 			if (other.originalAuthor != null)
 				return false;

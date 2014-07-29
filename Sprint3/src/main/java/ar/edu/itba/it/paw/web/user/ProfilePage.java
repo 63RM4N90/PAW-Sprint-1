@@ -111,7 +111,8 @@ public class ProfilePage extends BasePage {
 			public void onClick() {
 				setResponsePage(new FavouritesPage());
 			}
-		});
+		}.setVisible(SocialCthulhuSession.get().getUsername()
+				.equals(users.getUser(userId).getUsername())));
 
 		Link<String> editProfileLink = new Link<String>("editProfileLink") {
 
