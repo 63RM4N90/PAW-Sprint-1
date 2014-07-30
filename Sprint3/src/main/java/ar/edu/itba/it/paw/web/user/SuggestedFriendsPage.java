@@ -11,12 +11,6 @@ import java.util.Random;
 import java.util.Set;
 
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.PropertyListView;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.LoadableDetachableModel;
-import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import ar.edu.itba.it.paw.domain.HashtagRepo;
@@ -37,55 +31,16 @@ public class SuggestedFriendsPage extends SecuredPage {
 	public SuggestedFriendsPage() throws InvalidPropertiesFormatException,
 			IOException {
 
-		final IModel<List<User>> suggestedFriends = new LoadableDetachableModel<List<User>>() {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected List<User> load() {
-				User user = users.getUser(SocialCthulhuSession.get()
-						.getUsername());
-				try {
-					return getSuggestedFriends(user);
-				} catch (InvalidPropertiesFormatException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				return null;
-			}
-		};
-
-		add(new PropertyListView<User>("suggested_friend", suggestedFriends) {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected void populateItem(ListItem<User> item) {
-
-				Link<User> cthuluerLink = new Link<User>("cthulhuer",
-						item.getModel()) {
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					public void onClick() {
-						setResponsePage(new ProfilePage(getModelObject()
-								.getId()));
-					}
-				};
-				cthuluerLink
-						.add(new Label("cthulhuer_username",
-								new PropertyModel<String>(item.getModel(),
-										"username")));
-				item.add(cthuluerLink);
-				item.add(new Label("suggested_user_title",
-						getString("suggested_user_title")));
-			}
-		});
-		Label noSuggestedFriends = new Label("no_suggested_friends",
-				getString("no_suggested_friends"));
-		if (suggestedFriends != null && !suggestedFriends.getObject().isEmpty()) {
-			noSuggestedFriends.setVisible(false);
+		User user = users.getUser(SocialCthulhuSession.get().getUsername());
+		List<User> userFriends = new ArrayList<User>();
+		try {
+			userFriends = getSuggestedFriends(user);
+		} catch (InvalidPropertiesFormatException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-		add(noSuggestedFriends);
+		add(new UsersPanel("users-panel", userFriends));
 		add(new Label("suggested_friends_title",
 				getString("suggested_friends_title")));
 	}
