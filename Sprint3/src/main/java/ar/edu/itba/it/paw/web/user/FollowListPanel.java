@@ -11,6 +11,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.RefreshingView;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.ocpsoft.prettytime.PrettyTime;
 
 import ar.edu.itba.it.paw.domain.EntityModel;
@@ -47,8 +48,9 @@ public abstract class FollowListPanel extends Panel {
 
 					@Override
 					public void onClick() {
-						setResponsePage(new ProfilePage(getModelObject()
-								.getId()));
+						setResponsePage(new ProfilePage(
+								new PageParameters().set("username",
+										getModelObject().getUsername())));
 					}
 
 				}.add(new Label("username", item.getModelObject().getUsername())));

@@ -44,7 +44,12 @@ public class FavouritesPage extends SecuredPage {
 			}
 		};
 
-		add(new CommentsPanel("comments-panel", user.getId(), true));
+		List<Comment> favouriteComments = new ArrayList<Comment>();
+		for (Comment comment : user.getFavourites()) {
+			favouriteComments.add(comment);
+		}
+
+		add(new CommentsPanel("comments-panel", user.getId(), favouriteComments));
 		Label noFavourites = new Label("no_favourites",
 				getString("no_favourites"));
 		if (favourites != null && !favourites.getObject().isEmpty()) {

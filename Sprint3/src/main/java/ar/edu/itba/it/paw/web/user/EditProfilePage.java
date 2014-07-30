@@ -10,6 +10,7 @@ import org.apache.wicket.markup.html.form.validation.EqualPasswordInputValidator
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.ResourceModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.lang.Bytes;
 
 import ar.edu.itba.it.paw.domain.EntityModel;
@@ -39,8 +40,8 @@ public class EditProfilePage extends SecuredPage {
 			public void onSubmit() {
 				System.out.println("FILENAME = "
 						+ fileUpload.getFileUpload().getClientFileName());
-				setResponsePage(new ProfilePage(SocialCthulhuSession.get()
-						.getUserId()));
+				setResponsePage(new ProfilePage(new PageParameters().set(
+						"username", SocialCthulhuSession.get().getUsername())));
 			}
 		});
 
@@ -70,12 +71,12 @@ public class EditProfilePage extends SecuredPage {
 		descriptionField.setRequired(true);
 		descriptionField.add(new DescriptionValidator());
 		form.add(descriptionField);
-		
+
 		form.setMaxSize(Bytes.kilobytes(500));
 
 		FileUploadField fileUploadField = new FileUploadField("picture");
 		form.add(fileUploadField);
-		
+
 		form.add(new CheckBox("isPrivate"));
 		form.add(new EqualPasswordInputValidator(passwordField,
 				confirmPasswordField));

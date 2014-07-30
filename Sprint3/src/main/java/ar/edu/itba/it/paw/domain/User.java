@@ -98,6 +98,10 @@ public class User extends PersistentEntity {
 		return notifications;
 	}
 
+	public int getNotificationsAmount() {
+		return notifications.size();
+	}
+
 	public void addFavourite(Comment comment) {
 		favourites.add(comment);
 	}
@@ -144,8 +148,16 @@ public class User extends PersistentEntity {
 		return followers;
 	}
 
+	public int getFollowersAmount() {
+		return followers.size();
+	}
+
 	public Set<User> getFollowing() {
 		return following;
+	}
+
+	public int getFollowingAmount() {
+		return following.size();
 	}
 
 	public Notification follow(User user, Notification notification) {

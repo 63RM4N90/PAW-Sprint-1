@@ -14,6 +14,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.RefreshingView;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.ocpsoft.prettytime.PrettyTime;
 
@@ -30,16 +31,16 @@ public class CommentsPanel extends Panel {
 
 	private static final long serialVersionUID = 8914010631219544701L;
 	private int userId;
-	private boolean favourites;
+	private transient List<Comment> commentList;
 	@SpringBean
 	private UserRepo users;
 	@SpringBean
 	private CommentRepo comments;
 
-	public CommentsPanel(String id, int user, boolean favs) {
+	public CommentsPanel(String id, int user, List<Comment> listOfComments) {
 		super(id);
 		this.userId = user;
-		this.favourites = favs;
+		this.commentList = listOfComments;
 		add(new RefreshingView<CommentWrapper>("wrapperComment") {
 
 			private static final long serialVersionUID = -3507194379306183234L;
@@ -50,13 +51,6 @@ public class CommentsPanel extends Panel {
 						userId);
 				User commenter = userModel.getObject();
 				List<IModel<CommentWrapper>> result = new ArrayList<IModel<CommentWrapper>>();
-				List<Comment> commentList = null;
-				if (favourites) {
-					commentList = new ArrayList<Comment>(
-							commenter.getFavourites());
-				} else {
-					commentList = commenter.getComments();
-				}
 				List<CommentWrapper> transformedComments = transformComments(
 						commentList, commenter);
 				for (CommentWrapper c : transformedComments) {
@@ -70,6 +64,8 @@ public class CommentsPanel extends Panel {
 			@Override
 			protected void populateItem(Item<CommentWrapper> item) {
 
+				boolean userIsLogged = SocialCthulhuSession.get().getUsername() != null;
+
 				boolean canShowRecthulhuedFrom = !item
 						.getModelObject()
 						.getComment()
@@ -77,16 +73,18 @@ public class CommentsPanel extends Panel {
 						.equals(item.getModelObject().getComment()
 								.getOriginalAuthor());
 
-				boolean userCanRecthulhu = !SocialCthulhuSession
-						.get()
-						.getUsername()
-						.equals(item.getModelObject().getComment().getAuthor()
-								.getUsername());
+				boolean userCanRecthulhu = userIsLogged
+						&& !SocialCthulhuSession
+								.get()
+								.getUsername()
+								.equals(item.getModelObject().getComment()
+										.getAuthor().getUsername());
 
-				boolean alreadyFavourited = users
-						.getUser(SocialCthulhuSession.get().getUsername())
-						.getFavourites()
-						.contains(item.getModelObject().getComment());
+				boolean alreadyFavourited = userIsLogged
+						&& users.getUser(
+								SocialCthulhuSession.get().getUsername())
+								.getFavourites()
+								.contains(item.getModelObject().getComment());
 
 				item.add(new MultiLineLabel("transformedComment", item
 						.getModelObject().getTransformedComment())
@@ -122,7 +120,7 @@ public class CommentsPanel extends Panel {
 				};
 				addFavouriteLink.add(new Label("addFavourite",
 						getString("add_favourite")));
-				addFavouriteLink.setVisible(!alreadyFavourited);
+				addFavouriteLink.setVisible(userIsLogged && !alreadyFavourited);
 				item.add(addFavouriteLink);
 				Link<CommentWrapper> recthulhuLink = new Link<CommentWrapper>(
 						"recthulhuLink", item.getModel()) {
@@ -156,8 +154,10 @@ public class CommentsPanel extends Panel {
 
 					@Override
 					public void onClick() {
-						setResponsePage(new ProfilePage(getModelObject()
-								.getComment().getAuthor().getId()));
+						setResponsePage(new ProfilePage(
+								new PageParameters().set("username",
+										getModelObject().getComment()
+												.getAuthor().getUsername())));
 					}
 				};
 				commentUsernameLink.add(new Label("comment_username", item
@@ -173,8 +173,10 @@ public class CommentsPanel extends Panel {
 
 					@Override
 					public void onClick() {
-						setResponsePage(new ProfilePage(getModelObject()
-								.getComment().getOriginalAuthor().getId()));
+						setResponsePage(new ProfilePage(
+								new PageParameters().set("username",
+										getModelObject().getComment()
+												.getAuthor().getUsername())));
 					}
 				};
 				authorUsernameLink.setVisible(canShowRecthulhuedFrom);
@@ -200,9 +202,11 @@ public class CommentsPanel extends Panel {
 				};
 				deleteCommentLink.add(new Label("deleteComment",
 						getString("delete_comment")));
-				deleteCommentLink.setVisible(users.getUser(userId)
-						.getUsername()
-						.equals(SocialCthulhuSession.get().getUsername()));
+				deleteCommentLink.setVisible(userIsLogged
+						&& users.getUser(userId)
+								.getUsername()
+								.equals(SocialCthulhuSession.get()
+										.getUsername()));
 				item.add(deleteCommentLink);
 			}
 		});
@@ -244,8 +248,8 @@ public class CommentsPanel extends Panel {
 				result = matcher.group();
 				result = result.replace(" ", "");
 				String search = result.replace("#", "");
-				String searchHTML = "<a href='../../hashtag/detail?tag="
-						+ search + "'>" + result + "</a>";
+				String searchHTML = "<a href='../hashtag/" + search + "'>"
+						+ result + "</a>";
 				ans += word.replace(result, searchHTML) + " ";
 			} else {
 				ans += word + " ";
@@ -263,7 +267,7 @@ public class CommentsPanel extends Panel {
 				result = matcher.group();
 				result = result.replace(" ", "");
 				String search = result.replace("@", "");
-				String userHTML = "<a href='./" + search + "'>" + result
+				String userHTML = "<a href='../profile/" + search + "'>" + result
 						+ "</a>";
 				ans += word.replace(result, userHTML) + " ";
 			} else {

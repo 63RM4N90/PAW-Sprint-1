@@ -11,6 +11,7 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.RefreshingView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.ocpsoft.prettytime.PrettyTime;
 
 import ar.edu.itba.it.paw.domain.EntityModel;
@@ -24,8 +25,7 @@ public class UsersPanel extends Panel {
 	public UsersPanel(String id, List<User> users) {
 		super(id);
 		usersToShow = users;
-		Label noSuggestedFriends = new Label("no_users",
-				getString("no_users"));
+		Label noSuggestedFriends = new Label("no_users", getString("no_users"));
 		noSuggestedFriends.setVisible(usersToShow == null
 				|| usersToShow.isEmpty());
 		add(noSuggestedFriends);
@@ -50,8 +50,9 @@ public class UsersPanel extends Panel {
 
 					@Override
 					public void onClick() {
-						setResponsePage(new ProfilePage(getModelObject()
-								.getId()));
+						setResponsePage(new ProfilePage(
+								new PageParameters().set("username",
+										getModelObject().getUsername())));
 					}
 				};
 				usernameLink

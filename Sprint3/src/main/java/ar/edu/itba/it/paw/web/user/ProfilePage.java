@@ -11,8 +11,7 @@ import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import ar.edu.itba.it.paw.domain.Comment;
@@ -37,49 +36,48 @@ public class ProfilePage extends BasePage {
 	@SpringBean
 	private NotificationRepo notifications;
 	private String commentTextarea;
+	private transient User currentUser;
 
 	@SuppressWarnings("serial")
-	public ProfilePage(final int userId) {
-		IModel<User> userModel = new EntityModel<User>(User.class, userId);
+	public ProfilePage(final PageParameters parameters) {
+		final String username = parameters.get("username").toString();
+		currentUser = users.getUser(username);
+		if (currentUser == null) {
+			setResponsePage(getApplication().getHomePage());
+			return;
+		}
 		boolean isFollowing = users
 				.getUser(SocialCthulhuSession.get().getUsername())
-				.getFollowing().contains(userModel.getObject());
-		User profileUser = userModel.getObject();
+				.getFollowing().contains(currentUser);
+		User profileUser = currentUser;
 		if (profileUser.getPicture() != null) {
 			add(new Image("profilePicture", new ImageResourceReference(
 					profileUser.getPicture())));
 		} else {
 			add(new Image("profilePicture", SocialCthulhuApp.DEFAULT_IMAGE));
 		}
-		if (!users.getUser(userId).getUsername()
-				.equals(SocialCthulhuSession.get().getUsername()))
-			users.getUser(userId).visit();
-		add(new Label("profileUsername", new PropertyModel<String>(userModel,
-				"username")));
-		add(new Label("profileName", new PropertyModel<String>(userModel,
-				"name")));
-		add(new Label("profileSurname", new PropertyModel<String>(userModel,
-				"surname")));
-		add(new Label("profileDescription", new PropertyModel<String>(
-				userModel, "description")));
-		add(new Label("profileVisits", new PropertyModel<String>(userModel,
-				"visits")));
+		if (!currentUser.getUsername().equals(
+				SocialCthulhuSession.get().getUsername()))
+			currentUser.visit();
+		add(new Label("profileUsername", currentUser.getUsername()));
+		add(new Label("profileName", currentUser.getName()));
+		add(new Label("profileSurname", currentUser.getSurname()));
+		add(new Label("profileDescription", currentUser.getDescription()));
+		add(new Label("profileVisits", currentUser.getVisits()));
 		add(new Link<String>("followersLink") {
 
 			@Override
 			public void onClick() {
-				setResponsePage(new FollowersPage(userId));
+				setResponsePage(new FollowersPage(currentUser.getId()));
 			}
-		}.add(new Label("followersAmount", new PropertyModel<String>(userModel,
-				"followers.size"))));
+		}.add(new Label("followersAmount", currentUser.getFollowersAmount())));
 		add(new Link<String>("followingLink") {
 
 			@Override
 			public void onClick() {
-				setResponsePage(new FollowingPage(userId));
+				setResponsePage(new FollowingPage(currentUser.getId()));
 			}
-		}.add(new Label("followingAmount", new PropertyModel<String>(userModel,
-				"following.size"))));
+		}.add(new Label("followingAmount", currentUser.getFollowingAmount())));
 
 		Link<String> notificationsLink = new Link<String>("notificationsLink") {
 
@@ -88,8 +86,8 @@ public class ProfilePage extends BasePage {
 				setResponsePage(new NotificationsPage());
 			}
 		};
-		notificationsLink.add(new Label("notifications",
-				new PropertyModel<String>(userModel, "notifications.size")));
+		notificationsLink.add(new Label("notifications", currentUser
+				.getNotificationsAmount()));
 
 		add(notificationsLink);
 		Link<String> suggestedUsersLink = new Link<String>("suggestedUsersLink") {
@@ -115,7 +113,7 @@ public class ProfilePage extends BasePage {
 				setResponsePage(new FavouritesPage());
 			}
 		}.setVisible(SocialCthulhuSession.get().getUsername()
-				.equals(users.getUser(userId).getUsername())));
+				.equals(users.getUser(currentUser.getId()).getUsername())));
 
 		Link<String> editProfileLink = new Link<String>("editProfileLink") {
 
@@ -127,7 +125,8 @@ public class ProfilePage extends BasePage {
 		};
 		editProfileLink.add(new Label("edit", getString("edit")));
 		add(editProfileLink);
-		Link<User> followLink = new Link<User>("followLink", userModel) {
+		Link<User> followLink = new Link<User>("followLink",
+				new EntityModel<User>(User.class, currentUser.getId())) {
 
 			@Override
 			public void onClick() {
@@ -137,20 +136,23 @@ public class ProfilePage extends BasePage {
 						user.getUsername() + " is following you :).");
 				notifications.save(notification);
 				user.follow(getModelObject(), notification);
-				setResponsePage(new ProfilePage(userId));
+				setResponsePage(new ProfilePage(new PageParameters().set(
+						"username", getModelObject().getUsername())));
 			}
 		};
 		followLink.add(new Label("follow", getString("follow")));
 		followLink.setVisible(!isFollowing);
 		add(followLink);
-		Link<User> unfollowLink = new Link<User>("unfollowLink", userModel) {
+		Link<User> unfollowLink = new Link<User>("unfollowLink",
+				new EntityModel<User>(User.class, currentUser.getId())) {
 
 			@Override
 			public void onClick() {
 				User user = users.getUser(SocialCthulhuSession.get()
 						.getUsername());
 				user.unfollow(getModelObject());
-				setResponsePage(new ProfilePage(userId));
+				setResponsePage(new ProfilePage(new PageParameters().set(
+						"username", getModelObject().getUsername())));
 			}
 		};
 		unfollowLink.add(new Label("unfollow", getString("unfollow")));
@@ -176,7 +178,8 @@ public class ProfilePage extends BasePage {
 		};
 		form.add(new TextArea<String>("commentTextarea").setRequired(true));
 		add(form);
-		add(new CommentsPanel("comments-panel", userId, false));
+		add(new CommentsPanel("comments-panel", currentUser.getId(),
+				currentUser.getComments()));
 
 		if (profileUser.getUsername().equals(
 				((SocialCthulhuSession) getSession()).getUsername())) {

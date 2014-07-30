@@ -16,6 +16,8 @@ import org.springframework.stereotype.Component;
 
 import ar.edu.itba.it.paw.web.common.HibernateRequestCycleListener;
 import ar.edu.itba.it.paw.web.common.LoginPage;
+import ar.edu.itba.it.paw.web.hashtag.HashtagDetailPage;
+import ar.edu.itba.it.paw.web.user.ProfilePage;
 
 @Component
 public class SocialCthulhuApp extends WebApplication {
@@ -42,6 +44,8 @@ public class SocialCthulhuApp extends WebApplication {
 	@Override
 	protected void init() {
 		super.init();
+		mountPage("/profile/${username}", ProfilePage.class);
+		mountPage("/hashtag/${hashtag}", HashtagDetailPage.class);
 		getComponentInstantiationListeners().add(new SpringComponentInjector(this));
 		getRequestCycleListeners().add(new HibernateRequestCycleListener(sessionFactory));
 	}
