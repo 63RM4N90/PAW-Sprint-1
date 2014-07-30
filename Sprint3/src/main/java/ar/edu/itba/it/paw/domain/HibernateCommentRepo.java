@@ -60,7 +60,7 @@ public class HibernateCommentRepo extends AbstractHibernateRepo implements
 	}
 
 	@Override
-	public Set<User> getReferences(String comment) {
+	public Set<User> getReferences(String comment, User sessionUser) {
 		Set<User> ans = new HashSet<User>();
 		String patternStr = "@([A-Za-z0-9-_]+)";
 		Pattern pattern = Pattern.compile(patternStr);
@@ -72,9 +72,6 @@ public class HibernateCommentRepo extends AbstractHibernateRepo implements
 			result = matcher.group();
 			String username = result.substring(1);
 			User user = userRepo.getUser(username);
-			System.out.println(session.getAttributeNames());
-			User sessionUser = userRepo.getUser((String) session
-					.getAttribute("username"));
 			if (user != null) {
 				Notification notification = new Notification(sessionUser,
 						((String) session.getAttribute("username"))

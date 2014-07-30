@@ -139,8 +139,8 @@ public class CommentsPanel extends Panel {
 								.getUsername());
 						Comment rechtulhu = new Comment(author, new Date(),
 								comment, comments.getHashtagList(comment,
-										author),
-								comments.getReferences(comment), originalAuthor);
+										author), comments.getReferences(
+										comment, author), originalAuthor);
 						if (!author.getComments().contains(rechtulhu))
 							comments.addComment(rechtulhu);
 					}

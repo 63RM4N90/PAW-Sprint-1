@@ -51,7 +51,8 @@ public class ProfilePage extends BasePage {
 		} else {
 			add(new Image("profilePicture", SocialCthulhuApp.DEFAULT_IMAGE));
 		}
-		if(!users.getUser(userId).getUsername().equals(SocialCthulhuSession.get().getUsername()))
+		if (!users.getUser(userId).getUsername()
+				.equals(SocialCthulhuSession.get().getUsername()))
 			users.getUser(userId).visit();
 		add(new Label("profileUsername", new PropertyModel<String>(userModel,
 				"username")));
@@ -168,7 +169,7 @@ public class ProfilePage extends BasePage {
 				Comment comment = new Comment(author, new Date(),
 						commentTextarea, comments.getHashtagList(
 								commentTextarea, author),
-						comments.getReferences(commentTextarea), author);
+						comments.getReferences(commentTextarea, author), author);
 				comments.addComment(comment);
 				commentTextarea = "";
 			}
