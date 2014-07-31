@@ -174,6 +174,7 @@ public class ProfilePage extends BasePage {
 						comments.getReferences(commentTextarea, author), author);
 				comments.addComment(comment);
 				commentTextarea = "";
+				setResponsePage(new ProfilePage(parameters));
 			}
 		};
 		form.add(new TextArea<String>("commentTextarea").setRequired(true));
