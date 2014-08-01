@@ -33,6 +33,7 @@ public class RegistrationPage extends BasePage {
 	private transient String description;
 	private transient String secretQuestion;
 	private transient String secretAnswer;
+	private String captchaInput;
 	//private transient MultipartFile picture;
 	
 	private static transient final int MIN_NAME_LENGTH = 1;
