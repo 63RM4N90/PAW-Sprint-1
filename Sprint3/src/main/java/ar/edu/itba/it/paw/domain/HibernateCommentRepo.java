@@ -19,7 +19,6 @@ public class HibernateCommentRepo extends AbstractHibernateRepo implements
 
 	private HashtagRepo hashtagRepo;
 	private UserRepo userRepo;
-	private HttpSession session;
 	private NotificationRepo notificationRepo;
 
 	@Autowired
@@ -30,7 +29,6 @@ public class HibernateCommentRepo extends AbstractHibernateRepo implements
 		this.hashtagRepo = hibernateHashtagRepo;
 		this.userRepo = hibernateUserRepo;
 		this.notificationRepo = notificationRepo;
-		this.session = session;
 	}
 
 	@Override
@@ -74,8 +72,7 @@ public class HibernateCommentRepo extends AbstractHibernateRepo implements
 			User user = userRepo.getUser(username);
 			if (user != null) {
 				Notification notification = new Notification(sessionUser,
-						((String) session.getAttribute("username"))
-								+ " has mentioned you on a comment.");
+						username + " has mentioned you on a comment.");
 				notificationRepo.save(notification);
 				user.notify(notification);
 				ans.add(user);
