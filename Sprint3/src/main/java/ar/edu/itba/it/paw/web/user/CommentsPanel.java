@@ -267,8 +267,13 @@ public class CommentsPanel extends Panel {
 				result = matcher.group();
 				result = result.replace(" ", "");
 				String search = result.replace("@", "");
-				String userHTML = "<a href='../profile/" + search + "'>" + result
-						+ "</a>";
+				String userHTML = "";
+				if (users.getUser(search) != null) {
+					userHTML = "<a href='../profile/" + search + "'>" + result
+							+ "</a>";
+				} else {
+					userHTML = "@" + search;
+				}
 				ans += word.replace(result, userHTML) + " ";
 			} else {
 				ans += word + " ";
