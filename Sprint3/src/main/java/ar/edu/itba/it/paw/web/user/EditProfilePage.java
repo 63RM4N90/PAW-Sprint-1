@@ -38,8 +38,6 @@ public class EditProfilePage extends SecuredPage {
 
 			@Override
 			public void onSubmit() {
-				System.out.println("FILENAME = "
-						+ fileUpload.getFileUpload().getClientFileName());
 				setResponsePage(new ProfilePage(new PageParameters().set(
 						"username", SocialCthulhuSession.get().getUsername())));
 			}
