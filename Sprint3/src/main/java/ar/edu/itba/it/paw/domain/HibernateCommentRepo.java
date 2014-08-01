@@ -24,7 +24,7 @@ public class HibernateCommentRepo extends AbstractHibernateRepo implements
 	@Autowired
 	public HibernateCommentRepo(SessionFactory sessionFactory,
 			HashtagRepo hibernateHashtagRepo, UserRepo hibernateUserRepo,
-			NotificationRepo notificationRepo, HttpSession session) {
+			NotificationRepo notificationRepo) {
 		super(sessionFactory);
 		this.hashtagRepo = hibernateHashtagRepo;
 		this.userRepo = hibernateUserRepo;
