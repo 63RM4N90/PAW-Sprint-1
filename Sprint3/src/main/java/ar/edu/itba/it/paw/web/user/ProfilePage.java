@@ -12,6 +12,7 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import ar.edu.itba.it.paw.domain.Comment;
@@ -40,25 +41,23 @@ public class ProfilePage extends BasePage {
 
 	@SuppressWarnings("serial")
 	public ProfilePage(final PageParameters parameters) {
-		final String username = parameters.get("username").toString();
-		currentUser = users.getUser(username);
+		currentUser = users.getUser(parameters.get("username").toString());
+		
 		if (currentUser == null) {
 			setResponsePage(getApplication().getHomePage());
 			return;
 		}
-		boolean isFollowing = users
-				.getUser(SocialCthulhuSession.get().getUsername())
-				.getFollowing().contains(currentUser);
-		User profileUser = currentUser;
-		if (profileUser.getPicture() != null) {
-			add(new Image("profilePicture", new ImageResourceReference(
-					profileUser.getPicture())));
-		} else {
-			add(new Image("profilePicture", SocialCthulhuApp.DEFAULT_IMAGE));
-		}
+
+		boolean isFollowing = loggedUserIsFollowing();
+
+		boolean isSameUser = loggedUserIsCurrentUser();
+
+		add(new Image("profilePicture", getProfilePicture()));
+		
 		if (!currentUser.getUsername().equals(
 				SocialCthulhuSession.get().getUsername()))
 			currentUser.visit();
+		
 		add(new Label("profileUsername", currentUser.getUsername()));
 		add(new Label("profileName", currentUser.getName()));
 		add(new Label("profileSurname", currentUser.getSurname()));
@@ -71,6 +70,7 @@ public class ProfilePage extends BasePage {
 				setResponsePage(new FollowersPage(currentUser.getId()));
 			}
 		}.add(new Label("followersAmount", currentUser.getFollowersAmount())));
+		
 		add(new Link<String>("followingLink") {
 
 			@Override
@@ -79,18 +79,16 @@ public class ProfilePage extends BasePage {
 			}
 		}.add(new Label("followingAmount", currentUser.getFollowingAmount())));
 
-		Link<String> notificationsLink = new Link<String>("notificationsLink") {
+		add(new Link<String>("notificationsLink") {
 
 			@Override
 			public void onClick() {
 				setResponsePage(new NotificationsPage());
 			}
-		};
-		notificationsLink.add(new Label("notifications", currentUser
-				.getNotificationsAmount()));
+		}.add(new Label("notifications", currentUser.getNotificationsAmount()))
+				.setVisible(isSameUser));
 
-		add(notificationsLink);
-		Link<String> suggestedUsersLink = new Link<String>("suggestedUsersLink") {
+		add(new Link<String>("suggestedUsersLink") {
 
 			@Override
 			public void onClick() {
@@ -104,8 +102,8 @@ public class ProfilePage extends BasePage {
 					e.printStackTrace();
 				}
 			}
-		};
-		add(suggestedUsersLink);
+		}.setVisible(isSameUser));
+
 		add(new Link<String>("favouritesLink") {
 
 			@Override
@@ -115,18 +113,17 @@ public class ProfilePage extends BasePage {
 		}.setVisible(SocialCthulhuSession.get().getUsername()
 				.equals(users.getUser(currentUser.getId()).getUsername())));
 
-		Link<String> editProfileLink = new Link<String>("editProfileLink") {
+		add(new Link<String>("editProfileLink") {
 
 			@Override
 			public void onClick() {
 				setResponsePage(new EditProfilePage(
 						users.getUser(SocialCthulhuSession.get().getUsername())));
 			}
-		};
-		editProfileLink.add(new Label("edit", getString("edit")));
-		add(editProfileLink);
-		Link<User> followLink = new Link<User>("followLink",
-				new EntityModel<User>(User.class, currentUser.getId())) {
+		}.add(new Label("edit", getString("edit"))).setVisible(isSameUser));
+
+		add(new Link<User>("followLink", new EntityModel<User>(User.class,
+				currentUser.getId())) {
 
 			@Override
 			public void onClick() {
@@ -139,12 +136,11 @@ public class ProfilePage extends BasePage {
 				setResponsePage(new ProfilePage(new PageParameters().set(
 						"username", getModelObject().getUsername())));
 			}
-		};
-		followLink.add(new Label("follow", getString("follow")));
-		followLink.setVisible(!isFollowing);
-		add(followLink);
-		Link<User> unfollowLink = new Link<User>("unfollowLink",
-				new EntityModel<User>(User.class, currentUser.getId())) {
+		}.add(new Label("follow", getString("follow")).setVisible(!isFollowing
+				&& !isSameUser)));
+
+		add(new Link<User>("unfollowLink", new EntityModel<User>(User.class,
+				currentUser.getId())) {
 
 			@Override
 			public void onClick() {
@@ -154,13 +150,12 @@ public class ProfilePage extends BasePage {
 				setResponsePage(new ProfilePage(new PageParameters().set(
 						"username", getModelObject().getUsername())));
 			}
-		};
-		unfollowLink.add(new Label("unfollow", getString("unfollow")));
-		unfollowLink.setVisible(isFollowing);
-		add(unfollowLink);
-		FeedbackPanel errorPanel = new FeedbackPanel("errorPanel");
-		add(errorPanel);
-		Form<ProfilePage> form = new Form<ProfilePage>("commentForm",
+		}.add(new Label("unfollow", getString("unfollow"))
+				.setVisible(isFollowing)));
+
+		add(new FeedbackPanel("errorPanel").setVisible(isSameUser));
+
+		add(new Form<ProfilePage>("commentForm",
 				new CompoundPropertyModel<ProfilePage>(this)) {
 			private static final long serialVersionUID = 1L;
 
@@ -176,31 +171,28 @@ public class ProfilePage extends BasePage {
 				commentTextarea = "";
 				setResponsePage(new ProfilePage(parameters));
 			}
-		};
-		form.add(new TextArea<String>("commentTextarea").setRequired(true));
-		add(form);
+		}.add(new TextArea<String>("commentTextarea").setRequired(true))
+				.setVisible(isSameUser));
+
 		add(new CommentsPanel("comments-panel", currentUser.getId(),
 				currentUser.getComments()));
+	}
 
-		if (profileUser.getUsername().equals(
-				((SocialCthulhuSession) getSession()).getUsername())) {
-			followLink.setVisible(false);
-			unfollowLink.setVisible(false);
+	private boolean loggedUserIsFollowing() {
+		return users.getUser(SocialCthulhuSession.get().getUsername())
+				.getFollowing().contains(currentUser);
+	}
+
+	private boolean loggedUserIsCurrentUser() {
+		return currentUser.getUsername().equals(
+				SocialCthulhuSession.get().getUsername());
+	}
+
+	private ResourceReference getProfilePicture() {
+		if (currentUser.getPicture() != null) {
+			return new ImageResourceReference(currentUser.getPicture());
 		} else {
-			notificationsLink.setVisible(false);
-			suggestedUsersLink.setVisible(false);
-			form.setVisible(false);
-			errorPanel.setVisible(false);
-			editProfileLink.setVisible(false);
-
-			if (users
-					.getUser(
-							((SocialCthulhuSession) getSession()).getUsername())
-					.getFollowing().contains(profileUser)) {
-				followLink.setVisible(false);
-			} else {
-				unfollowLink.setVisible(false);
-			}
+			return SocialCthulhuApp.DEFAULT_IMAGE;
 		}
 	}
 }
