@@ -25,53 +25,8 @@
 						<p wicket:id="profileVisits">
 							visits
 						</p>
-						
-						<a wicket:id="followersLink">
-							<button class="followers btn-inverse">
-								<p wicket:id="followersAmount">
-									0
-								</p>
-								<span><wicket:message key="followers"/></span>
-							</button>
-						</a>
-						<a wicket:id="followingLink">
-							<button class="following btn-inverse">
-								<p wicket:id="followingAmount">
-									0
-								</p>
-								<span><wicket:message key="following"/></span>
-							</button>
-						</a>
-						<a wicket:id="notificationsLink">
-							<button class="notifications btn-inverse">
-								<p wicket:id="notifications">
-									0
-								</p>
-								<span><wicket:message key="notifications"/></span>
-							</button>
-						</a>
-						<a wicket:id="suggestedUsersLink">
-							<button class="btn-inverse suggested-users">
-								<span><wicket:message key="suggestedUsers"/></span>
-							</button>	
-						</a>
-						<a wicket:id="favouritesLink">
-							<button class="btn-inverse favourites">
-								<span><wicket:message key="favourites"/></span>
-							</button>
-						</a>
+						<div wicket:id="user_actions_panel" />
 					</div>
-					<a wicket:id="editProfileLink">
-						<button class="btn-inverse search-button" wicket:id="edit">
-							edit
-						</button>
-					</a>
-					<a wicket:id="followLink">
-						<button class="btn-inverse search-button" wicket:id="follow"> Follow </button>
-					</a>
-					<a wicket:id="unfollowLink">
-						<button class="btn-inverse search-button" wicket:id="unfollow"> Unfollow </button>
-					</a>
 				</div>
 			
 				<div class="comments-column profile-column">
