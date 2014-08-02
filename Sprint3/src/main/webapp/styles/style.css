@@ -222,6 +222,7 @@ h2 {
 	outline: none;
 	float: right;
 	margin-bottom: 10px;
+	resize: none;
 }
 
 .comment-creator-area { 
