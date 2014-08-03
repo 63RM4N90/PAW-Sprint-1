@@ -1,4 +1,4 @@
-package ar.edu.itba.it.paw.web.user;
+package ar.edu.itba.it.paw.web.user.passwordRecovery;
 
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -11,6 +11,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import ar.edu.itba.it.paw.domain.User;
 import ar.edu.itba.it.paw.domain.UserRepo;
 import ar.edu.itba.it.paw.web.base.BasePage;
+import ar.edu.itba.it.paw.web.user.ForgotPasswordPage;
 
 public class RecoverPasswordPage extends BasePage {
 	private static final long serialVersionUID = 1L;

@@ -12,6 +12,7 @@ import ar.edu.itba.it.paw.domain.User;
 import ar.edu.itba.it.paw.domain.UserRepo;
 import ar.edu.itba.it.paw.web.base.BasePage;
 import ar.edu.itba.it.paw.web.common.LoginPage;
+import ar.edu.itba.it.paw.web.user.passwordRecovery.RecoverPasswordPage;
 
 public class ForgotPasswordPage extends BasePage {
 
@@ -39,9 +40,12 @@ public class ForgotPasswordPage extends BasePage {
 				}
 			}
 		};
+		
 		form.add(new TextField<String>("userToRecover").setRequired(true));
 		add(form);
+
 		add(new Label("success", " "));
+		
 		add(new Link<Void>("back") {
 			private static final long serialVersionUID = 1L;
 

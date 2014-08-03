@@ -63,7 +63,6 @@ public abstract class FollowListPanel extends Panel {
 						.getModelObject().getRegistrationDate())));
 			}
 		});
-		// Set<User> userList = getFollows(FollowListPanel.this.userId);
 	}
 
 	protected abstract Set<User> getFollows(int userId);

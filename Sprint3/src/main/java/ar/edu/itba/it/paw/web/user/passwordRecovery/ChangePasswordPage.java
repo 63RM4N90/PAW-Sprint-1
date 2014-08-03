@@ -1,4 +1,4 @@
-package ar.edu.itba.it.paw.web.user;
+package ar.edu.itba.it.paw.web.user.passwordRecovery;
 
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;

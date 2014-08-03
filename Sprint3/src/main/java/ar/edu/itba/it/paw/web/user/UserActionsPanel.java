@@ -54,7 +54,7 @@ public class UserActionsPanel extends Panel {
 			public void onClick() {
 				setResponsePage(new NotificationsPage());
 			}
-		}.add(new Label("notifications", currentUser.getNotificationsAmount()))
+		}.add(new Label("notifications", currentUser.getUncheckedNotifications()))
 				.setVisible(isSameUser));
 
 		add(new Link<String>("suggestedUsersLink") {
