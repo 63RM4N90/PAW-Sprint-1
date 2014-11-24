@@ -1,14 +1,18 @@
 package ar.edu.itba.it.paw.web.user;
 
+import java.util.List;
+
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.form.validation.EqualPasswordInputValidator;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.lang.Bytes;
@@ -25,19 +29,20 @@ import ar.edu.itba.it.paw.web.common.SurnameValidator;
 public class EditProfilePage extends SecuredPage {
 
 	private static final long serialVersionUID = 1L;
-	private FileUploadField fileUpload;
+	private List<FileUpload> fileUpload;
 
 	public EditProfilePage(User user) {
 		add(new FeedbackPanel("errorPanel"));
-		Form<User> form = new Form<User>("editProfileForm",
-				new CompoundPropertyModel<User>(new EntityModel<User>(
-						User.class, user)));
+		Form<User> form = new Form<User>("editProfileForm",	new CompoundPropertyModel<User>(new EntityModel<User>(User.class, user)));
 		form.setMultiPart(true);
 		form.add(new Button("submit", new ResourceModel("submit")) {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void onSubmit() {
+				if (EditProfilePage.this.fileUpload != null) {
+					((User)this.getForm().getModelObject()).setPicture(fileUpload.get(0).getBytes());
+				}
 				setResponsePage(new ProfilePage(new PageParameters().set(
 						"username", SocialCthulhuSession.get().getUsername())));
 			}
@@ -72,7 +77,7 @@ public class EditProfilePage extends SecuredPage {
 
 		form.setMaxSize(Bytes.kilobytes(500));
 
-		FileUploadField fileUploadField = new FileUploadField("picture");
+		FileUploadField fileUploadField = new FileUploadField("picture", new PropertyModel<List<FileUpload>>(EditProfilePage.this, "fileUpload"));
 		form.add(fileUploadField);
 
 		form.add(new CheckBox("isPrivate"));
