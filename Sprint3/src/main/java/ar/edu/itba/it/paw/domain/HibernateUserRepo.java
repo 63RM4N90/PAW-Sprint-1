@@ -51,4 +51,9 @@ public class HibernateUserRepo extends AbstractHibernateRepo implements
 		List<User> result = find(" from User ");
 		return result;
 	}
+
+	@Override
+	public List<User> blcklistedUsers(User user) {
+		return null;
+	}
 }

@@ -15,4 +15,6 @@ public interface UserRepo {
 	public User getUser(int id);
 	
 	public List<User> getAll();
+	
+	public List<User> blcklistedUsers(User user);
 }

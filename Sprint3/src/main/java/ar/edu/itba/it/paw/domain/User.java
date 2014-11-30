@@ -16,6 +16,7 @@ import javax.imageio.ImageIO;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -64,6 +65,11 @@ public class User extends PersistentEntity {
 	private Set<User> followers = new HashSet<User>();
 	@ManyToMany
 	private Set<Comment> favourites = new HashSet<Comment>();
+	@ManyToMany
+	@JoinTable(name = "userss_blacklists")
+	private Set<User> blacklisted_users = new HashSet<User>();
+	@ManyToMany(mappedBy = "blacklisted_users")
+	private Set<User> blacklisted_by = new HashSet<User>();
 
 	User() {
 	}
@@ -106,6 +112,14 @@ public class User extends PersistentEntity {
 		this.isPrivate = isPrivate;
 	}
 
+	public Set<User> getBlacklistedUsers() {
+		return blacklisted_users;
+	}
+
+	public boolean hasBlacklistedUser(User user) {
+		return blacklisted_users.contains(user);
+	}
+
 	public void notify(Notification notification) {
 		notifications.add(notification);
 	}
@@ -135,6 +149,18 @@ public class User extends PersistentEntity {
 
 	public void removeFavourite(Comment comment) {
 		favourites.remove(comment);
+	}
+
+	public void addBlacklistedUser(User user) {
+		blacklisted_users.add(user);
+	}
+	
+	public void removeBlacklistedUser(User user) {
+		blacklisted_users.remove(user);
+	}
+	
+	public boolean isBlacklistedBy(User user) {
+		return blacklisted_by.contains(user);
 	}
 
 	public boolean checkPassword(String password) {
@@ -193,18 +219,10 @@ public class User extends PersistentEntity {
 		return notification;
 	}
 
-	public void followedBy(User user) {
-		followers.add(user);
-	}
-
 	public void unfollow(User user) {
 		following.remove(user);
 	}
-
-	public int followedBy() {
-		return followers.size();
-	}
-
+	
 	public int following() {
 		return following.size();
 	}

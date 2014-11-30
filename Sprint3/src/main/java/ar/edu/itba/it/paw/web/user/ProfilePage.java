@@ -40,29 +40,55 @@ public class ProfilePage extends BasePage {
 	@SuppressWarnings("serial")
 	public ProfilePage(final PageParameters parameters) {
 		currentUser = users.getUser(parameters.get("username").toString());
-
+		User logged_in_user = users.getUser(SocialCthulhuSession.get()
+				.getUsername());
 		if (currentUser == null) {
 			setResponsePage(getApplication().getHomePage());
 			return;
 		}
+		boolean has_blacklisted_you = logged_in_user
+				.isBlacklistedBy(currentUser) && currentUser.isPrivate();
+		boolean isSameUser = loggedUserIsCurrentUser(logged_in_user);
 
-		boolean isSameUser = loggedUserIsCurrentUser();
+		add(new Label("blacklisted_you", getString("blacklisted_you"))
+				.setVisible(has_blacklisted_you));
 
-		add(new Image("profilePicture", getProfilePicture()));
+		add(new Image("profilePicture", getProfilePicture())
+				.setVisible(!has_blacklisted_you));
+
+		add(new Label("profileNameTitle", getString("profileNameTitle"))
+				.setVisible(!has_blacklisted_you));
+
+		add(new Label("profileSurnameTitle", getString("profileSurnameTitle"))
+				.setVisible(!has_blacklisted_you));
+
+		add(new Label("profileDescriptionTitle",
+				getString("profileDescriptionTitle"))
+				.setVisible(!has_blacklisted_you));
+
+		add(new Label("profileVisitsTitle", getString("profileVisitsTitle"))
+				.setVisible(!has_blacklisted_you));
 
 		if (!currentUser.getUsername().equals(
 				SocialCthulhuSession.get().getUsername()))
 			currentUser.visit();
 
-		add(new Label("profileUsername", currentUser.getUsername()));
-		add(new Label("profileName", currentUser.getName()));
-		add(new Label("profileSurname", currentUser.getSurname()));
-		add(new Label("profileDescription", currentUser.getDescription()));
-		add(new Label("profileVisits", currentUser.getVisits()));
+		add(new Label("profileUsername", currentUser.getUsername())
+				.setVisible(!has_blacklisted_you));
+		add(new Label("profileName", currentUser.getName())
+				.setVisible(!has_blacklisted_you));
+		add(new Label("profileSurname", currentUser.getSurname())
+				.setVisible(!has_blacklisted_you));
+		add(new Label("profileDescription", currentUser.getDescription())
+				.setVisible(!has_blacklisted_you));
+		add(new Label("profileVisits", currentUser.getVisits())
+				.setVisible(!has_blacklisted_you));
 
-		add(new UserActionsPanel("user_actions_panel", currentUser, isSameUser));
+		add(new UserActionsPanel("user_actions_panel", currentUser, isSameUser)
+				.setVisible(!has_blacklisted_you));
 
-		add(new FeedbackPanel("errorPanel").setVisible(isSameUser));
+		add(new FeedbackPanel("errorPanel").setVisible(isSameUser
+				&& !has_blacklisted_you));
 
 		add(new Form<ProfilePage>("commentForm",
 				new CompoundPropertyModel<ProfilePage>(this)) {
@@ -82,7 +108,7 @@ public class ProfilePage extends BasePage {
 			}
 		}.add(new TextArea<String>("commentTextarea").setRequired(true))
 				.setVisible(isSameUser));
-		
+
 		IModel<List<CommentWrapper>> commentModel = new CommentWrapperModel() {
 			@Override
 			protected List<Comment> transformableLoad() {
@@ -91,12 +117,11 @@ public class ProfilePage extends BasePage {
 			}
 		};
 		add(new CommentsPanel("comments-panel", currentUser.getId(),
-				commentModel));
+				commentModel).setVisible(isSameUser && !has_blacklisted_you));
 	}
 
-	private boolean loggedUserIsCurrentUser() {
-		return currentUser.getUsername().equals(
-				SocialCthulhuSession.get().getUsername());
+	private boolean loggedUserIsCurrentUser(User logged_in_user) {
+		return currentUser.getUsername().equals(logged_in_user.getUsername());
 	}
 
 	private ResourceReference getProfilePicture() {

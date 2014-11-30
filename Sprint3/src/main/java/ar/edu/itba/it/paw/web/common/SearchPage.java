@@ -19,6 +19,7 @@ public class SearchPage extends BasePage {
 	@SpringBean
 	private UserRepo users;
 
+	@SuppressWarnings("serial")
 	public SearchPage(String searchText) {
 		super();
 		search = searchText != null ? searchText : "";
