@@ -1,18 +1,14 @@
 package ar.edu.itba.it.paw.web.user;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.basic.MultiLineLabel;
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.PropertyListView;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.markup.repeater.Item;
-import org.apache.wicket.markup.repeater.RefreshingView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -20,50 +16,27 @@ import org.ocpsoft.prettytime.PrettyTime;
 
 import ar.edu.itba.it.paw.domain.Comment;
 import ar.edu.itba.it.paw.domain.CommentRepo;
-import ar.edu.itba.it.paw.domain.EntityModel;
 import ar.edu.itba.it.paw.domain.User;
 import ar.edu.itba.it.paw.domain.UserRepo;
 import ar.edu.itba.it.paw.web.SocialCthulhuSession;
 import ar.edu.itba.it.paw.web.common.CommentWrapper;
-import ar.edu.itba.it.paw.web.common.CommentWrapperROM;
 
 public class CommentsPanel extends Panel {
 
 	private static final long serialVersionUID = 8914010631219544701L;
 	private int userId;
-	private transient List<Comment> commentList;
 	@SpringBean
 	private UserRepo users;
 	@SpringBean
 	private CommentRepo comments;
 
-	public CommentsPanel(String id, int user, List<Comment> listOfComments) {
+	public CommentsPanel(String id, int user, IModel<List<CommentWrapper>> listOfComments) {
 		super(id);
 		this.userId = user;
-		this.commentList = listOfComments;
-		add(new RefreshingView<CommentWrapper>("wrapperComment") {
-
-			private static final long serialVersionUID = -3507194379306183234L;
+		add(new PropertyListView<CommentWrapper>("wrapperComment", listOfComments) {
 
 			@Override
-			protected Iterator<IModel<CommentWrapper>> getItemModels() {
-				IModel<User> userModel = new EntityModel<User>(User.class,
-						userId);
-				User commenter = userModel.getObject();
-				List<IModel<CommentWrapper>> result = new ArrayList<IModel<CommentWrapper>>();
-				List<CommentWrapper> transformedComments = transformComments(
-						commentList, commenter);
-				for (CommentWrapper c : transformedComments) {
-					result.add(new CommentWrapperROM(new EntityModel<Comment>(
-							Comment.class, c.getComment()), c
-							.getTransformedComment(), commenter));
-				}
-				return result.iterator();
-			}
-
-			@Override
-			protected void populateItem(Item<CommentWrapper> item) {
-
+			protected void populateItem(ListItem<CommentWrapper> item) {
 				boolean userIsLogged = SocialCthulhuSession.get().getUsername() != null;
 
 				boolean canShowRecthulhuedFrom = !item
@@ -207,78 +180,8 @@ public class CommentsPanel extends Panel {
 								.getUsername()
 								.equals(SocialCthulhuSession.get()
 										.getUsername()));
-				item.add(deleteCommentLink);
+				item.add(deleteCommentLink);				
 			}
 		});
-	}
-
-	private List<CommentWrapper> transformComments(List<Comment> commentList,
-			User u) {
-		List<CommentWrapper> result = new ArrayList<CommentWrapper>();
-		for (Comment c : commentList) {
-			result.add(new CommentWrapper(c,
-					getProcessedComment(c.getComment()), c.favouritedBy(u)));
-		}
-		return result;
-	}
-
-	private String getProcessedComment(String comment) {
-		// Search for URLs
-		String aux = comment;
-		if (aux != null && aux.contains("http:")) {
-			int indexOfHttp = aux.indexOf("http:");
-			int endPoint = (aux.indexOf(' ', indexOfHttp) != -1) ? aux.indexOf(
-					' ', indexOfHttp) : aux.length();
-			String url = aux.substring(indexOfHttp, endPoint);
-			String targetUrlHtml = "<a href='" + url + "' target='_blank'>"
-					+ url + "</a>";
-			aux = aux.replace(url, targetUrlHtml);
-		}
-
-		// Search for Hashtags
-		String patternStr = "#([A-Za-z0-9_]+)";
-		Pattern pattern = Pattern.compile(patternStr);
-		String[] words = aux.split(" ");
-		String ans = "";
-		String result = "";
-
-		for (String word : words) {
-			Matcher matcher = pattern.matcher(word);
-			if (matcher.find()) {
-				result = matcher.group();
-				result = result.replace(" ", "");
-				String search = result.replace("#", "");
-				String searchHTML = "<a href='../hashtag/" + search + "'>"
-						+ result + "</a>";
-				ans += word.replace(result, searchHTML) + " ";
-			} else {
-				ans += word + " ";
-			}
-		}
-
-		// Search for Users
-		patternStr = "@([A-Za-z0-9_]+)";
-		pattern = Pattern.compile(patternStr);
-		words = ans.split(" ");
-		ans = "";
-		for (String word : words) {
-			Matcher matcher = pattern.matcher(word);
-			if (matcher.find()) {
-				result = matcher.group();
-				result = result.replace(" ", "");
-				String search = result.replace("@", "");
-				String userHTML = "";
-				if (users.getUser(search) != null) {
-					userHTML = "<a href='../profile/" + search + "'>" + result
-							+ "</a>";
-				} else {
-					userHTML = "@" + search;
-				}
-				ans += word.replace(result, userHTML) + " ";
-			} else {
-				ans += word + " ";
-			}
-		}
-		return ans;
 	}
 }

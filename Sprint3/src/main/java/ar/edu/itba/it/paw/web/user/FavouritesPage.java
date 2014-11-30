@@ -15,6 +15,7 @@ import ar.edu.itba.it.paw.domain.User;
 import ar.edu.itba.it.paw.domain.UserRepo;
 import ar.edu.itba.it.paw.web.SocialCthulhuSession;
 import ar.edu.itba.it.paw.web.base.SecuredPage;
+import ar.edu.itba.it.paw.web.common.CommentWrapper;
 
 public class FavouritesPage extends SecuredPage {
 
@@ -35,7 +36,15 @@ public class FavouritesPage extends SecuredPage {
 			}
 		};
 		User user = users.getUser(SocialCthulhuSession.get().getUsername());
-		add(new CommentsPanel("comments-panel", user.getId(), favourites.getObject()));
+		IModel<List<CommentWrapper>> comments = new CommentWrapperModel(users) {
+			
+			@Override
+			protected List<Comment> transformableLoad() {
+				return getUserFavouriteComments();
+			}
+		};
+		
+		add(new CommentsPanel("comments-panel", user.getId(), comments));
 		
 		
 		Label noFavourites = new Label("no_favourites", getString("no_favourites"));

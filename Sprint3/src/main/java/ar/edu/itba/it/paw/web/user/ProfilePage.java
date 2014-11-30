@@ -1,6 +1,7 @@
 package ar.edu.itba.it.paw.web.user;
 
 import java.util.Date;
+import java.util.List;
 
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -8,6 +9,7 @@ import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.ResourceReference;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -20,6 +22,7 @@ import ar.edu.itba.it.paw.domain.UserRepo;
 import ar.edu.itba.it.paw.web.SocialCthulhuApp;
 import ar.edu.itba.it.paw.web.SocialCthulhuSession;
 import ar.edu.itba.it.paw.web.base.BasePage;
+import ar.edu.itba.it.paw.web.common.CommentWrapper;
 import ar.edu.itba.it.paw.web.common.ImageResourceReference;
 
 public class ProfilePage extends BasePage {
@@ -78,9 +81,13 @@ public class ProfilePage extends BasePage {
 			}
 		}.add(new TextArea<String>("commentTextarea").setRequired(true))
 				.setVisible(isSameUser));
-
-		add(new CommentsPanel("comments-panel", currentUser.getId(),
-				currentUser.getComments()));
+		IModel<List<CommentWrapper>> commentModel = new CommentWrapperModel(users) {
+			@Override
+			protected List<Comment> transformableLoad() {
+				return getRelatedUser().getComments();
+			}
+		};
+		add(new CommentsPanel("comments-panel", currentUser.getId(), commentModel));
 	}
 
 	private boolean loggedUserIsCurrentUser() {

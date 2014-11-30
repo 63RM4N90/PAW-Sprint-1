@@ -5,9 +5,11 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.ocpsoft.prettytime.PrettyTime;
 
 import ar.edu.itba.it.paw.domain.Comment;
 import ar.edu.itba.it.paw.domain.Hashtag;
@@ -15,41 +17,52 @@ import ar.edu.itba.it.paw.domain.HashtagRepo;
 import ar.edu.itba.it.paw.domain.UserRepo;
 import ar.edu.itba.it.paw.web.SocialCthulhuSession;
 import ar.edu.itba.it.paw.web.base.BasePage;
+import ar.edu.itba.it.paw.web.common.CommentWrapper;
+import ar.edu.itba.it.paw.web.user.CommentWrapperModel;
 import ar.edu.itba.it.paw.web.user.CommentsPanel;
 
 public class HashtagDetailPage extends BasePage {
 
 	private static final long serialVersionUID = 1L;
-	private transient Hashtag cthulhu;
 	@SpringBean
-	private transient UserRepo users;
+	private UserRepo users;
 	@SpringBean
-	private transient HashtagRepo hashtags;
+	private HashtagRepo hashtags;
 
 	public HashtagDetailPage(final PageParameters parameters) {
-		Hashtag hashtag = hashtags.getHashtag(parameters.get("hashtag")
-				.toString());
-		if (hashtag == null) {
+		final String hashtagName = parameters.get("hashtag").toString();
+		IModel<List<CommentWrapper>> commentWrapperModel = new CommentWrapperModel(users) {
+			
+			@Override
+			protected List<Comment> transformableLoad() {
+				List<Comment> comments = new ArrayList<Comment>();
+				Set<Comment> commentsHashtag = hashtags.getHashtag(hashtagName).getComments();
+				for (Comment c : commentsHashtag) {
+					comments.add(c);
+				}
+				return comments;
+			}
+		};
+		if (hashtagName == null) {
 			setResponsePage(getApplication().getHomePage());
 			return;
 		}
+		IModel<Hashtag> hashtagModel = new LoadableDetachableModel<Hashtag>() {
+			@Override
+			protected Hashtag load() {
+				return hashtags.getHashtag(hashtagName);
+			}
+		};
 		String username = SocialCthulhuSession.get().getUsername();
 		int userId = -1;
 		if (username != null) {
 			userId = users.getUser(username).getId();
 		}
-		add(new Label("cthulhuName", hashtag.getHashtag()));
-		add(new Label("cthulhuAuthor", hashtag.getAuthor().getName()));
-		PrettyTime p = new PrettyTime();
-		add(new Label("cthulhuCreationDate", p.format(hashtag.getDate())));
-		cthulhu = hashtag;
-
-		List<Comment> comments = new ArrayList<Comment>();
-		Set<Comment> commentsHashtag = cthulhu.getComments();
-		for (Comment c : commentsHashtag) {
-			comments.add(c);
-		}
-
-		add(new CommentsPanel("comments-panel", userId, comments));
+		add(new Label("cthulhuName", new PropertyModel<Hashtag>(hashtagModel, "hashtag")));
+		add(new Label("cthulhuAuthor", new PropertyModel<Hashtag>(hashtagModel, "author.name")));
+//		PrettyTime p = new PrettyTime();
+//		add(new Label("cthulhuCreationDate", p.format(hashtag.getDate())));
+		add(new Label("cthulhuCreationDate", new PropertyModel<Hashtag>(hashtagModel, "date")));
+		add(new CommentsPanel("comments-panel", userId, commentWrapperModel));
 	}
 }
