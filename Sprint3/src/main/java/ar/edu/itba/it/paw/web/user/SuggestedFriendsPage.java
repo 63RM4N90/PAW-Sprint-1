@@ -11,6 +11,8 @@ import java.util.Random;
 import java.util.Set;
 
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import ar.edu.itba.it.paw.domain.HashtagRepo;
@@ -31,16 +33,25 @@ public class SuggestedFriendsPage extends SecuredPage {
 	public SuggestedFriendsPage() throws InvalidPropertiesFormatException,
 			IOException {
 
-		User user = users.getUser(SocialCthulhuSession.get().getUsername());
-		List<User> userFriends = new ArrayList<User>();
-		try {
-			userFriends = getSuggestedFriends(user);
-		} catch (InvalidPropertiesFormatException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		add(new UsersPanel("users-panel", userFriends));
+		IModel<List<User>> usersModel = new LoadableDetachableModel<List<User>>() {
+
+			@Override
+			protected List<User> load() {
+				User user = users.getUser(SocialCthulhuSession.get().getUsername());
+				try {
+					return getSuggestedFriends(user);
+				} catch (InvalidPropertiesFormatException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				return null;
+			}
+		};
+
+		add(new UsersPanel("users-panel", usersModel));
 		add(new Label("suggested_friends_title",
 				getString("suggested_friends_title")));
 	}

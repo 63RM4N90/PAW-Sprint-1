@@ -3,6 +3,8 @@ package ar.edu.itba.it.paw.web.common;
 import java.util.List;
 
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import ar.edu.itba.it.paw.domain.User;
@@ -21,10 +23,15 @@ public class SearchPage extends BasePage {
 		super();
 		search = searchText != null ? searchText : "";
 		add(new Label("search", getString("searchTitle") + "\"" + search + "\""));
+		
+		IModel<List<User>> userModel = new LoadableDetachableModel<List<User>>() {
 
-		List<User> userList;
-		userList = search == null ? users.getAll() : users
-				.getUsersWithName(search);
-		add(new UsersPanel("users-panel", userList));
+			@Override
+			protected List<User> load() {
+				List<User> userList = search == "" ? users.getAll() : users.getUsersWithName(search);
+				return userList;
+			}
+		};
+		add(new UsersPanel("users-panel", userModel));
 	}
 }
