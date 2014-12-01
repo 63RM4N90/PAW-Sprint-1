@@ -42,6 +42,7 @@ public class ProfilePage extends BasePage {
 		currentUser = users.getUser(parameters.get("username").toString());
 		User logged_in_user = users.getUser(SocialCthulhuSession.get()
 				.getUsername());
+		
 		if (currentUser == null) {
 			setResponsePage(getApplication().getHomePage());
 			return;
@@ -68,10 +69,6 @@ public class ProfilePage extends BasePage {
 
 		add(new Label("profileVisitsTitle", getString("profileVisitsTitle"))
 				.setVisible(!has_blacklisted_you));
-
-		if (!currentUser.getUsername().equals(
-				SocialCthulhuSession.get().getUsername()))
-			currentUser.visit();
 
 		add(new Label("profileUsername", currentUser.getUsername())
 				.setVisible(!has_blacklisted_you));

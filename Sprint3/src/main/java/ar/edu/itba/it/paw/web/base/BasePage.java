@@ -12,10 +12,13 @@ import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.pages.RedirectPage;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
 
+import ar.edu.itba.it.paw.domain.PublicityRepo;
+import ar.edu.itba.it.paw.domain.RenderedPublicity;
 import ar.edu.itba.it.paw.domain.User;
 import ar.edu.itba.it.paw.domain.UserRepo;
 import ar.edu.itba.it.paw.web.SessionProvider;
@@ -30,9 +33,13 @@ public class BasePage extends WebPage {
 	private StringBuilder values = new StringBuilder();
 	@SpringBean
 	private UserRepo users;
+	@SpringBean
+	private PublicityRepo publicities;
+	private transient RenderedPublicity rendered_publicity;
 
 	@SuppressWarnings("serial")
 	public BasePage() {
+		rendered_publicity = publicities.fetch_any_rendered_publicity();
 		add(new Image("separator1", SocialCthulhuApp.SEPARTOR));
 		add(new Link<Void>("home") {
 
@@ -42,6 +49,20 @@ public class BasePage extends WebPage {
 			}
 
 		}.add(new Image("home_image", SocialCthulhuApp.HOME)));
+		Link<String> publicity_link = new Link<String>("publicity_link") {
+
+			@Override
+			public void onClick() {
+				setResponsePage(new RedirectPage(
+						rendered_publicity.get_redirection_url()));
+			}
+
+		};
+		if (rendered_publicity != null)
+			publicity_link.add(new Image("publicity", rendered_publicity
+					.fetch_resource_reference())
+					.setVisible(rendered_publicity != null));
+		add(publicity_link.setVisible(rendered_publicity != null));
 		Form<BasePage> form = new Form<BasePage>("searchForm") {
 
 			private static final long serialVersionUID = 1L;

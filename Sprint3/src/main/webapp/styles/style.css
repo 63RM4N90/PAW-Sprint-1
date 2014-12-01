@@ -124,7 +124,7 @@ a, a :visited {
 .login-container {
 	min-height: 300px;
 	background: url(../img/container_background.png);
-	margin-top: 130px;
+	margin-top: 10px;
 	box-shadow: 0px 0px 50px #000;
 }
 
@@ -191,6 +191,16 @@ h2 {
 	box-shadow: 0px 0px 100px #000;
 	min-height: 100%;
 	padding: 40px;
+}
+
+.publicity { 
+	max-width: 50%;
+	margin: 0 auto;
+}
+
+.publicity-picture {
+	width: 60%;
+	max-height: 250px;
 }
 
 .profile-column {
