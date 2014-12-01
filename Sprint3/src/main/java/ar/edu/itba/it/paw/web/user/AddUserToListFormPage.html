@@ -1,0 +1,26 @@
+<html>
+	<body>
+		<wicket:extend>
+			<div class="vertical-container">
+				<h2>Add user to user list</h2>
+				<div wicket:id="errorPanel" class="error" />
+				<form wicket:id="add_user_to_userlist_form"
+					class="form-horizontal registration-form" method="POST"
+					enctype="multipart/form-data">
+					<div class="control-group">
+						<label class="control-label registration-label" for="name">
+							<wicket:message key="username">Name</wicket:message>:
+						</label>
+						<div class="controls registration-field">
+							<input type="text" wicket:id="username" />
+						</div>
+					</div>
+					<div class="registration-form-buttons">
+						<input type="submit" class="btn-inverse pull-right cthulhu-button"
+							name="submit" value="Submit" wicket:id="add_user_to_userlist" />
+					</div>
+				</form>
+			</div>
+		</wicket:extend>
+	</body>
+</html>

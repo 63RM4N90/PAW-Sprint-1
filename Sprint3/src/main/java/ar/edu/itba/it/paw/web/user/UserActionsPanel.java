@@ -151,9 +151,9 @@ public class UserActionsPanel extends Panel {
 
 		add(new Link<User>("unblacklistLink", new EntityModel<User>(User.class,
 				currentUser.getId())) {
-
 			@Override
 			public void onClick() {
+
 				User user = users.getUser(SocialCthulhuSession.get()
 						.getUsername());
 				user.removeBlacklistedUser(getModelObject());
@@ -170,6 +170,15 @@ public class UserActionsPanel extends Panel {
 			}
 		}.add(new Label("blacklisted_users_label",
 				getString("blacklisted_users_label")).setVisible(isSameUser)));
+
+		add(new Link<User>("userListsLink", new EntityModel<User>(User.class,
+				currentUser.getId())) {
+			@Override
+			public void onClick() {
+				setResponsePage(new UserListsPage());
+			}
+		}.add(new Label("userListsLabel", getString("userLists"))
+				.setVisible(isFollowing)));
 	}
 
 	private boolean loggedUserIsFollowing(User logged_in_user) {

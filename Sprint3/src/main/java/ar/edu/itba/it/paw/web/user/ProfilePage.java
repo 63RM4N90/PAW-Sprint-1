@@ -69,6 +69,10 @@ public class ProfilePage extends BasePage {
 		add(new Label("profileSurnameTitle", getString("profileSurnameTitle"))
 				.setVisible(!has_blacklisted_you && can_view_profile));
 
+		if (!currentUser.getUsername().equals(
+				SocialCthulhuSession.get().getUsername()))
+			currentUser.visit();
+
 		add(new Label("profileDescriptionTitle",
 				getString("profileDescriptionTitle"))
 				.setVisible(!has_blacklisted_you && can_view_profile));

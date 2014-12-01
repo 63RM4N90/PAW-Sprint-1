@@ -56,7 +56,6 @@ public class RegistrationPage extends BasePage {
 	private static transient final int MAX_SECRET_ANSWER_LENGTH = 64;
 
 	public RegistrationPage() {
-
 		add(new FeedbackPanel("errorPanel"));
 		Form<RegistrationPage> form = new Form<RegistrationPage>(
 				"registrationForm",

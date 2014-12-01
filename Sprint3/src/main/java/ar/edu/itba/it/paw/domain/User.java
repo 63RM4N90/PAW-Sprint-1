@@ -63,6 +63,10 @@ public class User extends PersistentEntity {
 	private Set<User> blacklisted_users = new HashSet<User>();
 	@ManyToMany(mappedBy = "blacklisted_users")
 	private Set<User> blacklisted_by = new HashSet<User>();
+	@OneToMany(mappedBy = "_owner", cascade = CascadeType.ALL)
+	private Set<UserList> user_lists = new HashSet<UserList>();
+	@ManyToMany
+	private Set<UserList> lists = new HashSet<UserList>();
 
 	protected User() {
 	}
@@ -126,6 +130,10 @@ public class User extends PersistentEntity {
 		ans.addAll(comments);
 		
 		return ans;
+	}
+	
+	public Set<UserList> userlists() {
+		return user_lists;
 	}
 
 	public List<Notification> getNotifications() {
@@ -371,5 +379,13 @@ public class User extends PersistentEntity {
 		} else if (!username.equals(other.username))
 			return false;
 		return true;
+	}
+
+	public void addBelongingList(UserList userList) {
+		lists.add(userList);
+	}
+
+	public void removeFromBelongingList(UserList userList) {
+		lists.remove(userList);
 	}
 }

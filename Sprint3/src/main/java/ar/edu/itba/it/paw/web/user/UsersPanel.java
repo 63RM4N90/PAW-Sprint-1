@@ -32,6 +32,7 @@ public class UsersPanel extends Panel {
 		noSuggestedFriends.setVisible(users.getObject() == null
 				|| users.getObject().isEmpty());
 		add(noSuggestedFriends);
+		
 		add(new PropertyListView<User>("user", users) {
 
 			@Override
