@@ -33,6 +33,7 @@ public class SocialCthulhuApp extends WebApplication {
 	public static final ResourceReference DEFAULT_IMAGE = new PackageResourceReference(SocialCthulhuApp.class, "resources/default_picture.png");
 	private CookieService cookieService = new CookieService();
 	private SessionProvider sessionProvider;
+	public static final ResourceReference POPULAR_ICON = new PackageResourceReference(SocialCthulhuApp.class, "resources/popular.png");
 	
 	@Autowired
 	public SocialCthulhuApp(SessionFactory sessionFactory) {

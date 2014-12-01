@@ -3,6 +3,7 @@ package ar.edu.itba.it.paw.web.user;
 import java.util.List;
 
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.PropertyListView;
@@ -16,6 +17,7 @@ import org.ocpsoft.prettytime.PrettyTime;
 import ar.edu.itba.it.paw.domain.User;
 import ar.edu.itba.it.paw.domain.UserRepo;
 import ar.edu.itba.it.paw.web.SocialCthulhuSession;
+import ar.edu.itba.it.paw.web.SocialCthulhuApp;
 
 public class UsersPanel extends Panel {
 
@@ -38,7 +40,10 @@ public class UsersPanel extends Panel {
 						.getUsername());
 				boolean is_same_user = item.getModelObject().getUsername()
 						.equals(logged_in_user.getUsername());
-
+				int followers_amount = Integer
+						.parseInt(getString("followers_amount"));
+				item.add(new Image("popular", SocialCthulhuApp.POPULAR_ICON)
+						.setVisible(item.getModelObject().getFollowers().size() > followers_amount));
 				Link<User> usernameLink = new Link<User>("usernameLink",
 						item.getModel()) {
 					private static final long serialVersionUID = 1L;

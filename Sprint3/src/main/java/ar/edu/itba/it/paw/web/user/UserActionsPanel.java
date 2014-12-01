@@ -163,7 +163,7 @@ public class UserActionsPanel extends Panel {
 
 	private boolean loggedUserIsFollowing(User logged_in_user) {
 		return logged_in_user != null
-				&& !logged_in_user.getFollowing().contains(currentUser);
+				&& logged_in_user.getFollowing().contains(currentUser);
 	}
 
 	private boolean canBlackList(User logged_in_user) {

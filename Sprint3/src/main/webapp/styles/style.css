@@ -10,6 +10,11 @@ body {
 	height: 100%;
 }
 
+.popular-icon {
+	width: 32px;
+	height: 32px;
+}
+
 .top-bar {
 	width: 100%;
 	background: url(../img/topbar_background.png);
