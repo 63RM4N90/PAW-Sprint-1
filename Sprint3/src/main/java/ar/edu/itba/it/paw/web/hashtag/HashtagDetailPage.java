@@ -31,7 +31,7 @@ public class HashtagDetailPage extends BasePage {
 
 	public HashtagDetailPage(final PageParameters parameters) {
 		final String hashtagName = parameters.get("hashtag").toString();
-		IModel<List<CommentWrapper>> commentWrapperModel = new CommentWrapperModel(users) {
+		IModel<List<CommentWrapper>> commentWrapperModel = new CommentWrapperModel() {
 			
 			@Override
 			protected List<Comment> transformableLoad() {

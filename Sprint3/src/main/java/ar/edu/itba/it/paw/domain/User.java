@@ -30,6 +30,8 @@ public class User extends PersistentEntity {
 	private String description;
 	@Column(nullable = false)
 	private String password;
+	@Column
+	private String token;
 	private byte[] picture;
 	@Column(nullable = false)
 	private String secretQuestion;
@@ -288,6 +290,22 @@ public class User extends PersistentEntity {
 
 	public void deleteComment(Comment comment) {
 		comments.remove(comment);
+	}
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+	
+	public boolean validateToken(String token) {
+		return this.token != null && this.token.equals(token);
+	}
+	
+	public void resetToken() {
+		this.token = null;
 	}
 
 	@Override

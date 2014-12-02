@@ -36,7 +36,7 @@ public class FavouritesPage extends SecuredPage {
 			}
 		};
 		User user = users.getUser(SocialCthulhuSession.get().getUsername());
-		IModel<List<CommentWrapper>> comments = new CommentWrapperModel(users) {
+		IModel<List<CommentWrapper>> comments = new CommentWrapperModel() {
 			
 			@Override
 			protected List<Comment> transformableLoad() {

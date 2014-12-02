@@ -12,7 +12,7 @@ import org.apache.wicket.request.http.WebResponse;
 
 public class CookieService {
 	
-    private Cookie loadCookie(Request request, String cookieName) {
+    public Cookie loadCookie(Request request, String cookieName) {
  
         List<Cookie> cookies = ((WebRequest) request).getCookies();
  
@@ -31,31 +31,19 @@ public class CookieService {
  
     public void saveCookie(Response response, String cookieName, String cookieValue, int expiryTimeInDays) {
         Cookie cookie = new Cookie(cookieName, cookieValue);
+        cookie.setPath("/");
         cookie.setMaxAge((int) TimeUnit.DAYS.toSeconds(expiryTimeInDays));
         ((WebResponse)response).addCookie(cookie);
     }
  
     public void removeCookieIfPresent(Request request, Response response, String cookieName) {
         Cookie cookie = loadCookie(request, cookieName);
- 
+        
         if(cookie != null) {
-            ((WebResponse)response).clearCookie(cookie);
+        	cookie.setValue("");
+        	cookie.setMaxAge(0);
+        	((WebResponse)response).addCookie(cookie);
         }
     }
     
-    public String getUsername(Request request, String cookieName) {
-    	Cookie cookie = loadCookie(request, cookieName);
-    	if (cookie != null) {
-    		return cookie.getValue();
-		}
-    	return null;
-    }
-    
-    public int getUserId(Request request, String cookieName) {
-    	Cookie cookie = loadCookie(request, cookieName);
-    	if (cookie != null) {
-    		return Integer.parseInt(cookie.getValue());
-		}
-    	return -1;
-    }
 }

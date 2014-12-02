@@ -14,6 +14,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import ar.edu.itba.it.paw.web.common.CookieService;
 import ar.edu.itba.it.paw.web.common.HibernateRequestCycleListener;
 import ar.edu.itba.it.paw.web.common.LoginPage;
 import ar.edu.itba.it.paw.web.hashtag.HashtagDetailPage;
@@ -30,6 +31,8 @@ public class SocialCthulhuApp extends WebApplication {
 	public static final ResourceReference SUGGESTED_USERS = new PackageResourceReference(SocialCthulhuApp.class, "resources/suggest_friends.png");
 	public static final ResourceReference FAVOURITES = new PackageResourceReference(SocialCthulhuApp.class, "resources/Favourites.png");
 	public static final ResourceReference DEFAULT_IMAGE = new PackageResourceReference(SocialCthulhuApp.class, "resources/default_picture.png");
+	private CookieService cookieService = new CookieService();
+	private SessionProvider sessionProvider;
 	
 	@Autowired
 	public SocialCthulhuApp(SessionFactory sessionFactory) {
@@ -48,16 +51,21 @@ public class SocialCthulhuApp extends WebApplication {
 		mountPage("/hashtag/${hashtag}", HashtagDetailPage.class);
 		getComponentInstantiationListeners().add(new SpringComponentInjector(this));
 		getRequestCycleListeners().add(new HibernateRequestCycleListener(sessionFactory));
+		sessionProvider = new SessionProvider(cookieService);
 	}
 
 	@Override
 	public Session newSession(Request request, Response response) {
-		return new SocialCthulhuSession(request);
+		return sessionProvider.createNewSession(request);
 	}
 
 	@Override
 	protected IConverterLocator newConverterLocator() {
 		ConverterLocator converterLocator = new ConverterLocator();
 		return converterLocator;
+	}
+	
+	public CookieService getCookieService() {
+		return cookieService;
 	}
 }

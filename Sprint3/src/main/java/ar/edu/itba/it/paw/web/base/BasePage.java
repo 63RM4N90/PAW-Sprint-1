@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.servlet.http.Cookie;
+
 import org.apache.wicket.extensions.ajax.markup.html.autocomplete.AutoCompleteTextField;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
@@ -13,11 +15,13 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
 
 import ar.edu.itba.it.paw.domain.User;
 import ar.edu.itba.it.paw.domain.UserRepo;
+import ar.edu.itba.it.paw.web.SessionProvider;
 import ar.edu.itba.it.paw.web.SocialCthulhuApp;
 import ar.edu.itba.it.paw.web.SocialCthulhuSession;
 import ar.edu.itba.it.paw.web.common.CookieService;
@@ -121,10 +125,11 @@ public class BasePage extends WebPage {
 			
 			@Override
 			public void onClick() {
-				((SocialCthulhuSession) getSession()).signOut();
-				CookieService cookieService = SocialCthulhuSession.get().getCookieService();
-		        cookieService.removeCookieIfPresent(getRequest(), getResponse(), "usernameCookie");
-		        cookieService.removeCookieIfPresent(getRequest(), getResponse(), "userIdCookie");
+				User user = users.getUser(((SocialCthulhuSession) getSession()).getUsername());
+				user.resetToken();
+				((SocialCthulhuApp) SocialCthulhuApp.get()).getCookieService().removeCookieIfPresent(getRequest(), getResponse(), SessionProvider.REMEMBERME_USER);
+				((SocialCthulhuApp) SocialCthulhuApp.get()).getCookieService().removeCookieIfPresent(getRequest(), getResponse(), SessionProvider.REMEMBERME_TOKEN);
+		        ((SocialCthulhuSession) getSession()).signOut();
 				setResponsePage(getApplication().getHomePage());
 			}
 		};

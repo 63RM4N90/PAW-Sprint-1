@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.wicket.injection.Injector;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -15,19 +16,15 @@ import ar.edu.itba.it.paw.web.SocialCthulhuSession;
 import ar.edu.itba.it.paw.web.common.CommentWrapper;
 
 public abstract class CommentWrapperModel extends LoadableDetachableModel<List<CommentWrapper>> {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 4982315764280758144L;
 
 	@SpringBean
 	private UserRepo users;
 	
-	
-	
-	public CommentWrapperModel(UserRepo users) {
+	public CommentWrapperModel() {
 		super();
-		this.users = users;
+		Injector.get().inject(this);
 	}
 
 	@Override

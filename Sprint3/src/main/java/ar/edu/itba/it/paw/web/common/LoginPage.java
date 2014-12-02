@@ -1,5 +1,7 @@
 package ar.edu.itba.it.paw.web.common;
 
+import java.sql.Date;
+
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
@@ -12,9 +14,12 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.springframework.util.DigestUtils;
 
 import ar.edu.itba.it.paw.domain.User;
 import ar.edu.itba.it.paw.domain.UserRepo;
+import ar.edu.itba.it.paw.web.SessionProvider;
+import ar.edu.itba.it.paw.web.SocialCthulhuApp;
 import ar.edu.itba.it.paw.web.SocialCthulhuSession;
 import ar.edu.itba.it.paw.web.base.BasePage;
 import ar.edu.itba.it.paw.web.user.ForgotPasswordPage;
@@ -27,9 +32,9 @@ public class LoginPage extends BasePage {
 	@SpringBean
 	private UserRepo users;
 
-	private transient String username;
-	private transient String password;
-	private transient boolean rememberMe;
+	private String username;
+	private String password;
+	private boolean rememberMe;
 
 	public LoginPage() {
 		if (((SocialCthulhuSession) getSession()).isSignedIn()) {
@@ -51,12 +56,11 @@ public class LoginPage extends BasePage {
 				if (session.signIn(username, password, users)) {
 					User loggedUser = users.getUser(session.getUsername());
 					if (rememberMe) {
-						CookieService cookieService = SocialCthulhuSession
-								.get().getCookieService();
-						cookieService.saveCookie(getResponse(),
-								"usernameCookie", username, 30);
-						cookieService.saveCookie(getResponse(), "userIdCookie",
-								String.valueOf(loggedUser.getId()), 30);
+						String token = String.valueOf(System.currentTimeMillis());
+						loggedUser.setToken(token);
+						CookieService cookieService = ((SocialCthulhuApp) SocialCthulhuApp.get()).getCookieService();
+						cookieService.saveCookie(getResponse(), SessionProvider.REMEMBERME_USER, username, 30);
+						cookieService.saveCookie(getResponse(), SessionProvider.REMEMBERME_TOKEN, token, 30);
 					}
 					continueToOriginalDestination();
 					setResponsePage(new ProfilePage(new PageParameters().set(

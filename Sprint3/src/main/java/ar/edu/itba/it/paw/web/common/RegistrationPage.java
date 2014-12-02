@@ -1,11 +1,14 @@
 package ar.edu.itba.it.paw.web.common;
 
 import java.util.Date;
+import java.util.List;
 
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.form.upload.FileUpload;
+import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -34,7 +37,7 @@ public class RegistrationPage extends BasePage {
 	private transient String secretQuestion;
 	private transient String secretAnswer;
 	private String captchaInput;
-	//private transient MultipartFile picture;
+	private transient List<FileUpload> picture;
 	
 	private static transient final int MIN_NAME_LENGTH = 1;
 	private static transient final int MAX_NAME_LENGTH = 32;
@@ -63,8 +66,12 @@ public class RegistrationPage extends BasePage {
 			@Override
 			protected void onSubmit() {
 				if (checkFieldLength() && password.equals(confirmPassword)) {
+					byte[] selectedPicture = null;
+					if (picture != null) {
+						selectedPicture = picture.get(0).getBytes();
+					}
 					User newUser = new User(name, surname, username,
-							description, password, null, secretQuestion,
+							description, password, selectedPicture, secretQuestion,
 							secretAnswer, new Date(), false);
 					users.registerUser(newUser);
 					SocialCthulhuSession session = SocialCthulhuSession.get();
@@ -138,6 +145,7 @@ public class RegistrationPage extends BasePage {
 		form.add(new TextField<String>("secretQuestion").setRequired(true));
 		form.add(new TextField<String>("secretAnswer").setRequired(true));
 		form.add(new BookmarkablePageLink<Void>("alreadyRegistered", LoginPage.class));
+		form.add(new FileUploadField("picture"));
 		form.add(new Button("register", new ResourceModel("register")));
 		form.add(captchaImage); 
 		form.add(captchaTF);

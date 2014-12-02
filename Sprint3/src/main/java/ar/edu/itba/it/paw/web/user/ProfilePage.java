@@ -81,7 +81,7 @@ public class ProfilePage extends BasePage {
 			}
 		}.add(new TextArea<String>("commentTextarea").setRequired(true))
 				.setVisible(isSameUser));
-		IModel<List<CommentWrapper>> commentModel = new CommentWrapperModel(users) {
+		IModel<List<CommentWrapper>> commentModel = new CommentWrapperModel() {
 			@Override
 			protected List<Comment> transformableLoad() {
 				return getRelatedUser().getComments();

@@ -3,6 +3,7 @@ package ar.edu.itba.it.paw.web;
 import org.apache.wicket.Session;
 import org.apache.wicket.protocol.http.WebSession;
 import org.apache.wicket.request.Request;
+import org.apache.wicket.request.http.WebRequest;
 
 import ar.edu.itba.it.paw.domain.User;
 import ar.edu.itba.it.paw.domain.UserRepo;
@@ -12,8 +13,6 @@ public class SocialCthulhuSession extends WebSession {
 
 	private static final long serialVersionUID = 1L;
 	private String username;
-	private int userId;
-	private CookieService cookieService = new CookieService();
 
 	public static SocialCthulhuSession get() {
 		return (SocialCthulhuSession) Session.get();
@@ -21,34 +20,18 @@ public class SocialCthulhuSession extends WebSession {
 
 	public SocialCthulhuSession(Request request) {
 		super(request);
-		String username = cookieService.getUsername(request, "usernameCookie");
-		if(username != null) {
-			int userId = cookieService.getUserId(request, "userIdCookie");
-			if (userId != -1) {
-				this.username = username;
-				this.userId = userId;
-			}
-		}
 	}
 
 	public String getUsername() {
 		return username;
 	}
 
-	public int getUserId() {
-		return userId;
-	}
-
-	public CookieService getCookieService() {
-		return cookieService;
-	}
-
 	public boolean signIn(String username, String password, UserRepo users) {
+		if (this.username != null)
+			return true;
 		User user = users.getUser(username);
 		if (user != null && user.checkPassword(password)) {
 			this.username = username;
-			this.userId = user.getId();
-			this.cookieService = new CookieService();
 			return true;
 		}
 		return false;
@@ -60,6 +43,10 @@ public class SocialCthulhuSession extends WebSession {
 
 	public void signOut() {
 		invalidate();
-		clear();
+		clear();	
+	}
+	
+	protected void setUsernameFromCookies(String username) {
+		this.username = username;
 	}
 }
