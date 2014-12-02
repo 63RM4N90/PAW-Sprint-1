@@ -33,7 +33,9 @@ public class EditProfilePage extends SecuredPage {
 
 	public EditProfilePage(User user) {
 		add(new FeedbackPanel("errorPanel"));
-		Form<User> form = new Form<User>("editProfileForm",	new CompoundPropertyModel<User>(new EntityModel<User>(User.class, user)));
+		Form<User> form = new Form<User>("editProfileForm",
+				new CompoundPropertyModel<User>(new EntityModel<User>(
+						User.class, user)));
 		form.setMultiPart(true);
 		form.add(new Button("submit", new ResourceModel("submit")) {
 			private static final long serialVersionUID = 1L;
@@ -41,7 +43,18 @@ public class EditProfilePage extends SecuredPage {
 			@Override
 			public void onSubmit() {
 				if (EditProfilePage.this.fileUpload != null) {
-					((User)this.getForm().getModelObject()).setPicture(fileUpload.get(0).getBytes());
+					((User) this.getForm().getModelObject())
+							.setPicture(fileUpload.get(0).getBytes());
+					String file_name = fileUpload.get(0).getClientFileName();
+					String image_extension = file_name.substring(file_name
+							.lastIndexOf("."));
+					image_extension = image_extension.substring(1);
+					((User) this.getForm().getModelObject())
+							.setPictureExtension(image_extension);
+					((User) this.getForm().getModelObject())
+							.setThumbnailPicture(ThumbnailImageConverter
+									.thumbnailPicture(fileUpload.get(0)
+											.getBytes(), image_extension));
 				}
 				setResponsePage(new ProfilePage(new PageParameters().set(
 						"username", SocialCthulhuSession.get().getUsername())));
@@ -77,7 +90,9 @@ public class EditProfilePage extends SecuredPage {
 
 		form.setMaxSize(Bytes.kilobytes(500));
 
-		FileUploadField fileUploadField = new FileUploadField("picture", new PropertyModel<List<FileUpload>>(EditProfilePage.this, "fileUpload"));
+		FileUploadField fileUploadField = new FileUploadField("picture",
+				new PropertyModel<List<FileUpload>>(EditProfilePage.this,
+						"fileUpload"));
 		form.add(fileUploadField);
 
 		form.add(new CheckBox("isPrivate"));

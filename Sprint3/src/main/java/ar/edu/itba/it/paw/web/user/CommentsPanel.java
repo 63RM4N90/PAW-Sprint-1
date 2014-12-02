@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.basic.MultiLineLabel;
+import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.PropertyListView;
@@ -20,6 +21,7 @@ import ar.edu.itba.it.paw.domain.User;
 import ar.edu.itba.it.paw.domain.UserRepo;
 import ar.edu.itba.it.paw.web.SocialCthulhuSession;
 import ar.edu.itba.it.paw.web.common.CommentWrapper;
+import ar.edu.itba.it.paw.web.common.ImageResourceReference;
 
 public class CommentsPanel extends Panel {
 
@@ -30,10 +32,13 @@ public class CommentsPanel extends Panel {
 	@SpringBean
 	private CommentRepo comments;
 
-	public CommentsPanel(String id, int user, IModel<List<CommentWrapper>> listOfComments) {
+	@SuppressWarnings("serial")
+	public CommentsPanel(String id, int user,
+			IModel<List<CommentWrapper>> listOfComments) {
 		super(id);
 		this.userId = user;
-		add(new PropertyListView<CommentWrapper>("wrapperComment", listOfComments) {
+		add(new PropertyListView<CommentWrapper>("wrapperComment",
+				listOfComments) {
 
 			@Override
 			protected void populateItem(ListItem<CommentWrapper> item) {
@@ -58,7 +63,9 @@ public class CommentsPanel extends Panel {
 								SocialCthulhuSession.get().getUsername())
 								.getFavourites()
 								.contains(item.getModelObject().getComment());
-
+				item.add(new Image("thumbnail",
+						new ImageResourceReference(item.getModelObject()
+								.getComment().getAuthor().getThumbnailPicture())));
 				item.add(new MultiLineLabel("transformedComment", item
 						.getModelObject().getTransformedComment())
 						.setEscapeModelStrings(false));
@@ -149,7 +156,7 @@ public class CommentsPanel extends Panel {
 						setResponsePage(new ProfilePage(
 								new PageParameters().set("username",
 										getModelObject().getComment()
-												.getAuthor().getUsername())));
+												.getOriginalAuthor().getUsername())));
 					}
 				};
 				authorUsernameLink.setVisible(canShowRecthulhuedFrom);
@@ -180,7 +187,7 @@ public class CommentsPanel extends Panel {
 								.getUsername()
 								.equals(SocialCthulhuSession.get()
 										.getUsername()));
-				item.add(deleteCommentLink);				
+				item.add(deleteCommentLink);
 			}
 		});
 	}

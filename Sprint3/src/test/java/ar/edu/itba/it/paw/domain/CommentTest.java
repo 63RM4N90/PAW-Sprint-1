@@ -13,7 +13,7 @@ public class CommentTest {
 	@Before
 	public void setUp() {
 		author = new User("test", "test", "test", "test", "12345678", null,
-				"test", "test", new Date(), false);
+				null, "png", "test", "test", new Date(), false);
 	}
 
 	@Test(expected = IllegalArgumentException.class)

@@ -38,7 +38,7 @@ public class RegistrationPage extends BasePage {
 	private transient String secretAnswer;
 	private String captchaInput;
 	private transient List<FileUpload> picture;
-	
+
 	private static transient final int MIN_NAME_LENGTH = 1;
 	private static transient final int MAX_NAME_LENGTH = 32;
 	private static transient final int MIN_SURNAME_LENGTH = 1;
@@ -55,8 +55,7 @@ public class RegistrationPage extends BasePage {
 	private static transient final int MAX_SECRET_ANSWER_LENGTH = 64;
 
 	public RegistrationPage() {
-		
-		
+
 		add(new FeedbackPanel("errorPanel"));
 		Form<RegistrationPage> form = new Form<RegistrationPage>(
 				"registrationForm",
@@ -70,8 +69,18 @@ public class RegistrationPage extends BasePage {
 					if (picture != null) {
 						selectedPicture = picture.get(0).getBytes();
 					}
+					String picture_extension = "png";
+					if (picture != null) {
+						picture_extension = picture
+								.get(0)
+								.getClientFileName()
+								.substring(
+										picture.get(0).getClientFileName()
+												.lastIndexOf(".")).substring(1);
+					}
 					User newUser = new User(name, surname, username,
-							description, password, selectedPicture, secretQuestion,
+							description, password, selectedPicture,
+							selectedPicture, picture_extension, secretQuestion,
 							secretAnswer, new Date(), false);
 					users.registerUser(newUser);
 					SocialCthulhuSession session = SocialCthulhuSession.get();
@@ -127,10 +136,10 @@ public class RegistrationPage extends BasePage {
 				return true;
 			}
 		};
-		
+
 		final CaptchaImage captchaImage = new CaptchaImage("kaptchaImage");
 		captchaImage.setOutputMarkupId(true);
- 
+
 		TextField<String> captchaTF = new TextField<String>("captcha",
 				new PropertyModel<String>(this, "captchaInput"));
 		captchaTF.add(new CaptchaValidator());
@@ -144,10 +153,11 @@ public class RegistrationPage extends BasePage {
 		form.add(new TextField<String>("description").setRequired(true));
 		form.add(new TextField<String>("secretQuestion").setRequired(true));
 		form.add(new TextField<String>("secretAnswer").setRequired(true));
-		form.add(new BookmarkablePageLink<Void>("alreadyRegistered", LoginPage.class));
+		form.add(new BookmarkablePageLink<Void>("alreadyRegistered",
+				LoginPage.class));
 		form.add(new FileUploadField("picture"));
 		form.add(new Button("register", new ResourceModel("register")));
-		form.add(captchaImage); 
+		form.add(captchaImage);
 		form.add(captchaTF);
 		add(form);
 	}

@@ -1,17 +1,28 @@
 package ar.edu.itba.it.paw.domain;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.imageio.ImageIO;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.imgscalr.Scalr;
+
+import ar.edu.itba.it.paw.web.user.ThumbnailImageConverter;
 
 @Entity
 @Table(name = "userss")
@@ -33,6 +44,8 @@ public class User extends PersistentEntity {
 	@Column
 	private String token;
 	private byte[] picture;
+	private byte[] thumbnail_picture;
+	private String picture_extension;
 	@Column(nullable = false)
 	private String secretQuestion;
 	@Column(nullable = false)
@@ -57,6 +70,7 @@ public class User extends PersistentEntity {
 
 	public User(String name, String surname, String username,
 			String description, String password, byte[] picture,
+			byte[] thumbnail_picture, String picture_extension,
 			String secretQuestion, String secretAnswer, Date registrationDate,
 			boolean isPrivate) throws IllegalArgumentException {
 		if (name == null || surname == null || username == null
@@ -83,6 +97,9 @@ public class User extends PersistentEntity {
 		this.description = description;
 		this.password = password;
 		this.picture = picture;
+		this.thumbnail_picture = ThumbnailImageConverter.thumbnailPicture(
+				picture, picture_extension);
+		this.picture_extension = picture_extension;
 		this.secretQuestion = secretQuestion;
 		this.secretAnswer = secretAnswer;
 		this.registrationDate = registrationDate;
@@ -122,6 +139,14 @@ public class User extends PersistentEntity {
 
 	public boolean checkPassword(String password) {
 		return this.password.equals(password);
+	}
+
+	public String getPictureExtension() {
+		return picture_extension;
+	}
+	
+	public void setPictureExtension(String extension) {
+		picture_extension = extension;
 	}
 
 	public int getUncheckedNotifications() {
@@ -211,6 +236,10 @@ public class User extends PersistentEntity {
 	public void setPicture(byte[] picture) {
 		this.picture = picture;
 	}
+	
+	public void setThumbnailPicture(byte[] picture) {
+		this.thumbnail_picture = picture;
+	}
 
 	public void setRegistrationDate(Date registrationDate) {
 		this.registrationDate = registrationDate;
@@ -258,6 +287,10 @@ public class User extends PersistentEntity {
 
 	public byte[] getPicture() {
 		return picture;
+	}
+
+	public byte[] getThumbnailPicture() {
+		return thumbnail_picture;
 	}
 
 	public String getSecretQuestion() {

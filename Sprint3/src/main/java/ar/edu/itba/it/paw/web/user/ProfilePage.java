@@ -37,9 +37,10 @@ public class ProfilePage extends BasePage {
 	private String commentTextarea;
 	private transient User currentUser;
 
+	@SuppressWarnings("serial")
 	public ProfilePage(final PageParameters parameters) {
 		currentUser = users.getUser(parameters.get("username").toString());
-		
+
 		if (currentUser == null) {
 			setResponsePage(getApplication().getHomePage());
 			return;
@@ -48,17 +49,17 @@ public class ProfilePage extends BasePage {
 		boolean isSameUser = loggedUserIsCurrentUser();
 
 		add(new Image("profilePicture", getProfilePicture()));
-		
+
 		if (!currentUser.getUsername().equals(
 				SocialCthulhuSession.get().getUsername()))
 			currentUser.visit();
-		
+
 		add(new Label("profileUsername", currentUser.getUsername()));
 		add(new Label("profileName", currentUser.getName()));
 		add(new Label("profileSurname", currentUser.getSurname()));
 		add(new Label("profileDescription", currentUser.getDescription()));
 		add(new Label("profileVisits", currentUser.getVisits()));
-		
+
 		add(new UserActionsPanel("user_actions_panel", currentUser, isSameUser));
 
 		add(new FeedbackPanel("errorPanel").setVisible(isSameUser));
@@ -81,13 +82,16 @@ public class ProfilePage extends BasePage {
 			}
 		}.add(new TextArea<String>("commentTextarea").setRequired(true))
 				.setVisible(isSameUser));
+		
 		IModel<List<CommentWrapper>> commentModel = new CommentWrapperModel() {
 			@Override
 			protected List<Comment> transformableLoad() {
-				return getRelatedUser().getComments();
+				return users.getUser(parameters.get("username").toString())
+						.getComments();
 			}
 		};
-		add(new CommentsPanel("comments-panel", currentUser.getId(), commentModel));
+		add(new CommentsPanel("comments-panel", currentUser.getId(),
+				commentModel));
 	}
 
 	private boolean loggedUserIsCurrentUser() {

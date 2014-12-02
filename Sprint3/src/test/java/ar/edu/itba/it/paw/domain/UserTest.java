@@ -14,13 +14,14 @@ public class UserTest {
 	@Before
 	public void setUp() {
 		testUser = new User("test", "test", "test", "test", "12345678", null,
-				"test", "test", new Date(), false);
+				null, "png", "test", "test", new Date(), false);
 	}
 
 	@Test
 	public void followUserTest() {
 		User follow = new User("follow", "follow", "follow", "follow",
-				"12345678", null, "follow", "follow", new Date(), false);
+				"12345678", null, null, "png", "follow", "follow", new Date(),
+				false);
 
 		Assert.assertEquals(testUser.getFollowing().size(), 0);
 		testUser.follow(follow, new Notification(follow, "notification"));
@@ -30,7 +31,8 @@ public class UserTest {
 	@Test
 	public void unfollowUserTest() {
 		User follow = new User("follow", "follow", "follow", "follow",
-				"12345678", null, "follow", "follow", new Date(), false);
+				"12345678", null, null, "png", "follow", "follow", new Date(),
+				false);
 
 		testUser.follow(follow, new Notification(follow, "notification"));
 		Assert.assertEquals(testUser.getFollowing().size(), 1);
@@ -41,8 +43,8 @@ public class UserTest {
 	@Test
 	public void notifyUserTest() {
 		User notificator = new User("notificator", "notificator",
-				"notificator", "notificator", "12345678", null, "notificator",
-				"notificator", new Date(), false);
+				"notificator", "notificator", "12345678", null, null, "png",
+				"notificator", "notificator", new Date(), false);
 		Notification notification = new Notification(notificator,
 				"notification");
 		Assert.assertEquals(testUser.getUncheckedNotifications(), 0);
@@ -53,8 +55,8 @@ public class UserTest {
 	@Test
 	public void checkNotificationTest() {
 		User notificator = new User("notificator", "notificator",
-				"notificator", "notificator", "12345678", null, "notificator",
-				"notificator", new Date(), false);
+				"notificator", "notificator", "12345678", null, null, "png",
+				"notificator", "notificator", new Date(), false);
 		Notification notification = new Notification(notificator,
 				"notification");
 		testUser.notify(notification);
