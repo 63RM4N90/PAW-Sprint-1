@@ -38,8 +38,9 @@ public class UsersPanel extends Panel {
 			protected void populateItem(ListItem<User> item) {
 				User logged_in_user = userss.getUser(SocialCthulhuSession.get()
 						.getUsername());
-				boolean is_same_user = item.getModelObject().getUsername()
-						.equals(logged_in_user.getUsername());
+				boolean is_same_user = logged_in_user != null
+						&& item.getModelObject().getUsername()
+								.equals(logged_in_user.getUsername());
 				int followers_amount = Integer
 						.parseInt(getString("followers_amount"));
 				item.add(new Image("popular", SocialCthulhuApp.POPULAR_ICON)
@@ -66,8 +67,9 @@ public class UsersPanel extends Panel {
 				PrettyTime p = new PrettyTime();
 				item.add(new Label("registrationDate", p.format(item
 						.getModelObject().getRegistrationDate())));
-				boolean has_blacklisted_user = logged_in_user
-						.hasBlacklistedUser(item.getModelObject());
+				boolean has_blacklisted_user = logged_in_user != null
+						&& logged_in_user.hasBlacklistedUser(item
+								.getModelObject());
 				Link<User> unblacklistLink = new Link<User>("unblacklist",
 						item.getModel()) {
 					private static final long serialVersionUID = 1L;
@@ -80,7 +82,8 @@ public class UsersPanel extends Panel {
 				};
 				unblacklistLink.add(new Label("unblacklist_text",
 						getString("unblacklist_text"))
-						.setVisible(has_blacklisted_user && !is_same_user));
+						.setVisible(has_blacklisted_user && !is_same_user
+								&& logged_in_user != null));
 				item.add(unblacklistLink);
 
 				Link<User> blacklistLink = new Link<User>("blacklist",
@@ -95,7 +98,8 @@ public class UsersPanel extends Panel {
 				};
 				blacklistLink.add(new Label("blacklist_text",
 						getString("blacklist_text"))
-						.setVisible(!has_blacklisted_user && !is_same_user));
+						.setVisible(!has_blacklisted_user && !is_same_user
+								&& logged_in_user != null));
 				item.add(blacklistLink);
 			}
 		});

@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -113,6 +115,17 @@ public class User extends PersistentEntity {
 
 	public void notify(Notification notification) {
 		notifications.add(notification);
+	}
+	
+	public List<Comment> getFollowingComments() {
+		SortedSet<Comment> comments = new TreeSet<Comment>();
+		List<Comment> ans = new ArrayList<Comment>();
+		for (User user : following)
+			comments.addAll(user.getComments());
+
+		ans.addAll(comments);
+		
+		return ans;
 	}
 
 	public List<Notification> getNotifications() {
