@@ -3,6 +3,7 @@ package ar.edu.itba.it.paw.web.user;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.basic.MultiLineLabel;
 import org.apache.wicket.markup.html.image.Image;
@@ -26,17 +27,21 @@ import ar.edu.itba.it.paw.web.common.ImageResourceReference;
 public class CommentsPanel extends Panel {
 
 	private static final long serialVersionUID = 8914010631219544701L;
-	private int userId;
 	@SpringBean
 	private UserRepo users;
 	@SpringBean
 	private CommentRepo comments;
 
 	@SuppressWarnings("serial")
-	public CommentsPanel(String id, int user,
+	public CommentsPanel(String id, final int user_id,
 			IModel<List<CommentWrapper>> listOfComments) {
 		super(id);
-		this.userId = user;
+
+		final Component successfully_recthulhued_label = new Label(
+				"successfully_recthulhued",
+				getString("successfully_recthulhued")).setVisible(false);
+		add(successfully_recthulhued_label);
+
 		add(new PropertyListView<CommentWrapper>("wrapperComment",
 				listOfComments) {
 
@@ -119,8 +124,11 @@ public class CommentsPanel extends Panel {
 								comment, comments.getHashtagList(comment,
 										author), comments.getReferences(
 										comment, author), originalAuthor);
-						if (!author.getComments().contains(rechtulhu))
+						if (!author.getComments().contains(rechtulhu)) {
 							comments.addComment(rechtulhu);
+							successfully_recthulhued_label.setVisible(true);
+						}
+
 					}
 				};
 				recthulhuLink
@@ -181,7 +189,7 @@ public class CommentsPanel extends Panel {
 						String logged_in_username = SocialCthulhuSession.get()
 								.getUsername();
 						if (logged_in_username != null
-								&& users.getUser(userId).getUsername()
+								&& users.getUser(user_id).getUsername()
 										.equals(logged_in_username))
 							comments.delete(getModelObject().getComment());
 					}
@@ -189,7 +197,7 @@ public class CommentsPanel extends Panel {
 				deleteCommentLink.add(new Label("deleteComment",
 						getString("delete_comment")));
 				deleteCommentLink.setVisible(userIsLogged
-						&& users.getUser(userId)
+						&& users.getUser(user_id)
 								.getUsername()
 								.equals(SocialCthulhuSession.get()
 										.getUsername()));

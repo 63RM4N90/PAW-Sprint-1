@@ -42,7 +42,6 @@ public class ProfilePage extends BasePage {
 		currentUser = users.getUser(parameters.get("username").toString());
 		User logged_in_user = users.getUser(SocialCthulhuSession.get()
 				.getUsername());
-		
 		if (currentUser == null) {
 			setResponsePage(getApplication().getHomePage());
 			return;
@@ -114,7 +113,7 @@ public class ProfilePage extends BasePage {
 			}
 		};
 		add(new CommentsPanel("comments-panel", currentUser.getId(),
-				commentModel).setVisible(isSameUser && !has_blacklisted_you));
+				commentModel).setVisible(!has_blacklisted_you));
 	}
 
 	private boolean loggedUserIsCurrentUser(User logged_in_user) {
