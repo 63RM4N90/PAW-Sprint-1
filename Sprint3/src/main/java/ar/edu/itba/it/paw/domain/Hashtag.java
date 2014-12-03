@@ -6,14 +6,14 @@ import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Hashtag extends PersistentEntity {
 
 	private String hashtag;
 
-	@OneToOne
+	@ManyToOne
 	private User author;
 	@Column(nullable = false)
 	private Date date;
