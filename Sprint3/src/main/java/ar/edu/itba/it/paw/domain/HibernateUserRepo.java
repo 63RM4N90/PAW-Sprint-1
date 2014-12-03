@@ -39,6 +39,8 @@ public class HibernateUserRepo extends AbstractHibernateRepo implements
 
 	@Override
 	public User getUser(String username) {
+		if (username == null)
+			return null;
 		List<User> result = find(" from User where username = ?", username);
 		return result.size() > 0 ? result.get(0) : null;
 	}

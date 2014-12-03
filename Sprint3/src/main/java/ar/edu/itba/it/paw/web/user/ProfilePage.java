@@ -46,9 +46,11 @@ public class ProfilePage extends BasePage {
 			setResponsePage(getApplication().getHomePage());
 			return;
 		}
-		boolean has_blacklisted_you = logged_in_user
-				.isBlacklistedBy(currentUser) && currentUser.isPrivate();
-		boolean isSameUser = loggedUserIsCurrentUser(logged_in_user);
+		boolean has_blacklisted_you = logged_in_user != null
+				&& logged_in_user.isBlacklistedBy(currentUser)
+				&& currentUser.isPrivate();
+		boolean isSameUser = logged_in_user != null
+				&& loggedUserIsCurrentUser(logged_in_user);
 
 		add(new Label("blacklisted_you", getString("blacklisted_you"))
 				.setVisible(has_blacklisted_you));
