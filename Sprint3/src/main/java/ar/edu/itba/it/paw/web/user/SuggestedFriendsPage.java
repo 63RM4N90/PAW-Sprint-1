@@ -1,12 +1,9 @@
 package ar.edu.itba.it.paw.web.user;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.InvalidPropertiesFormatException;
 import java.util.List;
-import java.util.Properties;
 import java.util.Random;
 import java.util.Set;
 
@@ -30,6 +27,7 @@ public class SuggestedFriendsPage extends SecuredPage {
 	private HashtagRepo hashtags;
 	private static final int SUGGESTED_FRIEND_AMOUNT = 3;
 
+	@SuppressWarnings("serial")
 	public SuggestedFriendsPage() throws InvalidPropertiesFormatException,
 			IOException {
 
@@ -60,7 +58,7 @@ public class SuggestedFriendsPage extends SecuredPage {
 			throws InvalidPropertiesFormatException, IOException {
 		Set<User> following = user.getFollowing();
 		Bag<User> bag = new MapBag<User>();
-		int n = getNValue();
+		int n = Integer.parseInt(getString("friends_in_common_amount"));
 		for (User each : following) {
 			bag.add(each.getFollowers());
 		}
@@ -90,18 +88,5 @@ public class SuggestedFriendsPage extends SecuredPage {
 			i++;
 		}
 		return ans.size();
-	}
-
-	private int getNValue() throws InvalidPropertiesFormatException,
-			IOException {
-		File file = new File("src/main/resources/parameters.xml");
-		FileInputStream fileInput = new FileInputStream(file);
-		Properties properties = new Properties();
-		properties.loadFromXML(fileInput);
-		fileInput.close();
-
-		int commonFollowers = Integer.parseInt(properties
-				.getProperty("common-followers"));
-		return commonFollowers;
 	}
 }
