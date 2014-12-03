@@ -95,4 +95,19 @@ public class HibernateCommentRepo extends AbstractHibernateRepo implements
 	public void addComment(Comment comment) {
 		super.save(comment);
 	}
+
+	@Override
+	public void recthulhu(Comment comment, User user) {
+		User originalAuthor = comment.getOriginalAuthor();
+		Comment rechtulhu = new Comment(user, new Date(), comment.getComment(),
+				getHashtagList(comment.getComment(), user), getReferences(
+						comment.getComment(), user), originalAuthor);
+		Notification notification = new Notification(user, user.getUsername()
+				+ " has recthulhued a comment of yours!");
+		notificationRepo.save(notification);
+		originalAuthor.notify(notification);
+		if (!user.getComments().contains(rechtulhu)) {
+			addComment(rechtulhu);
+		}
+	}
 }

@@ -16,4 +16,6 @@ public interface CommentRepo {
 	public Comment getComment(int id);
 	
 	public void addComment(Comment comment);
+	
+	public void recthulhu(Comment comment, User user);
 }

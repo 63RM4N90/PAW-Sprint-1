@@ -1,6 +1,5 @@
 package ar.edu.itba.it.paw.web.user;
 
-import java.util.Date;
 import java.util.List;
 
 import org.apache.wicket.Component;
@@ -16,7 +15,6 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.ocpsoft.prettytime.PrettyTime;
 
-import ar.edu.itba.it.paw.domain.Comment;
 import ar.edu.itba.it.paw.domain.CommentRepo;
 import ar.edu.itba.it.paw.domain.User;
 import ar.edu.itba.it.paw.domain.UserRepo;
@@ -114,21 +112,10 @@ public class CommentsPanel extends Panel {
 
 					@Override
 					public void onClick() {
-						String comment = getModelObject().getComment()
-								.getComment();
-						User originalAuthor = getModelObject().getComment()
-								.getOriginalAuthor();
-						User author = users.getUser(SocialCthulhuSession.get()
-								.getUsername());
-						Comment rechtulhu = new Comment(author, new Date(),
-								comment, comments.getHashtagList(comment,
-										author), comments.getReferences(
-										comment, author), originalAuthor);
-						if (!author.getComments().contains(rechtulhu)) {
-							comments.addComment(rechtulhu);
-							successfully_recthulhued_label.setVisible(true);
-						}
-
+						comments.recthulhu(getModelObject().getComment(), users
+								.getUser(SocialCthulhuSession.get()
+										.getUsername()));
+						successfully_recthulhued_label.setVisible(true);
 					}
 				};
 				recthulhuLink
