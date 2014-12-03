@@ -17,4 +17,6 @@ public interface UserRepo {
 	public List<User> getAll();
 	
 	public List<User> blcklistedUsers(User user);
+	
+	public List<User> getSuggestedFriends(User user);
 }
