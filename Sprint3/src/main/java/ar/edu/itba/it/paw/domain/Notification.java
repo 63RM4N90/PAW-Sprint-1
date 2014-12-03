@@ -14,7 +14,7 @@ public class Notification extends PersistentEntity {
 	private User notificator;
 	private boolean checked = false;
 
-	public Notification() {
+	protected Notification() {
 	}
 
 	public Notification(User notificator, String notification) {

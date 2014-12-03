@@ -62,7 +62,7 @@ public class User extends PersistentEntity {
 	@ManyToMany(mappedBy = "blacklisted_users")
 	private Set<User> blacklisted_by = new HashSet<User>();
 
-	User() {
+	protected User() {
 	}
 
 	public User(String name, String surname, String username,

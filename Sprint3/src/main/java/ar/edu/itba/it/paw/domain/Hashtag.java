@@ -22,7 +22,7 @@ public class Hashtag extends PersistentEntity {
 	private Set<Comment> comments;
 	private static final int MAX_HASHTAG_SIZE = 139;
 
-	public Hashtag() {
+	protected Hashtag() {
 	}
 
 	public Hashtag(String hashtag, User author, Date date) {

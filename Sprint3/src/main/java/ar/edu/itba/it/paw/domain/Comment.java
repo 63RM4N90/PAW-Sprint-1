@@ -33,7 +33,7 @@ public class Comment extends PersistentEntity implements Comparable<Comment> {
 
 	private static final int MAX_COMMENT_LENGTH = 140;
 
-	public Comment() {
+	protected Comment() {
 	}
 
 	public Comment(User author, Date date, String comment,

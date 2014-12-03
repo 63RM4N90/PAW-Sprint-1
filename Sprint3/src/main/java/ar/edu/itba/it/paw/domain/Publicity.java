@@ -13,7 +13,7 @@ public class Publicity extends PersistentEntity {
 	@Column(nullable = false)
 	private String _redirection_url;
 	
-	public Publicity() {
+	protected Publicity() {
 	}
 	
 	public Publicity(String client_name, String image_url, String redirection_url) {
