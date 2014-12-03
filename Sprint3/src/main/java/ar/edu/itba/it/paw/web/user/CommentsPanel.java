@@ -63,9 +63,9 @@ public class CommentsPanel extends Panel {
 								SocialCthulhuSession.get().getUsername())
 								.getFavourites()
 								.contains(item.getModelObject().getComment());
-				item.add(new Image("thumbnail",
-						new ImageResourceReference(item.getModelObject()
-								.getComment().getAuthor().getThumbnailPicture())));
+				item.add(new Image("thumbnail", new ImageResourceReference(item
+						.getModelObject().getComment().getAuthor()
+						.getThumbnailPicture())));
 				item.add(new MultiLineLabel("transformedComment", item
 						.getModelObject().getTransformedComment())
 						.setEscapeModelStrings(false));
@@ -156,7 +156,8 @@ public class CommentsPanel extends Panel {
 						setResponsePage(new ProfilePage(
 								new PageParameters().set("username",
 										getModelObject().getComment()
-												.getOriginalAuthor().getUsername())));
+												.getOriginalAuthor()
+												.getUsername())));
 					}
 				};
 				authorUsernameLink.setVisible(canShowRecthulhuedFrom);
@@ -177,7 +178,12 @@ public class CommentsPanel extends Panel {
 
 					@Override
 					public void onClick() {
-						comments.delete(getModelObject().getComment());
+						String logged_in_username = SocialCthulhuSession.get()
+								.getUsername();
+						if (logged_in_username != null
+								&& users.getUser(userId).getUsername()
+										.equals(logged_in_username))
+							comments.delete(getModelObject().getComment());
 					}
 				};
 				deleteCommentLink.add(new Label("deleteComment",
