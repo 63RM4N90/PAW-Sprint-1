@@ -1,21 +1,24 @@
 package ar.edu.itba.it.paw.web.common;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.PropertyListView;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.markup.repeater.Item;
-import org.apache.wicket.markup.repeater.RefreshingView;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import ar.edu.itba.it.paw.domain.EntityModel;
+import ar.edu.itba.it.paw.domain.Hashtag;
 import ar.edu.itba.it.paw.domain.HashtagRepo;
 import ar.edu.itba.it.paw.domain.RankedHashtag;
+import ar.edu.itba.it.paw.domain.User;
+import ar.edu.itba.it.paw.web.hashtag.HashtagDetailPage;
+import ar.edu.itba.it.paw.web.user.ProfilePage;
 
 @SuppressWarnings("serial")
 public class Top10HashtagsPanel extends Panel{
@@ -53,28 +56,37 @@ public class Top10HashtagsPanel extends Panel{
 				period = 30;				
 			}
 		});
-		add(new RefreshingView<RankedHashtag>("hashtag") {
-			@Override
-			protected Iterator<IModel<RankedHashtag>> getItemModels() {
-				List<IModel<RankedHashtag>> result = new ArrayList<IModel<RankedHashtag>>();
-				List<RankedHashtag> hashtagList = hashtags.topHashtags(period);
-				for (RankedHashtag h : hashtagList) {
-					result.add(new EntityModel<RankedHashtag>(RankedHashtag.class, h));
-				}
-				
-				
-				if(result.isEmpty()) {
-					emptyList.setVisible(true);
-				}
-				return result.iterator();
-			}
+		IModel<List<RankedHashtag>> hashtagsListModel = new LoadableDetachableModel<List<RankedHashtag>>() {
 
 			@Override
-			protected void populateItem(Item<RankedHashtag> item) {
-				item.add(new Label("name", new PropertyModel<String>(item.getModel(), "hashtag.hashtag")));
-				item.add(new Label("username", new PropertyModel<String>(item.getModel(), "hashtag.author.username")));
-				item.add(new Label("rank", new PropertyModel<String>(item.getModel(), "rank")));
+			protected List<RankedHashtag> load() {
+				return hashtags.topHashtags(period);
 			}
+		};
+		add(new PropertyListView<RankedHashtag>("hashtag", hashtagsListModel) {
+			@Override
+			protected void populateItem(ListItem<RankedHashtag> item) {
+				Link<Hashtag> hashtagLink = new Link<Hashtag>("name", new PropertyModel<Hashtag>(item.getModel(), "hashtag")) {
+
+					@Override
+					public void onClick() {
+						setResponsePage(new HashtagDetailPage(new PageParameters().set("hashtag", getModelObject().getHashtag())));
+					}
+					
+				};
+				hashtagLink.add(new Label("hashtag_name", new PropertyModel<String>(item.getModel(), "hashtag.hashtag")));
+				item.add(hashtagLink);
+				Link<User> hashtagAuthorLink = new Link<User>("username", new PropertyModel<User>(item.getModel(), "hashtag.author")){
+
+					@Override
+					public void onClick() {
+						setResponsePage(new ProfilePage(new PageParameters().set("username", getModelObject().getUsername())));						
+					}
+					
+				};
+				hashtagAuthorLink.add(new Label("hashtag_author", new PropertyModel<String>(item.getModel(), "hashtag.author.username")));
+				item.add(hashtagAuthorLink);
+				item.add(new Label("rank", new PropertyModel<String>(item.getModel(), "rank")));			}
 		});
 	}
 
