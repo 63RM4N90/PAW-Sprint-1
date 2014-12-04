@@ -250,9 +250,9 @@ public class User extends PersistentEntity {
 	public boolean isPrivate() {
 		return isPrivate;
 	}
-
-	public void setUsername(String username) {
-		this.username = username;
+	
+	public boolean isPublic() {
+		return !isPrivate();
 	}
 
 	public void setPicture(byte[] picture) {
@@ -261,10 +261,6 @@ public class User extends PersistentEntity {
 	
 	public void setThumbnailPicture(byte[] picture) {
 		this.thumbnail_picture = picture;
-	}
-
-	public void setRegistrationDate(Date registrationDate) {
-		this.registrationDate = registrationDate;
 	}
 
 	public String getName() {
@@ -319,28 +315,16 @@ public class User extends PersistentEntity {
 		return secretQuestion;
 	}
 
-	public void setSecretQuestion(String secretQuestion) {
-		this.secretQuestion = secretQuestion;
-	}
-
 	public String getSecretAnswer() {
 		return secretAnswer;
-	}
-
-	public void setSecretAnswer(String secretAnswer) {
-		this.secretAnswer = secretAnswer;
 	}
 
 	public Date getRegistrationDate() {
 		return registrationDate;
 	}
-
+	
 	public String getConfirmPassword() {
 		return password;
-	}
-
-	public void setConfirmPassword(String password) {
-		this.password = password;
 	}
 
 	public void deleteComment(Comment comment) {

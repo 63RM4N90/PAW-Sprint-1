@@ -42,7 +42,7 @@ public class ProfilePage extends BasePage {
 		currentUser = users.getUser(parameters.get("username").toString());
 		String logged_in_username = SocialCthulhuSession.get().getUsername();
 		boolean can_view_profile = logged_in_username != null
-				|| !currentUser.isPrivate();
+				|| currentUser.isPublic();
 		User logged_in_user = users.getUser(logged_in_username);
 		if (currentUser == null) {
 			setResponsePage(getApplication().getHomePage());
@@ -56,9 +56,9 @@ public class ProfilePage extends BasePage {
 
 		add(new Label("blacklisted_you", getString("blacklisted_you"))
 				.setVisible(has_blacklisted_you));
-		
+
 		add(new Label("private_user", getString("private_user"))
-		.setVisible(!can_view_profile));
+				.setVisible(!can_view_profile));
 
 		add(new Image("profilePicture", getProfilePicture())
 				.setVisible(!has_blacklisted_you && can_view_profile));
