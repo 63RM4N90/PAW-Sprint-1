@@ -3,11 +3,9 @@ package ar.edu.itba.it.paw.web;
 import org.apache.wicket.Session;
 import org.apache.wicket.protocol.http.WebSession;
 import org.apache.wicket.request.Request;
-import org.apache.wicket.request.http.WebRequest;
 
 import ar.edu.itba.it.paw.domain.User;
 import ar.edu.itba.it.paw.domain.UserRepo;
-import ar.edu.itba.it.paw.web.common.CookieService;
 
 public class SocialCthulhuSession extends WebSession {
 

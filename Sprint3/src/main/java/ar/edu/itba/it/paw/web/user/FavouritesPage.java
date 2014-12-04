@@ -25,6 +25,7 @@ public class FavouritesPage extends SecuredPage {
 	@SpringBean
 	private CommentRepo comments;
 
+	@SuppressWarnings("serial")
 	public FavouritesPage() {
 
 		final IModel<List<Comment>> favourites = new LoadableDetachableModel<List<Comment>>() {

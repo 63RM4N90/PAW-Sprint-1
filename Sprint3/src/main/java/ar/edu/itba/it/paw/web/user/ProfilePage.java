@@ -40,8 +40,10 @@ public class ProfilePage extends BasePage {
 	@SuppressWarnings("serial")
 	public ProfilePage(final PageParameters parameters) {
 		currentUser = users.getUser(parameters.get("username").toString());
-		User logged_in_user = users.getUser(SocialCthulhuSession.get()
-				.getUsername());
+		String logged_in_username = SocialCthulhuSession.get().getUsername();
+		boolean can_view_profile = logged_in_username != null
+				|| currentUser.isPublic();
+		User logged_in_user = users.getUser(logged_in_username);
 		if (currentUser == null) {
 			setResponsePage(getApplication().getHomePage());
 			return;
@@ -55,38 +57,41 @@ public class ProfilePage extends BasePage {
 		add(new Label("blacklisted_you", getString("blacklisted_you"))
 				.setVisible(has_blacklisted_you));
 
+		add(new Label("private_user", getString("private_user"))
+				.setVisible(!can_view_profile));
+
 		add(new Image("profilePicture", getProfilePicture())
-				.setVisible(!has_blacklisted_you));
+				.setVisible(!has_blacklisted_you && can_view_profile));
 
 		add(new Label("profileNameTitle", getString("profileNameTitle"))
-				.setVisible(!has_blacklisted_you));
+				.setVisible(!has_blacklisted_you && can_view_profile));
 
 		add(new Label("profileSurnameTitle", getString("profileSurnameTitle"))
-				.setVisible(!has_blacklisted_you));
+				.setVisible(!has_blacklisted_you && can_view_profile));
 
 		add(new Label("profileDescriptionTitle",
 				getString("profileDescriptionTitle"))
-				.setVisible(!has_blacklisted_you));
+				.setVisible(!has_blacklisted_you && can_view_profile));
 
 		add(new Label("profileVisitsTitle", getString("profileVisitsTitle"))
-				.setVisible(!has_blacklisted_you));
+				.setVisible(!has_blacklisted_you && can_view_profile));
 
 		add(new Label("profileUsername", currentUser.getUsername())
-				.setVisible(!has_blacklisted_you));
+				.setVisible(!has_blacklisted_you && can_view_profile));
 		add(new Label("profileName", currentUser.getName())
-				.setVisible(!has_blacklisted_you));
+				.setVisible(!has_blacklisted_you && can_view_profile));
 		add(new Label("profileSurname", currentUser.getSurname())
-				.setVisible(!has_blacklisted_you));
+				.setVisible(!has_blacklisted_you && can_view_profile));
 		add(new Label("profileDescription", currentUser.getDescription())
-				.setVisible(!has_blacklisted_you));
+				.setVisible(!has_blacklisted_you && can_view_profile));
 		add(new Label("profileVisits", currentUser.getVisits())
-				.setVisible(!has_blacklisted_you));
+				.setVisible(!has_blacklisted_you && can_view_profile));
 
 		add(new UserActionsPanel("user_actions_panel", currentUser, isSameUser)
-				.setVisible(!has_blacklisted_you));
+				.setVisible(!has_blacklisted_you && can_view_profile));
 
 		add(new FeedbackPanel("errorPanel").setVisible(isSameUser
-				&& !has_blacklisted_you));
+				&& !has_blacklisted_you && can_view_profile));
 
 		add(new Form<ProfilePage>("commentForm",
 				new CompoundPropertyModel<ProfilePage>(this)) {
@@ -105,7 +110,7 @@ public class ProfilePage extends BasePage {
 				setResponsePage(new ProfilePage(parameters));
 			}
 		}.add(new TextArea<String>("commentTextarea").setRequired(true))
-				.setVisible(isSameUser));
+				.setVisible(isSameUser && can_view_profile));
 
 		IModel<List<CommentWrapper>> commentModel = new CommentWrapperModel() {
 			@Override
@@ -115,7 +120,8 @@ public class ProfilePage extends BasePage {
 			}
 		};
 		add(new CommentsPanel("comments-panel", currentUser.getId(),
-				commentModel).setVisible(!has_blacklisted_you));
+				commentModel).setVisible(!has_blacklisted_you
+				&& can_view_profile));
 	}
 
 	private boolean loggedUserIsCurrentUser(User logged_in_user) {
