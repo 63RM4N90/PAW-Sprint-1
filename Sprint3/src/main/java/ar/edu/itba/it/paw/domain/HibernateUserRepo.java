@@ -86,33 +86,30 @@ public class HibernateUserRepo extends AbstractHibernateRepo implements
 		}
 		Bag<User> bag = new MapBag<User>();
 		int n = Integer.parseInt(prop.getProperty("friends_in_common_amount"));
-		for (User each : following) {
+		for (User each : following)
 			bag.add(each.getFollowers());
-		}
+
 		List<User> aux = new ArrayList<User>();
 		List<User> ans = new ArrayList<User>();
 
 		bag.getNOrGreaterMatching(n, aux);
 
 		int usrs_left = SUGGESTED_FRIEND_AMOUNT - randomize(aux, ans, user);
-		if (usrs_left != 0) {
+		if (usrs_left != 0)
 			ans.addAll(hashtags.mostFollowed(usrs_left));
-		}
 
 		return ans;
 	}
 
 	private int randomize(List<User> aux, List<User> ans, User user) {
 		Random randomGenerator = new Random();
-		int i = ans.size();
-		while (i < SUGGESTED_FRIEND_AMOUNT && aux.size() > 0) {
+		while (ans.size() < SUGGESTED_FRIEND_AMOUNT && aux.size() > 0) {
 			int rand = randomGenerator.nextInt(aux.size());
 			User auxUser = aux.get(rand);
-			if (!user.getUsername().equals(auxUser.getUsername())) {
+			if (!user.getUsername().equals(auxUser.getUsername()))
 				ans.add(auxUser);
-			}
+
 			aux.remove(rand);
-			i++;
 		}
 		return ans.size();
 	}

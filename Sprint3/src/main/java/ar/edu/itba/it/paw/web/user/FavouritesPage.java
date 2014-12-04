@@ -45,7 +45,7 @@ public class FavouritesPage extends SecuredPage {
 			}
 		};
 		
-		add(new CommentsPanel("comments-panel", user.getId(), comments));
+		add(new CommentsPanel("comments-panel", comments));
 		
 		
 		Label noFavourites = new Label("no_favourites", getString("no_favourites"));

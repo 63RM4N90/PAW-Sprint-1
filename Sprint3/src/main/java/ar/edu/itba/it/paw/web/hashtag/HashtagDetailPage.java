@@ -15,7 +15,6 @@ import ar.edu.itba.it.paw.domain.Comment;
 import ar.edu.itba.it.paw.domain.Hashtag;
 import ar.edu.itba.it.paw.domain.HashtagRepo;
 import ar.edu.itba.it.paw.domain.UserRepo;
-import ar.edu.itba.it.paw.web.SocialCthulhuSession;
 import ar.edu.itba.it.paw.web.base.BasePage;
 import ar.edu.itba.it.paw.web.common.CommentWrapper;
 import ar.edu.itba.it.paw.web.user.CommentWrapperModel;
@@ -29,6 +28,7 @@ public class HashtagDetailPage extends BasePage {
 	@SpringBean
 	private HashtagRepo hashtags;
 
+	@SuppressWarnings("serial")
 	public HashtagDetailPage(final PageParameters parameters) {
 		final String hashtagName = parameters.get("hashtag").toString();
 		IModel<List<CommentWrapper>> commentWrapperModel = new CommentWrapperModel() {
@@ -53,16 +53,11 @@ public class HashtagDetailPage extends BasePage {
 				return hashtags.getHashtag(hashtagName);
 			}
 		};
-		String username = SocialCthulhuSession.get().getUsername();
-		int userId = -1;
-		if (username != null) {
-			userId = users.getUser(username).getId();
-		}
 		add(new Label("cthulhuName", new PropertyModel<Hashtag>(hashtagModel, "hashtag")));
 		add(new Label("cthulhuAuthor", new PropertyModel<Hashtag>(hashtagModel, "author.name")));
 //		PrettyTime p = new PrettyTime();
 //		add(new Label("cthulhuCreationDate", p.format(hashtag.getDate())));
 		add(new Label("cthulhuCreationDate", new PropertyModel<Hashtag>(hashtagModel, "date")));
-		add(new CommentsPanel("comments-panel", userId, commentWrapperModel));
+		add(new CommentsPanel("comments-panel", commentWrapperModel));
 	}
 }

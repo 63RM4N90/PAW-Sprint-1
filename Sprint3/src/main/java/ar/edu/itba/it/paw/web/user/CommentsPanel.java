@@ -31,8 +31,7 @@ public class CommentsPanel extends Panel {
 	private CommentRepo comments;
 
 	@SuppressWarnings("serial")
-	public CommentsPanel(String id, final int user_id,
-			IModel<List<CommentWrapper>> listOfComments) {
+	public CommentsPanel(String id, IModel<List<CommentWrapper>> listOfComments) {
 		super(id);
 
 		final Component successfully_recthulhued_label = new Label(
@@ -176,18 +175,20 @@ public class CommentsPanel extends Panel {
 						String logged_in_username = SocialCthulhuSession.get()
 								.getUsername();
 						if (logged_in_username != null
-								&& users.getUser(user_id).getUsername()
+								&& getModelObject().getComment().getAuthor()
+										.getUsername()
 										.equals(logged_in_username))
 							comments.delete(getModelObject().getComment());
 					}
 				};
 				deleteCommentLink.add(new Label("deleteComment",
-						getString("delete_comment")));
-				deleteCommentLink.setVisible(userIsLogged
-						&& users.getUser(user_id)
+						getString("delete_comment")).setVisible(userIsLogged
+						&& users.getUser(
+								item.getModelObject().getComment().getAuthor()
+										.getUsername())
 								.getUsername()
 								.equals(SocialCthulhuSession.get()
-										.getUsername()));
+										.getUsername())));
 				item.add(deleteCommentLink);
 			}
 		});

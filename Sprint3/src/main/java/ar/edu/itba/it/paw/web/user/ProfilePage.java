@@ -119,9 +119,8 @@ public class ProfilePage extends BasePage {
 						.getComments();
 			}
 		};
-		add(new CommentsPanel("comments-panel", currentUser.getId(),
-				commentModel).setVisible(!has_blacklisted_you
-				&& can_view_profile));
+		add(new CommentsPanel("comments-panel", commentModel)
+				.setVisible(!has_blacklisted_you && can_view_profile));
 	}
 
 	private boolean loggedUserIsCurrentUser(User logged_in_user) {
