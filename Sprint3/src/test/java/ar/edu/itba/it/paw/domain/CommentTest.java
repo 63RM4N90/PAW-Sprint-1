@@ -1,5 +1,6 @@
 package ar.edu.itba.it.paw.domain;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 
@@ -22,6 +23,6 @@ public class CommentTest {
 				author,
 				new Date(),
 				"testtesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttesttest",
-				new HashSet<Hashtag>(), new HashSet<User>(), author);
+				new HashSet<Hashtag>(), new ArrayList<User>(), author);
 	}
 }

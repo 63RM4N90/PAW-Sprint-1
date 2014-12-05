@@ -78,9 +78,8 @@ public class CommentsPanel extends Panel {
 
 					@Override
 					public void onClick() {
-						User user = users.getUser(SocialCthulhuSession.get()
-								.getUsername());
-						user.removeFavourite(getModelObject().getComment());
+						SocialCthulhuSession.get().getUser()
+								.removeFavourite(getModelObject().getComment());
 					}
 
 				};
@@ -96,7 +95,7 @@ public class CommentsPanel extends Panel {
 					@Override
 					public void onClick() {
 						CommentWrapper comment = getModelObject();
-						users.getUser(SocialCthulhuSession.get().getUsername())
+						SocialCthulhuSession.get().getUser()
 								.addFavourite(comment.getComment());
 					}
 				};

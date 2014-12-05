@@ -2,7 +2,6 @@ package ar.edu.itba.it.paw.web.user;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -26,7 +25,7 @@ public class UserListsPage extends BasePage {
 	private UserRepo users;
 
 	public UserListsPage() {
-		final Set<UserList> userlists = users.getUser(
+		final List<UserList> userlists = users.getUser(
 				SocialCthulhuSession.get().getUsername()).userlists();
 		Label no_userlists = new Label("no_userlists",
 				getString("no_userlists"));

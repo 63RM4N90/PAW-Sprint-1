@@ -35,11 +35,11 @@ public class ProfilePage extends BasePage {
 	@SpringBean
 	private NotificationRepo notifications;
 	private String commentTextarea;
-	private transient User currentUser;
 
 	@SuppressWarnings("serial")
 	public ProfilePage(final PageParameters parameters) {
-		currentUser = users.getUser(parameters.get("username").toString());
+		final User currentUser = users.getUser(parameters.get("username")
+				.toString());
 		String logged_in_username = SocialCthulhuSession.get().getUsername();
 		boolean can_view_profile = logged_in_username != null
 				|| currentUser.isPublic();
@@ -52,7 +52,7 @@ public class ProfilePage extends BasePage {
 				&& logged_in_user.isBlacklistedBy(currentUser)
 				&& currentUser.isPrivate();
 		boolean isSameUser = logged_in_user != null
-				&& loggedUserIsCurrentUser(logged_in_user);
+				&& loggedUserIsCurrentUser(logged_in_user, currentUser);
 
 		add(new Label("blacklisted_you", getString("blacklisted_you"))
 				.setVisible(has_blacklisted_you));
@@ -60,7 +60,7 @@ public class ProfilePage extends BasePage {
 		add(new Label("private_user", getString("private_user"))
 				.setVisible(!can_view_profile));
 
-		add(new Image("profilePicture", getProfilePicture())
+		add(new Image("profilePicture", getProfilePicture(currentUser))
 				.setVisible(!has_blacklisted_you && can_view_profile));
 
 		add(new Label("profileNameTitle", getString("profileNameTitle"))
@@ -91,7 +91,7 @@ public class ProfilePage extends BasePage {
 		add(new Label("profileVisits", currentUser.getVisits())
 				.setVisible(!has_blacklisted_you && can_view_profile));
 
-		add(new UserActionsPanel("user_actions_panel", currentUser, isSameUser)
+		add(new UserActionsPanel("user_actions_panel", parameters)
 				.setVisible(!has_blacklisted_you && can_view_profile));
 
 		add(new FeedbackPanel("errorPanel").setVisible(isSameUser
@@ -103,8 +103,7 @@ public class ProfilePage extends BasePage {
 
 			@Override
 			protected void onSubmit() {
-				User author = users.getUser(SocialCthulhuSession.get()
-						.getUsername());
+				User author = SocialCthulhuSession.get().getUser();
 				Comment comment = new Comment(author, new Date(),
 						commentTextarea, comments.getHashtagList(
 								commentTextarea, author),
@@ -127,11 +126,12 @@ public class ProfilePage extends BasePage {
 				.setVisible(!has_blacklisted_you && can_view_profile));
 	}
 
-	private boolean loggedUserIsCurrentUser(User logged_in_user) {
+	private boolean loggedUserIsCurrentUser(User logged_in_user,
+			User currentUser) {
 		return currentUser.getUsername().equals(logged_in_user.getUsername());
 	}
 
-	private ResourceReference getProfilePicture() {
+	private ResourceReference getProfilePicture(User currentUser) {
 		if (currentUser.getPicture() != null) {
 			return new ImageResourceReference(currentUser.getPicture());
 		} else {

@@ -22,7 +22,7 @@ public class FollowingMessagesPage extends BasePage {
 		IModel<List<CommentWrapper>> commentModel = new CommentWrapperModel() {
 			@Override
 			protected List<Comment> transformableLoad() {
-				return users.getUser(SocialCthulhuSession.get().getUsername())
+				return SocialCthulhuSession.get().getUser()
 						.getFollowingComments();
 			}
 		};

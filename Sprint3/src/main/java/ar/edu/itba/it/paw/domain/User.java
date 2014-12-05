@@ -2,9 +2,7 @@ package ar.edu.itba.it.paw.domain;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -53,20 +51,20 @@ public class User extends PersistentEntity {
 	@OneToMany
 	private List<Notification> notifications = new ArrayList<Notification>();
 	@ManyToMany
-	private Set<User> following = new HashSet<User>();
+	private List<User> following = new ArrayList<User>();
 	@ManyToMany(mappedBy = "following")
-	private Set<User> followers = new HashSet<User>();
+	private List<User> followers = new ArrayList<User>();
 	@ManyToMany
-	private Set<Comment> favourites = new HashSet<Comment>();
+	private List<Comment> favourites = new ArrayList<Comment>();
 	@ManyToMany
 	@JoinTable(name = "userss_blacklists")
-	private Set<User> blacklisted_users = new HashSet<User>();
+	private List<User> blacklisted_users = new ArrayList<User>();
 	@ManyToMany(mappedBy = "blacklisted_users")
-	private Set<User> blacklisted_by = new HashSet<User>();
+	private List<User> blacklisted_by = new ArrayList<User>();
 	@OneToMany(mappedBy = "_owner", cascade = CascadeType.ALL)
-	private Set<UserList> user_lists = new HashSet<UserList>();
+	private List<UserList> user_lists = new ArrayList<UserList>();
 	@ManyToMany
-	private Set<UserList> lists = new HashSet<UserList>();
+	private List<UserList> lists = new ArrayList<UserList>();
 
 	protected User() {
 	}
@@ -109,7 +107,7 @@ public class User extends PersistentEntity {
 		this.isPrivate = isPrivate;
 	}
 
-	public Set<User> getBlacklistedUsers() {
+	public List<User> getBlacklistedUsers() {
 		return blacklisted_users;
 	}
 
@@ -132,7 +130,7 @@ public class User extends PersistentEntity {
 		return ans;
 	}
 	
-	public Set<UserList> userlists() {
+	public List<UserList> userlists() {
 		return user_lists;
 	}
 
@@ -155,7 +153,7 @@ public class User extends PersistentEntity {
 		return favourites.size();
 	}
 
-	public Set<Comment> getFavourites() {
+	public List<Comment> getFavourites() {
 		return favourites;
 	}
 
@@ -209,7 +207,7 @@ public class User extends PersistentEntity {
 		return comments;
 	}
 
-	public Set<User> getFollowers() {
+	public List<User> getFollowers() {
 		return followers;
 	}
 
@@ -217,7 +215,7 @@ public class User extends PersistentEntity {
 		return followers.size();
 	}
 
-	public Set<User> getFollowing() {
+	public List<User> getFollowing() {
 		return following;
 	}
 

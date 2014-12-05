@@ -26,8 +26,7 @@ public class BlacklistedUsersPage extends BasePage {
 			@Override
 			protected List<User> load() {
 				List<User> users = new ArrayList<User>();
-				users.addAll(_users.getUser(
-						SocialCthulhuSession.get().getUsername())
+				users.addAll(SocialCthulhuSession.get().getUser()
 						.getBlacklistedUsers());
 				return users;
 			}

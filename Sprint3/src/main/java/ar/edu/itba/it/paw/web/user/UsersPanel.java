@@ -32,7 +32,7 @@ public class UsersPanel extends Panel {
 		noSuggestedFriends.setVisible(users.getObject() == null
 				|| users.getObject().isEmpty());
 		add(noSuggestedFriends);
-		
+
 		add(new PropertyListView<User>("user", users) {
 
 			@Override
@@ -77,7 +77,7 @@ public class UsersPanel extends Panel {
 
 					@Override
 					public void onClick() {
-						userss.getUser(SocialCthulhuSession.get().getUsername())
+						SocialCthulhuSession.get().getUser()
 								.removeBlacklistedUser(getModelObject());
 					}
 				};
@@ -93,7 +93,7 @@ public class UsersPanel extends Panel {
 
 					@Override
 					public void onClick() {
-						userss.getUser(SocialCthulhuSession.get().getUsername())
+						SocialCthulhuSession.get().getUser()
 								.addBlacklistedUser(getModelObject());
 					}
 				};

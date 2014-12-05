@@ -1,5 +1,6 @@
 package ar.edu.itba.it.paw.domain;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -56,8 +57,8 @@ public class HibernateCommentRepo extends AbstractHibernateRepo implements
 	}
 
 	@Override
-	public Set<User> getReferences(String comment, User sessionUser) {
-		Set<User> ans = new HashSet<User>();
+	public List<User> getReferences(String comment, User sessionUser) {
+		List<User> ans = new ArrayList<User>();
 		String patternStr = "@([A-Za-z0-9-_]+)";
 		Pattern pattern = Pattern.compile(patternStr);
 		Matcher matcher = pattern.matcher(comment);

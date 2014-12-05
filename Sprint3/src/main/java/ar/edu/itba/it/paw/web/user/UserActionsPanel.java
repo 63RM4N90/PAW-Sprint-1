@@ -16,52 +16,49 @@ import ar.edu.itba.it.paw.domain.User;
 import ar.edu.itba.it.paw.domain.UserRepo;
 import ar.edu.itba.it.paw.web.SocialCthulhuSession;
 
+@SuppressWarnings("serial")
 public class UserActionsPanel extends Panel {
 
-	private static final long serialVersionUID = -4235379871556971356L;
-	private transient User currentUser;
 	@SpringBean
 	private UserRepo users;
 	@SpringBean
 	private NotificationRepo notifications;
+	private transient User user;
+	private transient User logged_in_user;
 
-	@SuppressWarnings("serial")
-	public UserActionsPanel(String id, User userPage, final boolean isSameUser) {
+	public UserActionsPanel(final String id, final PageParameters params) {
 		super(id);
-		this.currentUser = userPage;
-		final String logged_in_username = SocialCthulhuSession.get().getUsername();
-		User logged_in_user = users.getUser(logged_in_username);
+		user = users.getUser(params.get("username").toString());
+		logged_in_user = SocialCthulhuSession.get().getUser();
+		boolean is_same_user = logged_in_user != null
+				&& logged_in_user.getUsername().equals(user.getUsername());
 		boolean isFollowing = loggedUserIsFollowing(logged_in_user);
 		boolean can_black_list = canBlackList(logged_in_user);
 		boolean can_unblack_list = canUnblackList(logged_in_user);
 
 		add(new Link<String>("followersLink") {
-
 			@Override
 			public void onClick() {
-				setResponsePage(new FollowersPage(currentUser.getId()));
+				setResponsePage(new FollowersPage(params));
 			}
-		}.add(new Label("followersAmount", currentUser.getFollowersAmount())));
+		}.add(new Label("followersAmount", user.getFollowersAmount())));
 
 		add(new Link<String>("followingLink") {
-
 			@Override
 			public void onClick() {
-				setResponsePage(new FollowingPage(currentUser.getId()));
+				setResponsePage(new FollowingPage(params));
 			}
-		}.add(new Label("followingAmount", currentUser.getFollowingAmount())));
+		}.add(new Label("followingAmount", user.getFollowingAmount())));
 
 		add(new Link<String>("notificationsLink") {
-
 			@Override
 			public void onClick() {
 				setResponsePage(new NotificationsPage());
 			}
-		}.add(new Label("notifications", currentUser
-				.getUncheckedNotifications())).setVisible(isSameUser));
+		}.add(new Label("notifications", user.getUncheckedNotifications()))
+				.setVisible(is_same_user));
 
 		add(new Link<String>("suggestedUsersLink") {
-
 			@Override
 			public void onClick() {
 				try {
@@ -74,61 +71,51 @@ public class UserActionsPanel extends Panel {
 					e.printStackTrace();
 				}
 			}
-		}.setVisible(isSameUser));
+		}.setVisible(is_same_user));
 
 		add(new Link<String>("favouritesLink") {
-
 			@Override
 			public void onClick() {
 				setResponsePage(new FavouritesPage());
 			}
-		}.setVisible(logged_in_username != null
-				&& logged_in_username.equals(users.getUser(currentUser.getId())
-						.getUsername())));
+		}.setVisible(logged_in_user != null));
 
 		add(new Link<String>("followingMessagesLink") {
-
 			@Override
 			public void onClick() {
 				setResponsePage(new FollowingMessagesPage());
 			}
-		}.setVisible(logged_in_username != null
-				&& logged_in_username.equals(users.getUser(currentUser.getId())
-						.getUsername())));
+		}.setVisible(logged_in_user != null));
 
 		add(new Link<String>("editProfileLink") {
-
 			@Override
 			public void onClick() {
-				setResponsePage(new EditProfilePage(
-						users.getUser(logged_in_username)));
+				setResponsePage(new EditProfilePage(SocialCthulhuSession.get()
+						.getUser()));
 			}
 		}.add(new Label("edit", getString("edit"))).setVisible(
-				isSameUser && logged_in_username != null));
+				is_same_user && logged_in_user != null));
 
-		add(new Link<User>("followLink", new EntityModel<User>(User.class,
-				currentUser.getId())) {
-
+		add(new Link<User>("followLink",
+				new EntityModel<User>(User.class, user)) {
 			@Override
 			public void onClick() {
-				User user = users.getUser(logged_in_username);
 				Notification notification = new Notification(user,
 						user.getUsername() + " is following you :).");
 				notifications.save(notification);
-				user.follow(getModelObject(), notification);
+				SocialCthulhuSession.get().getUser()
+						.follow(getModelObject(), notification);
 				setResponsePage(new ProfilePage(new PageParameters().set(
 						"username", getModelObject().getUsername())));
 			}
 		}.add(new Label("follow", getString("follow")).setVisible(!isFollowing
-				&& !isSameUser && logged_in_user != null)));
+				&& !is_same_user && logged_in_user != null)));
 
 		add(new Link<User>("unfollowLink", new EntityModel<User>(User.class,
-				currentUser.getId())) {
-
+				user)) {
 			@Override
 			public void onClick() {
-				User user = users.getUser(logged_in_username);
-				user.unfollow(getModelObject());
+				SocialCthulhuSession.get().getUser().unfollow(getModelObject());
 				setResponsePage(new ProfilePage(new PageParameters().set(
 						"username", getModelObject().getUsername())));
 			}
@@ -136,13 +123,11 @@ public class UserActionsPanel extends Panel {
 				.setVisible(isFollowing)));
 
 		add(new Link<User>("blacklistLink", new EntityModel<User>(User.class,
-				currentUser.getId())) {
-
+				user.getId())) {
 			@Override
 			public void onClick() {
-				User user = users.getUser(SocialCthulhuSession.get()
-						.getUsername());
-				user.addBlacklistedUser(getModelObject());
+				SocialCthulhuSession.get().getUser()
+						.addBlacklistedUser(getModelObject());
 				setResponsePage(new ProfilePage(new PageParameters().set(
 						"username", getModelObject().getUsername())));
 			}
@@ -150,51 +135,47 @@ public class UserActionsPanel extends Panel {
 				.setVisible(can_black_list)));
 
 		add(new Link<User>("unblacklistLink", new EntityModel<User>(User.class,
-				currentUser.getId())) {
+				user.getId())) {
 			@Override
 			public void onClick() {
-
-				User user = users.getUser(SocialCthulhuSession.get()
-						.getUsername());
-				user.removeBlacklistedUser(getModelObject());
+				SocialCthulhuSession.get().getUser()
+						.removeBlacklistedUser(getModelObject());
 				setResponsePage(new ProfilePage(new PageParameters().set(
 						"username", getModelObject().getUsername())));
 			}
 		}.add(new Label("unblacklist", getString("unblacklist"))
 				.setVisible(can_unblack_list)));
 		add(new Link<String>("blacklisted_users") {
-
 			@Override
 			public void onClick() {
 				setResponsePage(new BlacklistedUsersPage());
 			}
 		}.add(new Label("blacklisted_users_label",
-				getString("blacklisted_users_label")).setVisible(isSameUser)));
+				getString("blacklisted_users_label")).setVisible(is_same_user)));
 
 		add(new Link<User>("userListsLink", new EntityModel<User>(User.class,
-				currentUser.getId())) {
+				user.getId())) {
 			@Override
 			public void onClick() {
 				setResponsePage(new UserListsPage());
 			}
-		}.add(new Label("userListsLabel", getString("userLists"))
-				.setVisible(isFollowing)));
+		}.setVisible(is_same_user));
 	}
 
 	private boolean loggedUserIsFollowing(User logged_in_user) {
 		return logged_in_user != null
-				&& logged_in_user.getFollowing().contains(currentUser);
+				&& logged_in_user.getFollowing().contains(user);
 	}
 
 	private boolean canBlackList(User logged_in_user) {
-		return logged_in_user != null && !logged_in_user.equals(currentUser)
+		return logged_in_user != null && !logged_in_user.equals(user)
 				&& logged_in_user.isPrivate()
-				&& !logged_in_user.hasBlacklistedUser(currentUser);
+				&& !logged_in_user.hasBlacklistedUser(user);
 	}
 
 	private boolean canUnblackList(User logged_in_user) {
-		return logged_in_user != null && !logged_in_user.equals(currentUser)
+		return logged_in_user != null && !logged_in_user.equals(user)
 				&& logged_in_user.isPrivate()
-				&& logged_in_user.hasBlacklistedUser(currentUser);
+				&& logged_in_user.hasBlacklistedUser(user);
 	}
 }

@@ -32,9 +32,10 @@ public class UserListForm extends BasePage {
 
 			@Override
 			protected void onSubmit() {
-				User logged_in_user = users.getUser(SocialCthulhuSession.get()
-						.getUsername());
-				userLists.createUserList(new UserList(logged_in_user, name));
+				User logged_in_user = SocialCthulhuSession.get().getUser();
+				UserList new_user_list = new UserList(logged_in_user, name);
+				if (!logged_in_user.userlists().contains(new_user_list))
+					userLists.createUserList(new_user_list);
 				setResponsePage(UserListsPage.class);
 			}
 		};

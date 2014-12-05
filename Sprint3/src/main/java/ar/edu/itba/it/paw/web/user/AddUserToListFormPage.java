@@ -17,6 +17,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.Strings;
 
 import ar.edu.itba.it.paw.domain.User;
+import ar.edu.itba.it.paw.domain.UserList;
 import ar.edu.itba.it.paw.domain.UserListRepo;
 import ar.edu.itba.it.paw.domain.UserRepo;
 import ar.edu.itba.it.paw.web.SocialCthulhuSession;
@@ -64,9 +65,11 @@ public class AddUserToListFormPage extends BasePage {
 			protected void onSubmit() {
 				if (!username.equals(SocialCthulhuSession.get().getUsername())) {
 					User new_user = users.getUser(username);
-					if (new_user != null) {
-						userlists.userList(params.get("userlist").toInt())
-								.addUser(new_user);
+					UserList user_list = userlists.userList(params.get(
+							"userlist").toInt());
+					if (new_user != null
+							&& !user_list.users().contains(new_user)) {
+						user_list.addUser(new_user);
 						setResponsePage(new UserListDetailPage(params));
 					}
 				}

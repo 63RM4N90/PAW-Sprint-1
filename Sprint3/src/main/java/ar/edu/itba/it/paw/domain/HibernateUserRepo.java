@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.Random;
-import java.util.Set;
 
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,7 +76,7 @@ public class HibernateUserRepo extends AbstractHibernateRepo implements
 	public List<User> getSuggestedFriends(User user) {
 		Properties prop = new Properties();
 		String property_file_name = "users.properties";
-		Set<User> following = user.getFollowing();
+		List<User> following = user.getFollowing();
 		InputStream is = getClass().getClassLoader().getResourceAsStream(property_file_name);
 		try {
 			prop.load(is);

@@ -1,5 +1,6 @@
 package ar.edu.itba.it.paw.domain;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 
@@ -68,7 +69,7 @@ public class UserTest {
 	@Test
 	public void addFavouriteTest() {
 		Comment favourite = new Comment(testUser, new Date(), "test comment",
-				new HashSet<Hashtag>(), new HashSet<User>(), testUser);
+				new HashSet<Hashtag>(), new ArrayList<User>(), testUser);
 		Assert.assertEquals(testUser.getFavourites().size(), 0);
 		testUser.addFavourite(favourite);
 		Assert.assertEquals(testUser.getFavourites().size(), 1);
@@ -77,7 +78,7 @@ public class UserTest {
 	@Test
 	public void removeFavouriteTest() {
 		Comment favourite = new Comment(testUser, new Date(), "test comment",
-				new HashSet<Hashtag>(), new HashSet<User>(), testUser);
+				new HashSet<Hashtag>(), new ArrayList<User>(), testUser);
 		testUser.addFavourite(favourite);
 		Assert.assertEquals(testUser.getFavourites().size(), 1);
 		testUser.removeFavourite(favourite);

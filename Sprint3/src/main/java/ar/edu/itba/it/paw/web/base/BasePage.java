@@ -126,14 +126,12 @@ public class BasePage extends WebPage {
 
 		/* session related info */
 
-		SocialCthulhuSession session = (SocialCthulhuSession) getSession();
 		Link<Void> logout = new Link<Void>("logout") {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void onClick() {
-				User user = users.getUser(((SocialCthulhuSession) getSession())
-						.getUsername());
+				User user = SocialCthulhuSession.get().getUser();
 				user.resetToken();
 				((SocialCthulhuApp) SocialCthulhuApp.get()).getCookieService()
 						.removeCookieIfPresent(getRequest(), getResponse(),
@@ -148,9 +146,9 @@ public class BasePage extends WebPage {
 		add(logout);
 		Image separator2 = new Image("separator2", SocialCthulhuApp.SEPARTOR);
 		add(separator2);
-		Label user = new Label("user", session.getUsername());
+		Label user = new Label("user", SocialCthulhuSession.get().getUsername());
 		add(user);
-		if (!session.isSignedIn()) {
+		if (!SocialCthulhuSession.get().isSignedIn()) {
 			logout.setVisible(false);
 			separator2.setVisible(false);
 			user.setVisible(false);

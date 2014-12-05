@@ -9,7 +9,7 @@ public interface CommentRepo {
 
 	public Set<Hashtag> getHashtagList(String comment, User author);
 
-	public Set<User> getReferences(String comment, User loggedUser);
+	public List<User> getReferences(String comment, User loggedUser);
 
 	public void delete(Comment comment);
 	

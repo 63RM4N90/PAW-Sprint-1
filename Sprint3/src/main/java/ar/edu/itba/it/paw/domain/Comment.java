@@ -1,7 +1,8 @@
 package ar.edu.itba.it.paw.domain;
 
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -26,10 +27,10 @@ public class Comment extends PersistentEntity implements Comparable<Comment> {
 	@JoinColumn(name = "com_id")
 	private Set<Hashtag> hashtags;
 	@ManyToMany
-	private Set<User> references;
+	private List<User> references;
 
 	@ManyToMany(mappedBy = "favourites")
-	private Set<User> favouritees = new HashSet<User>();
+	private List<User> favouritees = new ArrayList<User>();
 
 	private static final int MAX_COMMENT_LENGTH = 140;
 
@@ -37,7 +38,7 @@ public class Comment extends PersistentEntity implements Comparable<Comment> {
 	}
 
 	public Comment(User author, Date date, String comment,
-			Set<Hashtag> hashtags, Set<User> references, User originalauthor) {
+			Set<Hashtag> hashtags, List<User> references, User originalauthor) {
 		this.author = author;
 		this.date = date;
 		if (comment.length() > MAX_COMMENT_LENGTH) {
@@ -80,7 +81,7 @@ public class Comment extends PersistentEntity implements Comparable<Comment> {
 		return hashtags;
 	}
 
-	public Set<User> getReferences() {
+	public List<User> getReferences() {
 		return references;
 	}
 

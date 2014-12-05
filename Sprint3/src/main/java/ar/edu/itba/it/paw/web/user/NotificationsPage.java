@@ -31,8 +31,7 @@ public class NotificationsPage extends SecuredPage {
 
 			@Override
 			protected List<Notification> load() {
-				return users.getUser(SocialCthulhuSession.get().getUsername())
-						.getNotifications();
+				return SocialCthulhuSession.get().getUser().getNotifications();
 			}
 		};
 

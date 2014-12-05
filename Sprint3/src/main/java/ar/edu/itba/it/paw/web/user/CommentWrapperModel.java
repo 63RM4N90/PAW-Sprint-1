@@ -34,8 +34,7 @@ public abstract class CommentWrapperModel extends LoadableDetachableModel<List<C
 	}
 	
 	protected User getRelatedUser() {
-		String username = SocialCthulhuSession.get().getUsername();
-		return users.getUser(username);
+		return SocialCthulhuSession.get().getUser();
 	}
 	
 	private List<CommentWrapper> transformComments(List<Comment> commentList, User u) {
