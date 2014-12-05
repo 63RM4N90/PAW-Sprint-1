@@ -38,7 +38,7 @@ public class UserListDetailPage extends BasePage {
 		};
 
 		add(new CommentsPanel("comments_panel", commentModel));
-		Link<String> userlistsLink = new Link<String>(
+		Link<Void> userlistsLink = new Link<Void>(
 				"add_user_to_user_list_link") {
 
 			@Override
@@ -47,7 +47,7 @@ public class UserListDetailPage extends BasePage {
 				return;
 			}
 		};
-		Link<String> deleteUserListLink = new Link<String>(
+		Link<Void> deleteUserListLink = new Link<Void>(
 				"delete_user_list_link") {
 
 			@Override

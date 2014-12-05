@@ -14,10 +14,11 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.ocpsoft.prettytime.PrettyTime;
 
+import ar.edu.itba.it.paw.domain.EntityModel;
 import ar.edu.itba.it.paw.domain.User;
 import ar.edu.itba.it.paw.domain.UserRepo;
-import ar.edu.itba.it.paw.web.SocialCthulhuSession;
 import ar.edu.itba.it.paw.web.SocialCthulhuApp;
+import ar.edu.itba.it.paw.web.SocialCthulhuSession;
 
 public class UsersPanel extends Panel {
 
@@ -44,10 +45,12 @@ public class UsersPanel extends Panel {
 								.equals(logged_in_user.getUsername());
 				int followers_amount = Integer
 						.parseInt(getString("followers_amount"));
+				IModel<User> user_model = new EntityModel<User>(User.class,
+						item.getModelObject());
 				item.add(new Image("popular", SocialCthulhuApp.POPULAR_ICON)
 						.setVisible(item.getModelObject().getFollowers().size() > followers_amount));
 				Link<User> usernameLink = new Link<User>("usernameLink",
-						item.getModel()) {
+						user_model) {
 					private static final long serialVersionUID = 1L;
 
 					@Override
@@ -72,7 +75,7 @@ public class UsersPanel extends Panel {
 						&& logged_in_user.hasBlacklistedUser(item
 								.getModelObject());
 				Link<User> unblacklistLink = new Link<User>("unblacklist",
-						item.getModel()) {
+						user_model) {
 					private static final long serialVersionUID = 1L;
 
 					@Override
@@ -88,7 +91,7 @@ public class UsersPanel extends Panel {
 				item.add(unblacklistLink);
 
 				Link<User> blacklistLink = new Link<User>("blacklist",
-						item.getModel()) {
+						user_model) {
 					private static final long serialVersionUID = 1L;
 
 					@Override

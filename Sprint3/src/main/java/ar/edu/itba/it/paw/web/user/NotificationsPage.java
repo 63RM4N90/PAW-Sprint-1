@@ -13,6 +13,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.ocpsoft.prettytime.PrettyTime;
 
+import ar.edu.itba.it.paw.domain.EntityModel;
 import ar.edu.itba.it.paw.domain.Notification;
 import ar.edu.itba.it.paw.domain.UserRepo;
 import ar.edu.itba.it.paw.web.SocialCthulhuSession;
@@ -41,7 +42,9 @@ public class NotificationsPage extends SecuredPage {
 			@Override
 			protected void populateItem(ListItem<Notification> item) {
 				Link<Notification> notificatorLink = new Link<Notification>(
-						"notificator", item.getModel()) {
+						"notificator",
+						(IModel<Notification>) new EntityModel<Notification>(
+								Notification.class, item.getModelObject())) {
 					private static final long serialVersionUID = 1L;
 
 					@Override

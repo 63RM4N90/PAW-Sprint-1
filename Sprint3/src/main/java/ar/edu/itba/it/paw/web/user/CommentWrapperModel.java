@@ -15,9 +15,8 @@ import ar.edu.itba.it.paw.domain.UserRepo;
 import ar.edu.itba.it.paw.web.SocialCthulhuSession;
 import ar.edu.itba.it.paw.web.common.CommentWrapper;
 
+@SuppressWarnings("serial")
 public abstract class CommentWrapperModel extends LoadableDetachableModel<List<CommentWrapper>> {
-
-	private static final long serialVersionUID = 4982315764280758144L;
 
 	@SpringBean
 	private UserRepo users;

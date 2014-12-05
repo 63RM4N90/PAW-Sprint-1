@@ -6,6 +6,7 @@ import java.util.InvalidPropertiesFormatException;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -36,21 +37,23 @@ public class UserActionsPanel extends Panel {
 		boolean can_black_list = canBlackList(logged_in_user);
 		boolean can_unblack_list = canUnblackList(logged_in_user);
 
-		add(new Link<String>("followersLink") {
+		IModel<User> user_model = new EntityModel<User>(User.class, user);
+
+		add(new Link<Void>("followersLink") {
 			@Override
 			public void onClick() {
 				setResponsePage(new FollowersPage(params));
 			}
 		}.add(new Label("followersAmount", user.getFollowersAmount())));
 
-		add(new Link<String>("followingLink") {
+		add(new Link<Void>("followingLink") {
 			@Override
 			public void onClick() {
 				setResponsePage(new FollowingPage(params));
 			}
 		}.add(new Label("followingAmount", user.getFollowingAmount())));
 
-		add(new Link<String>("notificationsLink") {
+		add(new Link<Void>("notificationsLink") {
 			@Override
 			public void onClick() {
 				setResponsePage(new NotificationsPage());
@@ -58,7 +61,7 @@ public class UserActionsPanel extends Panel {
 		}.add(new Label("notifications", user.getUncheckedNotifications()))
 				.setVisible(is_same_user));
 
-		add(new Link<String>("suggestedUsersLink") {
+		add(new Link<Void>("suggestedUsersLink") {
 			@Override
 			public void onClick() {
 				try {
@@ -73,21 +76,21 @@ public class UserActionsPanel extends Panel {
 			}
 		}.setVisible(is_same_user));
 
-		add(new Link<String>("favouritesLink") {
+		add(new Link<Void>("favouritesLink") {
 			@Override
 			public void onClick() {
 				setResponsePage(new FavouritesPage());
 			}
 		}.setVisible(logged_in_user != null));
 
-		add(new Link<String>("followingMessagesLink") {
+		add(new Link<Void>("followingMessagesLink") {
 			@Override
 			public void onClick() {
 				setResponsePage(new FollowingMessagesPage());
 			}
 		}.setVisible(logged_in_user != null));
 
-		add(new Link<String>("editProfileLink") {
+		add(new Link<Void>("editProfileLink") {
 			@Override
 			public void onClick() {
 				setResponsePage(new EditProfilePage(SocialCthulhuSession.get()
@@ -96,8 +99,7 @@ public class UserActionsPanel extends Panel {
 		}.add(new Label("edit", getString("edit"))).setVisible(
 				is_same_user && logged_in_user != null));
 
-		add(new Link<User>("followLink",
-				new EntityModel<User>(User.class, user)) {
+		add(new Link<User>("followLink", user_model) {
 			@Override
 			public void onClick() {
 				Notification notification = new Notification(user,
@@ -111,8 +113,7 @@ public class UserActionsPanel extends Panel {
 		}.add(new Label("follow", getString("follow")).setVisible(!isFollowing
 				&& !is_same_user && logged_in_user != null)));
 
-		add(new Link<User>("unfollowLink", new EntityModel<User>(User.class,
-				user)) {
+		add(new Link<User>("unfollowLink", user_model) {
 			@Override
 			public void onClick() {
 				SocialCthulhuSession.get().getUser().unfollow(getModelObject());
@@ -122,8 +123,7 @@ public class UserActionsPanel extends Panel {
 		}.add(new Label("unfollow", getString("unfollow"))
 				.setVisible(isFollowing)));
 
-		add(new Link<User>("blacklistLink", new EntityModel<User>(User.class,
-				user.getId())) {
+		add(new Link<User>("blacklistLink", user_model) {
 			@Override
 			public void onClick() {
 				SocialCthulhuSession.get().getUser()
@@ -134,8 +134,7 @@ public class UserActionsPanel extends Panel {
 		}.add(new Label("blacklist", getString("blacklist"))
 				.setVisible(can_black_list)));
 
-		add(new Link<User>("unblacklistLink", new EntityModel<User>(User.class,
-				user.getId())) {
+		add(new Link<User>("unblacklistLink", user_model) {
 			@Override
 			public void onClick() {
 				SocialCthulhuSession.get().getUser()
@@ -145,7 +144,7 @@ public class UserActionsPanel extends Panel {
 			}
 		}.add(new Label("unblacklist", getString("unblacklist"))
 				.setVisible(can_unblack_list)));
-		add(new Link<String>("blacklisted_users") {
+		add(new Link<Void>("blacklisted_users") {
 			@Override
 			public void onClick() {
 				setResponsePage(new BlacklistedUsersPage());
@@ -153,8 +152,7 @@ public class UserActionsPanel extends Panel {
 		}.add(new Label("blacklisted_users_label",
 				getString("blacklisted_users_label")).setVisible(is_same_user)));
 
-		add(new Link<User>("userListsLink", new EntityModel<User>(User.class,
-				user.getId())) {
+		add(new Link<User>("userListsLink", user_model) {
 			@Override
 			public void onClick() {
 				setResponsePage(new UserListsPage());

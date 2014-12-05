@@ -16,7 +16,6 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.ocpsoft.prettytime.PrettyTime;
 
 import ar.edu.itba.it.paw.domain.CommentRepo;
-import ar.edu.itba.it.paw.domain.User;
 import ar.edu.itba.it.paw.domain.UserRepo;
 import ar.edu.itba.it.paw.web.SocialCthulhuSession;
 import ar.edu.itba.it.paw.web.common.CommentWrapper;
@@ -74,8 +73,6 @@ public class CommentsPanel extends Panel {
 				Link<CommentWrapper> removeFavouriteLink = new Link<CommentWrapper>(
 						"removeFavouriteLink", item.getModel()) {
 
-					private static final long serialVersionUID = -6657885277633930092L;
-
 					@Override
 					public void onClick() {
 						SocialCthulhuSession.get().getUser()
@@ -89,8 +86,6 @@ public class CommentsPanel extends Panel {
 				item.add(removeFavouriteLink);
 				Link<CommentWrapper> addFavouriteLink = new Link<CommentWrapper>(
 						"addFavouriteLink", item.getModel()) {
-
-					private static final long serialVersionUID = 3039554452059752457L;
 
 					@Override
 					public void onClick() {
@@ -106,8 +101,6 @@ public class CommentsPanel extends Panel {
 				Link<CommentWrapper> recthulhuLink = new Link<CommentWrapper>(
 						"recthulhuLink", item.getModel()) {
 
-					private static final long serialVersionUID = -7382250969064495012L;
-
 					@Override
 					public void onClick() {
 						comments.recthulhu(getModelObject().getComment(), users
@@ -122,8 +115,6 @@ public class CommentsPanel extends Panel {
 				item.add(recthulhuLink);
 				Link<CommentWrapper> commentUsernameLink = new Link<CommentWrapper>(
 						"commentUsernameLink", item.getModel()) {
-
-					private static final long serialVersionUID = 5817420657291774864L;
 
 					@Override
 					public void onClick() {
@@ -141,8 +132,6 @@ public class CommentsPanel extends Panel {
 						getString("recthuled_from"));
 				Link<CommentWrapper> authorUsernameLink = new Link<CommentWrapper>(
 						"authorUsernameLink", item.getModel()) {
-
-					private static final long serialVersionUID = -8279779646272929857L;
 
 					@Override
 					public void onClick() {
@@ -166,8 +155,6 @@ public class CommentsPanel extends Panel {
 
 				Link<CommentWrapper> deleteCommentLink = new Link<CommentWrapper>(
 						"deleteCommentLink", item.getModel()) {
-
-					private static final long serialVersionUID = -6955584208310539151L;
 
 					@Override
 					public void onClick() {

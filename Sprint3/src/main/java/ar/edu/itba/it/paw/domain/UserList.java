@@ -1,7 +1,9 @@
 package ar.edu.itba.it.paw.domain;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,7 +18,7 @@ public class UserList extends PersistentEntity {
 	@Column(nullable = false)
 	private String _name;
 	@ManyToMany(mappedBy = "lists")
-	private List<User> _users = new ArrayList<User>();
+	private Set<User> _users = new HashSet<User>();
 
 	public UserList() {
 	}
@@ -42,7 +44,7 @@ public class UserList extends PersistentEntity {
 		return _owner;
 	}
 
-	public List<User> users() {
+	public Set<User> users() {
 		return _users;
 	}
 

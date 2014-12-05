@@ -66,7 +66,8 @@ public class Top10HashtagsPanel extends Panel{
 		add(new PropertyListView<RankedHashtag>("hashtag", hashtagsListModel) {
 			@Override
 			protected void populateItem(ListItem<RankedHashtag> item) {
-				Link<Hashtag> hashtagLink = new Link<Hashtag>("name", new PropertyModel<Hashtag>(item.getModel(), "hashtag")) {
+				Link<Hashtag> hashtagLink = new Link<Hashtag>("name",
+						new PropertyModel<Hashtag>(item.getModel(), "hashtag")) {
 
 					@Override
 					public void onClick() {

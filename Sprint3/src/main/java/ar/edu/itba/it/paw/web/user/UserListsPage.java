@@ -13,6 +13,7 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
+import ar.edu.itba.it.paw.domain.EntityModel;
 import ar.edu.itba.it.paw.domain.UserList;
 import ar.edu.itba.it.paw.domain.UserRepo;
 import ar.edu.itba.it.paw.web.SocialCthulhuSession;
@@ -46,7 +47,9 @@ public class UserListsPage extends BasePage {
 			@Override
 			protected void populateItem(ListItem<UserList> item) {
 				Link<UserList> userlistsLink = new Link<UserList>(
-						"userlistsLink", item.getModel()) {
+						"userlistsLink",
+						(IModel<UserList>) new EntityModel<UserList>(
+								UserList.class, item.getModelObject())) {
 					private static final long serialVersionUID = 1L;
 
 					@Override

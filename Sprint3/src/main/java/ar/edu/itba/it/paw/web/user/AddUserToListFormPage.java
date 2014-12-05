@@ -67,8 +67,7 @@ public class AddUserToListFormPage extends BasePage {
 					User new_user = users.getUser(username);
 					UserList user_list = userlists.userList(params.get(
 							"userlist").toInt());
-					if (new_user != null
-							&& !user_list.users().contains(new_user)) {
+					if (new_user != null) {
 						user_list.addUser(new_user);
 						setResponsePage(new UserListDetailPage(params));
 					}

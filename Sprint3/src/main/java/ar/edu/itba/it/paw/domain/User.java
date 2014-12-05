@@ -2,7 +2,9 @@ package ar.edu.itba.it.paw.domain;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -64,7 +66,7 @@ public class User extends PersistentEntity {
 	@OneToMany(mappedBy = "_owner", cascade = CascadeType.ALL)
 	private List<UserList> user_lists = new ArrayList<UserList>();
 	@ManyToMany
-	private List<UserList> lists = new ArrayList<UserList>();
+	private Set<UserList> lists = new HashSet<UserList>();
 
 	protected User() {
 	}

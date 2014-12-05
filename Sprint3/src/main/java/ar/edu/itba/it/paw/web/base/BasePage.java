@@ -49,7 +49,7 @@ public class BasePage extends WebPage {
 			}
 
 		}.add(new Image("home_image", SocialCthulhuApp.HOME)));
-		Link<String> publicity_link = new Link<String>("publicity_link") {
+		Link<Void> publicity_link = new Link<Void>("publicity_link") {
 
 			@Override
 			public void onClick() {
