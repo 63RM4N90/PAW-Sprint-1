@@ -5,11 +5,13 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.ocpsoft.prettytime.PrettyTime;
 
 import ar.edu.itba.it.paw.domain.Comment;
 import ar.edu.itba.it.paw.domain.Hashtag;
@@ -47,7 +49,7 @@ public class HashtagDetailPage extends BasePage {
 			setResponsePage(getApplication().getHomePage());
 			return;
 		}
-		IModel<Hashtag> hashtagModel = new LoadableDetachableModel<Hashtag>() {
+		final IModel<Hashtag> hashtagModel = new LoadableDetachableModel<Hashtag>() {
 			@Override
 			protected Hashtag load() {
 				return hashtags.getHashtag(hashtagName);
@@ -55,9 +57,21 @@ public class HashtagDetailPage extends BasePage {
 		};
 		add(new Label("cthulhuName", new PropertyModel<Hashtag>(hashtagModel, "hashtag")));
 		add(new Label("cthulhuAuthor", new PropertyModel<Hashtag>(hashtagModel, "author.name")));
-//		PrettyTime p = new PrettyTime();
-//		add(new Label("cthulhuCreationDate", p.format(hashtag.getDate())));
-		add(new Label("cthulhuCreationDate", new PropertyModel<Hashtag>(hashtagModel, "date")));
+		IModel<String> dateModel = new AbstractReadOnlyModel<String>() {
+
+			@Override
+			public String getObject() {
+				PrettyTime p = new PrettyTime();
+				return p.format(hashtagModel.getObject().getDate());
+			}
+			
+			@Override
+			public void detach() {
+				super.detach();
+				hashtagModel.detach();
+			}
+		};
+		add(new Label("cthulhuCreationDate", dateModel));
 		add(new CommentsPanel("comments-panel", commentWrapperModel));
 	}
 }
