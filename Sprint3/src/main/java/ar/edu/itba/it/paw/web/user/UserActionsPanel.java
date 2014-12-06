@@ -123,27 +123,28 @@ public class UserActionsPanel extends Panel {
 		}.add(new Label("unfollow", getString("unfollow"))
 				.setVisible(isFollowing)));
 
-		add(new Link<User>("blacklistLink", user_model) {
+		Link<User> blacklist_link = new Link<User>("blacklistLink", user_model) {
 			@Override
 			public void onClick() {
-				SocialCthulhuSession.get().getUser()
-						.addBlacklistedUser(getModelObject());
+				User logged_user = SocialCthulhuSession.get().getUser();
+				if (logged_user.getBlacklistedUsers()
+						.contains(getModelObject())) {
+					logged_user.removeBlacklistedUser(getModelObject());
+				} else {
+					logged_user.addBlacklistedUser(getModelObject());
+				}
 				setResponsePage(new ProfilePage(new PageParameters().set(
 						"username", getModelObject().getUsername())));
 			}
-		}.add(new Label("blacklist", getString("blacklist"))
-				.setVisible(can_black_list)));
+		};
+		System.out.println("can blacklist = " + can_black_list);
+		System.out.println("can unblacklist = " + can_unblack_list);
+		blacklist_link.add(new Label("blacklist", getString("blacklist"))
+				.setVisible(can_black_list));
+		blacklist_link.add(new Label("unblacklist", getString("unblacklist"))
+				.setVisible(can_unblack_list));
+		add(blacklist_link.setVisible(can_unblack_list || can_black_list));
 
-		add(new Link<User>("unblacklistLink", user_model) {
-			@Override
-			public void onClick() {
-				SocialCthulhuSession.get().getUser()
-						.removeBlacklistedUser(getModelObject());
-				setResponsePage(new ProfilePage(new PageParameters().set(
-						"username", getModelObject().getUsername())));
-			}
-		}.add(new Label("unblacklist", getString("unblacklist"))
-				.setVisible(can_unblack_list)));
 		add(new Link<Void>("blacklisted_users") {
 			@Override
 			public void onClick() {

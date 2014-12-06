@@ -16,20 +16,20 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.ocpsoft.prettytime.PrettyTime;
 
 import ar.edu.itba.it.paw.domain.CommentRepo;
+import ar.edu.itba.it.paw.domain.User;
 import ar.edu.itba.it.paw.domain.UserRepo;
 import ar.edu.itba.it.paw.web.SocialCthulhuSession;
 import ar.edu.itba.it.paw.web.common.CommentWrapper;
 import ar.edu.itba.it.paw.web.common.ImageResourceReference;
 
+@SuppressWarnings("serial")
 public class CommentsPanel extends Panel {
 
-	private static final long serialVersionUID = 8914010631219544701L;
 	@SpringBean
 	private UserRepo users;
 	@SpringBean
 	private CommentRepo comments;
 
-	@SuppressWarnings("serial")
 	public CommentsPanel(String id, IModel<List<CommentWrapper>> listOfComments) {
 		super(id);
 
@@ -70,34 +70,31 @@ public class CommentsPanel extends Panel {
 				item.add(new MultiLineLabel("transformedComment", item
 						.getModelObject().getTransformedComment())
 						.setEscapeModelStrings(false));
-				Link<CommentWrapper> removeFavouriteLink = new Link<CommentWrapper>(
-						"removeFavouriteLink", item.getModel()) {
+				Link<CommentWrapper> favouriteLink = new Link<CommentWrapper>(
+						"favouriteLink", item.getModel()) {
 
 					@Override
 					public void onClick() {
-						SocialCthulhuSession.get().getUser()
-								.removeFavourite(getModelObject().getComment());
+						User logged_user = SocialCthulhuSession.get().getUser();
+						if (logged_user.getFavourites().contains(
+								getModelObject().getComment())) {
+							logged_user.removeFavourite(getModelObject()
+									.getComment());
+						} else {
+							logged_user.addFavourite(getModelObject()
+									.getComment());
+						}
 					}
 
 				};
-				removeFavouriteLink.add(new Label("removeFavourite",
-						getString("remove_favourite")));
-				removeFavouriteLink.setVisible(alreadyFavourited);
-				item.add(removeFavouriteLink);
-				Link<CommentWrapper> addFavouriteLink = new Link<CommentWrapper>(
-						"addFavouriteLink", item.getModel()) {
+				favouriteLink.add(new Label("removeFavourite",
+						getString("remove_favourite")).setVisible(userIsLogged
+						&& alreadyFavourited));
+				favouriteLink.add(new Label("addFavourite",
+						getString("add_favourite")).setVisible(userIsLogged
+						&& !alreadyFavourited));
+				item.add(favouriteLink);
 
-					@Override
-					public void onClick() {
-						CommentWrapper comment = getModelObject();
-						SocialCthulhuSession.get().getUser()
-								.addFavourite(comment.getComment());
-					}
-				};
-				addFavouriteLink.add(new Label("addFavourite",
-						getString("add_favourite")));
-				addFavouriteLink.setVisible(userIsLogged && !alreadyFavourited);
-				item.add(addFavouriteLink);
 				Link<CommentWrapper> recthulhuLink = new Link<CommentWrapper>(
 						"recthulhuLink", item.getModel()) {
 

@@ -5,12 +5,15 @@
 				<span wicket:id="no_userlists">There are no user lists to show...</span>
 				<ul>
 					<li class="search-result" wicket:id="userlist">
-						<a wicket:id="userlistsLink"><span wicket:id=userlist_name>User list name</span></a><br>
+						<a wicket:id="userlistsLink">
+						<span wicket:id=userlist_name>User list name</span></a><br>
 					</li>
 				</ul>
-				<h3>
-					<a wicket:id="create_user_list_link"><span wicket:id="create_user_list">name</span></a>
-				</h3>
+				<a wicket:id="create_user_list_link">
+					<button class="btn-inverse suggested-users">
+						<span wicket:id="create_user_list">name</span>
+					</button>
+				</a>
 			</div>
 		</wicket:extend>
 	</body>

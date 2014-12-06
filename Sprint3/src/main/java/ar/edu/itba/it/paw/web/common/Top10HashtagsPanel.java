@@ -73,9 +73,8 @@ public class Top10HashtagsPanel extends Panel{
 					public void onClick() {
 						setResponsePage(new HashtagDetailPage(new PageParameters().set("hashtag", getModelObject().getHashtag())));
 					}
-					
 				};
-				hashtagLink.add(new Label("hashtag_name", new PropertyModel<String>(item.getModel(), "hashtag.hashtag")));
+				hashtagLink.add(new Label("hashtag.hashtag"));
 				item.add(hashtagLink);
 				Link<User> hashtagAuthorLink = new Link<User>("username", new PropertyModel<User>(item.getModel(), "hashtag.author")){
 
@@ -83,9 +82,8 @@ public class Top10HashtagsPanel extends Panel{
 					public void onClick() {
 						setResponsePage(new ProfilePage(new PageParameters().set("username", getModelObject().getUsername())));						
 					}
-					
 				};
-				hashtagAuthorLink.add(new Label("hashtag_author", new PropertyModel<String>(item.getModel(), "hashtag.author.username")));
+				hashtagAuthorLink.add(new Label("hashtag.author.username"));
 				item.add(hashtagAuthorLink);
 				item.add(new Label("rank", new PropertyModel<String>(item.getModel(), "rank")));			}
 		});

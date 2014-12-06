@@ -5,11 +5,21 @@
 				<h1>
 					<span wicket:id="title">title</span>
 				</h1>
-				<h3>
-					<a wicket:id="add_user_to_user_list_link"><span wicket:id="add_user_to_user_list">add user</span></a><br>
-					<a wicket:id="delete_user_list_link"><span wicket:id="delete_user_list">delete userlist</span></a>
-				</h3>
-				<div wicket:id="comments_panel" />
+				<div class="info-column profile-column">
+					<a wicket:id="add_user_to_user_list_link">
+						<button class="btn-inverse suggested-users">
+							<span wicket:id="add_user_to_user_list">add user</span>
+						</button>
+					</a>
+					<a wicket:id="delete_user_list_link">
+						<button class="btn-inverse suggested-users">
+							<span wicket:id="delete_user_list">delete userlist</span>
+						</button>
+					</a>
+				</div>
+				<div class="comments-column profile-column">
+					<div wicket:id="comments_panel" />
+				</div>
 			</div>
 		</wicket:extend>
 	</body>

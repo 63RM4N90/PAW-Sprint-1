@@ -74,32 +74,25 @@ public class UsersPanel extends Panel {
 				boolean has_blacklisted_user = logged_in_user != null
 						&& logged_in_user.hasBlacklistedUser(item
 								.getModelObject());
-				Link<User> unblacklistLink = new Link<User>("unblacklist",
+				Link<User> blacklistLink = new Link<User>("unblacklist",
 						user_model) {
 					private static final long serialVersionUID = 1L;
 
 					@Override
 					public void onClick() {
-						SocialCthulhuSession.get().getUser()
-								.removeBlacklistedUser(getModelObject());
+						User logged_user = SocialCthulhuSession.get().getUser();
+						if (logged_user.getBlacklistedUsers().contains(
+								getModelObject())) {
+							logged_user.removeBlacklistedUser(getModelObject());
+						} else {
+							logged_user.addBlacklistedUser(getModelObject());
+						}
 					}
 				};
-				unblacklistLink.add(new Label("unblacklist_text",
+				blacklistLink.add(new Label("unblacklist_text",
 						getString("unblacklist_text"))
 						.setVisible(has_blacklisted_user && !is_same_user
 								&& logged_in_user != null));
-				item.add(unblacklistLink);
-
-				Link<User> blacklistLink = new Link<User>("blacklist",
-						user_model) {
-					private static final long serialVersionUID = 1L;
-
-					@Override
-					public void onClick() {
-						SocialCthulhuSession.get().getUser()
-								.addBlacklistedUser(getModelObject());
-					}
-				};
 				blacklistLink.add(new Label("blacklist_text",
 						getString("blacklist_text"))
 						.setVisible(!has_blacklisted_user && !is_same_user
