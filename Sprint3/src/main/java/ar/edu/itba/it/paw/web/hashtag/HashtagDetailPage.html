@@ -2,17 +2,20 @@
 	<body>
 		<wicket:extend>
 			<div class="vertical-container">
-				<h2>
-					# <label wicket:id="cthulhuName">Hashtag</label>
-				</h2>
-				<h5>
-					Created by: <label wicket:id="cthulhuAuthor">Author</label>
-				</h5>
-				<h5>
-					On date: <label wicket:id="cthulhuCreationDate">Creation Date</label>
-				</h5>
-				<br>
-				<div wicket:id="comments-panel" />
+				<div class="info-column profile-column">
+					<h2>
+						#<span wicket:id="cthulhuName">Hashtag</span>
+					</h2>
+					<h5>
+						Created by: <label wicket:id="cthulhuAuthor">Author</label>
+					</h5>
+					<h5>
+						On date: <label wicket:id="cthulhuCreationDate">Creation Date</label>
+					</h5>
+				</div>
+				<div class="info-column profile-column">
+					<div wicket:id="comments-panel" />
+				</div>
 			</div>
 		</wicket:extend>
 	</body>
