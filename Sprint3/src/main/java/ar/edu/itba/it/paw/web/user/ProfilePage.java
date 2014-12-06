@@ -42,7 +42,7 @@ public class ProfilePage extends BasePage {
 				.toString());
 		String logged_in_username = SocialCthulhuSession.get().getUsername();
 		boolean can_view_profile = logged_in_username != null
-				|| currentUser.isPublic();
+				|| currentUser != null && currentUser.isPublic();
 		User logged_in_user = users.getUser(logged_in_username);
 		if (currentUser == null) {
 			setResponsePage(getApplication().getHomePage());

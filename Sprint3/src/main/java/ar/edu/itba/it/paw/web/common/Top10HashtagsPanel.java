@@ -21,20 +21,15 @@ import ar.edu.itba.it.paw.web.hashtag.HashtagDetailPage;
 import ar.edu.itba.it.paw.web.user.ProfilePage;
 
 @SuppressWarnings("serial")
-public class Top10HashtagsPanel extends Panel{
-	
+public class Top10HashtagsPanel extends Panel {
+
 	@SpringBean
 	private HashtagRepo hashtags;
 	private int period = 30;
-	private Label emptyList;
 
 	public Top10HashtagsPanel(String id) {
 		super(id);
-		
-		
-		emptyList = new Label("emptyHashtagList", getString("no_hashtags"));
-		emptyList.setVisible(false);
-		add(emptyList);
+
 		add(new Link<Void>("1day") {
 
 			@Override
@@ -46,14 +41,14 @@ public class Top10HashtagsPanel extends Panel{
 
 			@Override
 			public void onClick() {
-				period = 7;				
+				period = 7;
 			}
 		});
 		add(new Link<Void>("1month") {
 
 			@Override
 			public void onClick() {
-				period = 30;				
+				period = 30;
 			}
 		});
 		IModel<List<RankedHashtag>> hashtagsListModel = new LoadableDetachableModel<List<RankedHashtag>>() {
@@ -71,21 +66,29 @@ public class Top10HashtagsPanel extends Panel{
 
 					@Override
 					public void onClick() {
-						setResponsePage(new HashtagDetailPage(new PageParameters().set("hashtag", getModelObject().getHashtag())));
+						setResponsePage(new HashtagDetailPage(
+								new PageParameters().set("hashtag",
+										getModelObject().getHashtag())));
 					}
 				};
 				hashtagLink.add(new Label("hashtag.hashtag"));
 				item.add(hashtagLink);
-				Link<User> hashtagAuthorLink = new Link<User>("username", new PropertyModel<User>(item.getModel(), "hashtag.author")){
+				Link<User> hashtagAuthorLink = new Link<User>("username",
+						new PropertyModel<User>(item.getModel(),
+								"hashtag.author")) {
 
 					@Override
 					public void onClick() {
-						setResponsePage(new ProfilePage(new PageParameters().set("username", getModelObject().getUsername())));						
+						setResponsePage(new ProfilePage(
+								new PageParameters().set("username",
+										getModelObject().getUsername())));
 					}
 				};
 				hashtagAuthorLink.add(new Label("hashtag.author.username"));
 				item.add(hashtagAuthorLink);
-				item.add(new Label("rank", new PropertyModel<String>(item.getModel(), "rank")));			}
+				item.add(new Label("rank", new PropertyModel<String>(item
+						.getModel(), "rank")));
+			}
 		});
 	}
 
