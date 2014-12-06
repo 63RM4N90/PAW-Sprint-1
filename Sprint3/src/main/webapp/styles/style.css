@@ -124,7 +124,7 @@ a, a :visited {
 .login-container {
 	min-height: 300px;
 	background: url(../img/container_background.png);
-	margin-top: 10px;
+	margin-top: 100px;
 	box-shadow: 0px 0px 50px #000;
 }
 

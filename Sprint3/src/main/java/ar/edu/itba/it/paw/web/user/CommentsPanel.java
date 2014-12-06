@@ -30,7 +30,7 @@ public class CommentsPanel extends Panel {
 	@SpringBean
 	private CommentRepo comments;
 
-	public CommentsPanel(String id, IModel<List<CommentWrapper>> listOfComments) {
+	public CommentsPanel(String id, final IModel<List<CommentWrapper>> listOfComments) {
 		super(id);
 
 		final Component successfully_recthulhued_label = new Label(
@@ -157,11 +157,10 @@ public class CommentsPanel extends Panel {
 					public void onClick() {
 						String logged_in_username = SocialCthulhuSession.get()
 								.getUsername();
-						if (logged_in_username != null
-								&& getModelObject().getComment().getAuthor()
-										.getUsername()
-										.equals(logged_in_username))
+						if (logged_in_username != null && getModelObject().getComment().getAuthor().getUsername().equals(logged_in_username)) {
 							comments.delete(getModelObject().getComment());
+						}
+						listOfComments.detach();
 					}
 				};
 				deleteCommentLink.add(new Label("deleteComment",
