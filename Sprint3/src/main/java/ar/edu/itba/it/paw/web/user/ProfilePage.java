@@ -16,6 +16,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import ar.edu.itba.it.paw.domain.Comment;
 import ar.edu.itba.it.paw.domain.CommentRepo;
+import ar.edu.itba.it.paw.domain.Notification;
 import ar.edu.itba.it.paw.domain.NotificationRepo;
 import ar.edu.itba.it.paw.domain.User;
 import ar.edu.itba.it.paw.domain.UserRepo;
@@ -104,10 +105,17 @@ public class ProfilePage extends BasePage {
 			@Override
 			protected void onSubmit() {
 				User author = SocialCthulhuSession.get().getUser();
+				List<User> referencedUsers = comments.getReferences(commentTextarea, author);
+				for(User ref : referencedUsers) {
+					Notification notification = new Notification(author,
+							author.getUsername() + " " + this.getString("mention_notif_text"));
+					notifications.save(notification);
+					ref.notify(notification);
+				}
+
 				Comment comment = new Comment(author, new Date(),
-						commentTextarea, comments.getHashtagList(
-								commentTextarea, author),
-						comments.getReferences(commentTextarea, author), author);
+						commentTextarea, comments.getHashtagList(commentTextarea, author),
+						referencedUsers, author);
 				comments.addComment(comment);
 				commentTextarea = "";
 				setResponsePage(new ProfilePage(parameters));

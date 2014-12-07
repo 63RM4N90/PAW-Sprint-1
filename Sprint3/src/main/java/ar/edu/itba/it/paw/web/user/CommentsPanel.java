@@ -16,6 +16,8 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.ocpsoft.prettytime.PrettyTime;
 
 import ar.edu.itba.it.paw.domain.CommentRepo;
+import ar.edu.itba.it.paw.domain.Notification;
+import ar.edu.itba.it.paw.domain.NotificationRepo;
 import ar.edu.itba.it.paw.domain.User;
 import ar.edu.itba.it.paw.domain.UserRepo;
 import ar.edu.itba.it.paw.web.SocialCthulhuSession;
@@ -29,6 +31,8 @@ public class CommentsPanel extends Panel {
 	private UserRepo users;
 	@SpringBean
 	private CommentRepo comments;
+	@SpringBean
+	private NotificationRepo notificationRepo;
 
 	public CommentsPanel(String id, final IModel<List<CommentWrapper>> listOfComments) {
 		super(id);
@@ -100,10 +104,14 @@ public class CommentsPanel extends Panel {
 
 					@Override
 					public void onClick() {
-						comments.recthulhu(getModelObject().getComment(), users
-								.getUser(SocialCthulhuSession.get()
-										.getUsername()));
+						User loggedUser = users.getUser(SocialCthulhuSession.get().getUsername());
+						comments.recthulhu(getModelObject().getComment(), loggedUser);
 						successfully_recthulhued_label.setVisible(true);
+						
+						Notification notification = new Notification(loggedUser, loggedUser.getUsername()
+								+ " has recthulhued a comment of yours!");
+						notificationRepo.save(notification);
+						getModelObject().getComment().getOriginalAuthor().notify(notification);
 					}
 				};
 				recthulhuLink

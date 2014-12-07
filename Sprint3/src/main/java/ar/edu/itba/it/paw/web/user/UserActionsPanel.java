@@ -102,8 +102,8 @@ public class UserActionsPanel extends Panel {
 		add(new Link<User>("followLink", user_model) {
 			@Override
 			public void onClick() {
-				Notification notification = new Notification(user,
-						user.getUsername() + " is following you :).");
+				Notification notification = new Notification(logged_in_user,
+						logged_in_user.getUsername() + " " + this.getString("follow_notif_text"));
 				notifications.save(notification);
 				SocialCthulhuSession.get().getUser()
 						.follow(getModelObject(), notification);

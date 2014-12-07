@@ -70,10 +70,6 @@ public class HibernateCommentRepo extends AbstractHibernateRepo implements
 			String username = result.substring(1);
 			User user = userRepo.getUser(username);
 			if (user != null) {
-				Notification notification = new Notification(sessionUser,
-						username + " has mentioned you on a comment.");
-				notificationRepo.save(notification);
-				user.notify(notification);
 				ans.add(user);
 			}
 		}
@@ -103,10 +99,6 @@ public class HibernateCommentRepo extends AbstractHibernateRepo implements
 		Comment rechtulhu = new Comment(user, new Date(), comment.getComment(),
 				getHashtagList(comment.getComment(), user), getReferences(
 						comment.getComment(), user), originalAuthor);
-		Notification notification = new Notification(user, user.getUsername()
-				+ " has recthulhued a comment of yours!");
-		notificationRepo.save(notification);
-		originalAuthor.notify(notification);
 		if (!user.getComments().contains(rechtulhu)) {
 			addComment(rechtulhu);
 		}
