@@ -14,14 +14,14 @@ public class UserTest {
 
 	@Before
 	public void setUp() {
-		testUser = new User("test", "test", "test", "test", "12345678", null,
+		testUser = new User("test", "test", "test", "test", "12345678", null, null,
 				null, "png", "test", "test", new Date(), false);
 	}
 
 	@Test
 	public void followUserTest() {
 		User follow = new User("follow", "follow", "follow", "follow",
-				"12345678", null, null, "png", "follow", "follow", new Date(),
+				"12345678", null, null, null, "png", "follow", "follow", new Date(),
 				false);
 
 		Assert.assertEquals(testUser.getFollowing().size(), 0);
@@ -32,7 +32,7 @@ public class UserTest {
 	@Test
 	public void unfollowUserTest() {
 		User follow = new User("follow", "follow", "follow", "follow",
-				"12345678", null, null, "png", "follow", "follow", new Date(),
+				"12345678", null, null, null, "png", "follow", "follow", new Date(),
 				false);
 
 		testUser.follow(follow, new Notification(follow, "notification"));
@@ -44,7 +44,7 @@ public class UserTest {
 	@Test
 	public void notifyUserTest() {
 		User notificator = new User("notificator", "notificator",
-				"notificator", "notificator", "12345678", null, null, "png",
+				"notificator", "notificator", "12345678", null, null, null, "png",
 				"notificator", "notificator", new Date(), false);
 		Notification notification = new Notification(notificator,
 				"notification");
@@ -56,7 +56,7 @@ public class UserTest {
 	@Test
 	public void checkNotificationTest() {
 		User notificator = new User("notificator", "notificator",
-				"notificator", "notificator", "12345678", null, null, "png",
+				"notificator", "notificator", "12345678", null, null, null, "png",
 				"notificator", "notificator", new Date(), false);
 		Notification notification = new Notification(notificator,
 				"notification");

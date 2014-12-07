@@ -38,6 +38,7 @@ public class User extends PersistentEntity {
 	@Column
 	private String token;
 	private byte[] picture;
+	private byte[] background;
 	private byte[] thumbnail_picture;
 	private String picture_extension;
 	@Column(nullable = false)
@@ -72,7 +73,7 @@ public class User extends PersistentEntity {
 	}
 
 	public User(String name, String surname, String username,
-			String description, String password, byte[] picture,
+			String description, String password, byte[] picture, byte[] background,
 			byte[] thumbnail_picture, String picture_extension,
 			String secretQuestion, String secretAnswer, Date registrationDate,
 			boolean isPrivate) throws IllegalArgumentException {
@@ -100,6 +101,7 @@ public class User extends PersistentEntity {
 		this.description = description;
 		this.password = password;
 		this.picture = picture;
+		this.background = background;
 		this.thumbnail_picture = ThumbnailImageConverter.thumbnailPicture(
 				picture, picture_extension);
 		this.picture_extension = picture_extension;
@@ -313,6 +315,14 @@ public class User extends PersistentEntity {
 
 	public byte[] getPicture() {
 		return picture;
+	}
+
+	public byte[] getBackground() {
+		return background;
+	}
+
+	public void setBackground(byte[] background) {
+		this.background = background;
 	}
 
 	public byte[] getThumbnailPicture() {

@@ -31,6 +31,7 @@ public class SocialCthulhuApp extends WebApplication {
 	public static final ResourceReference SUGGESTED_USERS = new PackageResourceReference(SocialCthulhuApp.class, "resources/suggest_friends.png");
 	public static final ResourceReference FAVOURITES = new PackageResourceReference(SocialCthulhuApp.class, "resources/Favourites.png");
 	public static final ResourceReference DEFAULT_IMAGE = new PackageResourceReference(SocialCthulhuApp.class, "resources/default_picture.png");
+	public static final ResourceReference TRANSPARENT_IMAGE = new PackageResourceReference(SocialCthulhuApp.class, "resources/default_picture.png");
 	private CookieService cookieService = new CookieService();
 	private SessionProvider sessionProvider;
 	public static final ResourceReference POPULAR_ICON = new PackageResourceReference(SocialCthulhuApp.class, "resources/popular.png");

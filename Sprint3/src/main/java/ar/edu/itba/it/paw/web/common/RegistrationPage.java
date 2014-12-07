@@ -39,6 +39,7 @@ public class RegistrationPage extends BasePage {
 	@SuppressWarnings("unused")
 	private String captchaInput;
 	private transient List<FileUpload> picture;
+	private transient List<FileUpload> background;
 
 	private static transient final int MIN_NAME_LENGTH = 1;
 	private static transient final int MAX_NAME_LENGTH = 32;
@@ -65,21 +66,11 @@ public class RegistrationPage extends BasePage {
 			@Override
 			protected void onSubmit() {
 				if (checkFieldLength() && password.equals(confirmPassword)) {
-					byte[] selectedPicture = null;
-					if (picture != null) {
-						selectedPicture = picture.get(0).getBytes();
-					}
-					String picture_extension = "png";
-					if (picture != null) {
-						picture_extension = picture
-								.get(0)
-								.getClientFileName()
-								.substring(
-										picture.get(0).getClientFileName()
-												.lastIndexOf(".")).substring(1);
-					}
+					byte[] selectedPicture = getImageBytes(picture);
+					String picture_extension = getImageExtension(picture);
+					byte[] selectedBackground = getImageBytes(background);
 					User newUser = new User(name, surname, username,
-							description, password, selectedPicture,
+							description, password, selectedPicture, selectedBackground,
 							selectedPicture, picture_extension, secretQuestion,
 							secretAnswer, new Date(), false);
 					users.registerUser(newUser);
@@ -156,9 +147,31 @@ public class RegistrationPage extends BasePage {
 		form.add(new BookmarkablePageLink<Void>("alreadyRegistered",
 				LoginPage.class));
 		form.add(new FileUploadField("picture"));
+		form.add(new FileUploadField("background"));
 		form.add(new Button("register", new ResourceModel("register")));
 		form.add(captchaImage);
 		form.add(captchaTF);
 		add(form);
+	}
+	
+	private byte[] getImageBytes(List<FileUpload> picture) {
+		byte[] selectedPicture = null;
+		if (picture != null) {
+			selectedPicture = picture.get(0).getBytes();
+		}
+		return selectedPicture;
+	}
+	
+	private String getImageExtension(List<FileUpload> picture) {
+		String picture_extension = "png";
+		if (picture != null) {
+			picture_extension = picture
+					.get(0)
+					.getClientFileName()
+					.substring(
+							picture.get(0).getClientFileName()
+							.lastIndexOf(".")).substring(1);
+		}		
+		return picture_extension;
 	}
 }

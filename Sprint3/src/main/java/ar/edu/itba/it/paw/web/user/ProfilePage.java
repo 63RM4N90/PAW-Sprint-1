@@ -63,6 +63,9 @@ public class ProfilePage extends BasePage {
 
 		add(new Image("profilePicture", getProfilePicture(currentUser))
 				.setVisible(!has_blacklisted_you && can_view_profile));
+		
+		add(new Image("profileBackground", getProfileBackground(currentUser))
+			.setVisible(!has_blacklisted_you && can_view_profile));
 
 		add(new Label("profileNameTitle", getString("profileNameTitle"))
 				.setVisible(!has_blacklisted_you && can_view_profile));
@@ -144,6 +147,14 @@ public class ProfilePage extends BasePage {
 			return new ImageResourceReference(currentUser.getPicture());
 		} else {
 			return SocialCthulhuApp.DEFAULT_IMAGE;
+		}
+	}
+	
+	private ResourceReference getProfileBackground(User currentUser) {
+		if (currentUser.getBackground() != null) {
+			return new ImageResourceReference(currentUser.getBackground());
+		} else {
+			return SocialCthulhuApp.TRANSPARENT_IMAGE;
 		}
 	}
 }

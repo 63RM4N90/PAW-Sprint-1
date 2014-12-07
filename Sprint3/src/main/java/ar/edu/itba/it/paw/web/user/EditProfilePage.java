@@ -30,6 +30,7 @@ public class EditProfilePage extends SecuredPage {
 
 	private static final long serialVersionUID = 1L;
 	private List<FileUpload> fileUpload;
+	private List<FileUpload> fileUploadBackground;
 
 	public EditProfilePage(User user) {
 		add(new FeedbackPanel("errorPanel"));
@@ -55,6 +56,10 @@ public class EditProfilePage extends SecuredPage {
 							.setThumbnailPicture(ThumbnailImageConverter
 									.thumbnailPicture(fileUpload.get(0)
 											.getBytes(), image_extension));
+				}
+				if(EditProfilePage.this.fileUploadBackground != null) {
+					((User) this.getForm().getModelObject())
+					.setBackground(fileUploadBackground.get(0).getBytes());
 				}
 				setResponsePage(new ProfilePage(new PageParameters().set(
 						"username", SocialCthulhuSession.get().getUsername())));
@@ -94,7 +99,10 @@ public class EditProfilePage extends SecuredPage {
 				new PropertyModel<List<FileUpload>>(EditProfilePage.this,
 						"fileUpload"));
 		form.add(fileUploadField);
-
+		FileUploadField fileUploadFieldBackground = new FileUploadField("background",
+				new PropertyModel<List<FileUpload>>(EditProfilePage.this,
+						"fileUploadBackground"));
+		form.add(fileUploadFieldBackground);
 		form.add(new CheckBox("isPrivate"));
 		form.add(new EqualPasswordInputValidator(passwordField,
 				confirmPasswordField));

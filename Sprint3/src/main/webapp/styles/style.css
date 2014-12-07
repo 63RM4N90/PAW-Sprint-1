@@ -20,6 +20,8 @@ body {
 	background: url(../img/topbar_background.png);
 	height: 45px;
 	box-shadow: 0px 10px 30px #000;
+	position: relative;
+	z-index: 1;
 }
 
 .top-bar-element {
@@ -191,11 +193,24 @@ h2 {
 	box-shadow: 0px 0px 100px #000;
 	min-height: 100%;
 	padding: 40px;
+	position: relative;
+	z-index: 1;
+}
+
+.profile-bg {
+	position: fixed;
+	z-index: 0;
+	left: 0;
+	top: 0;
+	min-width: 100%;
+	height: 100%;
 }
 
 .publicity { 
 	max-width: 50%;
 	margin: 0 auto;
+	position: relative;
+	z-index: 1;
 }
 
 .publicity-picture {
