@@ -25,6 +25,7 @@ import ar.edu.itba.it.paw.web.SessionProvider;
 import ar.edu.itba.it.paw.web.SocialCthulhuApp;
 import ar.edu.itba.it.paw.web.SocialCthulhuSession;
 import ar.edu.itba.it.paw.web.common.SearchPage;
+import ar.edu.itba.it.paw.web.hashtag.TopTenHashtagsPage;
 
 public class BasePage extends WebPage {
 
@@ -148,6 +149,14 @@ public class BasePage extends WebPage {
 		add(separator2);
 		Label user = new Label("user", SocialCthulhuSession.get().getUsername());
 		add(user);
+		Link<Void> top_10_hashtags_link = new Link<Void>("top_10_hashtags_link") {
+
+			@Override
+			public void onClick() {
+				setResponsePage(TopTenHashtagsPage.class);
+			}
+		};
+		add(top_10_hashtags_link);
 		if (!SocialCthulhuSession.get().isSignedIn()) {
 			logout.setVisible(false);
 			separator2.setVisible(false);
