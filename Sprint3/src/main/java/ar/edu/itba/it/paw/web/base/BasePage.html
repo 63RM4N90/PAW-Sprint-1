@@ -3,26 +3,35 @@
 <html>
 <head>
 <link rel="stylesheet" type="text/css" href="styles/bootstrap.css" />
-<link rel="stylesheet" type="text/css" href="styles/bootstrap-responsive.css" />
+<link rel="stylesheet" type="text/css"
+	href="styles/bootstrap-responsive.css" />
 <link rel="stylesheet" type="text/css" href="styles/style.css" />
 </head>
 <body>
 	<div class="top-bar">
 		<div class="top-bar-element title">
-			<img wicket:id="socialCthulhuTitle"/>
+			<img wicket:id="socialCthulhuTitle" />
 		</div>
 		<div class="top-bar-element search-bar">
 			<form wicket:id="searchForm">
-				<input type="text" placeholder="Find Soul..." wicket:id="searchField"/> 
-				<input type="submit" class="btn-inverse search-button" wicket:id="searchButton"/>
+				<input type="text" placeholder="Find Soul..."
+					wicket:id="searchField" /> <input type="submit"
+					class="btn-inverse search-button" wicket:id="searchButton" />
 			</form>
+		</div>
+		<div class="top-bar-element">
+			<a wicket:id="top_10_hashtags_link">
+				<button class="btn-inverse search-button">
+					<wicket:message key="top_10_hashtags"/>
+				</button>
+			</a>
 		</div>
 		<div class="top-bar-element session">
 			<div class="home-link">
-				<img class="separator" wicket:id="separator1"/>
-				<a wicket:id="home"><img wicket:id="home_image"/></a>
+				<img class="separator" wicket:id="separator1" /> <a
+					wicket:id="home"><img wicket:id="home_image" /></a>
 			</div>
-			<img class="separator" wicket:id="separator2"/>
+			<img class="separator" wicket:id="separator2" />
 			<div class="user-session">
 				<p>
 					<span wicket:id="user">user</span>
@@ -31,11 +40,11 @@
 			</div>
 		</div>
 	</div>
-		<div class="publicity">
-			<a wicket:id="publicity_link">
-				<img wicket:id="publicity" class="publicity-picture">
-			</a>
-		</div>
-		<wicket:child />
-	</body>
+	<div class="publicity">
+		<a wicket:id="publicity_link"> <img wicket:id="publicity"
+			class="publicity-picture">
+		</a>
+	</div>
+	<wicket:child />
+</body>
 </html>

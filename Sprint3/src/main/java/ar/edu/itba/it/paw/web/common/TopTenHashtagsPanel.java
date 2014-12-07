@@ -21,13 +21,13 @@ import ar.edu.itba.it.paw.web.hashtag.HashtagDetailPage;
 import ar.edu.itba.it.paw.web.user.ProfilePage;
 
 @SuppressWarnings("serial")
-public class Top10HashtagsPanel extends Panel {
+public class TopTenHashtagsPanel extends Panel {
 
 	@SpringBean
 	private HashtagRepo hashtags;
 	private int period = 30;
 
-	public Top10HashtagsPanel(String id) {
+	public TopTenHashtagsPanel(String id) {
 		super(id);
 
 		add(new Link<Void>("1day") {
