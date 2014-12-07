@@ -41,14 +41,13 @@ public class ProfilePage extends BasePage {
 	public ProfilePage(final PageParameters parameters) {
 		final User currentUser = users.getUser(parameters.get("username")
 				.toString());
-		String logged_in_username = SocialCthulhuSession.get().getUsername();
-		boolean can_view_profile = logged_in_username != null
-				|| currentUser != null && currentUser.isPublic();
-		User logged_in_user = users.getUser(logged_in_username);
+		User logged_in_user = SocialCthulhuSession.get().getUser();
 		if (currentUser == null) {
 			setResponsePage(getApplication().getHomePage());
 			return;
 		}
+		boolean can_view_profile = logged_in_user != null
+				|| currentUser != null && currentUser.isPublic();
 		boolean has_blacklisted_you = logged_in_user != null
 				&& logged_in_user.isBlacklistedBy(currentUser)
 				&& currentUser.isPrivate();
@@ -61,11 +60,11 @@ public class ProfilePage extends BasePage {
 		add(new Label("private_user", getString("private_user"))
 				.setVisible(!can_view_profile));
 
-		add(new Image("profilePicture", getProfilePicture(currentUser))
+		add(new Image("profilePicture", getProfilePicture(currentUser, "1"))
 				.setVisible(!has_blacklisted_you && can_view_profile));
-		
-		add(new Image("profileBackground", getProfileBackground(currentUser))
-			.setVisible(!has_blacklisted_you && can_view_profile));
+
+		add(new Image("profileBackground", getProfileBackground(currentUser, "2"))
+				.setVisible(!has_blacklisted_you && can_view_profile));
 
 		add(new Label("profileNameTitle", getString("profileNameTitle"))
 				.setVisible(!has_blacklisted_you && can_view_profile));
@@ -108,17 +107,20 @@ public class ProfilePage extends BasePage {
 			@Override
 			protected void onSubmit() {
 				User author = SocialCthulhuSession.get().getUser();
-				List<User> referencedUsers = comments.getReferences(commentTextarea, author);
-				for(User ref : referencedUsers) {
+				List<User> referencedUsers = comments.getReferences(
+						commentTextarea, author);
+				for (User ref : referencedUsers) {
 					Notification notification = new Notification(author,
-							author.getUsername() + " " + this.getString("mention_notif_text"));
+							author.getUsername() + " "
+									+ this.getString("mention_notif_text"));
 					notifications.save(notification);
 					ref.notify(notification);
 				}
 
 				Comment comment = new Comment(author, new Date(),
-						commentTextarea, comments.getHashtagList(commentTextarea, author),
-						referencedUsers, author);
+						commentTextarea, comments.getHashtagList(
+								commentTextarea, author), referencedUsers,
+						author);
 				comments.addComment(comment);
 				commentTextarea = "";
 				setResponsePage(new ProfilePage(parameters));
@@ -142,19 +144,19 @@ public class ProfilePage extends BasePage {
 		return currentUser.getUsername().equals(logged_in_user.getUsername());
 	}
 
-	private ResourceReference getProfilePicture(User currentUser) {
+	private ResourceReference getProfilePicture(User currentUser, String suffix) {
 		if (currentUser.getPicture() != null) {
-			return new ImageResourceReference(currentUser.getPicture());
+			return new ImageResourceReference(currentUser.getPicture(), suffix);
 		} else {
 			return SocialCthulhuApp.DEFAULT_IMAGE;
 		}
 	}
-	
-	private ResourceReference getProfileBackground(User currentUser) {
+
+	private ResourceReference getProfileBackground(User currentUser, String suffix) {
 		if (currentUser.getBackground() != null) {
-			return new ImageResourceReference(currentUser.getBackground());
+			return new ImageResourceReference(currentUser.getBackground(), suffix);
 		} else {
-			return SocialCthulhuApp.TRANSPARENT_IMAGE;
+			return null;
 		}
 	}
 }

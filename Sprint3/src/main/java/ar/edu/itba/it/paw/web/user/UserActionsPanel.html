@@ -1,73 +1,67 @@
 <html>
-	<body>
-		<wicket:panel>
-			<a wicket:id="followersLink">
-				<button class="followers btn-inverse">
-					<p wicket:id="followersAmount">
-						0
-					</p>
-					<span><wicket:message key="followers"/></span>
-				</button>
-			</a>
-			<a wicket:id="followingLink">
-				<button class="following btn-inverse">
-					<p wicket:id="followingAmount">
-						0
-					</p>
-					<span><wicket:message key="following"/></span>
-				</button>
-			</a>
-			<a wicket:id="notificationsLink">
-				<button class="notifications btn-inverse">
-					<p wicket:id="notifications">
-						0
-					</p>
-					<span><wicket:message key="notifications"/></span>
-				</button>
-			</a>
-			<a wicket:id="suggestedUsersLink">
-				<button class="btn-inverse suggested-users">
-					<span><wicket:message key="suggestedUsers"/></span>
-				</button>	
-			</a>
-			<a wicket:id="favouritesLink">
-				<button class="btn-inverse favourites">
-					<span><wicket:message key="favourites"/></span>
-				</button>
-			</a>
-			<a wicket:id="followingMessagesLink">
-				<button class="btn-inverse favourites">
-					<span><wicket:message key="followingMessages"/></span>
-				</button>
-			</a>
-			<a wicket:id="userListsLink">
-				<button class="btn-inverse favourites">
-					<span><wicket:message key="userLists"/></span>
-				</button>
-			</a>
-			<br/>
-			<a wicket:id="editProfileLink">
-				<button class="btn-inverse search-button" wicket:id="edit">
-					edit
-				</button>
-			</a>
-			<a wicket:id="blacklisted_users">
-				<button class="btn-inverse search-button" wicket:id="blacklisted_users_label">
-					Blacklisted users
-				</button>
-			</a>
-			<a wicket:id="followLink">
-				<button class="btn-inverse search-button" wicket:id="follow"> Follow </button>
-			</a>
-			<a wicket:id="unfollowLink">
-				<button class="btn-inverse search-button" wicket:id="unfollow"> Unfollow </button>
-			</a>
-			<a wicket:id="blacklistLink">
-					<span wicket:id="blacklist"> Blacklist </span>
-					<button class="btn-inverse search-button">
-					<span wicket:id="unblacklist"> Remove from blacklist </span>
-				</button>
-			</a>
-		</wicket:panel>
-	</body>
+<body>
+	<wicket:panel>
+		<a wicket:id="followersLink">
+			<button class="followers btn-inverse">
+				<p wicket:id="followersAmount">0</p>
+				<span><wicket:message key="followers" /></span>
+			</button>
+		</a>
+		<a wicket:id="followingLink">
+			<button class="following btn-inverse">
+				<p wicket:id="followingAmount">0</p>
+				<span><wicket:message key="following" /></span>
+			</button>
+		</a>
+		<a wicket:id="notificationsLink">
+			<button class="notifications btn-inverse">
+				<p wicket:id="notifications">0</p>
+				<span><wicket:message key="notifications" /></span>
+			</button>
+		</a>
+		<a wicket:id="suggestedUsersLink">
+			<button class="btn-inverse suggested-users">
+				<span><wicket:message key="suggestedUsers" /></span>
+			</button>
+		</a>
+		<a wicket:id="favouritesLink">
+			<button class="btn-inverse favourites">
+				<span><wicket:message key="favourites" /></span>
+			</button>
+		</a>
+		<a wicket:id="followingMessagesLink">
+			<button class="btn-inverse favourites">
+				<span><wicket:message key="followingMessages" /></span>
+			</button>
+		</a>
+		<a wicket:id="userListsLink">
+			<button class="btn-inverse favourites">
+				<span><wicket:message key="userLists" /></span>
+			</button>
+		</a>
+		<br />
+		<a wicket:id="editProfileLink">
+			<button class="btn-inverse search-button">
+				<wicket:message key="edit">Edit profile</wicket:message>
+			</button>
+		</a>
+		<a wicket:id="blacklisted_users">
+			<button class="btn-inverse search-button">
+				<wicket:message key="blacklisted_users_label">Blacklisted users</wicket:message>
+			</button>
+		</a>
+		<a wicket:id="followLink">
+			<button class="btn-inverse search-button">
+				<span wicket:id="follow">Follow</span>
+				<span wicket:id="unfollow">Unfollow</span>
+			</button>
+		</a>
+		<a wicket:id="blacklistLink"> <span wicket:id="blacklist">
+				Blacklist </span>
+			<button class="btn-inverse search-button">
+				<span wicket:id="unblacklist"> Remove from blacklist </span>
+			</button>
+		</a>
+	</wicket:panel>
+</body>
 </html>

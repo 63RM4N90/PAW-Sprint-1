@@ -43,23 +43,20 @@ public class EditProfilePage extends SecuredPage {
 
 			@Override
 			public void onSubmit() {
-				if (EditProfilePage.this.fileUpload != null) {
-					((User) this.getForm().getModelObject())
-							.setPicture(fileUpload.get(0).getBytes());
+				User user = (User) getForm().getModelObject();
+				if (fileUpload != null) {
+					user.setPicture(fileUpload.get(0).getBytes());
 					String file_name = fileUpload.get(0).getClientFileName();
 					String image_extension = file_name.substring(file_name
 							.lastIndexOf("."));
 					image_extension = image_extension.substring(1);
-					((User) this.getForm().getModelObject())
-							.setPictureExtension(image_extension);
-					((User) this.getForm().getModelObject())
-							.setThumbnailPicture(ThumbnailImageConverter
-									.thumbnailPicture(fileUpload.get(0)
-											.getBytes(), image_extension));
+					user.setPictureExtension(image_extension);
+					user.setThumbnailPicture(ThumbnailImageConverter
+							.thumbnailPicture(fileUpload.get(0).getBytes(),
+									image_extension));
 				}
-				if(EditProfilePage.this.fileUploadBackground != null) {
-					((User) this.getForm().getModelObject())
-					.setBackground(fileUploadBackground.get(0).getBytes());
+				if (fileUploadBackground != null) {
+					user.setBackground(fileUploadBackground.get(0).getBytes());
 				}
 				setResponsePage(new ProfilePage(new PageParameters().set(
 						"username", SocialCthulhuSession.get().getUsername())));
@@ -93,15 +90,15 @@ public class EditProfilePage extends SecuredPage {
 		descriptionField.add(new DescriptionValidator());
 		form.add(descriptionField);
 
-		form.setMaxSize(Bytes.kilobytes(500));
+		form.setMaxSize(Bytes.kilobytes(1024));
 
 		FileUploadField fileUploadField = new FileUploadField("picture",
 				new PropertyModel<List<FileUpload>>(EditProfilePage.this,
 						"fileUpload"));
 		form.add(fileUploadField);
-		FileUploadField fileUploadFieldBackground = new FileUploadField("background",
-				new PropertyModel<List<FileUpload>>(EditProfilePage.this,
-						"fileUploadBackground"));
+		FileUploadField fileUploadFieldBackground = new FileUploadField(
+				"background", new PropertyModel<List<FileUpload>>(
+						EditProfilePage.this, "fileUploadBackground"));
 		form.add(fileUploadFieldBackground);
 		form.add(new CheckBox("isPrivate"));
 		form.add(new EqualPasswordInputValidator(passwordField,

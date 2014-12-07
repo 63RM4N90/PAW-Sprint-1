@@ -34,7 +34,8 @@ public class CommentsPanel extends Panel {
 	@SpringBean
 	private NotificationRepo notificationRepo;
 
-	public CommentsPanel(String id, final IModel<List<CommentWrapper>> listOfComments) {
+	public CommentsPanel(String id,
+			final IModel<List<CommentWrapper>> listOfComments) {
 		super(id);
 
 		final Component successfully_recthulhued_label = new Label(
@@ -70,7 +71,7 @@ public class CommentsPanel extends Panel {
 								.contains(item.getModelObject().getComment());
 				item.add(new Image("thumbnail", new ImageResourceReference(item
 						.getModelObject().getComment().getAuthor()
-						.getThumbnailPicture())));
+						.getThumbnailPicture(), item.getModelObject().getId() + "")));
 				item.add(new MultiLineLabel("transformedComment", item
 						.getModelObject().getTransformedComment())
 						.setEscapeModelStrings(false));
@@ -104,14 +105,19 @@ public class CommentsPanel extends Panel {
 
 					@Override
 					public void onClick() {
-						User loggedUser = users.getUser(SocialCthulhuSession.get().getUsername());
-						comments.recthulhu(getModelObject().getComment(), loggedUser);
+						User loggedUser = users.getUser(SocialCthulhuSession
+								.get().getUsername());
+						comments.recthulhu(getModelObject().getComment(),
+								loggedUser);
 						successfully_recthulhued_label.setVisible(true);
-						
-						Notification notification = new Notification(loggedUser, loggedUser.getUsername()
-								+ " has recthulhued a comment of yours!");
+
+						Notification notification = new Notification(
+								loggedUser,
+								loggedUser.getUsername()
+										+ " has recthulhued a comment of yours!");
 						notificationRepo.save(notification);
-						getModelObject().getComment().getOriginalAuthor().notify(notification);
+						getModelObject().getComment().getOriginalAuthor()
+								.notify(notification);
 					}
 				};
 				recthulhuLink
@@ -165,7 +171,10 @@ public class CommentsPanel extends Panel {
 					public void onClick() {
 						String logged_in_username = SocialCthulhuSession.get()
 								.getUsername();
-						if (logged_in_username != null && getModelObject().getComment().getAuthor().getUsername().equals(logged_in_username)) {
+						if (logged_in_username != null
+								&& getModelObject().getComment().getAuthor()
+										.getUsername()
+										.equals(logged_in_username)) {
 							comments.delete(getModelObject().getComment());
 						}
 						listOfComments.detach();

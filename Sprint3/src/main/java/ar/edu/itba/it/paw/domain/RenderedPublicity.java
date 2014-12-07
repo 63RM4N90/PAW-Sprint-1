@@ -51,10 +51,10 @@ public class RenderedPublicity {
 		}
 		return ans;
 	}
-	
+
 	public ResourceReference fetch_resource_reference() {
 		if (_image != null) {
-			return new ImageResourceReference(_image);
+			return new ImageResourceReference(_image, _client_name);
 		} else {
 			return SocialCthulhuApp.DEFAULT_IMAGE;
 		}
