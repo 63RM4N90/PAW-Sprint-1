@@ -10,7 +10,7 @@
 		<repository>
 			<id>google-maven-snapshot-repository</id>
 			<url>https://m2repos.googlecode.com/svn/nexus</url>
-			</repository>
+		</repository>
 	</repositories>
 	<dependencies>
 		<dependency>
@@ -18,7 +18,7 @@
 			<artifactId>imgscalr-lib</artifactId>
 			<version>4.2</version>
 		</dependency>
-				
+
 		<dependency>
 			<groupId>org.ocpsoft.prettytime</groupId>
 			<artifactId>prettytime</artifactId>
@@ -150,5 +150,17 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+			</resource>
+			<resource>
+				<filtering>false</filtering>
+				<directory>src/main/java</directory>
+				<excludes>
+					<exclude>**/*.java</exclude>
+				</excludes>
+			</resource>
+		</resources>
 	</build>
 </project>
