@@ -1,6 +1,7 @@
 package ar.edu.itba.it.paw.domain;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -208,6 +209,11 @@ public class User extends PersistentEntity {
 	}
 
 	public List<Comment> getComments() {
+		return comments;
+	}
+	
+	public List<Comment> getOrderedComments() {
+		Collections.reverse(comments);
 		return comments;
 	}
 

@@ -18,7 +18,6 @@ public class HibernateCommentRepo extends AbstractHibernateRepo implements
 
 	private HashtagRepo hashtagRepo;
 	private UserRepo userRepo;
-	private NotificationRepo notificationRepo;
 
 	@Autowired
 	public HibernateCommentRepo(SessionFactory sessionFactory,
@@ -27,7 +26,6 @@ public class HibernateCommentRepo extends AbstractHibernateRepo implements
 		super(sessionFactory);
 		this.hashtagRepo = hibernateHashtagRepo;
 		this.userRepo = hibernateUserRepo;
-		this.notificationRepo = notificationRepo;
 	}
 
 	@Override

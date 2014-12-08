@@ -132,7 +132,7 @@ public class ProfilePage extends BasePage {
 			@Override
 			protected List<Comment> transformableLoad() {
 				return users.getUser(parameters.get("username").toString())
-						.getComments();
+						.getOrderedComments();
 			}
 		};
 		add(new CommentsPanel("comments-panel", commentModel)
