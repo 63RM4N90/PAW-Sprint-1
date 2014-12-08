@@ -36,7 +36,6 @@ public class RegistrationPage extends BasePage {
 	private transient String description;
 	private transient String secretQuestion;
 	private transient String secretAnswer;
-	@SuppressWarnings("unused")
 	private String captchaInput;
 	private transient List<FileUpload> picture;
 	private transient List<FileUpload> background;
@@ -65,7 +64,7 @@ public class RegistrationPage extends BasePage {
 
 			@Override
 			protected void onSubmit() {
-				if (checkFieldLength() && password.equals(confirmPassword)) {
+				if (checkFieldLength() && checkPasswords() && checkNotEmptyCaptcha()) {
 					byte[] selectedPicture = getImageBytes(picture);
 					String picture_extension = getImageExtension(picture);
 					byte[] selectedBackground = getImageBytes(background);
@@ -78,12 +77,26 @@ public class RegistrationPage extends BasePage {
 					session.signIn(username, password, users);
 					continueToOriginalDestination();
 					setResponsePage(getApplication().getHomePage());
-				} else {
-					error(getString("password_nonmatch"));
 				}
 			}
+			
+			private boolean checkPasswords() {
+				if (!password.equals(confirmPassword)) {
+					error(getString("password_nonmatch"));
+					return false;
+				}
+				return true;
+			}
+			
+			private boolean checkNotEmptyCaptcha() {
+				if (captchaInput == null || captchaInput == "") {
+					error(getString("empty_captcha"));
+					return false;
+				}
+				return true;
+			}
 
-			protected boolean checkFieldLength() {
+			private boolean checkFieldLength() {
 				if (name.length() < MIN_NAME_LENGTH
 						|| name.length() > MAX_NAME_LENGTH) {
 					error(getString("name_length"));
@@ -150,7 +163,7 @@ public class RegistrationPage extends BasePage {
 		form.add(new FileUploadField("background"));
 		form.add(new Button("register", new ResourceModel("register")));
 		form.add(captchaImage);
-		form.add(captchaTF);
+		form.add(captchaTF.setRequired(true));
 		add(form);
 	}
 	

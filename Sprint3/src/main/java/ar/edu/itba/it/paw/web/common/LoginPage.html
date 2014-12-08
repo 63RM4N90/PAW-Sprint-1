@@ -24,9 +24,9 @@
 					</div>
 					<div class="control-group">
 						<div class="controls">
-							<label class="checkbox"> 
-								<input type="checkbox" wicket:id="rememberMe"> 
-								Remember me on this computer
+							<label class="checkbox"> <input type="checkbox"
+								wicket:id="rememberMe"> <wicket:message
+									key="remember_me"></wicket:message>
 							</label>
 						</div>
 					</div>
@@ -35,17 +35,16 @@
 							wicket:id="login" />
 					</div>
 				</form>
-				<a wicket:id="forgotPassword">forgotten password?</a>
+				<a wicket:id="forgotPassword"><wicket:message
+						key="forgot_password"></wicket:message></a>
 			</div>
 			<div class="login-column column-2">
 				<h2>
-					<wicket:message key="welcome">Welcome to Social Cthulhu!</wicket:message>
+					<wicket:message key="welcome">Welcome title!</wicket:message>
 				</h2>
 				<p>
 					<wicket:message key="site_description">
-						A place were you can become a Cthulhu follower and show your love <br>
-						to our beloved god by posting comments in your own personal space. <br>
-						Wanna join us? <br>
+						Site description <br>
 					</wicket:message>
 				</p>
 				<div class="notRegistered">

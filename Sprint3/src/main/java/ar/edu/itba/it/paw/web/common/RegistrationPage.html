@@ -74,7 +74,7 @@
 					</div>
 						<img wicket:id="kaptchaImage" />
 						<br>
-						<label>Type the image words :</label>
+						<wicket:message key="captcha">Captcha</wicket:message>
 						<input type="text"wicket:id="captcha">
 					<div class="registration-form-field">
 						<label for="picture"><wicket:message key="picture">
@@ -84,7 +84,7 @@
 					</div>
 					<div class="registration-form-field">
 						<label for="picture"><wicket:message key="background">
-							Picture</wicket:message>:
+							Background picture</wicket:message>:
 						</label>
 						<input type="file" name="picture" wicket:id="background"/>
 					</div>
@@ -92,7 +92,7 @@
 						<input type="submit" class="btn-inverse pull-right cthulhu-button"
 							name="submit" value="Submit" wicket:id="register" />
 					</div>
-					<div class="alreadyRegistered pull-right">
+					<div class="alreadyRegistered">
 						<a wicket:id="alreadyRegistered">Already registered? Login!</a>
 					</div>
 				</form>

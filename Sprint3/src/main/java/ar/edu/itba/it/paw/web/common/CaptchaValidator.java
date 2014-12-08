@@ -11,22 +11,16 @@ import com.google.code.kaptcha.Constants;
 public class CaptchaValidator implements IValidator<String> {
  
 	private static final long serialVersionUID = 1L;
-	//private String INVALID_CODE = "captcha.invalid";
  
 	public void validate(IValidatable<String> validatable) {
 		String kaptchaReceived = (String) validatable.getValue();
  
 		SocialCthulhuSession session = SocialCthulhuSession.get();
-		
-		//Request request = RequestCycle.get().getRequest();
-		//HttpServletRequest httpRequest = ((WebRequest) request)
-			//	.getHttpServletRequest();
  
 		ValidationError error = new ValidationError();
 		
 		String kaptchaExpected = (String) session
 			.getAttribute(Constants.KAPTCHA_SESSION_KEY);
- 
 		if (kaptchaReceived == null
 				|| !kaptchaReceived.equalsIgnoreCase(kaptchaExpected)) {
 			error.addKey("captcha_error");
@@ -34,18 +28,4 @@ public class CaptchaValidator implements IValidator<String> {
 		}
  
 	}
- 
-//	// validate on numm value as well
-//	@Override
-//	public boolean validateOnNullValue() {
-// 
-//		return true;
-// 
-//	}
-// 
-//	@Override
-//	protected String resourceKey() {
-//		return INVALID_CODE;
-//	}
-
 }
