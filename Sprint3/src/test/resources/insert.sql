@@ -1,63 +1,12 @@
-insert into userss (id, description, isPrivate, name, password, registrationDate, secretAnswer, secretQuestion, surname, username, visits) values ('4', 'soy bahui', 'FALSE', 'Juan', '12345678', '2013-08-01 00:00:26', 'jbuireo', 'quien soy?', 'Buireo', 'jbuireo', '0');
-insert into userss (id, description, isPrivate, name, password, registrationDate, secretAnswer, secretQuestion, surname, username, visits) values ('5', 'soy faca', 'FALSE', 'Facundo', '12345678', '2013-08-01 00:00:27', 'fmenzella', 'quien soy?', 'Menzella', 'fmenzella', '0');
-insert into userss (id, description, isPrivate, name, password, registrationDate, secretAnswer, secretQuestion, surname, username, visits) values ('6', 'soy masiii', 'FALSE', 'Maximiliano', '12345678', '2013-08-01 00:00:28', 'maxix', 'quien soy?', 'Valverde', 'maxix', '0');
-insert into userss (id, description, isPrivate, name, password, registrationDate, secretAnswer, secretQuestion, surname, username, visits) values ('7', 'soy matix', 'FALSE', 'Matias', '12345678', '2013-08-01 00:00:29', 'matix', 'quien soy?', 'Rivas', 'matix', '0');
-insert into userss (id, description, isPrivate, name, password, registrationDate, secretAnswer, secretQuestion, surname, username, visits) values ('8', 'soy esteporg', 'FALSE', 'Stefano', '12345678', '2013-08-01 00:00:30', 'esteporg', 'quien soy?', 'Baratuche', 'esteporg', '0');
-insert into userss (id, description, isPrivate, name, password, registrationDate, secretAnswer, secretQuestion, surname, username, visits) values ('9', 'soy luchox', 'FALSE', 'Stefano', '12345678', '2013-08-01 00:00:31', 'luchox', 'quien soy?', 'Cappetta', 'luchox', '0');
+-- Test values for USER LISTS
+insert into userss_w (description, isprivate, name, password, registrationdate, secretanswer, secretquestion, surname, username, visits) values ('im a new user :P', 'TRUE', 'test', 'password', '2014-12-08 22:34:52', 'potato', 'favourite vegetable?', 'user', 'test_user', '0');
+insert into userlist (_name, _owner_id) values ('user_list_1', (select id from userss_w where id = (select max(id) from userss_w)));
+insert into userss_w_userlist (_users_id, lists_id) values ((select id from userss_w where id = (select min(id) from userss_w)), (select id from userlist where id = (select max(id) from userlist)));
 
-insert into Notification (id, checked, date, notification, notificator_id) values ('1', 'FALSE', '2013-11-01 00:00:30', 'gerchux has mentioned you in a comment', '1');
-insert into Comment (author_id, comment, date, originalAuthor_id) values ('1', 'Este comment menciona a @Gabox', '2013-11-01 00:00:30', '1');
-insert into userss_Notification (userss_id, notifications_id) values ('3', '1');
-insert into Comment_userss (Comment_id, references_id) values ('13', '3');
+-- Test values for BLACKLISTS
+insert into userss_blacklists (blacklisted_by_id, blacklisted_users_id) values ((select id from userss_w where id = (select max(id) from userss_w)), (select id from userss_w where id = (select min(id) from userss_w)));
 
-insert into Notification (id, checked, date, notification, notificator_id) values ('2', 'FALSE', '2013-11-01 00:00:30', 'gerchux is following you', '1');
-insert into userss_Notification (userss_id, notifications_id) values ('2', '2');
-insert into userss_userss (followers_id, following_id) values ('1', '2');
-
-insert into Notification (id, checked, date, notification, notificator_id) values ('3', 'FALSE', '2013-11-01 00:00:30', 'gerchux is following you', '1');
-insert into userss_Notification (userss_id, notifications_id) values ('3', '3');
-insert into userss_userss (followers_id, following_id) values ('1', '3');
-
-insert into Notification (id, checked, date, notification, notificator_id) values ('4', 'FALSE', '2013-11-01 00:00:30', 'gerchux is following you', '1');
-insert into userss_Notification (userss_id, notifications_id) values ('8', '4');
-insert into userss_userss (followers_id, following_id) values ('1', '8');
-
-insert into Notification (id, checked, date, notification, notificator_id) values ('5', 'FALSE', '2013-11-01 00:00:30', 'matix is following you', '7');
-insert into userss_Notification (userss_id, notifications_id) values ('2', '5');
-insert into userss_userss (followers_id, following_id) values ('7', '2');
-
-insert into Notification (id, checked, date, notification, notificator_id) values ('6', 'FALSE', '2013-11-01 00:00:30', 'matix is following you', '7');
-insert into userss_Notification (userss_id, notifications_id) values ('3', '6');
-insert into userss_userss (followers_id, following_id) values ('7', '3');
-
-insert into Notification (id, checked, date, notification, notificator_id) values ('7', 'FALSE', '2013-11-01 00:00:30', 'matix is following you', '7');
-insert into userss_Notification (userss_id, notifications_id) values ('8', '7');
-insert into userss_userss (followers_id, following_id) values ('7', '8');
-
-insert into Notification (id, checked, date, notification, notificator_id) values ('8', 'FALSE', '2013-11-01 00:00:30', 'jbuireo is following you', '4');
-insert into userss_Notification (userss_id, notifications_id) values ('2', '8');
-insert into userss_userss (followers_id, following_id) values ('4', '2');
-
-insert into Notification (id, checked, date, notification, notificator_id) values ('9', 'FALSE', '2013-11-01 00:00:30', 'jbuireo is following you', '4');
-insert into userss_Notification (userss_id, notifications_id) values ('3', '9');
-insert into userss_userss (followers_id, following_id) values ('4', '3');
-
-insert into Notification (id, checked, date, notification, notificator_id) values ('10', 'FALSE', '2013-11-01 00:00:30', 'fmenzella is following you', '5');
-insert into userss_Notification (userss_id, notifications_id) values ('2', '10');
-insert into userss_userss (followers_id, following_id) values ('5', '2');
-
-insert into Notification (id, checked, date, notification, notificator_id) values ('11', 'FALSE', '2013-11-01 00:00:30', 'maxix is following you', '6');
-insert into userss_Notification (userss_id, notifications_id) values ('2', '11');
-insert into userss_userss (followers_id, following_id) values ('6', '2');
-
-insert into Notification (id, checked, date, notification, notificator_id) values ('12', 'FALSE', '2013-11-01 00:00:30', 'maxix is following you', '6');
-insert into userss_Notification (userss_id, notifications_id) values ('3', '12');
-insert into userss_userss (followers_id, following_id) values ('6', '3');
-
-insert into Notification (id, checked, date, notification, notificator_id) values ('13', 'FALSE', '2013-11-01 00:00:30', 'luchox is following you', '9');
-insert into userss_Notification (userss_id, notifications_id) values ('2', '13');
-insert into userss_userss (followers_id, following_id) values ('9', '2');
-
-insert into Notification (id, checked, date, notification, notificator_id) values ('14', 'FALSE', '2013-11-01 00:00:30', 'luchox is following you', '9');
-insert into userss_Notification (userss_id, notifications_id) values ('8', '14');
-insert into userss_userss (followers_id, following_id) values ('9', '8');
+-- Test values for PUBLICITIES
+insert into publicity (_client_name, _image_url, _redirection_url) values ('test_client_1', 'http://www.dreamfly.co.uk/images/last-five-years-theatre-publicity-design-400.jpg', 'http://www.dreamfly.co.uk/');
+insert into publicity (_client_name, _image_url, _redirection_url) values ('test_client_2', 'http://4.bp.blogspot.com/_J46IM9u3bEs/TJmE8rhKnNI/AAAAAAAAAGo/eaIvgDh0i1k/s1600/afiche+fx+-1.ai.jpg', 'http://publicitytadeo.blogspot.com.ar/2010_09_01_archive.html');
+insert into publicity (_client_name, _image_url, _redirection_url) values ('test_client_3', 'http://www2.psd100.com/wp-content/uploads/2013/01/supermarket-flyer-template-psd-file.jpg', 'http://www.psd100.com/supermarket-flyer-template-psd-file5/#.VIZTQqSG_B8');
