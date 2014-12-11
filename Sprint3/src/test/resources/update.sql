@@ -1,7 +1,29 @@
 ALTER TABLE userss ADD COLUMN background bytea;
-ALTER TABLE userss ADD COLUMN picture bytea;
 ALTER TABLE userss ADD COLUMN picture_extension character varying(255);
 ALTER TABLE userss ADD COLUMN token character varying(255);
+
+
+-- Table: userlist
+
+-- DROP TABLE userlist;
+
+CREATE TABLE userlist
+(
+  id serial NOT NULL,
+  _name character varying(255) NOT NULL,
+  _owner_id integer,
+  CONSTRAINT userlist_pkey PRIMARY KEY (id),
+  CONSTRAINT fkf3f497292a17019f FOREIGN KEY (_owner_id)
+      REFERENCES userss (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE userlist
+  OWNER TO paw;
+
+
 -- Table: userss_blacklists
 
 -- DROP TABLE userss_blacklists;
