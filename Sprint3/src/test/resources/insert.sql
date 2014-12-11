@@ -1,10 +1,11 @@
 -- Test values for USER LISTS
-insert into userss_w (description, isprivate, name, password, registrationdate, secretanswer, secretquestion, surname, username, visits) values ('im a new user :P', 'TRUE', 'test', 'password', '2014-12-08 22:34:52', 'potato', 'favourite vegetable?', 'user', 'test_user', '0');
-insert into userlist (_name, _owner_id) values ('user_list_1', (select id from userss_w where id = (select max(id) from userss_w)));
-insert into userss_w_userlist (_users_id, lists_id) values ((select id from userss_w where id = (select min(id) from userss_w)), (select id from userlist where id = (select max(id) from userlist)));
+insert into userss (description, isprivate, name, password, registrationdate, secretanswer, secretquestion, surname, username, visits) values ('im a new user :P', 'TRUE', 'test_1', 'password', '2014-12-08 22:34:52', 'potato', 'favourite vegetable?', 'user_1', 'test_user_1', '0');
+insert into userss (description, isprivate, name, password, registrationdate, secretanswer, secretquestion, surname, username, visits) values ('im a new user too :P', 'TRUE', 'test_2', 'password', '2014-12-08 22:34:52', 'potato', 'favourite vegetable?', 'user_2', 'test_user_2', '0');
+insert into userlist (_name, _owner_id) values ('user_list_1', (select id from userss where id = (select max(id) from userss)));
+insert into userss_userlist (_users_id, lists_id) values ((select id from userss where id = (select min(id) from userss)), (select id from userlist where id = (select max(id) from userlist)));
 
 -- Test values for BLACKLISTS
-insert into userss_blacklists (blacklisted_by_id, blacklisted_users_id) values ((select id from userss_w where id = (select max(id) from userss_w)), (select id from userss_w where id = (select min(id) from userss_w)));
+insert into userss_blacklists (blacklisted_by_id, blacklisted_users_id) values ((select id from userss where id = (select max(id) from userss)), (select id from userss where id = (select min(id) from userss)));
 
 -- Test values for PUBLICITIES
 insert into publicity (_client_name, _image_url, _redirection_url) values ('test_client_1', 'http://www.dreamfly.co.uk/images/last-five-years-theatre-publicity-design-400.jpg', 'http://www.dreamfly.co.uk/');
